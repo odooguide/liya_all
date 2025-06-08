@@ -1,0 +1,27 @@
+<odoo>
+    <record id="view_order_form_inherit_tasks" model="ir.ui.view">
+  <field name="name">sale.order.form.tasks</field>
+  <field name="model">sale.order</field>
+  <field name="inherit_id" ref="sale.view_order_form"/>
+  <field name="arch" type="xml">
+    <notebook position="inside">
+      <page string="Project Tasks">
+        <field name="project_task_ids">
+          <list editable="bottom">
+            <field name="name"/>
+            <field name="description"/>
+            <field name="stage_id"/>
+            <field name="planned_date"/>
+            <field name="days"/>
+            <field name="user_ids" widget="many2many_tags"/>
+            <field name="activity_type_id"/>
+            <field name="optional_product_id"/>
+          </list>
+        </field>
+      </page>
+    </notebook>
+  </field>
+</record>
+
+
+</odoo>
