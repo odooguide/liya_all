@@ -5,29 +5,29 @@ from odoo.exceptions import ValidationError
 class CrmLead(models.Model):
     _inherit = "crm.lead"
 
-    option1 = fields.Date(string="Option 1")
-    option2 = fields.Date(string="Option 2")
-    option3 = fields.Date(string="Option 3")
+    option1 = fields.Date(string="Alternatif Tarih 1")
+    option2 = fields.Date(string="Alternatif Tarih 2")
+    option3 = fields.Date(string="Alternatif Tarih 3")
     wedding_type = fields.Many2one(
         comodel_name="wedding.type",
-        string="Wedding Type",
+        string="Düğün Tipi",
         ondelete="set null",
     )
-    request_date = fields.Date(string="Request Date")
+    request_date = fields.Date(string="Teklif Tarihi")
     wedding_year = fields.Char(
         string="Düğün Yılı",
         size=4,
         help="Düğün yılı (2025-2100 arası)"
     )
-    people = fields.Integer(string="People")
+    people = fields.Integer(string="Kişiler")
     second_contact = fields.Many2one(
         comodel_name="res.partner",
-        string="Second Contact",
+        string="İkincil Kontakt",
         ondelete="set null",
     )
-    second_phone = fields.Char(string="Second Phone")
-    second_mail = fields.Char(string="Second Mail")
-    second_job_positino = fields.Char(string="Second Job Position")
+    second_phone = fields.Char(string="İkincil Telefon")
+    second_mail = fields.Char(string="İkincil Mail")
+    second_job_positino = fields.Char(string="İkincil İş Pozisyonu")
 
 
     
