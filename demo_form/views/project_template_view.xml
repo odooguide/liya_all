@@ -1,0 +1,114 @@
+<odoo>
+  <record id="project_project_form_demo_extension" model="ir.ui.view">
+    <field name="name">project.project.form.demo</field>
+    <field name="model">project.project</field>
+    <field name="inherit_id" ref="project.edit_project"/>
+    <field name="arch" type="xml">
+        <xpath expr="//header" position="inside">
+  <button
+    name="action_demo_form"
+    string="Demo Oluştur"
+    type="object"
+    class="btn-primary"
+    invisible="demo_form_count > 0"
+  />
+      </xpath>
+     <xpath expr="//notebook" position="inside">
+        <page string="Liya All">
+          <group>
+            <separator string="Düğün" colspan="4"
+               style="font-size:1.5em; font-weight:bold; margin-top:1em; margin-bottom:0.5em;"/>
+           <group>
+             <field name="davet_sahibi"/>
+            <field name="davet_tarihi"/>
+            <field name="gun"/>
+            <field name="dugun_tipi"/>
+           </group>
+              <group>
+            <field name="kisi_sayisi"/>
+            <field name="nikah_tipi"/>
+            <field name="baslangic_saati"/>
+            <field name="bitis_saati"/>
+           </group>
+
+            <separator string="Demo ve Notlar" colspan="4"
+               style="font-size:1.5em; font-weight:bold; margin-top:1em; margin-bottom:0.5em;"/>
+            <group>
+               <field name="demo_tarihi"/>
+            <field name="ozel_notlar"/>
+            </group>
+
+
+            <!-- Saat Akışı -->
+            <separator string="Saat Akışı" colspan="4"
+               style="font-size:1.5em; font-weight:bold; margin-top:1em; margin-bottom:0.5em;"/>
+            <group>
+                         <field name="tekne_kalkis_zamani"/>
+                        <field name="tekne_kalkis_not"/>
+                        <field name="kokteyl_zamani"/>
+                        <field name="kokteyl_not"/>
+                        <field name="nikah_zamani"/>
+                        <field name="nikah_mekan"/>
+                        <field name="nikah_konusma_var"/>
+                        <field name="nikah_konusma_sure"/>
+            </group>
+            <group>
+                <field name="yemek_zamani"/>
+                <field name="yemek_not"/>
+                <field name="party_zamani"/>
+                <field name="party_mekan"/>
+                <field name="afterparty_baslangic"/>
+                <field name="afterparty_bitis"/>
+            </group>
+
+
+            <separator string="Ulaşım" colspan="4"
+               style="font-size:1.5em; font-weight:bold; margin-top:1em; margin-bottom:0.5em;"/>
+            <group>
+              <field name="ulasim_cift_gelis_zamani"/>
+              <field name="ulasim_cift_gelis_liman"/>
+              <field name="ulasim_cift_gelis_not_zamani"/>
+              <field name="ulasim_cift_gelis_not"/>
+            </group>
+
+          </group>
+        </page>
+      </xpath>
+    </field>
+  </record>
+
+    <record id="action_demo_form_form" model="ir.actions.act_window">
+    <field name="name">Yeni Demo Form</field>
+    <field name="res_model">demo.form</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_demo_form_form"/>
+    <field name="target">current</field>
+  </record>
+
+  <record id="menu_demo_form_project" model="ir.ui.menu">
+    <field name="name">Demo Oluştur</field>
+    <field name="parent_id" ref="project.menu_main_pm"/>
+    <field name="action" ref="action_demo_form_full"/>
+    <field name="sequence" eval="10"/>
+  </record>
+
+    <record id="project_project_form_smartbutton_demo" model="ir.ui.view">
+  <field name="name">project.project.form.smartbutton.demo</field>
+  <field name="model">project.project</field>
+  <field name="inherit_id" ref="project.edit_project"/>
+  <field name="arch" type="xml">
+    <xpath expr="//button[@name='action_view_tasks']" position="before">
+      <button
+        name="action_demo_form"
+        type="object"
+        class="oe_stat_button"
+        icon="fa-list"
+        string="Demo"
+        invisible="demo_form_count == 0"
+      >
+        <field name="demo_form_count" widget="statinfo"/>
+      </button>
+    </xpath>
+  </field>
+</record>
+</odoo>
