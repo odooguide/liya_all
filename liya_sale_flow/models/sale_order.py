@@ -8,7 +8,6 @@ class SaleOrder(models.Model):
         comodel_name='sale.order.template.task',
         string='Project Tasks',
         compute='_compute_project_task_ids',
-        readonly=True,
     )
 
     @api.depends('sale_order_template_id', 'order_line.product_id')
