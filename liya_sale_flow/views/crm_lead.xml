@@ -8,6 +8,7 @@
                 <group colspan="2">
                     <group string="Wedding Information">
                         <field name="request_date"/>
+                        <field name="source_id"/>
                         <field name="wedding_type"/>
                         <field name="people"/>
                     </group>
@@ -23,9 +24,6 @@
                 <field name="second_contact" invisible="type == 'lead'"/>
                 <field name="second_mail" widget="email" invisible="type == 'lead'"/>
                 <field name="second_phone" widget="phone" invisible="type == 'lead'"/>
-            </xpath>
-            <xpath expr="//field[@name='tag_ids']" position="after">
-                <field name="source_id" invisible="type == 'lead'"/>
             </xpath>
         </field>
     </record>
