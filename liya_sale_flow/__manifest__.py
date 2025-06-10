@@ -14,6 +14,7 @@
         "views/sale_order_template_view.xml",
         "views/sale_order_view_inherit.xml",
         "security/ir.model.access.csv",
+        "reports/report_saleorder_document_inherit.xml",
     ],
     "auto_install": False,
     "installable": True,
