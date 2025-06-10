@@ -19,15 +19,13 @@
                     </group>
                 </group>
             </xpath>
-            <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="second_contact"/>
+            <xpath expr="//field[@name='lost_reason_id']" position="before">
+                <field name="second_contact" invisible="type == 'lead'"/>
+                <field name="second_mail" widget="email" invisible="type == 'lead'"/>
+                <field name="second_phone" widget="phone" invisible="type == 'lead'"/>
             </xpath>
-            <xpath expr="//field[@name='function']" position="before">
-                <field name="second_mail" widget="email"/>
-            </xpath>
-            <xpath expr="//field[@name='function']" position="after">
-                <field name="second_job_positino"/>
-                <field name="second_phone" widget="phone"/>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="source_id" invisible="type == 'lead'"/>
             </xpath>
         </field>
     </record>
