@@ -6,13 +6,13 @@
         <field name="arch" type="xml">
             <xpath expr="(//group)[7]" position="after">
                 <group colspan="2">
-                    <group string="Wedding Information">
+                    <group string="Düğün Bilgisi">
                         <field name="request_date"/>
                         <field name="source_id"/>
                         <field name="wedding_type"/>
                         <field name="people"/>
                     </group>
-                    <group string="Wedding Date" >
+                    <group string="Düğün Tarihi" >
                         <field name="wedding_year"/>
                         <field name="option1"/>
                         <field name="option2"/>
