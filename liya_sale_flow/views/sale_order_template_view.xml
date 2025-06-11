@@ -5,7 +5,7 @@
     <field name="inherit_id" ref="sale_management.sale_order_template_view_form"/>
     <field name="arch" type="xml">
       <notebook position="inside">
-        <page string="Project Tasks">
+        <page string="Projedeki Görevler">
           <field name="project_task_ids">
             <list editable="bottom">
               <field name="name"/>
