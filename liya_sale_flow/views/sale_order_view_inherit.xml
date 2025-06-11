@@ -5,7 +5,7 @@
   <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
   <field name="arch" type="xml">
     <xpath expr="//page[@name='optional_products']" position="after">
-      <page string="Project Tasks">
+      <page string="Projedeki Görevler">
         <field name="project_task_ids">
           <list editable="bottom" creatable="true">
             <field name="name"/>

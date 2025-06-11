@@ -6,7 +6,7 @@ class SaleOrderTemplate(models.Model):
     project_task_ids = fields.One2many(
         comodel_name='sale.order.template.task',
         inverse_name='sale_order_template_id',
-        string='Project Tasks',
+        string='Projedeki Görevler',
     )
 
 class SaleOrderTemplateTask(models.Model):
@@ -23,29 +23,29 @@ class SaleOrderTemplateTask(models.Model):
         string='Sale Order',
         ondelete='cascade',
     )
-    name = fields.Char(string='Task Name', required=True)
-    description = fields.Text(string='Task Description')
+    name = fields.Char(string='Görev Adı', required=True)
+    description = fields.Text(string='Açıklama')
     stage_id = fields.Many2one(
         comodel_name='project.task.type',
-        string='Stage',
+        string='Aşama',
     )
     planned_date = fields.Selection(
         selection=[
             ('before_wedding', 'Düğünden Önce'),
             ('after_wedding', 'Düğünden Sonra'),
         ],
-        string='Planned Date',
+        string='Planlanan Tarih',
         default='before_wedding',
     )
-    days = fields.Integer(string='Days')
+    days = fields.Integer(string='Gün')
     user_ids = fields.Many2many(
         comodel_name='res.users',
-        string='Assignees',
+        string='Sorumlular',
         help="Birden fazla kullanıcıyı atayabilirsiniz."
     )
     activity_type_id = fields.Many2one(
         comodel_name='mail.activity.type',
-        string='Activity Type',
+        string='Aktivite Tipi',
     )
     optional_product_id = fields.Many2one(
         'product.product',
