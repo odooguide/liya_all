@@ -20,3 +20,5 @@ class ProjectProject(models.Model):
                 'project_ids': [(4, project.id)],
             })
         return project
+
+

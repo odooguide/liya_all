@@ -9,6 +9,7 @@ class SaleOrder(models.Model):
         string='Projedeki Görevler',
         compute='_compute_project_task_ids',
     )
+    is_project_true=fields.Boolean(string='Is There Any Project?')
 
     @api.depends('sale_order_template_id', 'order_line.product_id')
     def _compute_project_task_ids(self):
@@ -45,3 +46,42 @@ class SaleOrder(models.Model):
                         'user_ids': [(6, 0, tmpl.user_ids.ids)],
                     })
         return res
+
+    def action_project_create(self):
+        self.ensure_one()
+
+        if self.project_id:
+            return True
+
+        seq_num = self.env['ir.sequence'].next_by_code('sale.order.project') or '0000'
+        today = fields.Date.context_today(self)
+        date_str = today.strftime('%d-%m-%Y')
+        partner_slug = self.partner_id.name.replace(' ', '-')
+        project_name = f"D{seq_num}-{date_str}-{partner_slug}"
+
+        vals = {
+            'name': project_name,
+            'partner_id': self.partner_id.id,
+            'company_id': self.company_id.id,
+            'user_id': self.user_id.id or self.env.uid,
+            'allow_billable': True,
+            'privacy_visibility': 'portal',
+            'sale_order_id': self.id,
+        }
+
+        project = self.env['project.project'].create(vals)
+
+        self.project_id = project.id
+
+        self.is_project_true=True
+
+        return True
+
+    @api.onchange('project_id')
+    def _is_project(self):
+
+        project_id=self.project_id
+        if project_id:
+            self.is_project_true=True
+        else:
+            self.is_project_true=False
