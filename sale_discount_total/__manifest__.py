@@ -20,7 +20,6 @@
         'views/sale_order_views.xml',
         'views/account_move_views.xml',
         'views/account_move_templates.xml',
-        'views/sale_order_templates.xml',
     ],
     'license': 'AGPL-3',
     'installable': True,
