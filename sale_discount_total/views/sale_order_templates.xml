@@ -2,7 +2,7 @@
 <odoo>
     <!--Inherited Template for sale order report-->
     <template id="report_saleorder_customized"
-              inherit_id="sale.report_saleorder_document">
+              inherit_id="liya_sale_flow.report_saleorder_document_external_replace">
         <xpath expr="//span[@t-field='line.discount']" position="replace">
             <span t-esc="'%.2f'%(line.discount)"/>
         </xpath>
