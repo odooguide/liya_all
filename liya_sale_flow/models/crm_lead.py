@@ -91,8 +91,7 @@ class CrmLead(models.Model):
             display = lead.activity_type_id and lead.activity_type_id.display_name or ''
             if 'Toplantı' in display:
                 lead.type = 'opportunity'
-            else:
-                lead.type='lead'
+
         return None
 
 
