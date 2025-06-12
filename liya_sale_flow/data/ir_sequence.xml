@@ -1,0 +1,7 @@
+<odoo>
+  <record id="seq_sale_project" model="ir.sequence">
+    <field name="name">Sale Order Project</field>
+    <field name="code">sale.order.project</field>
+    <field name="padding">4</field>
+  </record>
+</odoo>
