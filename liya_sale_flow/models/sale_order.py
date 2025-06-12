@@ -1,10 +1,6 @@
 from odoo import models,api,fields,_
 from odoo.exceptions import UserError
-<<<<<<< staging
 from datetime import date
-=======
-
->>>>>>> main
 class SaleOrder(models.Model):
     _inherit='sale.order'
 
@@ -59,11 +55,7 @@ class SaleOrder(models.Model):
 
         seq_num = self.env['ir.sequence'].next_by_code('sale.order.project') or '0000'
         today = fields.Date.context_today(self)
-<<<<<<< staging
         date_str = today.strftime('%Y-%m-%d')
-=======
-        date_str = today.strftime('%d-%m-%Y')
->>>>>>> main
         partner_slug = self.partner_id.name.replace(' ', '-')
         project_name = f"D{seq_num}-{date_str}-{partner_slug}"
 
@@ -92,7 +84,6 @@ class SaleOrder(models.Model):
         if project_id:
             self.is_project_true=True
         else:
-<<<<<<< staging
             self.is_project_true=False
 
     @api.model
@@ -116,6 +107,3 @@ class SaleOrder(models.Model):
                 })
 
         return sale
-=======
-            self.is_project_true=False
->>>>>>> main

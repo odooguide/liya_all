@@ -1,9 +1,5 @@
 from odoo import models, fields, api
-<<<<<<< staging
 from datetime import date, datetime, timedelta
-=======
-from datetime import date, datetime
->>>>>>> main
 from odoo.exceptions import ValidationError
 
 
@@ -31,16 +27,12 @@ class CrmLead(models.Model):
     )
     second_phone = fields.Char(string="İkincil Telefon")
     second_mail = fields.Char(string="İkincil Mail")
-<<<<<<< staging
     second_job_position = fields.Char(string="İkincil İş Pozisyonu")
     second_title = fields.Many2one(
         comodel_name='res.partner.title',
         string='Ikincil Başlık',
         help='Kontakt kartındaki unvanlar listesinden seçiniz.'
     )
-=======
-    second_job_positino = fields.Char(string="İkincil İş Pozisyonu")
->>>>>>> main
 
     type = fields.Selection(
         [('lead', 'Lead'), ('opportunity', 'Opportunity')],
@@ -49,7 +41,6 @@ class CrmLead(models.Model):
         readonly=False,
     )
 
-<<<<<<< staging
     my_activity_date_clock = fields.Char(
         string='Aktivite Saati',
         compute='_compute_activity_date_time',
@@ -69,9 +60,6 @@ class CrmLead(models.Model):
     )
 
 
-=======
-    
->>>>>>> main
     @api.constrains('wedding_year')
     def _check_wedding_year(self):
         if self.wedding_year:
@@ -103,7 +91,6 @@ class CrmLead(models.Model):
             display = lead.activity_type_id and lead.activity_type_id.display_name or ''
             if 'Toplantı' in display:
                 lead.type = 'opportunity'
-<<<<<<< staging
 
         return None
 
@@ -138,8 +125,3 @@ class CrmLead(models.Model):
             dt_with_offset = start_dt + timedelta(hours=3)
             lead.my_activity_date_clock = dt_with_offset.strftime('%H:%M')
             lead.my_activity_date = start_dt.strftime('%d.%m.%Y')
-=======
-            else:
-                lead.type='lead'
-        return None
->>>>>>> main
