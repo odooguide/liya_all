@@ -66,7 +66,7 @@ class CrmLead(models.Model):
     def _compute_type(self):
         for lead in self:
             display = lead.activity_type_id and lead.activity_type_id.display_name or ''
-            if 'Meeting' in display:
+            if 'Toplantı' in display:
                 lead.type = 'opportunity'
             else:
                 lead.type='lead'
