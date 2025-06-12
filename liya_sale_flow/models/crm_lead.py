@@ -27,7 +27,12 @@ class CrmLead(models.Model):
     )
     second_phone = fields.Char(string="İkincil Telefon")
     second_mail = fields.Char(string="İkincil Mail")
-    second_job_positino = fields.Char(string="İkincil İş Pozisyonu")
+    second_job_position = fields.Char(string="İkincil İş Pozisyonu")
+    second_title = fields.Many2one(
+        comodel_name='res.partner.title',
+        string='Ikincil Başlık',
+        help='Kontakt kartındaki unvanlar listesinden seçiniz.'
+    )
 
     type = fields.Selection(
         [('lead', 'Lead'), ('opportunity', 'Opportunity')],
@@ -36,7 +41,25 @@ class CrmLead(models.Model):
         readonly=False,
     )
 
-    
+    my_activity_date_clock = fields.Char(
+        string='Aktivite Saati',
+        compute='_compute_activity_date_time',
+        store=True,
+    )
+
+    my_activity_date = fields.Char(
+        string='Aktivite Tarihi',
+        compute='_compute_activity_date_time',
+        store=True,
+    )
+
+    my_activity_day = fields.Char(
+        string='Gun',
+        compute='_compute_activity_date_time',
+        store=True,
+    )
+
+
     @api.constrains('wedding_year')
     def _check_wedding_year(self):
         if self.wedding_year:
@@ -66,8 +89,24 @@ class CrmLead(models.Model):
     def _compute_type(self):
         for lead in self:
             display = lead.activity_type_id and lead.activity_type_id.display_name or ''
-            if 'Meeting' in display:
+            if 'Toplantı' in display:
                 lead.type = 'opportunity'
             else:
                 lead.type='lead'
         return None
+
+
+
+    @api.depends('calendar_event_ids.start')
+    def _compute_activity_date_time(self):
+        for lead in self:
+            if not lead.calendar_event_ids:
+                lead.my_activity_date_clock = False
+                continue
+
+            event = lead.calendar_event_ids[0]
+            start_dt = event.start
+            if isinstance(start_dt, str):
+                start_dt = fields.Datetime.from_string(start_dt)
+            lead.my_activity_date_clock = start_dt.strftime('%H:%M')
+            lead.my_activity_date = start_dt.strftime('%d.%m.%Y')

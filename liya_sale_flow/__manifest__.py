@@ -16,6 +16,8 @@
         "security/ir.model.access.csv",
         "reports/report_saleorder_document_inherit.xml",
         "data/ir_sequence.xml",
+        "data/calendar_alarm_data.xml",
+        "views/mail_activity_type.xml",
     ],
     "auto_install": False,
     "installable": True,

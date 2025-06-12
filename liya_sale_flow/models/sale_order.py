@@ -1,6 +1,6 @@
 from odoo import models,api,fields,_
 from odoo.exceptions import UserError
-
+from datetime import date
 class SaleOrder(models.Model):
     _inherit='sale.order'
 
@@ -55,7 +55,7 @@ class SaleOrder(models.Model):
 
         seq_num = self.env['ir.sequence'].next_by_code('sale.order.project') or '0000'
         today = fields.Date.context_today(self)
-        date_str = today.strftime('%d-%m-%Y')
+        date_str = today.strftime('%Y-%m-%d')
         partner_slug = self.partner_id.name.replace(' ', '-')
         project_name = f"D{seq_num}-{date_str}-{partner_slug}"
 
@@ -85,3 +85,25 @@ class SaleOrder(models.Model):
             self.is_project_true=True
         else:
             self.is_project_true=False
+
+    @api.model
+    def create(self, vals):
+        sale = super().create(vals)
+        if sale.opportunity_id:
+            sale_model = self.env['ir.model'].sudo().search(
+                [('model', '=', 'sale.order')], limit=1)
+
+            activity_types = self.env['mail.activity.type'].search(
+                [('is_quot', '=', True)])
+
+            for atype in activity_types:
+                self.env['mail.activity'].create({
+                    'res_model_id': sale_model.id,
+                    'res_model': 'sale.order',
+                    'res_id': sale.id,
+                    'activity_type_id': atype.id,
+                    'user_id': sale.user_id.id or sale.create_uid.id,
+                    'date_deadline': date.today(),
+                })
+
+        return sale
