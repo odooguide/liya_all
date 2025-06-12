@@ -22,8 +22,18 @@
             </xpath>
             <xpath expr="//field[@name='lost_reason_id']" position="before">
                 <field name="second_contact" invisible="type == 'lead'"/>
+<<<<<<< staging
+                <field name="second_title" invisible="type == 'lead'"/>
                 <field name="second_mail" widget="email" invisible="type == 'lead'"/>
                 <field name="second_phone" widget="phone" invisible="type == 'lead'"/>
+                <field name="second_job_position"  invisible="type == 'lead'"/>
+                <field name="my_activity_date_clock"  invisible="1"/>
+                <field name="my_activity_day"  invisible="1"/>
+                <field name="my_activity_date"  invisible="1"/>
+=======
+                <field name="second_mail" widget="email" invisible="type == 'lead'"/>
+                <field name="second_phone" widget="phone" invisible="type == 'lead'"/>
+>>>>>>> main
             </xpath>
         </field>
     </record>

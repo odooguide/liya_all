@@ -1,5 +1,9 @@
 from odoo import models, fields, api
+<<<<<<< staging
+from datetime import date, datetime, timedelta
+=======
 from datetime import date, datetime
+>>>>>>> main
 from odoo.exceptions import ValidationError
 
 
@@ -27,7 +31,16 @@ class CrmLead(models.Model):
     )
     second_phone = fields.Char(string="İkincil Telefon")
     second_mail = fields.Char(string="İkincil Mail")
+<<<<<<< staging
+    second_job_position = fields.Char(string="İkincil İş Pozisyonu")
+    second_title = fields.Many2one(
+        comodel_name='res.partner.title',
+        string='Ikincil Başlık',
+        help='Kontakt kartındaki unvanlar listesinden seçiniz.'
+    )
+=======
     second_job_positino = fields.Char(string="İkincil İş Pozisyonu")
+>>>>>>> main
 
     type = fields.Selection(
         [('lead', 'Lead'), ('opportunity', 'Opportunity')],
@@ -36,7 +49,29 @@ class CrmLead(models.Model):
         readonly=False,
     )
 
+<<<<<<< staging
+    my_activity_date_clock = fields.Char(
+        string='Aktivite Saati',
+        compute='_compute_activity_date_time',
+        store=True,
+    )
+
+    my_activity_date = fields.Char(
+        string='Aktivite Tarihi',
+        compute='_compute_activity_date_time',
+        store=True,
+    )
+
+    my_activity_day = fields.Char(
+        string='Gun',
+        compute='_compute_activity_day',
+        store=True,
+    )
+
+
+=======
     
+>>>>>>> main
     @api.constrains('wedding_year')
     def _check_wedding_year(self):
         if self.wedding_year:
@@ -68,6 +103,43 @@ class CrmLead(models.Model):
             display = lead.activity_type_id and lead.activity_type_id.display_name or ''
             if 'Toplantı' in display:
                 lead.type = 'opportunity'
+<<<<<<< staging
+
+        return None
+
+
+    @api.depends('my_activity_date')
+    def _compute_activity_day(self):
+        turkish_days = [
+            'Pazartesi', 'Salı', 'Çarşamba',
+            'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'
+        ]
+        for rec in self:
+            if rec.my_activity_date:
+                try:
+                    date_obj = datetime.strptime(rec.my_activity_date, '%d.%m.%Y').date()
+                    rec.my_activity_day = turkish_days[date_obj.weekday()]
+                except ValueError:
+                    rec.my_activity_day = False
+            else:
+                rec.my_activity_day = False
+                
+    @api.depends('calendar_event_ids.start')
+    def _compute_activity_date_time(self):
+        for lead in self:
+            if not lead.calendar_event_ids:
+                lead.my_activity_date_clock = False
+                continue
+
+            event = lead.calendar_event_ids[0]
+            start_dt = event.start
+            if isinstance(start_dt, str):
+                start_dt = fields.Datetime.from_string(start_dt)
+            dt_with_offset = start_dt + timedelta(hours=3)
+            lead.my_activity_date_clock = dt_with_offset.strftime('%H:%M')
+            lead.my_activity_date = start_dt.strftime('%d.%m.%Y')
+=======
             else:
                 lead.type='lead'
         return None
+>>>>>>> main
