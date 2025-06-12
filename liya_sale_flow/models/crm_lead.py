@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from odoo.exceptions import ValidationError
 
 
@@ -55,7 +55,7 @@ class CrmLead(models.Model):
 
     my_activity_day = fields.Char(
         string='Gun',
-        compute='_compute_activity_date_time',
+        compute='_compute_activity_day',
         store=True,
     )
 
@@ -96,7 +96,22 @@ class CrmLead(models.Model):
         return None
 
 
-
+    @api.depends('my_activity_date')
+    def _compute_activity_day(self):
+        turkish_days = [
+            'Pazartesi', 'Salı', 'Çarşamba',
+            'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'
+        ]
+        for rec in self:
+            if rec.my_activity_date:
+                try:
+                    date_obj = datetime.strptime(rec.my_activity_date, '%d.%m.%Y').date()
+                    rec.my_activity_day = turkish_days[date_obj.weekday()]
+                except ValueError:
+                    rec.my_activity_day = False
+            else:
+                rec.my_activity_day = False
+                
     @api.depends('calendar_event_ids.start')
     def _compute_activity_date_time(self):
         for lead in self:
@@ -108,5 +123,6 @@ class CrmLead(models.Model):
             start_dt = event.start
             if isinstance(start_dt, str):
                 start_dt = fields.Datetime.from_string(start_dt)
-            lead.my_activity_date_clock = start_dt.strftime('%H:%M')
+            dt_with_offset = start_dt + timedelta(hours=3)
+            lead.my_activity_date_clock = dt_with_offset.strftime('%H:%M')
             lead.my_activity_date = start_dt.strftime('%d.%m.%Y')
