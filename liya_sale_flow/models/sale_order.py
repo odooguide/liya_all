@@ -107,3 +107,22 @@ class SaleOrder(models.Model):
                 })
 
         return sale
+
+    def action_quotation_sent(self):
+        action = super(SaleOrder, self).action_quotation_sent()
+        for sale in self:
+            if sale.opportunity_id:
+                sale_model = self.env['ir.model'].sudo().search(
+                    [('model', '=', 'sale.order')], limit=1)
+                activity_types = self.env['mail.activity.type'].search(
+                    [('is_reminder', '=', True)])
+                for atype in activity_types:
+                    self.env['mail.activity'].create({
+                        'res_model_id': sale_model.id,
+                        'res_model': 'sale.order',
+                        'res_id': sale.id,
+                        'activity_type_id': atype.id,
+                        'user_id': sale.user_id.id or sale.create_uid.id,
+                        'date_deadline': date.today(),
+                    })
+        return action

@@ -7,6 +7,7 @@
     <field name="arch" type="xml">
       <xpath expr="//field[@name='keep_done']" position="after">
         <field name="is_quot"/>
+        <field name="is_reminder"/>
       </xpath>
     </field>
   </record>

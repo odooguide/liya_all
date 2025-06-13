@@ -30,6 +30,9 @@
                 <field name="my_activity_day"  invisible="1"/>
                 <field name="my_activity_date"  invisible="1"/>
             </xpath>
+            <xpath expr="//field[@name='partner_id']" position="replace">
+                <field name="partner_id" widget="res_partner_many2one" context="{'default_name': contact_name,'default_title': title,'default_street': street,'default_street2': street2,'default_city': city,'default_state_id': state_id,'default_zip': zip,'default_country_id': country_id,'default_function': function,'default_phone': phone,'default_mobile': mobile,'default_email': email_from,'default_user_id': user_id,'default_team_id': team_id,'default_website': website,'default_lang': lang_code,'show_vat': True}" />
+            </xpath>
         </field>
     </record>
 
@@ -46,5 +49,43 @@
             <field name="wedding_year" optional="show"/>
         </xpath>
     </field>
+
 </record>
+
+     <record id="crm_lead_view_form_iap_enrich_hide" model="ir.ui.view">
+      <field name="name">crm.lead.form.iap.enrich.hide</field>
+      <field name="model">crm.lead</field>
+      <field name="inherit_id" ref="crm_iap_enrich.crm_lead_view_form"/>
+      <field name="arch" type="xml">
+
+        <xpath expr="//button[@name='iap_enrich'][1]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//button[@name='iap_enrich'][2]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+      </field>
+    </record>
+
+
+<!--    <record id="crm_lead_form_move_title_function" model="ir.ui.view">-->
+<!--      <field name="name">crm.lead.form.move.title.function</field>-->
+<!--      <field name="model">crm.lead</field>-->
+<!--      <field name="inherit_id" ref="crm.crm_lead_view_form"/>-->
+<!--      <field name="arch" type="xml">-->
+
+<!--        <xpath expr="//field[@name='title']" position="replace"/>-->
+<!--        <xpath expr="//field[@name='function']" position="replace"/>-->
+
+<!--        <xpath expr="//field[@name='partner_id']" position="after">-->
+
+<!--            <field name="title" placeholder="Title" options="{'no_open': True}"/>-->
+<!--            <field name="function"/>-->
+
+<!--        </xpath>-->
+
+<!--      </field>-->
+<!--    </record>-->
 </odoo>

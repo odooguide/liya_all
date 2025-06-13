@@ -1,8 +1,10 @@
 <odoo>
-  <record id="alarm_24h_email" model="calendar.alarm">
-    <field name="name">24 Saat E-Posta Hatırlatması</field>
-    <field name="alarm_type">email</field>
-    <field name="duration">24</field>
-    <field name="interval">hours</field>
-  </record>
+    <data noupdate="1">
+    <record id="alarm_24h_email" model="calendar.alarm">
+      <field name="name">24 Saat E-Posta Hatırlatması</field>
+      <field name="alarm_type">email</field>
+      <field name="duration">24</field>
+      <field name="interval">hours</field>
+    </record>
+  </data>
 </odoo>
