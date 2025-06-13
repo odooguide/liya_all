@@ -1,6 +1,7 @@
 from odoo import models,api,fields,_
 from odoo.exceptions import UserError
-from datetime import date
+from datetime import date,timedelta
+
 class SaleOrder(models.Model):
     _inherit='sale.order'
 
@@ -123,6 +124,6 @@ class SaleOrder(models.Model):
                         'res_id': sale.id,
                         'activity_type_id': atype.id,
                         'user_id': sale.user_id.id or sale.create_uid.id,
-                        'date_deadline': date.today(),
+                        'date_deadline': date.today() + timedelta(days=2),
                     })
         return action
