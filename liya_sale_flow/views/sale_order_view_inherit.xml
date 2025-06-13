@@ -20,6 +20,9 @@
         </field>
       </page>
     </xpath>
+    <xpath expr="//button[@name='action_unlock']" position="before">
+      <button name="action_lock" type="object" string="Sözleşmeyi Tamamla"  invisible="locked or state != 'sale'" groups="sales_team.group_sale_manager"/>
+    </xpath>
   </field>
 </record>
 <!--    <record id="view_order_form_inherit_project" model="ir.ui.view">-->
