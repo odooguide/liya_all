@@ -27,25 +27,25 @@ class SaleOrder(models.Model):
             order.project_task_ids = valid
 
 
-    def action_confirm(self):
-
-        res = super().action_confirm()
-        for order in self:
-            if order.sale_order_template_id:
-                if not order.project_id:
-                    raise UserError(_(
-                        "Sipariş %s için proje oluşturulmamış. "
-                        "Önce bir proje atanmalı."
-                    ) % order.name)
-                for tmpl in order.project_task_ids:
-                    self.env['project.task'].create({
-                        'project_id': order.project_id.id,
-                        'name': tmpl.name,
-                        'description': tmpl.description,
-                        'stage_id': tmpl.stage_id.id,
-                        'user_ids': [(6, 0, tmpl.user_ids.ids)],
-                    })
-        return res
+    # def action_confirm(self):
+    #
+    #     res = super().action_confirm()
+    #     for order in self:
+    #         if order.sale_order_template_id:
+    #             if not order.project_id:
+    #                 raise UserError(_(
+    #                     "Sipariş %s için proje oluşturulmamış. "
+    #                     "Önce bir proje atanmalı."
+    #                 ) % order.name)
+    #             for tmpl in order.project_task_ids:
+    #                 self.env['project.task'].create({
+    #                     'project_id': order.project_id.id,
+    #                     'name': tmpl.name,
+    #                     'description': tmpl.description,
+    #                     'stage_id': tmpl.stage_id.id,
+    #                     'user_ids': [(6, 0, tmpl.user_ids.ids)],
+    #                 })
+    #     return res
 
     def action_project_create(self):
         self.ensure_one()
