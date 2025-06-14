@@ -68,7 +68,32 @@
 
       </field>
     </record>
+    <record id="view_crm_lead_form_hide_revenue_prob" model="ir.ui.view">
+      <field name="name">crm.lead.form.hide.revenue.probability</field>
+      <field name="model">crm.lead</field>
+      <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+      <field name="arch" type="xml">
 
+        <xpath expr="//div[@class='col-auto pb-2 pb-md-0 w-100 w-sm-auto']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//div[button[@name='action_set_automated_probability']]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+      </field>
+    </record>
+    <record id="view_crm_lead_form_hide_quotation_income" model="ir.ui.view">
+      <field name="name">crm.lead.form.hide.quotation.income</field>
+      <field name="model">crm.lead</field>
+      <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='sale_amount_total']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+      </field>
+    </record>
 
 <!--    <record id="crm_lead_form_move_title_function" model="ir.ui.view">-->
 <!--      <field name="name">crm.lead.form.move.title.function</field>-->

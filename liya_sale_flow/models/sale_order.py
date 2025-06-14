@@ -11,6 +11,12 @@ class SaleOrder(models.Model):
         compute='_compute_project_task_ids',
     )
     is_project_true=fields.Boolean(string='Is There Any Project?')
+    confirmed_contract=fields.Binary(string="Onaylı Sözleşme")
+    coordinators=fields.Many2many(comodel_name='res.users',string="Koordinatorler")
+    wedding_date=fields.Date(string="Düğün Tarihi")
+    people_count=fields.Integer(string="Kişi Sayısı")
+    second_contact=fields.Char(string="İkinci Kontak")
+
 
     @api.depends('sale_order_template_id', 'order_line.product_id')
     def _compute_project_task_ids(self):

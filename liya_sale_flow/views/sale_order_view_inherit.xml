@@ -23,21 +23,37 @@
     <xpath expr="//button[@name='action_unlock']" position="before">
       <button name="action_lock" type="object" string="Sözleşmeyi Tamamla"  invisible="locked or state != 'sale'" groups="sales_team.group_sale_manager"/>
     </xpath>
+    <xpath expr="//field[@name='payment_term_id']" position="after">
+      <field name="confirmed_contract"/>
+    </xpath>
+    <xpath expr="//field[@name='partner_id']" position="after">
+      <field name="second_contact"/>
+    </xpath>
+
   </field>
 </record>
-<!--    <record id="view_order_form_inherit_project" model="ir.ui.view">-->
-<!--    <field name="name">sale.order.form.inherit.project</field>-->
-<!--    <field name="model">sale.order</field>-->
-<!--    <field name="inherit_id" ref="sale.view_order_form"/>-->
-<!--    <field name="arch" type="xml">-->
-<!--      <xpath expr="//form/header" position="inside">-->
-<!--        <button name="action_project_create"-->
-<!--                type="object"-->
-<!--                string="Create Project"-->
-<!--                class="btn-primary"-->
-<!--                invisible="is_project_true"/>-->
-<!--      </xpath>-->
-<!--    </field>-->
-<!--  </record>-->
+    <record id="view_order_form_inherit_wedding_info" model="ir.ui.view">
+    <field name="name">sale.order.form.inherit.wedding.info</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='sale_order_template_id']" position="after">
+        <field name="coordinators" widget="many2many_tags"/>
+        <field name="wedding_date"/>
+        <field name="people_count"/>
+      </xpath>
+    </field>
+  </record>
+
+  <record id="view_sale_order_form_unlock_admin_only" model="ir.ui.view">
+      <field name="name">sale.order.form.unlock.admin.only</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//button[@name='action_unlock']" position="attributes">
+          <attribute name="groups">base.group_system</attribute>
+        </xpath>
+      </field>
+    </record>
 
 </odoo>
