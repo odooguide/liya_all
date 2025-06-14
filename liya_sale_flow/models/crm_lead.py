@@ -1,7 +1,6 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from datetime import date, datetime, timedelta
-from odoo.exceptions import ValidationError
-
+from odoo.exceptions import ValidationError, UserError
 
 
 class CrmLead(models.Model):
@@ -59,25 +58,24 @@ class CrmLead(models.Model):
         store=True,
     )
 
-
     @api.constrains('wedding_year')
     def _check_wedding_year(self):
         if self.wedding_year:
             if not self.wedding_year.isdigit():
                 raise ValidationError("Düğün yılı sadece sayı içermelidir.")
-            
+
             if len(self.wedding_year) != 4:
                 raise ValidationError("Düğün yılı 4 haneli olmalıdır.")
-            
+
             year = int(self.wedding_year)
-            
+
             if year < 2024:
                 raise ValidationError("Düğün yılı 2024'den büyük olmalıdır (minimum 2025).")
-            
+
             if year > 2100:
                 raise ValidationError("Düğün yılı 2100'den küçük olmalıdır (maksimum 2100).")
 
-    #Delete related sale orders when lost reason activated
+    # Delete related sale orders when lost reason activated
     def action_set_lost(self, **additional_values):
         res = super(CrmLead, self).action_set_lost()
 
@@ -94,7 +92,6 @@ class CrmLead(models.Model):
 
         return None
 
-
     @api.depends('my_activity_date')
     def _compute_activity_day(self):
         turkish_days = [
@@ -110,7 +107,7 @@ class CrmLead(models.Model):
                     rec.my_activity_day = False
             else:
                 rec.my_activity_day = False
-                
+
     @api.depends('calendar_event_ids.start')
     def _compute_activity_date_time(self):
         for lead in self:
@@ -125,3 +122,60 @@ class CrmLead(models.Model):
             dt_with_offset = start_dt + timedelta(hours=3)
             lead.my_activity_date_clock = dt_with_offset.strftime('%H:%M')
             lead.my_activity_date = start_dt.strftime('%d.%m.%Y')
+
+    @api.model
+    def _get_first_stage(self, team):
+        return self.env['crm.stage'].search([
+            ('team_id', '=', team.id),
+            ('sequence', '=', 1)], limit=1)
+
+    def write(self, vals):
+        if 'stage_id' not in vals:
+            return super().write(vals)
+
+        for lead in self:
+            old_seq = lead.stage_id.sequence
+            new_stage = self.env['crm.stage'].browse(vals['stage_id'])
+            new_seq = new_stage.sequence
+
+            if new_seq <= old_seq:
+                continue
+
+            if new_stage.name == 'Görüşülüyor / Teklif Süreci':
+                if lead.quotation_count < 1:
+                    raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
+
+
+            elif new_stage.name == 'Sözleşme Süreci':
+                orders = self.env['sale.order'].search([
+                    ('opportunity_id', '=', lead.id),
+                    ('state', 'in', ('sale', 'done'))
+                ])
+                if not orders:
+                    raise UserError(
+                        _('Onaylı teklif yok, "Sözleşme Süreci"ne geçemezsiniz.')
+                    )
+            if new_stage.name == 'Kazanıldı':
+                orders = self.env['sale.order'].search([
+                    ('opportunity_id', '=', lead.id),
+                    ('state', 'in', ('sale', 'done'))
+                ])
+
+                has_confirmed = any(order.confirmed_contract for order in orders)
+                if not has_confirmed:
+                    raise UserError(
+                        _('Hiçbir onaylı sözleşme bulunamadı. "Kazanıldı" aşamasına geçemezsiniz.')
+                    )
+
+        return super().write(vals)
+
+    def action_sale_quotations_new(self):
+        self.ensure_one()
+        action = super(CrmLead, self).action_sale_quotations_new()
+        ctx = dict(action.get('context', {}))
+        ctx.update({
+            'default_second_contact': self.second_contact or False,
+            'default_wedding_date': self.option1 or False,
+        })
+        action['context'] = ctx
+        return action
