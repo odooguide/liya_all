@@ -172,17 +172,19 @@ class CrmLead(models.Model):
                 wedding_tag = self.env['calendar.event.type'].search(
                     [('name', '=', 'Düğün')], limit=1
                 )
-                all_partners = order.coordinators.ids + [lead.user_id.id, lead.partner_id.id]
+                all_partner_ids = order.coordinators.ids + [lead.user_id.id]
+
+                partner_ops = [(4, pid) for pid in all_partner_ids]
 
                 self.env['calendar.event'].create({
                     'name': 'Düğün Günü',
                     'start_date': order.wedding_date,
-                    'stop_date':order.wedding_date,
+                    'stop_date': order.wedding_date,
                     'allday': True,
                     'user_id': lead.user_id.id,
-                    'partner_ids': [(6, 0, all_partners)],
+                    'partner_ids': partner_ops,
                     'categ_ids': [(6, 0, [wedding_tag.id])] if wedding_tag else [],
-                    'opportunity_id':self.id
+                    'opportunity_id': self.id,
                 })
 
         return super().write(vals)
