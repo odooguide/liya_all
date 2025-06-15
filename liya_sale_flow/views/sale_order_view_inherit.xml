@@ -51,7 +51,7 @@
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
         <xpath expr="//button[@name='action_unlock']" position="attributes">
-          <attribute name="invisible">uid != 2</attribute>
+            <attribute name="groups">base.group_system</attribute>
         </xpath>
       </field>
     </record>

@@ -1,15 +1,5 @@
 from odoo import models, api,fields
 
-class CalendarAlarm(models.Model):
-    _inherit = 'calendar.alarm'
-
-    @api.model
-    def _default_24h_alarm(self):
-        alarm = self.env.ref('your_module.alarm_24h_email', raise_if_not_found=False)
-        return alarm and [(6, 0, [alarm.id])] or []
-
-
-
 class CalendarEvent(models.Model):
     _inherit = 'calendar.event'
 
