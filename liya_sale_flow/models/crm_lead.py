@@ -167,6 +167,23 @@ class CrmLead(models.Model):
                         _('Hiçbir onaylı sözleşme bulunamadı. "Kazanıldı" aşamasına geçemezsiniz.')
                     )
 
+                order = orders[0]
+
+                wedding_tag = self.env['calendar.event.type'].search(
+                    [('name', '=', 'Düğün')], limit=1
+                )
+
+                self.env['calendar.event'].create({
+                    'name': 'Düğün Günü',
+                    'start_date': order.wedding_date,
+                    'stop_date':order.wedding_date,
+                    'allday': True,
+                    'user_id': lead.user_id.id,
+                    'partner_ids': [(6, 0, order.coordinators.ids)],
+                    'categ_ids': [(6, 0, [wedding_tag.id])] if wedding_tag else [],
+                    'opportunity_id':self.id
+                })
+
         return super().write(vals)
 
     def action_sale_quotations_new(self):
@@ -179,3 +196,6 @@ class CrmLead(models.Model):
         })
         action['context'] = ctx
         return action
+
+
+#TODO: partner_ids coordinatorler, sales person user_id tum gun
