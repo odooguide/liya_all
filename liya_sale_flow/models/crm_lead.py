@@ -26,7 +26,7 @@ class CrmLead(models.Model):
     )
     second_phone = fields.Char(string="İkincil Telefon")
     second_mail = fields.Char(string="İkincil Mail")
-    second_job_position = fields.Char(string="İkincil İş Pozisyonu")
+    second_job_position = fields.Char(string="İkincil Meslek")
     second_title = fields.Many2one(
         comodel_name='res.partner.title',
         string='Ikincil Başlık',
