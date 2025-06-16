@@ -1,6 +1,8 @@
 from odoo import models,api,fields,_
 from odoo.exceptions import UserError
 from datetime import date,timedelta
+from odoo.tools.misc import formatLang
+
 
 class SaleOrder(models.Model):
     _inherit='sale.order'
@@ -133,3 +135,28 @@ class SaleOrder(models.Model):
                         'date_deadline': date.today() + timedelta(days=2),
                     })
         return action
+
+    def get_total_discount_formatted(self):
+        self.ensure_one()
+        total = sum(
+            line.price_unit * line.product_uom_qty * (line.discount or 0.0) / 100.0
+            for line in self.order_line
+        )
+        return formatLang(self.env, total, currency_obj=self.currency_id)
+
+    def get_lines_with_options_total(self):
+        self.ensure_one()
+        total = sum(
+            line.price_unit * line.product_uom_qty
+            for line in self.order_line
+            if line.sale_order_option_ids
+        )
+
+    def get_lines_with_options_total_formatted(self):
+        self.ensure_one()
+        total = sum(
+            line.price_unit * line.product_uom_qty
+            for line in self.order_line
+            if line.sale_order_option_ids
+        )
+        return formatLang(self.env, total, currency_obj=self.currency_id)

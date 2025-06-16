@@ -15,6 +15,7 @@
         "views/sale_order_view_inherit.xml",
         "security/ir.model.access.csv",
         "reports/report_saleorder_document_inherit.xml",
+        "reports/external_layout_light_view_inherit.xml",
         "data/ir_sequence.xml",
         "data/calendar_alarm_data.xml",
         "views/mail_activity_type.xml",
