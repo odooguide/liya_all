@@ -3,7 +3,6 @@ from odoo.exceptions import UserError
 from datetime import date,timedelta
 from odoo.tools.misc import formatLang
 
-
 class SaleOrder(models.Model):
     _inherit='sale.order'
 
