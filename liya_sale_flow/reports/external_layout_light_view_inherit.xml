@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="external_layout_standard_empty_header"
+            inherit_id="web.external_layout_standard"
+            priority="20">
+    <xpath expr="//div[@t-attf-class='header o_company_#{company.id}_layout']"
+           position="replace">
+    </xpath>
+    <xpath expr="//t[@t-set='layout_background_url']" position="replace"/>
+    <xpath expr="//div[contains(@t-attf-class, 'footer o_company_')]" position="replace"/>
+
+  </template>
+</odoo>
