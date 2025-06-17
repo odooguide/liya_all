@@ -70,7 +70,7 @@
                                 <tr>
                                     <td>Net Tutar</td>
                                     <td>
-                                        <span t-esc="line.price_unit * line.product_uom_qty" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                        <span t-esc="doc.get_wedding_net_total()" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -82,7 +82,7 @@
                                 <tr>
                                     <td>Toplam Tutar</td>
                                     <td>
-                                        <span t-field="doc.amount_total"/>
+                                        <span t-esc="doc.amount_total - doc.get_discount_total()"/>
                                     </td>
                                 </tr>
                                 <tr>

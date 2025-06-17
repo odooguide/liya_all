@@ -5,3 +5,4 @@ from . import sale_order
 from . import calendar_alarm
 from . import activity_type
 from . import wedding_place
+from . import product_template
