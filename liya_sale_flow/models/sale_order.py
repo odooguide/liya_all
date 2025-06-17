@@ -15,7 +15,9 @@ class SaleOrder(models.Model):
     )
     is_project_true=fields.Boolean(string='Is There Any Project?')
     confirmed_contract=fields.Binary(string="Onaylı Sözleşme")
-    coordinator_ids=fields.Many2many(comodel_name='res.partner', string="Koordinatorler",domain=[('user_id', '!=', False)])
+    coordinator_ids = fields.Many2many(comodel_name='res.partner', string="Koordinatörler",
+                                       domain=[('employee_ids', '!=', False)])
+
     wedding_date=fields.Date(string="Düğün Tarihi")
     people_count=fields.Integer(string="Kişi Sayısı")
     second_contact=fields.Char(string="İkinci Kontak")
@@ -200,6 +202,15 @@ class SaleOrder(models.Model):
             if line.sale_order_option_ids
         )
         return formatLang(self.env, total, currency_obj=self.currency_id)
+
+
+    def get_wedding_net_total(self):
+        self.ensure_one()
+        return sum(
+            line.price_unit * line.product_uom_qty
+            for line in self.order_line
+            if line.product_id.is_wedding
+        )
 
     def action_custom_send_quotation(self):
         for order in self:

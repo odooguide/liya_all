@@ -57,7 +57,8 @@ class CrmLead(models.Model):
         compute='_compute_activity_day',
         store=True,
     )
-    wedding_place=fields.Many2one('wedding.place',string='Düğünün Türü',ondelete="set null")
+    wedding_place=fields.Many2one('wedding.place',string='Kaynak Kategori',ondelete="set null")
+
 
     @api.constrains('wedding_year')
     def _check_wedding_year(self):
