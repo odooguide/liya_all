@@ -1,0 +1,40 @@
+<odoo>
+  <data noupdate="1">
+
+    <record id="view_crm_case_kanban_view_leads_hide_revenues" model="ir.ui.view">
+      <field name="name">crm.lead.kanban.hide.revenues</field>
+      <field name="model">crm.lead</field>
+      <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+      <field name="arch" type="xml">
+
+        <xpath expr="//t[field[@name='expected_revenue']]" position="attributes">
+          <attribute name="t-if">False</attribute>
+        </xpath>
+
+        <xpath expr="//t[field[@name='recurring_revenue']]" position="attributes">
+          <attribute name="t-if">False</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='expected_revenue']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+        <xpath expr="//field[@name='recurring_revenue']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+        <xpath expr="//field[@name='recurring_plan']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//progressbar" position="replace">
+          <progressbar
+            field="activity_state"
+            colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}"
+            help="This bar allows to filter the opportunities based on scheduled activities."
+          />
+        </xpath>
+
+      </field>
+    </record>
+
+  </data>
+</odoo>

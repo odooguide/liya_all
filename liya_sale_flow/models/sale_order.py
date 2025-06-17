@@ -1,7 +1,9 @@
 from odoo import models,api,fields,_
 from odoo.exceptions import UserError
-from datetime import date,timedelta
+from datetime import date, timedelta, datetime
 from odoo.tools.misc import formatLang
+from babel.dates import format_date as babel_format_date
+
 
 
 class SaleOrder(models.Model):
@@ -15,10 +17,50 @@ class SaleOrder(models.Model):
     is_project_true=fields.Boolean(string='Is There Any Project?')
     confirmed_contract=fields.Binary(string="Onaylı Sözleşme")
     coordinators=fields.Many2many(comodel_name='res.users',string="Koordinatorler")
+    coordinator_ids=fields.Many2many(comodel_name='res.partner', string="Koordinatorler",domain=[('user_id', '!=', False)])
     wedding_date=fields.Date(string="Düğün Tarihi")
     people_count=fields.Integer(string="Kişi Sayısı")
     second_contact=fields.Char(string="İkinci Kontak")
+    wedding_day = fields.Char(
+        string='Dugun Gunu',
+        compute='_compute_wedding_day',
+        store=True,
+    )
+    wedding_date_display = fields.Char(
+        string="Düğün Tarihi (Formatlı)",
+        compute='_compute_wedding_date_display',
+        store=True,
+    )
 
+    @api.depends('wedding_date')
+    def _compute_wedding_date_display(self):
+        for order in self:
+            if order.wedding_date:
+                lang = 'tr'
+                order.wedding_date_display = babel_format_date(
+                    order.wedding_date,
+                    format='d MMMM y, EEEE',
+                    locale=lang.replace('_', '-')
+                )
+            else:
+                order.wedding_date_display = False
+
+    @api.depends('wedding_date')
+    def _compute_wedding_day(self):
+        turkish_days = [
+            'Pazartesi', 'Salı', 'Çarşamba',
+            'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'
+        ]
+        for rec in self:
+            if rec.wedding_date:
+
+                try:
+                    date_obj = datetime.strptime(rec.wedding_date, '%Y-%m-%d').date()
+                    rec.wedding_day = turkish_days[date_obj.weekday()]
+                except (ValueError, TypeError):
+                    rec.wedding_day = False
+            else:
+                rec.wedding_day = False
 
     @api.depends('sale_order_template_id', 'order_line.product_id')
     def _compute_project_task_ids(self):
@@ -34,6 +76,9 @@ class SaleOrder(models.Model):
                           or t.optional_product_id.id in prod_ids
             )
             order.project_task_ids = valid
+
+
+
 
 
     # def action_confirm(self):
@@ -136,13 +181,10 @@ class SaleOrder(models.Model):
                     })
         return action
 
-    def get_total_discount_formatted(self):
+    def get_discount_total(self):
         self.ensure_one()
-        total = sum(
-            line.price_unit * line.product_uom_qty * (line.discount or 0.0) / 100.0
-            for line in self.order_line
-        )
-        return formatLang(self.env, total, currency_obj=self.currency_id)
+        return sum(line.price_subtotal for line in self.order_line if line.price_subtotal < 0)
+
 
     def get_lines_with_options_total(self):
         self.ensure_one()
@@ -160,3 +202,7 @@ class SaleOrder(models.Model):
             if line.sale_order_option_ids
         )
         return formatLang(self.env, total, currency_obj=self.currency_id)
+
+    def action_custom_send_quotation(self):
+        for order in self:
+            return order.with_context(hide_default_template=True).action_quotation_send()

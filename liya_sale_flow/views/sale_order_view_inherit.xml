@@ -38,9 +38,11 @@
     <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
     <field name="arch" type="xml">
       <xpath expr="//field[@name='sale_order_template_id']" position="after">
-        <field name="coordinators" widget="many2many_tags"/>
+        <field name="coordinator_ids" widget="many2many_tags"/>
         <field name="wedding_date"/>
         <field name="people_count"/>
+        <field name="wedding_day" invisible="1"/>
+        <field name="wedding_date_display" invisible="1"/>
       </xpath>
     </field>
   </record>
@@ -55,5 +57,41 @@
         </xpath>
       </field>
     </record>
+
+      <record id="view_order_form_custom_send" model="ir.ui.view">
+    <field name="name">sale.order.form.custom.send</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <header>
+        <button
+          name="action_custom_send_quotation"
+          type="object"
+          string="Email Gönder"
+          class="oe_highlight"
+        />
+      </header>
+    </field>
+  </record>
+
+   <record id="view_order_form_hide_send_buttons" model="ir.ui.view">
+    <field name="name">sale.order.form.hide.send.buttons</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//button[@id='send_by_email_primary']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+      <xpath expr="//button[@id='send_proforma_primary']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+      <xpath expr="//button[@id='send_proforma']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+      <xpath expr="//button[@id='send_by_email']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+    </field>
+  </record>
 
 </odoo>

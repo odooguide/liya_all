@@ -1,5 +1,5 @@
-from odoo import models, api,fields
-
+from odoo import models, api,fields,_
+from odoo.exceptions import UserError
 class CalendarEvent(models.Model):
     _inherit = 'calendar.event'
 
@@ -11,3 +11,18 @@ class CalendarEvent(models.Model):
             if alarm:
                 res['alarm_ids'] = [(6, 0, [alarm.id])]
         return res
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('categ_ids'):
+            raise UserError(_('Lütfen en az bir etiket seçin.'))
+        return super(CalendarEvent, self).create(vals)
+
+    def write(self, vals):
+        if 'categ_ids' in vals:
+            res = super(CalendarEvent, self).write(vals)
+            for event in self:
+                if not event.categ_ids:
+                    raise UserError(_('Lütfen en az bir etiket seçin.'))
+            return res
+        return super(CalendarEvent, self).write(vals)
