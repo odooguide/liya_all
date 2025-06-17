@@ -17,7 +17,7 @@ class SaleOrder(models.Model):
     confirmed_contract=fields.Binary(string="Onaylı Sözleşme")
     coordinator_ids = fields.Many2many(comodel_name='res.partner', string="Koordinatörler",
                                        domain=[('employee_ids', '!=', False)])
-    wedding_date=fields.Date(string="Düğün Tarihi")
+    wedding_date=fields.Date(string="Etkinlik Tarihi")
     people_count=fields.Integer(string="Kişi Sayısı")
     second_contact=fields.Char(string="İkinci Kontak")
     wedding_day = fields.Char(
@@ -26,7 +26,7 @@ class SaleOrder(models.Model):
         store=True,
     )
     wedding_date_display = fields.Char(
-        string="Düğün Tarihi (Formatlı)",
+        string="Etkinlik Tarihi (Formatlı)",
         compute='_compute_wedding_date_display',
         store=True,
     )
