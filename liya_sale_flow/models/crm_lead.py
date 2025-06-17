@@ -59,6 +59,7 @@ class CrmLead(models.Model):
     )
     wedding_place=fields.Many2one('wedding.place',string='Kaynak Kategori',ondelete="set null")
 
+
     @api.constrains('wedding_year')
     def _check_wedding_year(self):
         if self.wedding_year:

@@ -17,6 +17,7 @@ class SaleOrder(models.Model):
     confirmed_contract=fields.Binary(string="Onaylı Sözleşme")
     coordinator_ids = fields.Many2many(comodel_name='res.partner', string="Koordinatörler",
                                        domain=[('employee_ids', '!=', False)])
+
     wedding_date=fields.Date(string="Düğün Tarihi")
     people_count=fields.Integer(string="Kişi Sayısı")
     second_contact=fields.Char(string="İkinci Kontak")
@@ -201,6 +202,7 @@ class SaleOrder(models.Model):
             if line.sale_order_option_ids
         )
         return formatLang(self.env, total, currency_obj=self.currency_id)
+
 
     def get_wedding_net_total(self):
         self.ensure_one()

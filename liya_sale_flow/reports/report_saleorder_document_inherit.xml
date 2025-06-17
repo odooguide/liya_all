@@ -89,7 +89,9 @@
                                     <td>İndirim Yapılan Tutar</td>
                                     <td>
 
+
                                         <span style="color: purple;"><t t-esc="doc.get_discount_total()" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/></span>
+
                                     </td>
                                 </tr>
                                 <tr>
