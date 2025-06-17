@@ -57,6 +57,7 @@ class CrmLead(models.Model):
         compute='_compute_activity_day',
         store=True,
     )
+    wedding_place=fields.Many2one('wedding.place',string='Düğünün Türü',ondelete="set null")
 
     @api.constrains('wedding_year')
     def _check_wedding_year(self):
@@ -75,12 +76,14 @@ class CrmLead(models.Model):
             if year > 2100:
                 raise ValidationError("Düğün yılı 2100'den küçük olmalıdır (maksimum 2100).")
 
-    # Delete related sale orders when lost reason activated
     def action_set_lost(self, **additional_values):
-        res = super(CrmLead, self).action_set_lost()
-
-        self.mapped('order_ids').action_cancel()
-
+        res = super().action_set_lost(**additional_values)
+        # ilgili tüm sale.order kayıtlarını al
+        orders = self.env['sale.order'].search([
+            ('opportunity_id', 'in', self.ids),
+        ])
+        for order in orders:
+            order._action_cancel()
         return res
 
     @api.depends('activity_type_id')
@@ -172,12 +175,12 @@ class CrmLead(models.Model):
                 wedding_tag = self.env['calendar.event.type'].search(
                     [('name', '=', 'Düğün')], limit=1
                 )
-                all_partner_ids = order.coordinators.ids + [lead.user_id.id]
+                all_partner_ids = order.coordinator_ids.ids
 
                 partner_ops = [(4, pid) for pid in all_partner_ids]
 
                 self.env['calendar.event'].create({
-                    'name': 'Düğün Günü',
+                    'name': f'{lead.name} Düğün Günü',
                     'start_date': order.wedding_date,
                     'stop_date': order.wedding_date,
                     'allday': True,
@@ -186,6 +189,15 @@ class CrmLead(models.Model):
                     'categ_ids': [(6, 0, [wedding_tag.id])] if wedding_tag else [],
                     'opportunity_id': self.id,
                 })
+
+                orders_to_cancel=self.env['sale.order'].search([
+                    ('opportunity_id', '=', lead.id),
+                    ('state', 'in', ('draft','sent'))
+                ])
+
+                for o in orders_to_cancel:
+                    o._action_cancel()
+
 
         return super().write(vals)
 
@@ -199,6 +211,18 @@ class CrmLead(models.Model):
         })
         action['context'] = ctx
         return action
+
+    @api.onchange('source_id')
+    def _onchange_source(self):
+        if self.source_id and self.source_id.name == 'Düğün.com':
+            rec = self.env['wedding.place'].search(
+                [('name', '=', 'Kır Düğünü')],
+                limit=1
+            )
+            if rec:
+                self.wedding_place = rec.id
+
+
 
 
 #TODO: partner_ids coordinatorler, sales person user_id tum gun

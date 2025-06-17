@@ -13,6 +13,8 @@
         "views/crm_lead.xml",
         "views/sale_order_template_view.xml",
         "views/sale_order_view_inherit.xml",
+        "views/crm_lead_kanban_hide_revenues.xml",
+        "views/calendar_event_inherit_search_custom.xml",
         "security/ir.model.access.csv",
         "reports/report_saleorder_document_inherit.xml",
         "reports/external_layout_light_view_inherit.xml",

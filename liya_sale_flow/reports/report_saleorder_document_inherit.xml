@@ -21,7 +21,7 @@
                     <div style="font-size:9pt;">
                         <span>
                             Sayın
-                            <t t-esc="doc.partner_id.name"/>
+                            <t t-esc="doc.partner_id.name"/> ve <t t-esc="doc.second_contact"/>
                             çiftimiz
                         </span>
                         <br/>
@@ -41,9 +41,9 @@
                         <table class="table" style="       width: 50%;       font-size: 8pt;       line-height: 6pt;       border-collapse: collapse;       margin: 0;     ">
                             <thead>
                                 <tr>
-                                    <th>Düğün Tarihleri</th>
+                                    <th>Düğün Tarihi</th>
                                     <th>
-                                        <t t-esc="doc.validity_date.strftime('%A, %B %d, %Y')"/>
+                                       <t t-esc="doc.wedding_date_display"/>
                                     </th>
                                 </tr>
                             </thead>
@@ -89,7 +89,7 @@
                                     <td>İndirim Yapılan Tutar</td>
                                     <td>
 
-                                        <span style="color: purple;"><t t-esc="doc.get_total_discount_formatted()"/></span>
+                                        <span style="color: purple;"><t t-esc="doc.get_discount_total()"/></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -222,7 +222,7 @@
 
                                     32. FOTOGRAF VIDEO PLUS
                                     <br/>
-                                    33. AFTER PARTY 2 SA, 50 KİŞİ
+                                    33. AFTER PARTY 2.5 SA, 50 KİŞİ
                                     <br/>
                                     34. AFTER PARTY’DE SHOT SE
                                     <br/>
@@ -253,7 +253,7 @@
                             <tr>
                                 <td style="vertical-align:top; width:25%; padding:2px;">
 
-                                    33. AFTER PARTY 2.5 SA, 100
+                                    33. AFTER PARTY 2.5 SA, 100 KİŞİ
                                     <br/>
                                     39. LASER ve SİS ŞOVLARI
                                     <br/>

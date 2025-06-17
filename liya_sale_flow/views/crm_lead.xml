@@ -9,6 +9,7 @@
                     <group string="Düğün Bilgisi">
                         <field name="request_date"/>
                         <field name="source_id"/>
+                        <field name="wedding_place"/>
                         <field name="wedding_type"/>
                         <field name="people"/>
                     </group>

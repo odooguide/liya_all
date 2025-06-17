@@ -1,0 +1,26 @@
+<odoo>
+    <record id="view_order_form_inherit_demo_tasks" model="ir.ui.view">
+  <field name="name">sale.order.form.demo.tasks</field>
+  <field name="model">sale.order</field>
+  <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
+  <field name="arch" type="xml">
+    <xpath expr="//page[@name='optional_products']" position="after">
+      <page string="Projedeki Görevler">
+        <field name="project_task_ids">
+          <list editable="bottom" creatable="true">
+            <field name="name"/>
+            <field name="description"/>
+            <field name="stage_id"/>
+            <field name="planned_date"/>
+            <field name="days"/>
+            <field name="user_ids" widget="many2many_tags"/>
+            <field name="activity_type_id"/>
+            <field name="optional_product_id"/>
+          </list>
+        </field>
+      </page>
+    </xpath>
+
+  </field>
+</record>
+</odoo>
