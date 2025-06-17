@@ -5,7 +5,6 @@ from odoo.tools.misc import formatLang
 from babel.dates import format_date as babel_format_date
 
 
-
 class SaleOrder(models.Model):
     _inherit='sale.order'
 
