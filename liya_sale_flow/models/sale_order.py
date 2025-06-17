@@ -15,7 +15,6 @@ class SaleOrder(models.Model):
     )
     is_project_true=fields.Boolean(string='Is There Any Project?')
     confirmed_contract=fields.Binary(string="Onaylı Sözleşme")
-    coordinators=fields.Many2many(comodel_name='res.users',string="Koordinatorler")
     coordinator_ids=fields.Many2many(comodel_name='res.partner', string="Koordinatorler",domain=[('user_id', '!=', False)])
     wedding_date=fields.Date(string="Düğün Tarihi")
     people_count=fields.Integer(string="Kişi Sayısı")
