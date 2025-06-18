@@ -6,4 +6,5 @@ from . import calendar_alarm
 from . import activity_type
 from . import wedding_place
 from . import product_template
+from . import event_event
 

@@ -4,4 +4,4 @@ class WeddingType(models.Model):
     _name = "wedding.type"
     _description = "Düğün Tipi"
 
-    name = fields.Char(string="Düğün Tipi Adı", required=True)
+    name = fields.Char(string="Etkinlik Tipi Adı", required=True)
