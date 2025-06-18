@@ -68,7 +68,6 @@ class SaleOrder(models.Model):
         ]
         for rec in self:
             if rec.wedding_date:
-
                 try:
                     date_obj = datetime.strptime(rec.wedding_date, '%Y-%m-%d').date()
                     rec.wedding_day = turkish_days[date_obj.weekday()]
