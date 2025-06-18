@@ -1,3 +1,5 @@
+import re
+
 from odoo import models, fields, api, _
 from datetime import date, datetime, timedelta
 from odoo.exceptions import ValidationError, UserError
@@ -11,14 +13,14 @@ class CrmLead(models.Model):
     option3 = fields.Date(string="Alternatif Tarih 3")
     wedding_type = fields.Many2one(
         comodel_name="wedding.type",
-        string="Düğün Tipi",
+        string="Etkinlik Tipi",
         ondelete="set null",
     )
     request_date = fields.Date(string="Talep Tarihi")
     wedding_year = fields.Char(
-        string="Düğün Yılı",
+        string="Etkinlik Yılı",
         size=4,
-        help="Düğün yılı (2025-2100 arası)"
+        help="Etkinlik yılı (2025-2100 arası)"
     )
     people = fields.Integer(string="Kişiler")
     second_contact = fields.Char(
@@ -32,6 +34,7 @@ class CrmLead(models.Model):
         string='Ikincil Başlık',
         help='Kontakt kartındaki unvanlar listesinden seçiniz.'
     )
+
 
     type = fields.Selection(
         [('lead', 'Lead'), ('opportunity', 'Opportunity')],
@@ -59,23 +62,39 @@ class CrmLead(models.Model):
     )
     wedding_place=fields.Many2one('wedding.place',string='Kaynak Kategori',ondelete="set null")
 
+    @api.onchange('second_phone')
+    def _onchange_second_phone(self):
+        for partner in self:
+            raw = partner.second_phone or ''
 
+            digits = re.sub(r'\D', '', raw)
+            if len(digits) == 11 and digits.startswith('0'):
+                digits = digits[1:]
+            if len(digits) == 10:
+                m = re.match(r'(\d{3})(\d{3})(\d{2})(\d{2})$', digits)
+                if m:
+                    part1, part2, part3, part4 = m.groups()
+                    partner.second_phone = f'+90 {part1} {part2} {part3} {part4}'
+                else:
+                    partner.second_phone = raw
+            else:
+                partner.second_phone = raw
     @api.constrains('wedding_year')
     def _check_wedding_year(self):
         if self.wedding_year:
             if not self.wedding_year.isdigit():
-                raise ValidationError("Düğün yılı sadece sayı içermelidir.")
+                raise ValidationError("Etkinlik yılı sadece sayı içermelidir.")
 
             if len(self.wedding_year) != 4:
-                raise ValidationError("Düğün yılı 4 haneli olmalıdır.")
+                raise ValidationError("Etkinlik yılı 4 haneli olmalıdır.")
 
             year = int(self.wedding_year)
 
             if year < 2024:
-                raise ValidationError("Düğün yılı 2024'den büyük olmalıdır (minimum 2025).")
+                raise ValidationError("Etkinlik yılı 2024'den büyük olmalıdır (minimum 2025).")
 
             if year > 2100:
-                raise ValidationError("Düğün yılı 2100'den küçük olmalıdır (maksimum 2100).")
+                raise ValidationError("Etkinlik yılı 2100'den küçük olmalıdır (maksimum 2100).")
 
     def action_set_lost(self, **additional_values):
         res = super().action_set_lost(**additional_values)
@@ -181,7 +200,7 @@ class CrmLead(models.Model):
                 partner_ops = [(4, pid) for pid in all_partner_ids]
 
                 self.env['calendar.event'].create({
-                    'name': f'{lead.name} Düğün Günü',
+                    'name': f'{lead.name} Etkinlik Günü',
                     'start_date': order.wedding_date,
                     'stop_date': order.wedding_date,
                     'allday': True,

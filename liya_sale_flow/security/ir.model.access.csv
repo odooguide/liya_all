@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_wedding_type_user,wedding.type user,model_wedding_type,base.group_user,1,1,1,1
 access_wedding_place_user,wedding.place user,model_wedding_place,base.group_user,1,1,1,1
 access_sale_order_template_task,access sale order template task,model_sale_order_template_task,base.group_user,1,1,1,1
+access_event_event,Access Event,model_event_event,base.group_user,1,1,1,1

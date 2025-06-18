@@ -2,345 +2,366 @@
 <odoo>
     <template id="report_saleorder_document_external_replace" inherit_id="sale.report_saleorder_document">
         <xpath expr="//t[@t-call='web.external_layout']" position="replace">
-           <data inherit_id="sale.report_saleorder_document">
-            <t t-call="web.external_layout">
-                <div class="row align-items-start mb-2" style="width:100%;">
-  <div class="col text-start" style="margin-top:10px">
-    <t t-esc="docs.create_date.strftime('%d.%m.%Y')"/>
-  </div>
-  <div class="col text-center" style="margin-top:60px; font-size:16pt">
-    TEKLİF
-  </div>
-  <div class="col text-end">
-    <img t-if="docs.company_id.logo" style="width:150px" t-att-src="image_data_uri(docs.company_id.logo)" alt="Logo"/>
-  </div>
-</div>
-                <t t-set="o" t-value="doc"/>
-                <t t-set="line" t-value="o.order_line and o.order_line[0]"/>
-                <div class="page">
-                    <div style="font-size:9pt;">
-                        <span>
-                            Sayın
-                            <t t-esc="doc.partner_id.name"/> ve <t t-esc="doc.second_contact"/>
-                            çiftimiz
-                        </span>
-                        <br/>
-                        <br/>
-                        <span>
-                            Aşağıda, sizinle gerçekleştirdiğimiz görüşme doğrultusunda planladığımız tarih ve tercih
-                            ettiğiniz
-                            hizmet seçeneklerine göre oluşturulmuş
-                            All'N One teklifimizi bulabilirsiniz.
-                        </span>
-
-
+            <data inherit_id="sale.report_saleorder_document">
+                <t t-call="web.external_layout">
+                    <div class="row align-items-start mb-2" style="width:100%;">
+                        <div class="col text-start" style="margin-top:10px">
+                            <t t-esc="docs.create_date.strftime('%d.%m.%Y')"/>
+                        </div>
+                        <div class="col text-center" style="margin-top:60px; font-size:16pt;color: #048364;">
+                            TEKLİF
+                        </div>
+                        <div class="col text-end">
+                            <img t-if="docs.company_id.logo" style="width:150px"
+                                 t-att-src="image_data_uri(docs.company_id.logo)" alt="Logo"/>
+                        </div>
                     </div>
-
-
-                    <div style="display:flex; justify-content:center; align-items:center;margin-top:15px;margin-left:0%">
-                        <table class="table" style="       width: 50%;       font-size: 8pt;       line-height: 6pt;       border-collapse: collapse;       margin: 0;     ">
-                            <thead>
-                                <tr>
-                                    <th>Düğün Tarihi</th>
-                                    <th>
-                                       <t t-esc="doc.wedding_date_display"/>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Kişi Sayısı</td>
-                                    <td>
-                                        <t t-esc="doc.people_count"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Paket Tercihi</td>
-                                    <td>
-                                        <t t-esc="doc.sale_order_template_id.name"/>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>Kişi Başı Fiyat</td>
-                                    <td>
-                                        <span t-field="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Net Tutar</td>
-                                    <td>
-                                        <span t-esc="doc.get_wedding_net_total()" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Opsiyonel Hizmetler Tutarı</td>
-                                    <td>
-                                        <span><t t-esc="doc.get_lines_with_options_total_formatted()"/></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Toplam Tutar</td>
-                                    <td>
-                                        <span t-esc="doc.amount_total - doc.get_discount_total()" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>İndirim Yapılan Tutar</td>
-                                    <td>
-
-
-                                        <span style="color: purple;"><t t-esc="doc.get_discount_total()" t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/></span>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span>
-                                            <strong>SIZE ÖZEL TEKLİFİMİZ</strong>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span t-field="doc.amount_total"/>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div style="margin-top:10pt;">
-                        <table style="           width: 100%;            border-collapse: collapse;            border: 1px solid;           font-size:9pt;         ">
-                            <tr>
-                                <td style="width: 20%; padding: 0.3rem; vertical-align: top;  font-weight: bold;">
-                                    Notlarımız:
-                                </td>
-                                <td style="max-width: 45%; padding: 0.3rem; vertical-align: top; text-wrap:wrap">
-                                    <span t-field="doc.note" name="order_note"/>
-                                </td>
-                                <td style="width: 20%; padding: 0.3rem; vertical-align: top; font-weight: bold;">
-                                    Opsiyonel Hizmetler
-                                </td>
-                                <td style="width: 15%; padding: 0.3rem; vertical-align: top;">
-                <t t-set="line2" t-value="o.order_line"/>
-    <t t-if="line2.sale_order_option_ids">
-        <t t-foreach="line2.sale_order_option_ids" t-as="opt">
-            <div>
-                <span t-esc="opt.product_id.name"/>
-            </div>
-        </t>
-    </t>
-</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div style="margin-top:1rem; font-size:10px; line-height:1.5; border:0 !important ">
-                        <!-- Başlık -->
-                        <p style="margin:0 0 .5rem 0;">
-                            Fiyatlara tercih edilen pakete göre aşağıdaki tüm hizmetler dahildir.
-                        </p>
-                        <!-- 4 sütunlu hizmet listesi -->
-                        <span style="font-size:11pt;font-weight:bold;">ELITE</span>
-                        <table style="width:100%; border-collapse:collapse; margin-bottom:.5rem;">
-                            <tr>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-                                    1. DÖRT TEMALI MASA SÜSLEN
-                                    <br/>
-                                    2. DJ PERFORMANS
-                                    <br/>
-                                    3. SES-IŞIK-JENERATÖR
-                                    <br/>
-                                    4. A'LA CARTE DÜĞÜN MENÜS
-                                    <br/>
-                                    5. SERVİS
-                                    <br/>
-                                    6. KOKTEYL
-                                    <br/>
-                                    7. LİMİTSİZ YERLİ İÇKİ
-                                    <br/>
-                                    8. DENİZ ULAŞIMI
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-                                    9. PHOTO BOOTH
-                                    <br/>
-                                    10. PRE HOSTING
-                                    <br/>
-                                    11. WEDDING PLANNER
-                                    <br/>
-                                    12. ORGANİZASYON
-                                    <br/>
-                                    13. WELCOMING
-                                    <br/>
-                                    14. LCV ARAMA ve RAPORLAMA
-                                    <br/>
-                                    15. CANLI ÇİÇEK
-                                    <br/>
-                                    16. DEKORASYON
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-                                    17. GELİN YOLU SÜSLEME
-                                    <br/>
-                                    18. NİKAH TAŞLARI
-                                    <br/>
-                                    19. YAĞIŞ ÇÖZÜMLERİ
-                                    <br/>
-                                    20. HAZIRLIK ODASI VE TERASI
-                                    <br/>
-                                    21. WEB SİTESİ
-                                    <br/>
-                                    22. GÜVENLİK
-                                    <br/>
-                                    23. PARAMEDİK UZMANI
-                                    <br/>
-                                    24. TAG ME
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-                                    25. PASTA SHOW
-                                    <br/>
-                                    26. CREATIVE WEDDING ARTS
-                                    <br/>
-                                    27. NEDİME
-                                    <br/>
-                                    28. BEACH
-                                    <br/>
-                                    29. DEMO
-                                    <br/>
-                                    30. DAVETİYE TASARIM
-                                    <br/>
-                                    31. LİYA YACHT
-                                    <br/>
-                                    32. STANDART FOTOĞRAF HİZMETİ
-                                </td>
-                            </tr>
-                        </table>
-                        <!-- Paket detayları -->
-                        <span style="font-size:11pt;">
-                            <strong>PLUS Paket:</strong>
-                            <em>Elite pakete ilave olarak:</em>
-                        </span>
-                        <table style="width:100%; border-collapse:collapse; margin-bottom:.5rem;">
-                            <tr>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                    32. FOTOGRAF VIDEO PLUS
-                                    <br/>
-                                    33. AFTER PARTY 2.5 SA, 50 KİŞİ
-                                    <br/>
-                                    34. AFTER PARTY’DE SHOT SE
-                                    <br/>
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                    35. SAÇ ve MAKYAJ HİZMETİ
-                                    <br/>
-                                    36. DANS DERSLERİ
-                                    <br/>
-                                    37. DAVETİYE BASKI
-                                    <br/>
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                    38. KONAKLAMA
-
-                                </td>
-                            </tr>
-                        </table>
-
-                        <span style="font-size:11pt;">
-                            <strong>ULTRA Paket:</strong>
-                            <em>Plus pakete ilave olarak:</em>
-                        </span>
-                        <table style="width:100%; border-collapse:collapse; margin-bottom:.5rem;">
-
-                            <tr>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                    33. AFTER PARTY 2.5 SA, 100 KİŞİ
-                                    <br/>
-                                    39. LASER ve SİS ŞOVLARI
-                                    <br/>
-                                    40. SUSHI BAR
-                                    <br/>
-                                    41. DRONE KAMERA ÇEKİMLER
-                                    <br/>
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                    42. PRE HOSTING BARNEY
-                                    <br/>
-                                    43. CANLI MÜZİK
-                                    <br/>
-                                    44. TRİO PERFORMANSI
-                                    <br/>
-                                    45. PERKÜSYON PERFORMANSI
-                                    <br/>
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                    46. YABANCI İÇKİ SERVİSİ
-                                    <br/>
-                                    47. ÜÇ FARKLI RAKI SEÇENEĞİ
-                                    <br/>
-                                    48. İKİ FARKLI TATLI SEÇENEĞİ
-                                    <br/>
-                                    49. ÖZEL DENİZ MEZELERİ VE ARA SICAKI
-                                    <br/>
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                    50. GELİNLİK DAMATLIKLA ÖZEL YAT ÇEKİMİ
-                                </td>
-                            </tr>
-                        </table>
-                        <!-- Kapanış notu -->
-                        <p style="margin:0;">
-                            Size özel hazırlanan bu teklifin hayalinizdeki güne bir adım daha yaklaşmanızı sağlayacağını
-                            umuyoruz.
+                    <t t-set="o" t-value="doc"/>
+                    <t t-set="line" t-value="o.order_line and o.order_line[0]"/>
+                    <div class="page">
+                        <div style="font-size:10.5pt;">
+                            <span>
+                                Sayın
+                                <t t-esc="doc.partner_id.name"/>
+                                ve
+                                <t t-esc="doc.second_contact"/>
+                                çiftimiz
+                            </span>
                             <br/>
-                            Sorularınızı memnuniyetle yanıtlamaya ve olumlu geri dönüşünüzü heyecanla bekliyoruz.
-                        </p>
-                        <br/>
-                        <table style="width:100%; margin-bottom:.5rem;" class="table-borderless">
-                            <tr>
-                                <td style="vertical-align:top; width:25%; padding:0px;">
-Sinem Kösem
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-+90 530 842 9291 / sinem@liya-all.com
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
- +90 216 382 4827 / info@liya-all.com
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                </td>
-                                <td style="vertical-align:top; width:25%; padding:2px;">
-www.liya-all.com
-                                </td>
-                            </tr>
-                        </table>
-                        <p style="margin:0;">
-                            Teklifimiz 3 (Üç) gün süreli geçerlidir. Sonrasında tekrar bilgi almanızı tavsiye ederiz.
                             <br/>
-                            Sevgilerimizle.
+                            <span>
+                                Aşağıda, sizinle gerçekleştirdiğimiz görüşme doğrultusunda planladığımız tarih ve tercih
+                                ettiğiniz
+                                hizmet seçeneklerine göre oluşturulmuş
+                                All'N One teklifimizi bulabilirsiniz.
+                            </span>
+
+
+                        </div>
+
+
+                        <div style="display:flex; justify-content:center; align-items:center;margin-top:15px;margin-left:0%">
+                            <table class="table"
+                                   style="       width: 50%;       font-size: 9pt;       line-height: 5pt;       border-collapse: collapse;       margin: 0;     ">
+                                <thead>
+                                    <tr>
+                                        <th>Düğün Tarihi</th>
+                                        <th>
+                                            <t t-esc="doc.wedding_date_display"/>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="color: #1894AB;">
+                                        <td style="color: #1894AB;">Kişi Sayısı</td>
+                                        <td style="color: #1894AB;">
+                                            <t t-esc="doc.people_count"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="color: #1894AB;">
+                                        <td style="color: #1894AB;">Paket Tercihi</td>
+                                        <td style="color: #1894AB;">
+                                            <t t-esc="doc.sale_order_template_id.name"/>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Kişi Başı Fiyat</td>
+                                        <td>
+                                            <span t-field="line.price_unit"
+                                                  t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Net Tutar</td>
+                                        <td>
+                                            <span t-esc="doc.get_wedding_net_total()"
+                                                  t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Opsiyonel Hizmetler Tutarı</td>
+                                        <td>
+                                            <span>
+                                                <t t-esc="doc.get_lines_with_options_total_formatted()"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Toplam Tutar</td>
+                                        <td>
+                                            <span t-esc="doc.amount_total - doc.get_discount_total()"
+                                                  t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: #048364;">İndirim Yapılan Tutar</td>
+                                        <td style="color: #048364;">
+
+                                            <span>
+                                                <t t-esc="doc.get_discount_total()"
+                                                   t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>
+                                                <strong>SIZE ÖZEL TEKLİFİMİZ!!!</strong>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span t-field="doc.amount_total"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style="margin-top:10pt;">
+                            <table style="           width: 100%;            border-collapse: collapse;            border: 1px solid;           font-size:9pt;         ">
+                                <tr>
+                                    <td style="width: 20%; padding: 0.3rem; vertical-align: top;  font-weight: bold;">
+                                        Notlarımız:
+                                    </td>
+                                    <td style="max-width: 40%; padding: 0.3rem; vertical-align: top; text-wrap:wrap">
+                                        <span t-field="doc.note" name="order_note"/>
+                                    </td>
+                                    <td style="width: 20%; padding: 0.3rem; vertical-align: top; font-weight: bold;">
+                                        Opsiyonel Hizmetler
+                                    </td>
+                                    <td style="width: 20%; padding: 0.3rem; vertical-align: top;">
+                                        <t t-set="line2" t-value="o.order_line"/>
+                                        <t t-if="line2.sale_order_option_ids">
+                                            <t t-foreach="line2.sale_order_option_ids" t-as="opt">
+                                                <div>
+                                                    <span t-esc="opt.product_id.name"/>
+                                                </div>
+                                            </t>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:0 0 .5rem 0; font-size:8pt;margin-top:5pt;">
+                                <em>*Belirtilen fiyatlar Türk Lirası cinsidir ve KDV hariç düzenlenmiştir.</em>
                             </p>
+                        </div>
+
+                        <div style="margin-top:1rem; font-size:8pt; line-height:1.5;border-top:1px solid black;  ">
+                            <!-- Başlık -->
+                            <p style="margin:0 0 .5rem 0;padding-top:15pt">
+                                Fiyatlara tercih edilen pakete göre aşağıdaki tüm hizmetler dahildir.
+                            </p>
+                            <!-- 4 sütunlu hizmet listesi -->
+                            <span style="font-size:11pt;font-weight:bold;">ELITE Paketi</span>
+                            <table class="table table-borderless"
+                                   style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;">
+                                <tr>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+                                        1. DÖRT TEMALI MASA SÜSLEN
+                                        <br/>
+                                        2. DJ PERFORMANS
+                                        <br/>
+                                        3. SES-IŞIK-JENERATÖR
+                                        <br/>
+                                        4. A'LA CARTE DÜĞÜN MENÜS
+                                        <br/>
+                                        5. SERVİS
+                                        <br/>
+                                        6. KOKTEYL
+                                        <br/>
+                                        7. LİMİTSİZ YERLİ İÇKİ
+                                        <br/>
+                                        8. DENİZ ULAŞIMI
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+                                        9. PHOTO BOOTH
+                                        <br/>
+                                        10. PRE HOSTING
+                                        <br/>
+                                        11. WEDDING PLANNER
+                                        <br/>
+                                        12. ORGANİZASYON
+                                        <br/>
+                                        13. WELCOMING
+                                        <br/>
+                                        14. LCV ARAMA ve RAPORLAMA
+                                        <br/>
+                                        15. CANLI ÇİÇEK
+                                        <br/>
+                                        16. DEKORASYON
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+                                        17. GELİN YOLU SÜSLEME
+                                        <br/>
+                                        18. NİKAH TAŞLARI
+                                        <br/>
+                                        19. YAĞIŞ ÇÖZÜMLERİ
+                                        <br/>
+                                        20. HAZIRLIK ODASI VE TERASI
+                                        <br/>
+                                        21. WEB SİTESİ
+                                        <br/>
+                                        22. GÜVENLİK
+                                        <br/>
+                                        23. PARAMEDİK UZMANI
+                                        <br/>
+                                        24. TAG ME
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+                                        25. PASTA SHOW
+                                        <br/>
+                                        26. CREATIVE WEDDING ARTS
+                                        <br/>
+                                        27. NEDİME
+                                        <br/>
+                                        28. BEACH
+                                        <br/>
+                                        29. DEMO
+                                        <br/>
+                                        30. DAVETİYE TASARIM
+                                        <br/>
+                                        31. LİYA YACHT
+                                        <br/>
+                                        32. STANDART FOTOĞRAF HİZMETİ
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- Paket detayları -->
+                            <span style="font-size:11pt;">
+                                <strong>PLUS Paket:</strong>
+                                <em>Elite pakete ilave olarak:</em>
+                            </span>
+                            <table class="table table-borderless"
+                                   style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;">
+                                <tr>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                        32. FOTOGRAF VIDEO PLUS
+                                        <br/>
+                                        33. AFTER PARTY 2.5 SA, 50 KİŞİ
+                                        <br/>
+                                        34. AFTER PARTY’DE SHOT SE
+                                        <br/>
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                        35. SAÇ ve MAKYAJ HİZMETİ
+                                        <br/>
+                                        36. DANS DERSLERİ
+                                        <br/>
+                                        37. DAVETİYE BASKI
+                                        <br/>
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                        38. KONAKLAMA
+
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <span style="font-size:11pt;">
+                                <strong>ULTRA Paket:</strong>
+                                <em>Plus pakete ilave olarak:</em>
+                            </span>
+                            <table class="table table-borderless"
+                                   style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;">
+
+                                <tr>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                        33. AFTER PARTY 2.5 SA, 100 KİŞİ
+                                        <br/>
+                                        39. LASER ve SİS ŞOVLARI
+                                        <br/>
+                                        40. SUSHI BAR
+                                        <br/>
+                                        41. DRONE KAMERA ÇEKİMLER
+                                        <br/>
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                        42. PRE HOSTING BARNEY
+                                        <br/>
+                                        43. CANLI MÜZİK
+                                        <br/>
+                                        44. TRİO PERFORMANSI
+                                        <br/>
+                                        45. PERKÜSYON PERFORMANSI
+                                        <br/>
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                        46. YABANCI İÇKİ SERVİSİ
+                                        <br/>
+                                        47. ÜÇ FARKLI RAKI SEÇENEĞİ
+                                        <br/>
+                                        48. İKİ FARKLI TATLI SEÇENEĞİ
+                                        <br/>
+                                        49. ÖZEL DENİZ MEZELERİ VE ARA SICAKLAR
+                                        <br/>
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                        50. GELİNLİK DAMATLIKLA ÖZEL YAT ÇEKİMİ
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- Kapanış notu -->
+                            <br/>
+                            <br/>
+                            <p style="margin:0;font-size:10.5pt;">
+                                Size özel hazırlanan bu teklifin hayalinizdeki güne bir adım daha yaklaşmanızı
+                                sağlayacağını
+                                umuyoruz.
+                                <br/>
+                                Sorularınızı memnuniyetle yanıtlamaya ve olumlu geri dönüşünüzü heyecanla bekliyoruz.
+                            </p>
+                            <br/>
+                            <table class="table table-borderless"
+                                   style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;font-size:10.5pt;">
+                                <tr>
+                                    <td style="vertical-align:top; width:25%; padding:0px;color:grey;">
+                                        Sinem Kösem
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;color:grey;">
+                                        +90 530 842 9291 / sinem@liya-all.com
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;color:grey;">
+
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;color:grey;">
+                                        +90 216 382 4827 / info@liya-all.com
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;color:grey;">
+                                        www.liya-all.com
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin:0;color:grey;font-size:10.5pt;">
+                                Teklifimiz 3 (Üç) gün süreli geçerlidir. Sonrasında tekrar bilgi almanızı tavsiye
+                                ederiz.
+                                <br/>
+                                Sevgilerimizle.
+                            </p>
+                        </div>
+
+
                     </div>
-
-
-                </div>
-            </t>
-           </data>
+                </t>
+            </data>
         </xpath>
     </template>
 </odoo>

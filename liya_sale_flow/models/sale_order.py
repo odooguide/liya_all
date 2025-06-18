@@ -1,4 +1,4 @@
-from odoo import models,api,fields,_
+from odoo import models,api,fields, _
 from odoo.exceptions import UserError
 from datetime import date, timedelta, datetime
 from odoo.tools.misc import formatLang
@@ -17,20 +17,35 @@ class SaleOrder(models.Model):
     confirmed_contract=fields.Binary(string="Onaylı Sözleşme")
     coordinator_ids = fields.Many2many(comodel_name='res.partner', string="Koordinatörler",
                                        domain=[('employee_ids', '!=', False)])
-
-    wedding_date=fields.Date(string="Düğün Tarihi")
+    wedding_date=fields.Date(string="Etkinlik Tarihi")
     people_count=fields.Integer(string="Kişi Sayısı")
     second_contact=fields.Char(string="İkinci Kontak")
     wedding_day = fields.Char(
-        string='Dugun Gunu',
+        string='Etkinlik Gunu',
         compute='_compute_wedding_day',
         store=True,
     )
     wedding_date_display = fields.Char(
-        string="Düğün Tarihi (Formatlı)",
+        string="Etkinlik Tarihi (Formatlı)",
         compute='_compute_wedding_date_display',
         store=True,
     )
+
+    event_ids = fields.One2many(
+        comodel_name='event.event',
+        inverse_name='order_id',
+        compute='_compute_event_ids',
+    )
+    #
+    # @api.depends('sale_order_template_id.template_type',
+    #              'sale_order_template_id.event_ids')
+    # def _compute_event_ids(self):
+    #     for order in self:
+    #         tpl = order.sale_order_template_id
+    #         if tpl and tpl.template_type == 'etkinlik':
+    #             order.event_ids = tpl.event_ids
+    #         else:
+    #             order.event_ids = self.env['event.event']
 
     @api.depends('wedding_date')
     def _compute_wedding_date_display(self):
@@ -53,7 +68,6 @@ class SaleOrder(models.Model):
         ]
         for rec in self:
             if rec.wedding_date:
-
                 try:
                     date_obj = datetime.strptime(rec.wedding_date, '%Y-%m-%d').date()
                     rec.wedding_day = turkish_days[date_obj.weekday()]
@@ -100,6 +114,15 @@ class SaleOrder(models.Model):
     #                     'user_ids': [(6, 0, tmpl.user_ids.ids)],
     #                 })
     #     return res
+
+    def action_confirm(self):
+        res=super().action_confirm()
+        for order in self:
+            if not order.coordinator_ids:
+                raise UserError(_("Koordinatör seçilmeden bu teklifi onaylayamazsınız. Lütfen koordinatör seçin."))
+        return res
+
+
 
     def action_project_create(self):
         self.ensure_one()
@@ -202,7 +225,6 @@ class SaleOrder(models.Model):
             if line.sale_order_option_ids
         )
         return formatLang(self.env, total, currency_obj=self.currency_id)
-
 
     def get_wedding_net_total(self):
         self.ensure_one()
