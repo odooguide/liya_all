@@ -180,7 +180,7 @@
       <field name="model">crm.lead</field>
       <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
       <field name="arch" type="xml">
-        <xpath expr="//button[@name='415']" position="attributes">
+        <xpath expr="//button[@name='358']" position="attributes">
           <attribute name="invisible">True</attribute>
         </xpath>
       </field>
@@ -192,11 +192,11 @@
       <field name="inherit_id" ref="crm_sms.crm_case_tree_view_oppor"/>
       <field name="arch" type="xml">
 
-        <xpath expr="//button[@name='435']" position="attributes">
+        <xpath expr="//button[@name='466']" position="attributes">
           <attribute name="invisible">True</attribute>
         </xpath>
 
-          <xpath expr="//button[@name='436']" position="attributes">
+          <xpath expr="//button[@name='467']" position="attributes">
           <attribute name="invisible">True</attribute>
         </xpath>
       </field>
