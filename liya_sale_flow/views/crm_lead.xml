@@ -32,6 +32,8 @@
                 <field name="my_activity_date" invisible="1"/>
                 <field name="request_month" invisible="1"/>
                 <field name="conversion_month" invisible="1"/>
+                <field name="current_month" invisible="1"/>
+
             </xpath>
             <xpath expr="//field[@name='partner_id']" position="replace">
                 <field name="partner_id" widget="res_partner_many2one"
@@ -97,6 +99,7 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
         </field>
+
     </record>
 
     <!--    <record id="crm_lead_form_move_title_function" model="ir.ui.view">-->
@@ -164,41 +167,43 @@
         </field>
     </record>
 
-     <record id="view_crm_case_tree_hide_expected_revenue" model="ir.ui.view">
-      <field name="name">crm.case.tree.hide.expected.revenue</field>
-      <field name="model">crm.lead</field>
-      <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
-      <field name="arch" type="xml">
-        <xpath expr="//field[@name='expected_revenue']" position="attributes">
-          <attribute name="groups">base.group_system</attribute>
-        </xpath>
-      </field>
+    <record id="view_crm_case_tree_hide_expected_revenue" model="ir.ui.view">
+        <field name="name">crm.case.tree.hide.expected.revenue</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='expected_revenue']" position="attributes">
+                <attribute name="groups">base.group_system</attribute>
+            </xpath>
+        </field>
     </record>
 
     <record id="view_crm_case_tree_hide_email_button" model="ir.ui.view">
-      <field name="name">crm.case.tree.hide.email.button</field>
-      <field name="model">crm.lead</field>
-      <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
-      <field name="arch" type="xml">
-        <xpath expr="//button[@name='358']" position="attributes">
-          <attribute name="invisible">True</attribute>
-        </xpath>
-      </field>
+        <field name="name">crm.case.tree.hide.email.button</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='358']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+        </field>
     </record>
 
     <record id="view_crm_sms_case_tree_hide_sms_buttons" model="ir.ui.view">
-      <field name="name">crm.sms.case.tree.hide.sms.buttons</field>
-      <field name="model">crm.lead</field>
-      <field name="inherit_id" ref="crm_sms.crm_case_tree_view_oppor"/>
-      <field name="arch" type="xml">
+        <field name="name">crm.sms.case.tree.hide.sms.buttons</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm_sms.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
 
-        <xpath expr="//button[@name='466']" position="attributes">
-          <attribute name="invisible">True</attribute>
-        </xpath>
+            <xpath expr="//button[@name='466']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
 
-          <xpath expr="//button[@name='467']" position="attributes">
-          <attribute name="invisible">True</attribute>
-        </xpath>
-      </field>
+            <xpath expr="//button[@name='467']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+        </field>
+
+
     </record>
 </odoo>
