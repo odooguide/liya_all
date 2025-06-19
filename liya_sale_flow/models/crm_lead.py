@@ -8,31 +8,36 @@ from odoo.exceptions import ValidationError, UserError
 class CrmLead(models.Model):
     _inherit = "crm.lead"
 
-    option1 = fields.Date(string="Alternatif Tarih 1")
-    option2 = fields.Date(string="Alternatif Tarih 2")
-    option3 = fields.Date(string="Alternatif Tarih 3")
+    option1 = fields.Date(string="Optional Date 1")
+    option2 = fields.Date(string="Optional Date 2")
+    option3 = fields.Date(string="Optional Date 3")
     wedding_type = fields.Many2one(
         comodel_name="wedding.type",
-        string="Etkinlik Tipi",
+        string="Event Type",
         ondelete="set null",
     )
-    request_date = fields.Date(string="Talep Tarihi")
+    request_date = fields.Date(string="Request Date")
     wedding_year = fields.Char(
-        string="Etkinlik Yılı",
+        string="Event Year",
         size=4,
-        help="Etkinlik yılı (2025-2100 arası)"
+        help="Event Year (between 2025-2100)"
     )
-    people = fields.Integer(string="Kişiler")
+    people = fields.Integer(string="People",default=False)
     second_contact = fields.Char(
-        string="İkincil Kontakt",
+        string="Secondary Contact",
     )
-    second_phone = fields.Char(string="İkincil Telefon")
-    second_mail = fields.Char(string="İkincil Mail")
-    second_job_position = fields.Char(string="İkincil Meslek")
+    second_phone = fields.Char(string="Secondary Phone")
+    second_mail = fields.Char(string="Secondary E-mail")
+    second_job_position = fields.Char(string="Secondary Job Position")
     second_title = fields.Many2one(
         comodel_name='res.partner.title',
-        string='Ikincil Başlık',
-        help='Kontakt kartındaki unvanlar listesinden seçiniz.'
+        string='Secondary Title',
+        help='Please choose one of the titles from Contact Titles.'
+    )
+    second_country = fields.Many2one(
+        comodel_name='res.country',
+        string='Second Country',
+        help='Secondary country selection'
     )
 
 
@@ -44,23 +49,65 @@ class CrmLead(models.Model):
     )
 
     my_activity_date_clock = fields.Char(
-        string='Aktivite Saati',
+        string='Activity Hour',
         compute='_compute_activity_date_time',
         store=True,
     )
 
     my_activity_date = fields.Char(
-        string='Aktivite Tarihi',
+        string='Activity Date',
         compute='_compute_activity_date_time',
         store=True,
     )
 
     my_activity_day = fields.Char(
-        string='Gun',
+        string='Activity Day',
         compute='_compute_activity_day',
         store=True,
     )
-    wedding_place=fields.Many2one('wedding.place',string='Kaynak Kategori',ondelete="set null")
+    wedding_place=fields.Many2one('wedding.place',string='Source Category',ondelete="set null")
+
+    yt = fields.Selection([
+        ('yt', 'YT'),
+        ('y', 'Y'),
+        ('t', 'T'),
+    ], string='Y/T')
+
+
+    request_month = fields.Char(
+        string='Request Month',
+        compute='_compute_month_names',
+        store=True,
+    )
+
+    conversion_month = fields.Char(
+        string='Conversion Month',
+        compute='_compute_month_names',
+        store=True,
+    )
+
+    @api.depends('request_date', 'date_conversion')
+    def _compute_month_names(self):
+        month_names = {
+            1: 'Ocak', 2: 'Şubat', 3: 'Mart', 4: 'Nisan',
+            5: 'Mayıs', 6: 'Haziran', 7: 'Temmuz', 8: 'Ağustos',
+            9: 'Eylül', 10: 'Ekim', 11: 'Kasım', 12: 'Aralık'
+        }
+        for rec in self:
+            if rec.request_date:
+                rec.request_month = month_names.get(
+                    rec.request_date.month, False
+                )
+            else:
+                rec.request_month = False
+
+            # date_conversion varsa, ilgili ayın adını ata, yoksa False
+            if rec.date_conversion:
+                rec.conversion_month = month_names.get(
+                    rec.date_conversion.month, False
+                )
+            else:
+                rec.conversion_month = False
 
     @api.onchange('second_phone')
     def _onchange_second_phone(self):
@@ -110,8 +157,9 @@ class CrmLead(models.Model):
     def _compute_type(self):
         for lead in self:
             display = lead.activity_type_id and lead.activity_type_id.display_name or ''
-            if 'Toplantı' in display:
+            if 'toplantı' or 'meeting' in display.lower():
                 lead.type = 'opportunity'
+                lead.date_conversion=date.today()
 
         return None
 
@@ -160,10 +208,33 @@ class CrmLead(models.Model):
             new_stage = self.env['crm.stage'].browse(vals['stage_id'])
 
             if (new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation Progress'):
+                missing = []
+                required_fields = {
+                    'people': _('People'),
+                    'second_contact': _('Secondary Contact'),
+                    'second_phone': _('Secondary Phone'),
+                    'second_mail': _('Secondary E-mail'),
+                    'second_job_position': _('Secondary Job Position'),
+                    'second_title': _('Secondary Title'),
+                    'second_country': _('Second Country'),
+                    'yt':_('YT')
+                }
+                for field_name, pretty in required_fields.items():
+                    val = vals.get(field_name, getattr(lead, field_name))
+                    if not val:
+                        missing.append(pretty)
+                if missing:
+                    raise UserError(_(
+                        '“Görüşülüyor” aşamasına geçebilmek için şu alanlar zorunlu:\n%s'
+                    ) % (', '.join(missing)))
+
                 if lead.quotation_count < 1:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
+
                 
             elif (new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting'):
+
+
                 orders = self.env['sale.order'].search([
                     ('opportunity_id', '=', lead.id),
                     ('state', 'in', ('sale', 'done'))

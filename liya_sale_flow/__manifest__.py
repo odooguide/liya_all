@@ -17,6 +17,7 @@
         "views/product_template_view_inherit.xml",
         "views/calendar_event_inherit_search_custom.xml",
         "views/calendar_event_form_inherit.xml",
+        "views/res_partner_inherit_requireds.xml",
         "security/ir.model.access.csv",
         "reports/report_saleorder_document_inherit.xml",
         "reports/external_layout_light_view_inherit.xml",

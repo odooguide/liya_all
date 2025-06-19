@@ -3,17 +3,17 @@ from odoo import fields,models
 class EventEvent(models.Model):
     _name='event.event'
 
-    name=fields.Char(string='Etkinlik Adı')
-    start_date=fields.Datetime(string='Etkinlik Başlangıcı')
-    end_date=fields.Datetime(string='Etkinlik Bitişi')
+    name=fields.Char(string='Event Name')
+    start_date=fields.Datetime(string='Start Date')
+    end_date=fields.Datetime(string='End Date')
 
     template_id = fields.Many2one(
         comodel_name='sale.order.template',
-        string='Şablon',
+        string='Template',
         ondelete='cascade',
     )
     order_id = fields.Many2one(
         comodel_name='sale.order',
-        string='Sipariş',
+        string='Sale Order',
         ondelete='cascade',
     )

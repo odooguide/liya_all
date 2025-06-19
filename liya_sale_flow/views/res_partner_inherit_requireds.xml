@@ -1,0 +1,32 @@
+<odoo>
+  <data>
+    <record id="view_partner_form_required" model="ir.ui.view">
+      <field name="name">res.partner.form.required</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+
+        <xpath expr="//field[@name='country_id']" position="attributes">
+          <attribute name="required">True</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='phone']" position="attributes">
+          <attribute name="required">True</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='email']" position="attributes">
+          <attribute name="required">True</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='title']" position="attributes">
+          <attribute name="required">True</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='lang']" position="attributes">
+          <attribute name="required">True</attribute>
+        </xpath>
+
+      </field>
+    </record>
+  </data>
+</odoo>
