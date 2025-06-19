@@ -157,19 +157,13 @@ class CrmLead(models.Model):
             return super().write(vals)
 
         for lead in self:
-            old_seq = lead.stage_id.sequence
             new_stage = self.env['crm.stage'].browse(vals['stage_id'])
-            new_seq = new_stage.sequence
 
-            if new_seq <= old_seq:
-                continue
-
-            if new_stage.name == 'Görüşülüyor / Teklif Süreci':
+            if (new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation Progress'):
                 if lead.quotation_count < 1:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
-
-
-            elif new_stage.name == 'Sözleşme Süreci':
+                
+            elif (new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting'):
                 orders = self.env['sale.order'].search([
                     ('opportunity_id', '=', lead.id),
                     ('state', 'in', ('sale', 'done'))
@@ -178,7 +172,7 @@ class CrmLead(models.Model):
                     raise UserError(
                         _('Onaylı teklif yok, "Sözleşme Süreci"ne geçemezsiniz.')
                     )
-            if new_stage.name == 'Kazanıldı':
+            if (new_stage.name == 'Kazanıldı' or new_stage.name == 'Won'):
                 orders = self.env['sale.order'].search([
                     ('opportunity_id', '=', lead.id),
                     ('state', 'in', ('sale', 'done'))
