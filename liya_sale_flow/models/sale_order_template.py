@@ -6,17 +6,17 @@ class SaleOrderTemplate(models.Model):
     project_task_ids = fields.One2many(
         comodel_name='sale.order.template.task',
         inverse_name='sale_order_template_id',
-        string='Projedeki Görevler',
+        string='Project Tasks',
     )
     template_type = fields.Selection([
         ('wedding', 'Düğün'),
         ('event', 'Etkinlik'),
-    ], string='Şablon Türü', default='wedding')
+    ], string='Template Type', default='wedding')
 
     event_ids = fields.One2many(
         comodel_name='event.event',
         inverse_name='template_id',
-        string='Etkinlikler'
+        string='Events'
     )
 
 class SaleOrderTemplateTask(models.Model):

@@ -13,6 +13,6 @@ class Lead2OpportunityPartner(models.TransientModel):
             ('res_id',    '=', lead.id),
         ], limit=1)
         if not meeting:
-            raise UserError(_('Planlanmış toplantı bulunmuyor.'))
+            raise UserError(_('Planlanmış toplantı bulunmuyor.\n There is no planned meeting.'))
 
         return super(Lead2OpportunityPartner, self).action_apply()

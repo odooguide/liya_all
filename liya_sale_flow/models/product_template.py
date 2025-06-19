@@ -3,4 +3,4 @@ from odoo import fields,models
 class ProductTemplate(models.Model):
     _inherit='product.template'
 
-    is_wedding=fields.Boolean(string="Etkinlik Ürünü mü?")
+    is_wedding=fields.Boolean(string="Is Event Product?")

@@ -13,7 +13,7 @@
                         <field name="wedding_type"/>
                         <field name="people"/>
                     </group>
-                    <group string="Etkinlik Tarihi" >
+                    <group string="Etkinlik Tarihi">
                         <field name="wedding_year"/>
                         <field name="option1"/>
                         <field name="option2"/>
@@ -26,92 +26,152 @@
                 <field name="second_title" invisible="type == 'lead'"/>
                 <field name="second_mail" widget="email" invisible="type == 'lead'"/>
                 <field name="second_phone" widget="phone" invisible="type == 'lead'"/>
-                <field name="second_job_position"  invisible="type == 'lead'"/>
-                <field name="my_activity_date_clock"  invisible="1"/>
-                <field name="my_activity_day"  invisible="1"/>
-                <field name="my_activity_date"  invisible="1"/>
+                <field name="second_job_position" invisible="type == 'lead'"/>
+                <field name="my_activity_date_clock" invisible="1"/>
+                <field name="my_activity_day" invisible="1"/>
+                <field name="my_activity_date" invisible="1"/>
+                <field name="request_month" invisible="1"/>
+                <field name="conversion_month" invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='partner_id']" position="replace">
-                <field name="partner_id" widget="res_partner_many2one" context="{'default_name': contact_name,'default_title': title,'default_street': street,'default_street2': street2,'default_city': city,'default_state_id': state_id,'default_zip': zip,'default_country_id': country_id,'default_function': function,'default_phone': phone,'default_mobile': mobile,'default_email': email_from,'default_user_id': user_id,'default_team_id': team_id,'default_website': website,'default_lang': lang_code,'show_vat': True}" />
+                <field name="partner_id" widget="res_partner_many2one"
+                       context="{'default_name': contact_name,'default_title': title,'default_street': street,'default_street2': street2,'default_city': city,'default_state_id': state_id,'default_zip': zip,'default_country_id': country_id,'default_function': function,'default_phone': phone,'default_mobile': mobile,'default_email': email_from,'default_user_id': user_id,'default_team_id': team_id,'default_website': website,'default_lang': lang_code,'show_vat': True}"/>
             </xpath>
         </field>
     </record>
 
     <record id="view_crm_lead_tree_optional" model="ir.ui.view">
-    <field name="name">crm.lead.tree.optional.fields</field>
-    <field name="model">crm.lead</field>
-    <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
-    <field name="arch" type="xml">
-        <xpath expr="//field[@name='stage_id']" position="before">
-            <field name="request_date" optional="show"/>
-            <field name="source_id"    optional="show"/>
-            <field name="wedding_type" optional="show"/>
-            <field name="people"       optional="show"/>
-            <field name="wedding_year" optional="show"/>
-        </xpath>
-    </field>
+        <field name="name">crm.lead.tree.optional.fields</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stage_id']" position="before">
+                <field name="request_date" optional="show"/>
+                <field name="source_id" optional="show"/>
+                <field name="wedding_type" optional="show"/>
+                <field name="people" optional="show"/>
+                <field name="wedding_year" optional="show"/>
+            </xpath>
+        </field>
 
-</record>
+    </record>
 
-     <record id="crm_lead_view_form_iap_enrich_hide" model="ir.ui.view">
-      <field name="name">crm.lead.form.iap.enrich.hide</field>
-      <field name="model">crm.lead</field>
-      <field name="inherit_id" ref="crm_iap_enrich.crm_lead_view_form"/>
-      <field name="arch" type="xml">
+    <record id="crm_lead_view_form_iap_enrich_hide" model="ir.ui.view">
+        <field name="name">crm.lead.form.iap.enrich.hide</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm_iap_enrich.crm_lead_view_form"/>
+        <field name="arch" type="xml">
 
-        <xpath expr="//button[@name='iap_enrich'][1]" position="attributes">
-          <attribute name="invisible">1</attribute>
-        </xpath>
+            <xpath expr="//button[@name='iap_enrich'][1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
 
-        <xpath expr="//button[@name='iap_enrich'][2]" position="attributes">
-          <attribute name="invisible">1</attribute>
-        </xpath>
+            <xpath expr="//button[@name='iap_enrich'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
 
-      </field>
+        </field>
     </record>
     <record id="view_crm_lead_form_hide_revenue_prob" model="ir.ui.view">
-      <field name="name">crm.lead.form.hide.revenue.probability</field>
-      <field name="model">crm.lead</field>
-      <field name="inherit_id" ref="crm.crm_lead_view_form"/>
-      <field name="arch" type="xml">
+        <field name="name">crm.lead.form.hide.revenue.probability</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
 
-        <xpath expr="//div[@class='col-auto pb-2 pb-md-0 w-100 w-sm-auto']" position="attributes">
-          <attribute name="invisible">1</attribute>
-        </xpath>
+            <xpath expr="//div[@class='col-auto pb-2 pb-md-0 w-100 w-sm-auto']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
 
-        <xpath expr="//div[button[@name='action_set_automated_probability']]" position="attributes">
-          <attribute name="invisible">1</attribute>
-        </xpath>
+            <xpath expr="//div[button[@name='action_set_automated_probability']]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
 
-      </field>
+        </field>
     </record>
     <record id="view_crm_lead_form_hide_quotation_income" model="ir.ui.view">
-      <field name="name">crm.lead.form.hide.quotation.income</field>
+        <field name="name">crm.lead.form.hide.quotation.income</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_amount_total']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--    <record id="crm_lead_form_move_title_function" model="ir.ui.view">-->
+    <!--      <field name="name">crm.lead.form.move.title.function</field>-->
+    <!--      <field name="model">crm.lead</field>-->
+    <!--      <field name="inherit_id" ref="crm.crm_lead_view_form"/>-->
+    <!--      <field name="arch" type="xml">-->
+
+    <!--        <xpath expr="//field[@name='title']" position="replace"/>-->
+    <!--        <xpath expr="//field[@name='function']" position="replace"/>-->
+
+    <!--        <xpath expr="//field[@name='partner_id']" position="after">-->
+
+    <!--            <field name="title" placeholder="Title" options="{'no_open': True}"/>-->
+    <!--            <field name="function"/>-->
+
+    <!--        </xpath>-->
+
+    <!--      </field>-->
+    <!--    </record>-->
+
+    <record id="view_crm_lead_form_required" model="ir.ui.view">
+        <field name="name">crm.lead.form.required</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='request_date']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='wedding_year']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='source_id']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+
+
+        </field>
+    </record>
+    <record id="view_crm_lead_country_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.country.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="country_id" placeholder="Country" class="o_address_country" invisible="type == 'lead'"/>
+            </xpath>
+            <xpath expr="//field[@name='second_contact']" position="after">
+                <field name="second_country" placeholder="Country" class="o_address_country"
+                       invisible="type == 'lead'"/>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="yt"/>
+            </xpath>
+
+
+        </field>
+    </record>
+
+     <record id="view_crm_case_tree_hide_expected_revenue" model="ir.ui.view">
+      <field name="name">crm.case.tree.hide.expected.revenue</field>
       <field name="model">crm.lead</field>
-      <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor"/>
+      <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
       <field name="arch" type="xml">
-        <xpath expr="//field[@name='sale_amount_total']" position="attributes">
-          <attribute name="invisible">1</attribute>
+        <xpath expr="//field[@name='expected_revenue']" position="attributes">
+          <attribute name="groups">base.group_system</attribute>
         </xpath>
       </field>
     </record>
-
-<!--    <record id="crm_lead_form_move_title_function" model="ir.ui.view">-->
-<!--      <field name="name">crm.lead.form.move.title.function</field>-->
-<!--      <field name="model">crm.lead</field>-->
-<!--      <field name="inherit_id" ref="crm.crm_lead_view_form"/>-->
-<!--      <field name="arch" type="xml">-->
-
-<!--        <xpath expr="//field[@name='title']" position="replace"/>-->
-<!--        <xpath expr="//field[@name='function']" position="replace"/>-->
-
-<!--        <xpath expr="//field[@name='partner_id']" position="after">-->
-
-<!--            <field name="title" placeholder="Title" options="{'no_open': True}"/>-->
-<!--            <field name="function"/>-->
-
-<!--        </xpath>-->
-
-<!--      </field>-->
-<!--    </record>-->
 </odoo>

@@ -14,19 +14,19 @@ class SaleOrder(models.Model):
         compute='_compute_project_task_ids',
     )
     is_project_true=fields.Boolean(string='Is There Any Project?')
-    confirmed_contract=fields.Binary(string="Onaylı Sözleşme")
-    coordinator_ids = fields.Many2many(comodel_name='res.partner', string="Koordinatörler",
+    confirmed_contract=fields.Binary(string="Signed Contract")
+    coordinator_ids = fields.Many2many(comodel_name='res.partner', string="Coordinators",
                                        domain=[('employee_ids', '!=', False)])
-    wedding_date=fields.Date(string="Etkinlik Tarihi")
-    people_count=fields.Integer(string="Kişi Sayısı")
-    second_contact=fields.Char(string="İkinci Kontak")
+    wedding_date=fields.Date(string="Event Date")
+    people_count=fields.Integer(string="People Count")
+    second_contact=fields.Char(string="Secondary Contact")
     wedding_day = fields.Char(
-        string='Etkinlik Gunu',
+        string='Event Day',
         compute='_compute_wedding_day',
         store=True,
     )
     wedding_date_display = fields.Char(
-        string="Etkinlik Tarihi (Formatlı)",
+        string="Event Date (Formatted)",
         compute='_compute_wedding_date_display',
         store=True,
     )
