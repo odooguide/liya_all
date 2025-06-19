@@ -157,12 +157,7 @@ class CrmLead(models.Model):
             return super().write(vals)
 
         for lead in self:
-            old_seq = lead.stage_id.sequence
             new_stage = self.env['crm.stage'].browse(vals['stage_id'])
-            new_seq = new_stage.sequence
-
-            if new_seq <= old_seq:
-                continue
 
             if new_stage.name == 'Görüşülüyor / Teklif Süreci':
                 if lead.quotation_count < 1:
