@@ -8,6 +8,8 @@ from odoo.exceptions import ValidationError, UserError
 class CrmLead(models.Model):
     _inherit = "crm.lead"
 
+    date_conversion = fields.Datetime('Conversion Date', readonly=False)
+
     option1 = fields.Date(string="Optional Date 1")
     option2 = fields.Date(string="Optional Date 2")
     option3 = fields.Date(string="Optional Date 3")
@@ -86,6 +88,12 @@ class CrmLead(models.Model):
         store=True,
     )
 
+    current_month = fields.Char(
+        string='Current Month',
+        compute='_compute_month_names',
+        store=True,
+    )
+
     @api.depends('request_date', 'date_conversion')
     def _compute_month_names(self):
         month_names = {
@@ -101,13 +109,17 @@ class CrmLead(models.Model):
             else:
                 rec.request_month = False
 
-            # date_conversion varsa, ilgili ayın adını ata, yoksa False
             if rec.date_conversion:
                 rec.conversion_month = month_names.get(
                     rec.date_conversion.month, False
                 )
             else:
                 rec.conversion_month = False
+
+            today = fields.Date.context_today(self)
+            current_month_num = fields.Date.from_string(today).month
+            current_month_name = month_names.get(current_month_num, False)
+            rec.current_month = current_month_name
 
     @api.onchange('second_phone')
     def _onchange_second_phone(self):
