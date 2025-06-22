@@ -6,14 +6,14 @@
         <field name="arch" type="xml">
             <xpath expr="(//group)[7]" position="after">
                 <group colspan="2">
-                    <group string="Etkinlik Bilgisi">
+                    <group string="Event Details">
                         <field name="request_date"/>
                         <field name="source_id"/>
                         <field name="wedding_place"/>
                         <field name="wedding_type"/>
                         <field name="people"/>
                     </group>
-                    <group string="Etkinlik Tarihi">
+                    <group string="Event Date">
                         <field name="wedding_year"/>
                         <field name="option1"/>
                         <field name="option2"/>
@@ -178,6 +178,20 @@
         </field>
     </record>
 
+    <record id="view_crm_lead_opportunity_filter_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.opportunity.filter.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
+        <field name="arch" type="xml">
+           <xpath expr="filter[@name='filter_creation_date']" position="after">
+                    <filter string="Current Month" name="filter_request_date_this_month" domain="[             ('request_date', '&gt;=', (context_today() + relativedelta(day=1))),             ('request_date', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
+           </xpath>
+            <xpath expr="filter[@name='filter_creation_date']" position="after">
+                    <filter string="Convertion Month" name="filter_request_date_this_month" domain="[             ('date_conversion', '&gt;=', (context_today() + relativedelta(day=1))),             ('date_conversion', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
+           </xpath>
+        </field>
+    </record>
+
     <record id="view_crm_case_tree_hide_email_button" model="ir.ui.view">
         <field name="name">crm.case.tree.hide.email.button</field>
         <field name="model">crm.lead</field>
@@ -203,7 +217,7 @@
                 <attribute name="invisible">True</attribute>
             </xpath>
         </field>
-
-
     </record>
+
+
 </odoo>
