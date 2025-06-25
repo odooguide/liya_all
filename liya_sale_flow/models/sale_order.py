@@ -36,16 +36,16 @@ class SaleOrder(models.Model):
         inverse_name='order_id',
         compute='_compute_event_ids',
     )
-    #
-    # @api.depends('sale_order_template_id.template_type',
-    #              'sale_order_template_id.event_ids')
-    # def _compute_event_ids(self):
-    #     for order in self:
-    #         tpl = order.sale_order_template_id
-    #         if tpl and tpl.template_type == 'etkinlik':
-    #             order.event_ids = tpl.event_ids
-    #         else:
-    #             order.event_ids = self.env['event.event']
+
+    @api.depends('sale_order_template_id.template_type',
+                 'sale_order_template_id.event_ids')
+    def _compute_event_ids(self):
+        for order in self:
+            tpl = order.sale_order_template_id
+            if tpl and tpl.template_type == 'event':
+                order.event_ids = tpl.event_ids
+            else:
+                order.event_ids = self.env['event.event']
 
     @api.depends('wedding_date')
     def _compute_wedding_date_display(self):
