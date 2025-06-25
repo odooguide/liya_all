@@ -1,0 +1,19 @@
+<odoo>
+
+    <record id="view_crm_team_boolean_inherit" model="ir.ui.view">
+        <field name="name">crm.team.boolean.inherit</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="crm.sales_team_form_view_in_crm"/>
+        <field name="arch" type="xml">
+            <xpath expr="//span[@name='leads']" position="after">
+                <span>
+                    <field name="wedding_team"/>
+                    <label for="wedding_team"/>
+                    <field name="event_team"/>
+                    <label for="event_team"/>
+                </span>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

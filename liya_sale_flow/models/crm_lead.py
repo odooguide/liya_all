@@ -272,25 +272,7 @@ class CrmLead(models.Model):
                         _('Hiçbir onaylı sözleşme bulunamadı. "Kazanıldı" aşamasına geçemezsiniz.')
                     )
 
-                order = orders[0]
-
-                wedding_tag = self.env['calendar.event.type'].search(
-                    [('name', '=', 'Düğün')], limit=1
-                )
-                all_partner_ids = order.coordinator_ids.ids
-
-                partner_ops = [(4, pid) for pid in all_partner_ids]
-
-                self.env['calendar.event'].create({
-                    'name': f'{lead.name} Etkinlik Günü',
-                    'start_date': order.wedding_date,
-                    'stop_date': order.wedding_date,
-                    'allday': True,
-                    'user_id': lead.user_id.id,
-                    'partner_ids': partner_ops,
-                    'categ_ids': [(6, 0, [wedding_tag.id])] if wedding_tag else [],
-                    'opportunity_id': self.id,
-                })
+                self.create_activity(lead)
 
                 orders_to_cancel=self.env['sale.order'].search([
                     ('opportunity_id', '=', lead.id),
@@ -302,6 +284,41 @@ class CrmLead(models.Model):
 
 
         return super().write(vals)
+
+    def create_activity(self, lead):
+
+        orders = self.env['sale.order'].search([
+            ('opportunity_id', '=', lead.id),
+            ('state', 'in', ('sale', 'done'))
+        ], limit=1)
+        if not orders:
+            raise UserError(_('Hiçbir onaylı sözleşme bulunamadı.'))
+        order = orders
+
+        wedding_tag = self.env['calendar.event.type'].search(
+            [('name', 'in', ['Düğün', 'Wedding'])], limit=1
+        )
+        event_tag = self.env['calendar.event.type'].search(
+            [('name', 'in', ['Etkinlik', 'Event'])], limit=1
+        )
+
+        partner_ids = [(4, pid) for pid in order.coordinator_ids.ids]
+
+        vals = {
+            'name': f"{lead.name} {'Düğün Günü' if lead.team_id.wedding_team else 'Etkinlik Günü'}",
+            'start_date': order.wedding_date,
+            'stop_date': order.wedding_date,
+            'allday': True,
+            'user_id': lead.user_id.id,
+            'partner_ids': partner_ids,
+            'opportunity_id': lead.id,
+        }
+        if lead.team_id.wedding_team and wedding_tag:
+            vals['categ_ids'] = [(6, 0, [wedding_tag.id])]
+        elif event_tag:
+            vals['categ_ids'] = [(6, 0, [event_tag.id])]
+
+        self.env['calendar.event'].create(vals)
 
     def action_sale_quotations_new(self):
         self.ensure_one()

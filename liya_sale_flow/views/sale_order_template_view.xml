@@ -36,27 +36,27 @@
       </notebook>
     </field>
   </record>
-<!-- <record id="view_sale_order_template_form_inherit_activity" model="ir.ui.view">-->
-<!--    <field name="name">sale.order.template.form.activity</field>-->
-<!--    <field name="model">sale.order.template</field>-->
-<!--    <field name="inherit_id" ref="sale_management.sale_order_template_view_form"/>-->
-<!--    <field name="arch" type="xml">-->
-<!--      <field name="mail_template_id" position="after">-->
-<!--        <field name="template_type"/>-->
-<!--      </field>-->
-<!--     <notebook position="inside">-->
-<!--      <page string="Etkinlikler" invisible="template_type != 'event'">-->
-<!--        <group>-->
-<!--          <field name="event_ids" widget="one2many_list">-->
-<!--            <list editable="bottom">-->
-<!--              <field name="name"/>-->
-<!--              <field name="start_date"/>-->
-<!--              <field name="end_date"/>-->
-<!--            </list>-->
-<!--          </field>-->
-<!--        </group>-->
-<!--      </page>-->
-<!--      </notebook>-->
-<!--    </field>-->
-<!--  </record>-->
+ <record id="view_sale_order_template_form_inherit_activity" model="ir.ui.view">
+    <field name="name">sale.order.template.form.activity</field>
+    <field name="model">sale.order.template</field>
+    <field name="inherit_id" ref="sale_management.sale_order_template_view_form"/>
+    <field name="arch" type="xml">
+      <field name="mail_template_id" position="after">
+        <field name="template_type"/>
+      </field>
+     <notebook position="inside">
+      <page string="Etkinlikler" invisible="template_type != 'event'">
+        <group>
+          <field name="event_ids" widget="one2many_list">
+            <list editable="bottom">
+              <field name="name"/>
+              <field name="start_date"/>
+              <field name="end_date"/>
+            </list>
+          </field>
+        </group>
+      </page>
+      </notebook>
+    </field>
+  </record>
 </odoo>
