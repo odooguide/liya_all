@@ -39,7 +39,7 @@ class CrmLead(models.Model):
     )
     second_country = fields.Many2one(
         comodel_name='res.country',
-        string='Second Country',
+        string='Secondary Country',
         help='Secondary country selection'
     )
 
