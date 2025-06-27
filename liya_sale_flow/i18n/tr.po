@@ -722,22 +722,22 @@ msgstr ""
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__option1
 msgid "Optional Date 1"
-msgstr ""
+msgstr "Alternatif Tarih 1"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__option2
 msgid "Optional Date 2"
-msgstr ""
+msgstr "Alternatif Tarih 2"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__option3
 msgid "Optional Date 3"
-msgstr ""
+msgstr "Alternatif Tarih 3"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
-msgid "Paket Tercihi"
-msgstr ""
+msgid "Package Choice"
+msgstr "Paket Tercihi"
 
 #. module: liya_sale_flow
 #. odoo-python

@@ -192,32 +192,32 @@
         </field>
     </record>
 
-    <record id="view_crm_case_tree_hide_email_button" model="ir.ui.view">
-        <field name="name">crm.case.tree.hide.email.button</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='358']" position="attributes">
-                <attribute name="invisible">True</attribute>
-            </xpath>
-        </field>
-    </record>
+<!--    <record id="view_crm_case_tree_hide_email_button" model="ir.ui.view">-->
+<!--        <field name="name">crm.case.tree.hide.email.button</field>-->
+<!--        <field name="model">crm.lead</field>-->
+<!--        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//button[@name='358']" position="attributes">-->
+<!--                <attribute name="invisible">True</attribute>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
-    <record id="view_crm_sms_case_tree_hide_sms_buttons" model="ir.ui.view">
-        <field name="name">crm.sms.case.tree.hide.sms.buttons</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm_sms.crm_case_tree_view_oppor"/>
-        <field name="arch" type="xml">
+<!--    <record id="view_crm_sms_case_tree_hide_sms_buttons" model="ir.ui.view">-->
+<!--        <field name="name">crm.sms.case.tree.hide.sms.buttons</field>-->
+<!--        <field name="model">crm.lead</field>-->
+<!--        <field name="inherit_id" ref="crm_sms.crm_case_tree_view_oppor"/>-->
+<!--        <field name="arch" type="xml">-->
 
-            <xpath expr="//button[@name='466']" position="attributes">
-                <attribute name="invisible">True</attribute>
-            </xpath>
+<!--            <xpath expr="//button[@name='466']" position="attributes">-->
+<!--                <attribute name="invisible">True</attribute>-->
+<!--            </xpath>-->
 
-            <xpath expr="//button[@name='467']" position="attributes">
-                <attribute name="invisible">True</attribute>
-            </xpath>
-        </field>
-    </record>
+<!--            <xpath expr="//button[@name='467']" position="attributes">-->
+<!--                <attribute name="invisible">True</attribute>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
 
 </odoo>

@@ -9,7 +9,7 @@
                             <t t-esc="docs.create_date.strftime('%d.%m.%Y')"/>
                         </div>
                         <div class="col text-center" style="margin-top:60px; font-size:16pt;color: #048364;">
-                            TEKLİF
+                            THE OFFER
                         </div>
                         <div class="col text-end">
                             <img t-if="docs.company_id.logo" style="width:150px"
@@ -21,19 +21,16 @@
                     <div class="page">
                         <div style="font-size:10.5pt;">
                             <span>
-                                Sayın
+                                Dear
                                 <t t-esc="doc.partner_id.name"/>
-                                ve
+                                and
                                 <t t-esc="doc.second_contact"/>
-                                çiftimiz
+                                couple
                             </span>
                             <br/>
                             <br/>
                             <span>
-                                Aşağıda, sizinle gerçekleştirdiğimiz görüşme doğrultusunda planladığımız tarih ve tercih
-                                ettiğiniz
-                                hizmet seçeneklerine göre oluşturulmuş
-                                All'N One teklifimizi bulabilirsiniz.
+                                Below, you’ll find our personalized All’N One proposal, prepared based on our recent meeting — reflecting your preferred wedding date and selected service options.
                             </span>
 
 
@@ -45,7 +42,7 @@
                                    style="       width: 50%;       font-size: 9pt;       line-height: 5pt;       border-collapse: collapse;       margin: 0;     ">
                                 <thead>
                                     <tr>
-                                        <th>Düğün Tarihi</th>
+                                        <th>Event Date</th>
                                         <th>
                                             <t t-esc="doc.wedding_date_display"/>
                                         </th>
@@ -53,34 +50,34 @@
                                 </thead>
                                 <tbody>
                                     <tr style="color: #1894AB;">
-                                        <td style="color: #1894AB;">Kişi Sayısı</td>
+                                        <td style="color: #1894AB;">Guest Count</td>
                                         <td style="color: #1894AB;">
                                             <t t-esc="doc.people_count"/>
                                         </td>
                                     </tr>
                                     <tr style="color: #1894AB;">
-                                        <td style="color: #1894AB;">Paket Tercihi</td>
+                                        <td style="color: #1894AB;">Package Selection</td>
                                         <td style="color: #1894AB;">
                                             <t t-esc="doc.sale_order_template_id.name"/>
                                         </td>
 
                                     </tr>
                                     <tr>
-                                        <td>Kişi Başı Fiyat</td>
+                                        <td>Price Per Guest</td>
                                         <td>
                                             <span t-field="line.price_unit"
                                                   t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Net Tutar</td>
+                                        <td>Net Amount</td>
                                         <td>
                                             <span t-esc="doc.get_wedding_net_total()"
                                                   t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Opsiyonel Hizmetler Tutarı</td>
+                                        <td>Optional Services Total</td>
                                         <td>
                                             <span>
                                                 <t t-esc="doc.get_lines_with_options_total_formatted()"/>
@@ -88,14 +85,14 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Toplam Tutar</td>
+                                        <td>Total Amount</td>
                                         <td>
                                             <span t-esc="doc.amount_total - doc.get_discount_total()"
                                                   t-options="{'widget': 'monetary', 'display_currency': line.currency_id}"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="color: #048364;">İndirim Yapılan Tutar</td>
+                                        <td style="color: #048364;">Discounted Amount</td>
                                         <td style="color: #048364;">
 
                                             <span>
@@ -107,7 +104,7 @@
                                     <tr>
                                         <td>
                                             <span>
-                                                <strong>SIZE ÖZEL TEKLİFİMİZ!!!</strong>
+                                                <strong>SPECIAL OFFER FOR YOU!!!</strong>
                                             </span>
                                         </td>
                                         <td>
@@ -123,10 +120,10 @@
                                 <thead>
                                     <tr>
                                         <th style="width:50%; padding: 0.3rem; text-align: left; font-weight: bold;">
-                                            Notlarımız
+                                            Notes
                                         </th>
                                         <th style="width:50%; padding: 0.3rem; text-align: left; font-weight: bold;">
-                                            Opsiyonel Hizmetler
+                                            Optional Services
                                         </th>
                                     </tr>
                                 </thead>
@@ -138,7 +135,6 @@
                                         <td style="width:50%; padding: 0.3rem; vertical-align: top;">
                                             <t t-set="line2" t-value="o.order_line"/>
                                             <t t-if="line2.sale_order_option_ids">
-                                                <!-- İki kolonlu düzen için nested table -->
                                                 <table class="table-borderless"
                                                        style="width:100%; border-collapse: collapse;margin:0">
                                                     <tr>
@@ -167,119 +163,120 @@
                                 </tbody>
                             </table>
                             <p style="margin:0 0 .5rem 0; font-size:8pt;margin-top:5pt;">
-                                <em>*Belirtilen fiyatlar Türk Lirası cinsidir ve KDV hariç düzenlenmiştir.</em>
+                                <em>*The prices indicated are in Euro and are exclusive of VAT.</em>
                             </p>
                         </div>
 
                         <div style="margin-top:1rem; font-size:8pt; line-height:1.5;border-top:1px solid black;  ">
-                            <!-- Başlık -->
                             <p style="margin:0 0 .5rem 0;padding-top:15pt">
-                                Fiyatlara tercih edilen pakete göre aşağıdaki tüm hizmetler dahildir.
+                                All services listed below are included in the price, depending on the selected package.
                             </p>
-                            <!-- 4 sütunlu hizmet listesi -->
-                            <span style="font-size:11pt;font-weight:bold;">ELITE Paketi</span>
+                            <span style="font-size:11pt;font-weight:bold;">ALL'N ONE ELITE</span>
                             <table class="table table-borderless"
                                    style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;">
                                 <tr>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
-                                        1. DÖRT TEMALI MASA SÜSLEN
+                                       1. Four-Theme Table Styling
                                         <br/>
-                                        2. DJ PERFORMANS
+                                        2. DJ Performance
                                         <br/>
-                                        3. SES-IŞIK-JENERATÖR
+                                        3. Sound, Lighting and Generator
                                         <br/>
-                                        4. A'LA CARTE DÜĞÜN MENÜS
+                                        4. À la Carte Wedding Menu
                                         <br/>
-                                        5. SERVİS
+                                        5. Service Staff
                                         <br/>
-                                        6. KOKTEYL
+                                        6. Cocktail Hour
                                         <br/>
-                                        7. LİMİTSİZ YERLİ İÇKİ
+                                        7. Unlimited Local Alcoholic Beverages
                                         <br/>
-                                        8. DENİZ ULAŞIMI
+                                        8. Sea Transportation
                                     </td>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
-                                        9. PHOTO BOOTH
+                                        9. Photo Booth
                                         <br/>
-                                        10. PRE HOSTING
+                                        10. Pre-Hosting for Guests
                                         <br/>
-                                        11. WEDDING PLANNER
+                                        11. Wedding Planner
                                         <br/>
-                                        12. ORGANİZASYON
+                                        12. Event Coordination
                                         <br/>
-                                        13. WELCOMING
+                                        13. Guest Welcoming
                                         <br/>
-                                        14. LCV ARAMA ve RAPORLAMA
+                                        14. RSVP Calls and Reporting
                                         <br/>
-                                        15. CANLI ÇİÇEK
+                                        15. Fresh Flowers
                                         <br/>
-                                        16. DEKORASYON
+                                        16. Decoration
+                                        <br/>
                                     </td>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
-                                        17. GELİN YOLU SÜSLEME
+                                        17. Aisle Decoration
                                         <br/>
-                                        18. NİKAH TAŞLARI
+                                        18. Ceremony Backdrops
                                         <br/>
-                                        19. YAĞIŞ ÇÖZÜMLERİ
+                                        19. Rain Plan Solutions
                                         <br/>
-                                        20. HAZIRLIK ODASI VE TERASI
+                                        20. Bridal Suite and Terrace
                                         <br/>
-                                        21. WEB SİTESİ
+                                        21. Personal Wedding Website
                                         <br/>
-                                        22. GÜVENLİK
+                                        22. Security
                                         <br/>
-                                        23. PARAMEDİK UZMANI
+                                        23. Paramedic On Site
                                         <br/>
-                                        24. TAG ME
+                                        24. Tag Me
+                                        <br/>
                                     </td>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
-                                        25. PASTA SHOW
+                                        25. Cake Show
                                         <br/>
-                                        26. CREATIVE WEDDING ARTS
+                                        26. Creative Wedding Arts
                                         <br/>
-                                        27. NEDİME
+                                        27. Bridesmaid
                                         <br/>
-                                        28. BEACH
+                                        28. Beach Area
                                         <br/>
-                                        29. DEMO
+                                        29. Demo Setup
                                         <br/>
-                                        30. DAVETİYE TASARIM
+                                        30. Invitation Design
                                         <br/>
-                                        31. LİYA YACHT
+                                        31. Liya Yacht
                                         <br/>
-                                        32. STANDART FOTOĞRAF HİZMETİ
+                                        32. Standard Photography Service
+                                        <br/>
                                     </td>
                                 </tr>
                             </table>
                             <!-- Paket detayları -->
                             <span style="font-size:11pt;">
-                                <strong>PLUS Paket:</strong>
-                                <em>Elite pakete ilave olarak:</em>
+                                <strong>ALL'N ONE PLUS:</strong>
+                                <em>Additionally to Elite</em>
                             </span>
                             <table class="table table-borderless"
                                    style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;">
                                 <tr>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
 
-                                        32. FOTOGRAF VIDEO PLUS
+                                        33. Photo and Video Plus
                                         <br/>
-                                        33. AFTER PARTY 2.5 SA, 50 KİŞİ
+                                        34. After Party (2 Hours, 50 Guests)
                                         <br/>
-                                        34. AFTER PARTY’DE SHOT SE
-                                        <br/>
-                                    </td>
-                                    <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                        35. SAÇ ve MAKYAJ HİZMETİ
-                                        <br/>
-                                        36. DANS DERSLERİ
-                                        <br/>
-                                        37. DAVETİYE BASKI
+                                        35. Shot Service During After Party
                                         <br/>
                                     </td>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
 
-                                        38. KONAKLAMA
+                                        36. Hair and Makeup Service
+                                        <br/>
+                                        37. Dance Lessons
+                                        <br/>
+                                        38. Invitation Printing
+                                        <br/>
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                        39. Accommodation
 
                                     </td>
                                 </tr>
@@ -295,40 +292,41 @@
                                 <tr>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
 
-                                        33. AFTER PARTY 2.5 SA, 100 KİŞİ
+                                        40. After Party (2.5 Hours, 100 Guests)
                                         <br/>
-                                        39. LASER ve SİS ŞOVLARI
+                                        41. Laser and Smoke Shows
                                         <br/>
-                                        40. SUSHI BAR
+                                        42. Sushi Bar
                                         <br/>
-                                        41. DRONE KAMERA ÇEKİMLER
-                                        <br/>
-                                    </td>
-                                    <td style="vertical-align:top; width:25%; padding:2px;">
-
-                                        42. PRE HOSTING BARNEY
-                                        <br/>
-                                        43. CANLI MÜZİK
-                                        <br/>
-                                        44. TRİO PERFORMANSI
-                                        <br/>
-                                        45. PERKÜSYON PERFORMANSI
+                                        43. Drone Camera Footage
                                         <br/>
                                     </td>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
 
-                                        46. YABANCI İÇKİ SERVİSİ
+                                        44. Pre-Hosting Bar Service
                                         <br/>
-                                        47. ÜÇ FARKLI RAKI SEÇENEĞİ
+                                        45. Live Music
                                         <br/>
-                                        48. İKİ FARKLI TATLI SEÇENEĞİ
+                                        46. Trio Performance
                                         <br/>
-                                        49. ÖZEL DENİZ MEZELERİ VE ARA SICAKLAR
+                                        47. Percussion Performance
+                                        <br/>
+
+                                    </td>
+                                    <td style="vertical-align:top; width:25%; padding:2px;">
+
+                                        48. Imported Alcohol Service
+                                        <br/>
+                                        49. Three Types of Raki
+                                        <br/>
+                                        50. Two Types of Dessert
+                                        <br/>
+                                        51. Special Seafood Mezzes and Warm Starters
                                         <br/>
                                     </td>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
 
-                                        50. GELİNLİK DAMATLIKLA ÖZEL YAT ÇEKİMİ
+                                        52. Exclusive Yacht Shoot with Wedding Attire 
                                     </td>
                                 </tr>
                             </table>
@@ -336,21 +334,18 @@
                             <br/>
                             <br/>
                             <p style="margin:0;font-size:10.5pt;">
-                                Size özel hazırlanan bu teklifin hayalinizdeki güne bir adım daha yaklaşmanızı
-                                sağlayacağını
-                                umuyoruz.
+                                We hope this offer brings you one step closer to the day you’ve been dreaming of.
                                 <br/>
-                                Sorularınızı memnuniyetle yanıtlamaya ve olumlu geri dönüşünüzü heyecanla bekliyoruz.
-                            </p>
+We would be happy to answer any questions you may have and look forward to hearing from you soon.                            </p>
                             <br/>
                             <table class="table table-borderless"
                                    style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;font-size:10.5pt;">
                                 <tr>
                                     <td style="vertical-align:top; width:25%; padding:0px;color:grey;">
-                                        Sinem Kösem
+                                        PARISA MIRABI
                                     </td>
                                     <td style="vertical-align:top; width:32%; padding:2px;color:grey;">
-                                        +90 530 842 9291 / sinem@liya-all.com
+                                        +90 537 264 7588 / paris@liya-all.com
                                     </td>
                                     <td style="vertical-align:top; width:10%; padding:2px;color:grey;">
 
@@ -375,13 +370,11 @@
                                 </tr>
                             </table>
                             <p style="margin:0;color:grey;font-size:10.5pt;">
-                                Teklifimiz 3 (Üç) gün süreli geçerlidir. Sonrasında tekrar bilgi almanızı tavsiye
-                                ederiz.
+                                Our proposal is valid for 3 (three) days. After this period, we kindly recommend contacting us again for the most up-to-date information.
                                 <br/>
-                                Sevgilerimizle.
+                                Best Regards.
                             </p>
                         </div>
-
 
                     </div>
                 </t>

@@ -16,4 +16,39 @@
 
         </field>
     </record>
+
+<record id="action_crm_wedding_leads" model="ir.actions.act_window">
+    <field name="name">Wedding Opportunities</field>
+    <field name="res_model">crm.lead</field>
+    <field name="view_mode">kanban,list,form</field>
+    <field name="domain">[('team_id.wedding_team', '=', True)]</field>
+    <field name="context">{}</field>
+</record>
+
+<record id="action_crm_event_leads" model="ir.actions.act_window">
+    <field name="name">Event Opportunities</field>
+    <field name="res_model">crm.lead</field>
+    <field name="view_mode">kanban,list,form</field>
+    <field name="domain">[('team_id.event_team', '=', True)]</field>
+    <field name="context">{}</field>
+</record>
+
+<menuitem
+    id="menu_crm_wedding"
+    name="Wedding"
+    parent="crm.crm_menu_sales"
+    action="action_crm_wedding_leads"
+    sequence="10"
+/>
+
+<menuitem
+    id="menu_crm_event"
+    name="Event"
+    parent="crm.crm_menu_sales"
+    action="action_crm_event_leads"
+    sequence="20"
+/>
+
+
+
 </odoo>

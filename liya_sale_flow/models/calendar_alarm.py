@@ -28,11 +28,28 @@ class CalendarEvent(models.Model):
                 res['alarm_ids'] = [(6, 0, [alarm.id])]
         return res
 
-    @api.model
-    def create(self, vals):
-        if not vals.get('categ_ids'):
-            raise UserError(_('Lütfen en az bir etiket seçin.'))
-        return super(CalendarEvent, self).create(vals)
+    # @api.model
+    # def create(self, vals):
+    #     if not vals.get('categ_ids'):
+    #         raise UserError(_('Lütfen en az bir etiket seçin.'))
+    #     return super(CalendarEvent, self).create(vals)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        events = super(CalendarEvent, self).create(vals_list)
+
+        categ_model = self._fields['categ_ids'].comodel_name
+        sale_cat = self.env[categ_model].search(
+            [('name', '=', 'Satış Toplantısı')], limit=1
+        )
+        if not sale_cat:
+            return events
+
+        for event in events:
+            if any(act.activity_type_id.id == 14 for act in event.activity_ids):
+                event.write({'categ_ids': [(4, sale_cat.id)]})
+
+        return events
 
     def write(self, vals):
         if 'categ_ids' in vals:
