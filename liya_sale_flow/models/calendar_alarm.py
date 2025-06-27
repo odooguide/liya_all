@@ -46,7 +46,7 @@ class CalendarEvent(models.Model):
             return events
 
         for event in events:
-            if any(act.activity_type_id.id == 14 for act in event.activity_ids):
+            if any(act.activity_type_id.id == 12 for act in event.activity_ids):
                 event.write({'categ_ids': [(4, sale_cat.id)]})
 
         return events
