@@ -47,7 +47,7 @@ class SaleOrder(models.Model):
         inverse_name='order_id',
         string='Transportation'
     )
-    event_type=fields.Char(string="Event Type")
+    event_type=fields.Char(string="Type of Invitation")
 
     @api.model
     def default_get(self, fields_list):
@@ -113,17 +113,16 @@ class SaleOrder(models.Model):
             self.program_ids = [(5, 0, 0)]
             self.transport_ids = [(5, 0, 0)]
 
-
-
-    @api.depends('wedding_date')
+    @api.depends('wedding_date', 'partner_id.lang')
     def _compute_wedding_date_display(self):
         for order in self:
             if order.wedding_date:
-                lang = 'tr'
+                lang_code = order.partner_id.lang or self.env.lang or 'en'
+                locale = lang_code.split('_')[0]
                 order.wedding_date_display = babel_format_date(
                     order.wedding_date,
                     format='d MMMM y, EEEE',
-                    locale=lang.replace('_', '-')
+                    locale=locale
                 )
             else:
                 order.wedding_date_display = False

@@ -17,6 +17,18 @@
         </field>
     </record>
 
+  <data noupdate="0">
+    <record id="group_crm_wedding_user" model="res.groups">
+      <field name="name">Wedding Team User</field>
+      <field name="category_id" ref="base.module_category_usability"/>
+    </record>
+
+    <record id="group_crm_event_user" model="res.groups">
+      <field name="name">Event Team User</field>
+      <field name="category_id" ref="base.module_category_usability"/>
+    </record>
+  </data>
+
 <record id="action_crm_wedding_leads" model="ir.actions.act_window">
     <field name="name">Wedding Opportunities</field>
     <field name="res_model">crm.lead</field>
@@ -39,6 +51,8 @@
     parent="crm.crm_menu_sales"
     action="action_crm_wedding_leads"
     sequence="10"
+    groups="liya_sale_flow.group_crm_wedding_user"
+
 />
 
 <menuitem
@@ -47,6 +61,8 @@
     parent="crm.crm_menu_sales"
     action="action_crm_event_leads"
     sequence="20"
+    groups="liya_sale_flow.group_crm_event_user"
+
 />
 
 
