@@ -16,7 +16,6 @@
 
         </field>
     </record>
-
   <data noupdate="0">
     <record id="group_crm_wedding_user" model="res.groups">
       <field name="name">Wedding Team User</field>
@@ -64,7 +63,4 @@
     groups="liya_sale_flow.group_crm_event_user"
 
 />
-
-
-
 </odoo>

@@ -5,3 +5,4 @@ class CrmTeam(models.Model):
 
     wedding_team=fields.Boolean(string='Wedding Team')
     event_team=fields.Boolean(string='Event Team')
+

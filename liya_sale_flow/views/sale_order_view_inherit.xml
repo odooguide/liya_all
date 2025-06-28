@@ -78,8 +78,6 @@
     </field>
   </record>
 
-
-
   <record id="view_order_form_event" model="ir.ui.view">
     <field name="name">sale.order.form.event</field>
     <field name="model">sale.order</field>
