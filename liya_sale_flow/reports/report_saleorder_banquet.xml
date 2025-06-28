@@ -346,7 +346,7 @@
                         </strong>
                         yapılması planlanan
                         <strong>
-                            <t t-esc="doc.opportunity_id.name"/>
+                            <t t-esc="doc.partner_id.name"/>
                             Etkinliği
                         </strong>
                         için hazırlanmıştır.

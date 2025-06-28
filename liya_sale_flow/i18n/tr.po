@@ -558,7 +558,7 @@ msgstr "Dönüştürme Tarihi"
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__conversion_month
 msgid "Conversion Month"
-msgstr "Değişim Ayı"
+msgstr "Dönüşüm Ayı"
 
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_crm_lead2opportunity_partner
@@ -568,7 +568,7 @@ msgstr "Adayı Fırsata Dönüştür  (topluca olmadan)"
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_crm_lead_opportunity_filter_inherit
 msgid "Convertion Month"
-msgstr "Değişim Ayı"
+msgstr "Dönüşüm Ayı"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__coordinator_ids
