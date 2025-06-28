@@ -263,7 +263,7 @@
                     </div>
                     <div style="width: 1px; background: #8c6a3b; height: auto; float: left; margin: 0 10px;"></div>
                     <div style="width: 50%; float: left; padding-left: 40px;">
-                        <h4>MEYVE &amp; TATLİ</h4>
+                        <h4>MEYVE &amp; TATLI</h4>
                         <ul>
                             <li>Meyveli Tartolet</li>
                             <li>Brownie</li>
@@ -286,7 +286,7 @@
                     <div style="clear: both;"></div>
                 </div>
                 <!-- Page 8 -->
-                <div class="page">
+                 <div class="page">
                     <!-- Dynamic Services -->
                     <h2 style="text-align: center;">ÜCRETE DAHİL OLAN HİZMETLER</h2>
                     <ul style="list-style-type: disc; margin-left: 20px;">
@@ -294,7 +294,7 @@
                             <li>
                                 <strong t-esc="srv.name"/>:
                                 <t t-esc="srv.description or '-'"/>
-                                <span></span>
+                                <span/>
                             </li>
                         </t>
                     </ul>
@@ -308,27 +308,33 @@
                         </strong>
                         tir. Örnek program akışı:
                     </p>
+                    <ul style="list-style-type: disc; margin-left: 20px;">
                     <t t-foreach="doc.program_ids" t-as="p">
-                        <p>
+                        <li>
                             <strong t-esc="p.name"/>: (
                             <t t-esc="'%.1f' % p.hours"/>
                             saat)
                             <t t-esc="p.start_datetime and p.start_datetime.strftime('%H:%M')"/>
                             -
                             <t t-esc="p.end_datetime and p.end_datetime.strftime('%H:%M')"/>
-                        </p>
+                        </li>
                     </t>
+                    </ul>
 
                     <!-- Dynamic Transportation -->
                     <h2 style="text-align: center; margin-top: 20px;">TEKNE SAATLERİ</h2>
+                     <ul style="list-style-type: disc; margin-left: 20px;">
+
                     <t t-foreach="doc.transport_ids" t-as="tr">
-                        <p>
+                        <li>
                             <strong t-esc="tr.departure_location"/>
                             →<strong t-esc="tr.arrival_location"/>:
                             <t t-esc="tr.arrival_datetime and tr.arrival_datetime.strftime('%H:%M')"/>
-                        </p>
+                        </li>
                     </t>
+                    </ul>
                 </div>
+
 
                 <!-- Page 9 -->
                 <div class="page">
