@@ -1,0 +1,16 @@
+<odoo>
+  <record id="action_crm_all_leads_opps" model="ir.actions.act_window">
+    <field name="name">Tüm Leads &amp; Opportunities</field>
+    <field name="res_model">crm.lead</field>
+    <field name="view_mode">list,form,pivot</field>
+    <field name="domain">[('type', 'in', ['lead','opportunity'])]</field>
+    <field name="context">{}</field>
+  </record>
+
+  <menuitem
+      id="menu_crm_all_leads_opps"
+      name="Adaylar/Fırsatlar"
+      parent="crm.crm_menu_sales"
+      action="action_crm_all_leads_opps"
+      sequence="15"/>
+</odoo>

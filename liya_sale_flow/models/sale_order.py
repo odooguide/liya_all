@@ -8,11 +8,7 @@ from babel.dates import format_date as babel_format_date
 class SaleOrder(models.Model):
     _inherit='sale.order'
 
-    project_task_ids = fields.Many2many(
-        comodel_name='sale.order.template.task',
-        string='Projedeki Görevler',
-        compute='_compute_project_task_ids',
-    )
+
     is_project_true=fields.Boolean(string='Is There Any Project?')
     confirmed_contract=fields.Binary(string="Signed Contract")
     coordinator_ids = fields.Many2many(comodel_name='res.partner', string="Coordinators",
@@ -30,32 +26,97 @@ class SaleOrder(models.Model):
         compute='_compute_wedding_date_display',
         store=True,
     )
-
-    event_ids = fields.One2many(
-        comodel_name='event.event',
+    service_ids = fields.One2many(
+        comodel_name='sale.order.service',
         inverse_name='order_id',
-        compute='_compute_event_ids',
+        string='Services',
     )
+    program_ids = fields.One2many(
+        comodel_name='sale.order.program',
+        inverse_name='order_id',
+        string='Program Flow',
+    )
+    transport_ids = fields.One2many(
+        comodel_name='sale.order.transport',
+        inverse_name='order_id',
+        string='Transportation'
+    )
+    event_type=fields.Char(string="Type of Invitation")
 
-    @api.depends('sale_order_template_id.template_type',
-                 'sale_order_template_id.event_ids')
-    def _compute_event_ids(self):
-        for order in self:
-            tpl = order.sale_order_template_id
-            if tpl and tpl.template_type == 'event':
-                order.event_ids = tpl.event_ids
-            else:
-                order.event_ids = self.env['event.event']
+    @api.model
+    def default_get(self, fields_list):
+        defaults = super().default_get(fields_list)
+        sale_order_template_id = (
+                defaults.get('sale_order_template_id')
+                or self.env.context.get('default_sale_order_template_id')
+        )
+        if sale_order_template_id:
+            tmpl = self.env['sale.order.template'].browse(sale_order_template_id)
+            if tmpl.template_type == 'event':
+                defaults['service_ids'] = [
+                    (0, 0, {
+                        'name': svc.name,
+                        'description': svc.description,
+                    })
+                    for svc in tmpl.service_ids
+                ]
+                defaults['program_ids'] = [
+                    (0, 0, {
+                        'name': prog.name,
+                        'start_datetime': prog.start_datetime,
+                        'end_datetime': prog.end_datetime,
+                    })
+                    for prog in tmpl.program_ids
+                ]
+                # transport_ids
+                defaults['transport_ids'] = [
+                    (0, 0, {
+                        'departure_location': tr.departure_location,
+                        'arrival_location': tr.arrival_location,
+                        'arrival_datetime': tr.arrival_datetime,
+                    })
+                    for tr in tmpl.transport_ids
+                ]
+        return defaults
 
-    @api.depends('wedding_date')
+    @api.onchange('sale_order_template_id')
+    def _onchange_sale_order_template_id(self):
+        if self.sale_order_template_id and self.sale_order_template_id.template_type == 'event':
+            self.service_ids = [(5, 0, 0)]
+            self.program_ids = [(5, 0, 0)]
+            self.transport_ids = [(5, 0, 0)]
+            for svc in self.sale_order_template_id.service_ids:
+                self.service_ids = [(0, 0, {
+                    'name': svc.name,
+                    'description': svc.description,
+                })]
+            for prog in self.sale_order_template_id.program_ids:
+                self.program_ids = [(0, 0, {
+                    'name': prog.name,
+                    'start_datetime': prog.start_datetime,
+                    'end_datetime': prog.end_datetime,
+                })]
+            for tr in self.sale_order_template_id.transport_ids:
+                self.transport_ids = [(0, 0, {
+                    'departure_location': tr.departure_location,
+                    'arrival_location': tr.arrival_location,
+                    'arrival_datetime': tr.arrival_datetime,
+                })]
+        else:
+            self.service_ids = [(5, 0, 0)]
+            self.program_ids = [(5, 0, 0)]
+            self.transport_ids = [(5, 0, 0)]
+
+    @api.depends('wedding_date', 'partner_id.lang')
     def _compute_wedding_date_display(self):
         for order in self:
             if order.wedding_date:
-                lang = 'tr'
+                lang_code = order.partner_id.lang or self.env.lang or 'en'
+                locale = lang_code.split('_')[0]
                 order.wedding_date_display = babel_format_date(
                     order.wedding_date,
                     format='d MMMM y, EEEE',
-                    locale=lang.replace('_', '-')
+                    locale=locale
                 )
             else:
                 order.wedding_date_display = False
@@ -77,44 +138,6 @@ class SaleOrder(models.Model):
             else:
                 rec.wedding_day = False
 
-    @api.depends('sale_order_template_id', 'order_line.product_id')
-    def _compute_project_task_ids(self):
-        for order in self:
-            if not order.sale_order_template_id:
-                order.project_task_ids = False
-                continue
-            tasks = order.sale_order_template_id.project_task_ids
-            prod_ids = order.order_line.mapped('product_id.id')
-
-            valid = tasks.filtered(
-                lambda t: not t.optional_product_id
-                          or t.optional_product_id.id in prod_ids
-            )
-            order.project_task_ids = valid
-
-
-
-
-
-    # def action_confirm(self):
-    #
-    #     res = super().action_confirm()
-    #     for order in self:
-    #         if order.sale_order_template_id:
-    #             if not order.project_id:
-    #                 raise UserError(_(
-    #                     "Sipariş %s için proje oluşturulmamış. "
-    #                     "Önce bir proje atanmalı."
-    #                 ) % order.name)
-    #             for tmpl in order.project_task_ids:
-    #                 self.env['project.task'].create({
-    #                     'project_id': order.project_id.id,
-    #                     'name': tmpl.name,
-    #                     'description': tmpl.description,
-    #                     'stage_id': tmpl.stage_id.id,
-    #                     'user_ids': [(6, 0, tmpl.user_ids.ids)],
-    #                 })
-    #     return res
 
     def action_confirm(self):
         res=super().action_confirm()
@@ -164,7 +187,7 @@ class SaleOrder(models.Model):
         else:
             self.is_project_true=False
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         sale = super().create(vals)
         if sale.opportunity_id:
@@ -238,3 +261,4 @@ class SaleOrder(models.Model):
     def action_custom_send_quotation(self):
         for order in self:
             return order.with_context(hide_default_template=True).action_quotation_send()
+

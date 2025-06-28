@@ -4,13 +4,10 @@ from odoo import models, fields, api, _
 from datetime import date, datetime, timedelta
 from odoo.exceptions import ValidationError, UserError
 
-
 class CrmLead(models.Model):
     _inherit = "crm.lead"
     
     date_conversion = fields.Datetime('Conversion Date', readonly=False)
-
-
     option1 = fields.Date(string="Optional Date 1")
     option2 = fields.Date(string="Optional Date 2")
     option3 = fields.Date(string="Optional Date 3")
@@ -42,61 +39,54 @@ class CrmLead(models.Model):
         string='Secondary Country',
         help='Secondary country selection'
     )
-
-
     type = fields.Selection(
         [('lead', 'Lead'), ('opportunity', 'Opportunity')],
         compute='_compute_type',
         store=True,
         readonly=False,
     )
-
     my_activity_date_clock = fields.Char(
         string='Activity Hour',
         compute='_compute_activity_date_time',
         store=True,
     )
-
     my_activity_date = fields.Char(
         string='Activity Date',
         compute='_compute_activity_date_time',
         store=True,
     )
-
     my_activity_day = fields.Char(
         string='Activity Day',
         compute='_compute_activity_day',
         store=True,
     )
-    wedding_place=fields.Many2one('wedding.place',string='Source Category',ondelete="set null")
-
+    wedding_place=fields.Many2one(
+        'wedding.place',
+        string='Source Category',
+        ondelete="set null"
+    )
     yt = fields.Selection([
         ('yt', 'YT'),
         ('y', 'Y'),
         ('t', 'T'),
-    ], string='Y/T')
-
-
+    ], string='Y/T'
+    )
     request_month = fields.Char(
         string='Request Month',
         compute='_compute_month_names',
         store=True,
     )
-
     conversion_month = fields.Char(
         string='Conversion Month',
         compute='_compute_month_names',
         store=True,
     )
-
-
     current_month = fields.Char(
         string='Current Month',
         compute='_compute_month_names',
         store=True,
     )
-
-
+    ##### Compute #####
     @api.depends('request_date', 'date_conversion')
     def _compute_month_names(self):
         month_names = {
@@ -119,57 +109,7 @@ class CrmLead(models.Model):
                 )
             else:
                 rec.conversion_month = False
-
-            today = fields.Date.context_today(self)
-            current_month_num = fields.Date.from_string(today).month
-            current_month_name = month_names.get(current_month_num, False)
-            rec.current_month = current_month_name
-
-
-    @api.onchange('second_phone')
-    def _onchange_second_phone(self):
-        for partner in self:
-            raw = partner.second_phone or ''
-
-            digits = re.sub(r'\D', '', raw)
-            if len(digits) == 11 and digits.startswith('0'):
-                digits = digits[1:]
-            if len(digits) == 10:
-                m = re.match(r'(\d{3})(\d{3})(\d{2})(\d{2})$', digits)
-                if m:
-                    part1, part2, part3, part4 = m.groups()
-                    partner.second_phone = f'+90 {part1} {part2} {part3} {part4}'
-                else:
-                    partner.second_phone = raw
-            else:
-                partner.second_phone = raw
-    @api.constrains('wedding_year')
-    def _check_wedding_year(self):
-        if self.wedding_year:
-            if not self.wedding_year.isdigit():
-                raise ValidationError("Etkinlik yılı sadece sayı içermelidir.")
-
-            if len(self.wedding_year) != 4:
-                raise ValidationError("Etkinlik yılı 4 haneli olmalıdır.")
-
-            year = int(self.wedding_year)
-
-            if year < 2024:
-                raise ValidationError("Etkinlik yılı 2024'den büyük olmalıdır (minimum 2025).")
-
-            if year > 2100:
-                raise ValidationError("Etkinlik yılı 2100'den küçük olmalıdır (maksimum 2100).")
-
-    def action_set_lost(self, **additional_values):
-        res = super().action_set_lost(**additional_values)
-        # ilgili tüm sale.order kayıtlarını al
-        orders = self.env['sale.order'].search([
-            ('opportunity_id', 'in', self.ids),
-        ])
-        for order in orders:
-            order._action_cancel()
-        return res
-
+        
     @api.depends('activity_type_id')
     def _compute_type(self):
         for lead in self:
@@ -211,12 +151,56 @@ class CrmLead(models.Model):
             lead.my_activity_date_clock = dt_with_offset.strftime('%H:%M')
             lead.my_activity_date = start_dt.strftime('%d.%m.%Y')
 
+    @api.onchange('second_phone')
+    def _onchange_second_phone(self):
+        for partner in self:
+            raw = partner.second_phone or ''
+
+            digits = re.sub(r'\D', '', raw)
+            if len(digits) == 11 and digits.startswith('0'):
+                digits = digits[1:]
+            if len(digits) == 10:
+                m = re.match(r'(\d{3})(\d{3})(\d{2})(\d{2})$', digits)
+                if m:
+                    part1, part2, part3, part4 = m.groups()
+                    partner.second_phone = f'+90 {part1} {part2} {part3} {part4}'
+                else:
+                    partner.second_phone = raw
+            else:
+                partner.second_phone = raw
+
+    @api.constrains('wedding_year')
+    def _check_wedding_year(self):
+        if self.wedding_year:
+            if not self.wedding_year.isdigit():
+                raise ValidationError("Etkinlik yılı sadece sayı içermelidir.")
+
+            if len(self.wedding_year) != 4:
+                raise ValidationError("Etkinlik yılı 4 haneli olmalıdır.")
+
+            year = int(self.wedding_year)
+
+            if year < 2024:
+                raise ValidationError("Etkinlik yılı 2023'den büyük olmalıdır (minimum 2024).")
+
+            if year > 2100:
+                raise ValidationError("Etkinlik yılı 2100'den küçük olmalıdır (maksimum 2100).")
+
+    def action_set_lost(self, **additional_values):
+        res = super().action_set_lost(**additional_values)
+        orders = self.env['sale.order'].search([
+            ('opportunity_id', 'in', self.ids),
+        ])
+        for order in orders:
+            order._action_cancel()
+        return res
+    #???
     @api.model
     def _get_first_stage(self, team):
         return self.env['crm.stage'].search([
             ('team_id', '=', team.id),
             ('sequence', '=', 1)], limit=1)
-
+    #???
     def write(self, vals):
         if 'stage_id' not in vals:
             return super().write(vals)
@@ -284,6 +268,41 @@ class CrmLead(models.Model):
 
 
         return super().write(vals)
+    #???
+    def create_activity(self, lead):
+
+        orders = self.env['sale.order'].search([
+            ('opportunity_id', '=', lead.id),
+            ('state', 'in', ('sale', 'done'))
+        ], limit=1)
+        if not orders:
+            raise UserError(_('Hiçbir onaylı sözleşme bulunamadı.'))
+        order = orders
+
+        wedding_tag = self.env['calendar.event.type'].search(
+            [('name', 'in', ['Düğün', 'Wedding'])], limit=1
+        )
+        event_tag = self.env['calendar.event.type'].search(
+            [('name', 'in', ['Etkinlik', 'Event'])], limit=1
+        )
+
+        partner_ids = [(4, pid) for pid in order.coordinator_ids.ids]
+
+        vals = {
+            'name': f"{lead.name} {'Düğün Günü' if lead.team_id.wedding_team else 'Etkinlik Günü'}",
+            'start_date': order.wedding_date,
+            'stop_date': order.wedding_date,
+            'allday': True,
+            'user_id': lead.user_id.id,
+            'partner_ids': partner_ids,
+            'opportunity_id': lead.id,
+        }
+        if lead.team_id.wedding_team and wedding_tag:
+            vals['categ_ids'] = [(6, 0, [wedding_tag.id])]
+        elif event_tag:
+            vals['categ_ids'] = [(6, 0, [event_tag.id])]
+
+        self.env['calendar.event'].create(vals)
 
     def create_activity(self, lead):
 
@@ -340,8 +359,3 @@ class CrmLead(models.Model):
             )
             if rec:
                 self.wedding_place = rec.id
-
-
-
-
-#TODO: partner_ids coordinatorler, sales person user_id tum gun

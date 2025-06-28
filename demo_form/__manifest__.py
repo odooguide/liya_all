@@ -10,10 +10,11 @@
 	""",
     "website": "https://broadmax.com.tr",
     "data": [
-        "views/demo_form.xml",
-        "views/project_template_view.xml",
-        "security/ir.model.access.csv",
+        # "views/demo_form.xml",
+        # "views/project_template_view.xml",
+        # "security/ir.model.access.csv",
     ],
     "auto_install": False,
     "installable": True,
+    "license": "AGPL-3",
 }

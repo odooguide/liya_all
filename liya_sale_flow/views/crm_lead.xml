@@ -58,22 +58,22 @@
 
     </record>
 
-    <record id="crm_lead_view_form_iap_enrich_hide" model="ir.ui.view">
-        <field name="name">crm.lead.form.iap.enrich.hide</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm_iap_enrich.crm_lead_view_form"/>
-        <field name="arch" type="xml">
+<!--    <record id="crm_lead_view_form_iap_enrich_hide" model="ir.ui.view">-->
+<!--        <field name="name">crm.lead.form.iap.enrich.hide</field>-->
+<!--        <field name="model">crm.lead</field>-->
+<!--        <field name="inherit_id" ref="crm_iap_enrich.crm_lead_view_form"/>-->
+<!--        <field name="arch" type="xml">-->
 
-            <xpath expr="//button[@name='iap_enrich'][1]" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </xpath>
+<!--            <xpath expr="//button[@name='iap_enrich'][1]" position="attributes">-->
+<!--                <attribute name="invisible">1</attribute>-->
+<!--            </xpath>-->
 
-            <xpath expr="//button[@name='iap_enrich'][2]" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </xpath>
+<!--            <xpath expr="//button[@name='iap_enrich'][2]" position="attributes">-->
+<!--                <attribute name="invisible">1</attribute>-->
+<!--            </xpath>-->
 
-        </field>
-    </record>
+<!--        </field>-->
+<!--    </record>-->
     <record id="view_crm_lead_form_hide_revenue_prob" model="ir.ui.view">
         <field name="name">crm.lead.form.hide.revenue.probability</field>
         <field name="model">crm.lead</field>
@@ -187,37 +187,37 @@
                     <filter string="Current Month" name="filter_request_date_this_month" domain="[             ('request_date', '&gt;=', (context_today() + relativedelta(day=1))),             ('request_date', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
            </xpath>
             <xpath expr="filter[@name='filter_creation_date']" position="after">
-                    <filter string="Convertion Month" name="filter_request_date_this_month" domain="[             ('date_conversion', '&gt;=', (context_today() + relativedelta(day=1))),             ('date_conversion', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
+                    <filter string="Convertion Month" name="filter_convertion_date_this_month" domain="[             ('date_conversion', '&gt;=', (context_today() + relativedelta(day=1))),             ('date_conversion', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
            </xpath>
         </field>
     </record>
 
-    <record id="view_crm_case_tree_hide_email_button" model="ir.ui.view">
-        <field name="name">crm.case.tree.hide.email.button</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='358']" position="attributes">
-                <attribute name="invisible">True</attribute>
-            </xpath>
-        </field>
-    </record>
+<!--    <record id="view_crm_case_tree_hide_email_button" model="ir.ui.view">-->
+<!--        <field name="name">crm.case.tree.hide.email.button</field>-->
+<!--        <field name="model">crm.lead</field>-->
+<!--        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//button[@name='358']" position="attributes">-->
+<!--                <attribute name="invisible">True</attribute>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
-    <record id="view_crm_sms_case_tree_hide_sms_buttons" model="ir.ui.view">
-        <field name="name">crm.sms.case.tree.hide.sms.buttons</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm_sms.crm_case_tree_view_oppor"/>
-        <field name="arch" type="xml">
+<!--    <record id="view_crm_sms_case_tree_hide_sms_buttons" model="ir.ui.view">-->
+<!--        <field name="name">crm.sms.case.tree.hide.sms.buttons</field>-->
+<!--        <field name="model">crm.lead</field>-->
+<!--        <field name="inherit_id" ref="crm_sms.crm_case_tree_view_oppor"/>-->
+<!--        <field name="arch" type="xml">-->
 
-            <xpath expr="//button[@name='466']" position="attributes">
-                <attribute name="invisible">True</attribute>
-            </xpath>
+<!--            <xpath expr="//button[@name='466']" position="attributes">-->
+<!--                <attribute name="invisible">True</attribute>-->
+<!--            </xpath>-->
 
-            <xpath expr="//button[@name='467']" position="attributes">
-                <attribute name="invisible">True</attribute>
-            </xpath>
-        </field>
-    </record>
+<!--            <xpath expr="//button[@name='467']" position="attributes">-->
+<!--                <attribute name="invisible">True</attribute>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
 
 </odoo>
