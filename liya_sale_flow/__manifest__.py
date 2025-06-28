@@ -11,8 +11,8 @@
     "website": "https://broadmax.com.tr",
     "data": [
         "views/crm_lead.xml",
-        "views/sale_order_template_view.xml",
-        "views/sale_order_view_inherit.xml",
+        #"views/sale_order_template_view.xml",
+        #"views/sale_order_view_inherit.xml",
         "views/crm_lead_kanban_hide_revenues.xml",
         "views/product_template_view_inherit.xml",
         "views/calendar_event_inherit_search_custom.xml",
