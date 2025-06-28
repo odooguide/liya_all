@@ -187,7 +187,7 @@
                     <filter string="Current Month" name="filter_request_date_this_month" domain="[             ('request_date', '&gt;=', (context_today() + relativedelta(day=1))),             ('request_date', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
            </xpath>
             <xpath expr="filter[@name='filter_creation_date']" position="after">
-                    <filter string="Convertion Month" name="filter_request_date_this_month" domain="[             ('date_conversion', '&gt;=', (context_today() + relativedelta(day=1))),             ('date_conversion', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
+                    <filter string="Convertion Month" name="filter_convertion_date_this_month" domain="[             ('date_conversion', '&gt;=', (context_today() + relativedelta(day=1))),             ('date_conversion', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
            </xpath>
         </field>
     </record>

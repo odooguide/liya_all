@@ -5,5 +5,3 @@ class MailActivityType(models.Model):
 
     is_quot=fields.Boolean(string='Is Quotation?')
     is_reminder=fields.Boolean(string='Is Quotation Reminder?')
-    # is_quot=fields.Boolean(string='Teklif için mi?')
-    # is_reminder=fields.Boolean(string='Teklif Hatirlatma için mi?')

@@ -26,22 +26,16 @@ class SaleOrder(models.Model):
         compute='_compute_wedding_date_display',
         store=True,
     )
-
-
     service_ids = fields.One2many(
         comodel_name='sale.order.service',
         inverse_name='order_id',
         string='Services',
-
     )
-
     program_ids = fields.One2many(
         comodel_name='sale.order.program',
         inverse_name='order_id',
         string='Program Flow',
-
     )
-
     transport_ids = fields.One2many(
         comodel_name='sale.order.transport',
         inverse_name='order_id',
@@ -193,7 +187,7 @@ class SaleOrder(models.Model):
         else:
             self.is_project_true=False
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         sale = super().create(vals)
         if sale.opportunity_id:

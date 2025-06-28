@@ -4,8 +4,9 @@ from odoo.exceptions import UserError
 class CalendarEvent(models.Model):
     _inherit = 'calendar.event'
 
+    ##### Defaul Get #####
     @api.model
-    def _default_partners(self):
+    def _default_attendees(self):
         """ When active_model is res.partner, the current partners should be attendees """
         partners = self.env.user.partner_id
         active_id = self._context.get('active_id')
@@ -13,26 +14,21 @@ class CalendarEvent(models.Model):
                 partners |= self.env['res.partner'].browse(active_id)
         return partners
     
-    partner_ids = fields.Many2many(
-        'res.partner', 'calendar_event_res_partner_rel',
-        string='Attendees', default=_default_partners,
-        domain=[('employee_ids', '!=', False)]
-        )
-
     @api.model
     def default_get(self, fields_list):
+        """ Adding 24 Hour Reminder every event"""
         res = super(CalendarEvent, self).default_get(fields_list)
         if 'alarm_ids' in fields_list:
             alarm = self.env.ref('liya_sale_flow.alarm_24h_email', raise_if_not_found=False)
             if alarm:
                 res['alarm_ids'] = [(6, 0, [alarm.id])]
         return res
-
-    # @api.model
-    # def create(self, vals):
-    #     if not vals.get('categ_ids'):
-    #         raise UserError(_('Lütfen en az bir etiket seçin.'))
-    #     return super(CalendarEvent, self).create(vals)
+    
+    partner_ids = fields.Many2many(
+        'res.partner', 'calendar_event_res_partner_rel',
+        string='Attendees', default=_default_attendees,
+        domain=[('employee_ids', '!=', False)]
+        )
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -49,13 +45,16 @@ class CalendarEvent(models.Model):
             if any(act.activity_type_id.id == 12 for act in event.activity_ids):
                 event.write({'categ_ids': [(4, sale_cat.id)]})
 
+        self.check_categ_ids(vals_list)
         return events
 
     def write(self, vals):
         if 'categ_ids' in vals:
-            res = super(CalendarEvent, self).write(vals)
             for event in self:
-                if not event.categ_ids:
-                    raise UserError(_('Lütfen en az bir etiket seçin.'))
-            return res
+                event.check_categ_ids(vals)
         return super(CalendarEvent, self).write(vals)
+    
+    def check_categ_ids(self, vals):
+        if not vals.get('categ_ids'):
+            raise UserError(_('Lütfen en az bir etiket seçin.'))
+        return True
