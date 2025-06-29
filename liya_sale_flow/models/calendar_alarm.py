@@ -30,31 +30,38 @@ class CalendarEvent(models.Model):
         domain=[('employee_ids', '!=', False)]
         )
 
+
     @api.model_create_multi
     def create(self, vals_list):
-        events = super(CalendarEvent, self).create(vals_list)
+        events = super().create(vals_list)
 
-        categ_model = self._fields['categ_ids'].comodel_name
-        sale_cat = self.env[categ_model].search(
-            [('name', '=', 'Satış Toplantısı')], limit=1
-        )
-        if not sale_cat:
-            return events
+        if not self.env.context.get('skip_sale_tagging'):
+            categ_model = self._fields['categ_ids'].comodel_name
+            sale_cat = self.env[categ_model].search(
+                [('name', '=', 'Satış Toplantısı')], limit=1
+            )
+            if sale_cat:
+                for ev in events:
+                    if any(act.activity_type_id.id == 12 for act in ev.activity_ids):
+                        ev.write({'categ_ids': [(4, sale_cat.id)]})
 
-        for event in events:
-            if any(act.activity_type_id.id == 12 for act in event.activity_ids):
-                event.write({'categ_ids': [(4, sale_cat.id)]})
+        # if not self.env.context.get('skip_categ_check'):
+        #     self.check_categ_ids(vals_list)
 
-        self.check_categ_ids(vals_list)
         return events
 
-    def write(self, vals):
-        if 'categ_ids' in vals:
-            for event in self:
-                event.check_categ_ids(vals)
-        return super(CalendarEvent, self).write(vals)
-    
-    def check_categ_ids(self, vals):
-        if not vals.get('categ_ids'):
-            raise UserError(_('Lütfen en az bir etiket seçin.'))
-        return True
+    # def write(self, vals):
+    #     if 'categ_ids' in vals and not self.env.context.get('skip_categ_check'):
+    #         for ev in self:
+    #             ev.check_categ_ids(vals)
+    #     return super().write(vals)
+
+    # def check_categ_ids(self, vals):
+    #     if isinstance(vals, list):
+    #         for v in vals:
+    #             if not v.get('categ_ids'):
+    #                 raise UserError(_('Lütfen en az bir etiket seçin.'))
+    #     else:
+    #         if not vals.get('categ_ids'):
+    #             raise UserError(_('Lütfen en az bir etiket seçin.'))
+    #     return True
