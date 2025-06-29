@@ -14,5 +14,6 @@
       name="Adaylar/Fırsatlar"
       parent="crm.crm_menu_sales"
       action="action_crm_all_leads_opps"
-      sequence="15"/>
+      sequence="15"
+      groups="base.group_system"/>
 </odoo>
