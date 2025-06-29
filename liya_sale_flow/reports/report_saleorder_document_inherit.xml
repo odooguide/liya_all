@@ -340,6 +340,7 @@ We would be happy to answer any questions you may have and look forward to heari
                             <br/>
                             <table class="table table-borderless"
                                    style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;font-size:10.5pt;">
+                                <t t-if="doc.partner_id.lang=='en_US'">
                                 <tr>
                                     <td style="vertical-align:top; width:25%; padding:0px;color:grey;">
                                         PARISA MIRABI
@@ -354,6 +355,7 @@ We would be happy to answer any questions you may have and look forward to heari
                                         +90 216 382 4827 / info@liya-all.com
                                     </td>
                                 </tr>
+                                </t>
                                 <tr>
                                     <td style="vertical-align:top; width:25%; padding:0px;color:grey;">
                                         SİNEM KÖSEM
