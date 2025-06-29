@@ -22,7 +22,7 @@ class CrmLead(models.Model):
         size=4,
         help="Event Year (between 2025-2100)"
     )
-    people = fields.Integer(string="People",default=False)
+    people = fields.Integer(string="People Count",default=False)
     second_contact = fields.Char(
         string="Secondary Contact",
     )
@@ -113,10 +113,11 @@ class CrmLead(models.Model):
     @api.depends('activity_type_id')
     def _compute_type(self):
         for lead in self:
-            display = lead.activity_type_id and lead.activity_type_id.display_name or ''
-            if 'toplantı' or 'meeting' in display.lower():
+            disp = lead.activity_type_id and lead.activity_type_id.display_name or ''
+            keywords = ('satış toplantısı', 'meeting','toplantı')
+            if any(kw in disp.lower() for kw in keywords):
                 lead.type = 'opportunity'
-                lead.date_conversion=date.today()
+                lead.date_conversion = date.today()
 
         return None
 
@@ -194,13 +195,7 @@ class CrmLead(models.Model):
         for order in orders:
             order._action_cancel()
         return res
-    #???
-    @api.model
-    def _get_first_stage(self, team):
-        return self.env['crm.stage'].search([
-            ('team_id', '=', team.id),
-            ('sequence', '=', 1)], limit=1)
-    #???
+
     def write(self, vals):
         if 'stage_id' not in vals:
             return super().write(vals)
@@ -208,7 +203,7 @@ class CrmLead(models.Model):
         for lead in self:
             new_stage = self.env['crm.stage'].browse(vals['stage_id'])
 
-            if (new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation Progress'):
+            if (new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation'):
                 missing = []
                 required_fields = {
                     'people': _('People'),
