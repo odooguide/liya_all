@@ -16,7 +16,7 @@
 
         </field>
     </record>
-  <data noupdate="0">
+  <data noupdate="1">
     <record id="group_crm_wedding_user" model="res.groups">
       <field name="name">Wedding Team User</field>
       <field name="category_id" ref="base.module_category_usability"/>
@@ -46,7 +46,7 @@
 
 <menuitem
     id="menu_crm_wedding"
-    name="Wedding"
+    name="Wedding Pipeline"
     parent="crm.crm_menu_sales"
     action="action_crm_wedding_leads"
     sequence="10"
@@ -56,7 +56,7 @@
 
 <menuitem
     id="menu_crm_event"
-    name="Event"
+    name="Event Pipeline"
     parent="crm.crm_menu_sales"
     action="action_crm_event_leads"
     sequence="20"
