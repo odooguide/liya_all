@@ -227,7 +227,7 @@ class CrmLead(models.Model):
                 if lead.quotation_count < 1:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
 
-            elif (new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting') and lead.team_id.wedding_team:
+            elif (new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting'):
 
                 orders = self.env['sale.order'].search([
                     ('opportunity_id', '=', lead.id),
