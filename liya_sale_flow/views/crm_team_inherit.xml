@@ -58,20 +58,20 @@
 
 <menuitem
     id="menu_crm_wedding"
-    name="Wedding Pipeline"
+    name="Wedding Leads"
     parent="crm.crm_menu_root"
     action="action_crm_wedding_leads"
-    sequence="10"
+    sequence="6"
     groups="liya_sale_flow.group_crm_wedding_user"
 
 />
 
 <menuitem
     id="menu_crm_event"
-    name="Event Pipeline"
+    name="Event Leads"
     parent="crm.crm_menu_root"
     action="action_crm_event_leads"
-    sequence="20"
+    sequence="7"
     groups="liya_sale_flow.group_crm_event_user"
 
 />
@@ -106,7 +106,7 @@
     name="Wedding Pipeline"
     parent="crm.crm_menu_sales"
     action="action_crm_wedding_opportunity"
-    sequence="10"
+    sequence="1"
     groups="liya_sale_flow.group_crm_wedding_user"
 
 />
@@ -116,7 +116,7 @@
     name="Event Pipeline"
     parent="crm.crm_menu_sales"
     action="action_crm_event_opportunity"
-    sequence="20"
+    sequence="1"
     groups="liya_sale_flow.group_crm_event_user"
 
 />
