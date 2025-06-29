@@ -232,9 +232,7 @@ class CrmLead(models.Model):
                 if lead.quotation_count < 1:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
 
-                
-            elif (new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting'):
-
+            elif (new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting') and lead.team_id.wedding_team:
 
                 orders = self.env['sale.order'].search([
                     ('opportunity_id', '=', lead.id),
@@ -337,7 +335,9 @@ class CrmLead(models.Model):
         elif event_tag:
             vals['categ_ids'] = [(6, 0, [event_tag.id])]
 
-        self.env['calendar.event'].create(vals)
+        self.env['calendar.event'] \
+            .with_context(skip_categ_check=True, skip_sale_tagging=True) \
+            .create(vals)
 
     def action_sale_quotations_new(self):
         self.ensure_one()
