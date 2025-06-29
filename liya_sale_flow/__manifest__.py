@@ -27,6 +27,7 @@
         "reports/report_saleorder_banquet.xml",
         "data/ir_sequence.xml",
         "data/calendar_alarm_data.xml",
+        "data/menu_restrict.xml",
 
     ],
     "auto_install": False,
