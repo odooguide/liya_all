@@ -203,7 +203,7 @@ class CrmLead(models.Model):
         for lead in self:
             new_stage = self.env['crm.stage'].browse(vals['stage_id'])
 
-            if (new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation Progress'):
+            if (new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation'):
                 missing = []
                 required_fields = {
                     'people': _('People'),
