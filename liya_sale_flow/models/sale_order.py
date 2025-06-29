@@ -43,69 +43,33 @@ class SaleOrder(models.Model):
     )
     event_type=fields.Char(string="Type of Invitation")
 
-    # @api.model
-    # def default_get(self, fields_list):
-    #     defaults = super().default_get(fields_list)
-    #     sale_order_template_id = (
-    #             defaults.get('sale_order_template_id')
-    #             or self.env.context.get('default_sale_order_template_id')
-    #     )
-    #     if sale_order_template_id:
-    #         tmpl = self.env['sale.order.template'].browse(sale_order_template_id)
-    #         if tmpl.template_type == 'event':
-    #             defaults['service_ids'] = [
-    #                 (0, 0, {
-    #                     'name': svc.name,
-    #                     'description': svc.description,
-    #                 })
-    #                 for svc in tmpl.service_ids
-    #             ]
-    #             defaults['program_ids'] = [
-    #                 (0, 0, {
-    #                     'name': prog.name,
-    #                     'start_datetime': prog.start_datetime,
-    #                     'end_datetime': prog.end_datetime,
-    #                 })
-    #                 for prog in tmpl.program_ids
-    #             ]
-    #             # transport_ids
-    #             defaults['transport_ids'] = [
-    #                 (0, 0, {
-    #                     'departure_location': tr.departure_location,
-    #                     'arrival_location': tr.arrival_location,
-    #                     'arrival_datetime': tr.arrival_datetime,
-    #                 })
-    #                 for tr in tmpl.transport_ids
-    #             ]
-    #     return defaults
-
-    # @api.onchange('sale_order_template_id')
-    # def _onchange_sale_order_template_id(self):
-    #     if self.sale_order_template_id and self.sale_order_template_id.template_type == 'event':
-    #         self.service_ids = [(5, 0, 0)]
-    #         self.program_ids = [(5, 0, 0)]
-    #         self.transport_ids = [(5, 0, 0)]
-    #         for svc in self.sale_order_template_id.service_ids:
-    #             self.service_ids = [(0, 0, {
-    #                 'name': svc.name,
-    #                 'description': svc.description,
-    #             })]
-    #         for prog in self.sale_order_template_id.program_ids:
-    #             self.program_ids = [(0, 0, {
-    #                 'name': prog.name,
-    #                 'start_datetime': prog.start_datetime,
-    #                 'end_datetime': prog.end_datetime,
-    #             })]
-    #         for tr in self.sale_order_template_id.transport_ids:
-    #             self.transport_ids = [(0, 0, {
-    #                 'departure_location': tr.departure_location,
-    #                 'arrival_location': tr.arrival_location,
-    #                 'arrival_datetime': tr.arrival_datetime,
-    #             })]
-    #     else:
-    #         self.service_ids = [(5, 0, 0)]
-    #         self.program_ids = [(5, 0, 0)]
-    #         self.transport_ids = [(5, 0, 0)]
+    @api.onchange('sale_order_template_id')
+    def _onchange_sale_order_event_template_id(self):
+        if self.sale_order_template_id and self.sale_order_template_id.template_type == 'event':
+            self.service_ids = [(5, 0, 0)]
+            self.program_ids = [(5, 0, 0)]
+            self.transport_ids = [(5, 0, 0)]
+            for svc in self.sale_order_template_id.service_ids:
+                self.service_ids = [(0, 0, {
+                    'name': svc.name,
+                    'description': svc.description,
+                })]
+            for prog in self.sale_order_template_id.program_ids:
+                self.program_ids = [(0, 0, {
+                    'name': prog.name,
+                    'start_datetime': prog.start_datetime,
+                    'end_datetime': prog.end_datetime,
+                })]
+            for tr in self.sale_order_template_id.transport_ids:
+                self.transport_ids = [(0, 0, {
+                    'departure_location': tr.departure_location,
+                    'arrival_location': tr.arrival_location,
+                    'arrival_datetime': tr.arrival_datetime,
+                })]
+        else:
+            self.service_ids = [(5, 0, 0)]
+            self.program_ids = [(5, 0, 0)]
+            self.transport_ids = [(5, 0, 0)]
 
     @api.depends('wedding_date', 'partner_id.lang')
     def _compute_wedding_date_display(self):
