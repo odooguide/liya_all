@@ -22,7 +22,7 @@ class CrmLead(models.Model):
         size=4,
         help="Event Year (between 2025-2100)"
     )
-    people = fields.Integer(string="People",default=False)
+    people = fields.Integer(string="People Count",default=False)
     second_contact = fields.Char(
         string="Secondary Contact",
     )
