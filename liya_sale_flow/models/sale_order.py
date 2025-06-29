@@ -108,6 +108,8 @@ class SaleOrder(models.Model):
         for order in self:
             if not order.coordinator_ids:
                 raise UserError(_("Koordinatör seçilmeden bu teklifi onaylayamazsınız. Lütfen koordinatör seçin."))
+            if not order.wedding_date:
+                raise UserError(_("Etkinlik tarihi seçilmeden satışı onaylayamazsınız."))
         return res
 
 
