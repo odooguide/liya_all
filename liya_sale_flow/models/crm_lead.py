@@ -115,7 +115,7 @@ class CrmLead(models.Model):
         for lead in self:
             disp = lead.activity_type_id and lead.activity_type_id.display_name or ''
             keywords = ('satış toplantısı', 'meeting','toplantı')
-            if any(kw in disp for kw in keywords):
+            if any(kw in disp.lower() for kw in keywords):
                 lead.type = 'opportunity'
                 lead.date_conversion = date.today()
 
