@@ -84,7 +84,7 @@
     <field name="inherit_id" ref="sale.view_order_form"/>
     <field name="arch" type="xml">
       <xpath expr="//notebook" position="inside">
-        <page string="Event" name="page_event">
+        <page string="Event" name="page_event" invisible="is_event_selected != True">
           <group>
             <!-- 1) Services -->
             <group string="Services">

@@ -19,4 +19,9 @@
     <record id="crm.crm_menu_leads" model="ir.ui.menu">
       <field name="groups_id" eval="[(6, 0, [ref('base.group_system')])]"/>
     </record>
+
+     <record id="group_sale_manager_custom" model="res.groups">
+            <field name="name">Sale Manager Custom</field>
+            <field name="category_id" ref="base.module_category_usability"/>
+     </record>
 </odoo>

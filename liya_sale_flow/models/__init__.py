@@ -8,4 +8,4 @@ from . import wedding_place
 from . import product_template
 from . import sales_teams
 from . import sale_order_event
-
+from . import dashboard_groups

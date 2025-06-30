@@ -17,8 +17,8 @@ class SaleOrderProgram(models.Model):
     order_id = fields.Many2one('sale.order', string='Order')
     sale_order_template_id = fields.Many2one('sale.order.template', string='Sale Order Template')
     name = fields.Char(string='Event Name', )
-    start_datetime = fields.Datetime(string='Start DateTime',)
-    end_datetime = fields.Datetime(string='End DateTime',)
+    start_datetime = fields.Datetime(string='Start Time',)
+    end_datetime = fields.Datetime(string='End Time',)
     hours = fields.Float(string='Duration (hours)', compute='_compute_hours', store=True)
 
     @api.depends('start_datetime', 'end_datetime')
@@ -37,5 +37,5 @@ class SaleOrderTransport(models.Model):
     sale_order_template_id = fields.Many2one('sale.order.template', string='Sale Order Template')
     departure_location = fields.Char(string='Departure Location')
     arrival_location = fields.Char(string='Arrival Location')
-    arrival_datetime = fields.Datetime(string='Arrival DateTime')
+    arrival_datetime = fields.Datetime(string='Departure Time')
 
