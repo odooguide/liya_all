@@ -113,9 +113,8 @@ class CrmLead(models.Model):
     @api.depends('activity_type_id')
     def _compute_type(self):
         for lead in self:
-            disp = lead.activity_type_id and lead.activity_type_id.display_name or ''
-            keywords = ('satış toplantısı', 'meeting','toplantı')
-            if any(kw in disp.lower() for kw in keywords):
+            disp = lead.activity_type_id and lead.activity_type_id.category or ''
+            if disp=='meeting':
                 lead.type = 'opportunity'
                 lead.date_conversion = date.today()
 
