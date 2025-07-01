@@ -48,7 +48,7 @@
         <field name="view_mode">kanban,list,form</field>
         <field name="domain">
             [
-            ('team_id.wedding_team', '=', True),
+            ('team_id.event_team', '=', True),
             ('type', '=', 'lead')
             ]
         </field>
@@ -93,7 +93,7 @@
         <field name="view_mode">kanban,list,form</field>
         <field name="domain">
             [
-            ('team_id.wedding_team', '=', True),
+            ('team_id.event_team', '=', True),
             ('type', '=', 'opportunity')
             ]
         </field>
