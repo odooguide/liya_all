@@ -41,6 +41,7 @@ class SaleOrder(models.Model):
         inverse_name='order_id',
         string='Transportation'
     )
+    contract_date=fields.Date(string='Contract Date')
     event_type=fields.Char(string="Type of Invitation")
     is_event_selected=fields.Boolean(string="Is Event Template Selected")
 
@@ -115,6 +116,9 @@ class SaleOrder(models.Model):
                 raise UserError(_("Koordinatör seçilmeden bu teklifi onaylayamazsınız. Lütfen koordinatör seçin."))
             if not order.wedding_date:
                 raise UserError(_("Etkinlik tarihi seçilmeden satışı onaylayamazsınız."))
+            if not order.contract_date:
+                raise UserError(_("Sözleşme tarihi seçilmeden satışı onaylayamazsınız."))
+
         return res
 
 

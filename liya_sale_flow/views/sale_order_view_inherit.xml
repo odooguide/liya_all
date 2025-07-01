@@ -9,6 +9,7 @@
     </xpath>
     <xpath expr="//field[@name='payment_term_id']" position="after">
       <field name="confirmed_contract"/>
+      <field name="contract_date"/>
     </xpath>
     <xpath expr="//field[@name='partner_id']" position="after">
       <field name="second_contact"/>

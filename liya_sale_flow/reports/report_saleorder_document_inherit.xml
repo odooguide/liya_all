@@ -340,36 +340,22 @@ We would be happy to answer any questions you may have and look forward to heari
                             <br/>
                             <table class="table table-borderless"
                                    style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;font-size:10.5pt;">
-                                <t t-if="doc.partner_id.lang=='en_US'">
                                 <tr>
                                     <td style="vertical-align:top; width:25%; padding:0px;color:grey;">
-                                        PARISA MIRABI
+                                        <t t-esc="user_id.name"/>
                                     </td>
                                     <td style="vertical-align:top; width:32%; padding:2px;color:grey;">
-                                        +90 537 264 7588 / paris@liya-all.com
+                                        <t t-esc="user_id.phone"/> / <t t-esc="user_id.login"/>
                                     </td>
                                     <td style="vertical-align:top; width:10%; padding:2px;color:grey;">
 
                                     </td>
                                     <td style="vertical-align:top; width:32%; padding:2px;color:grey;">
-                                        +90 216 382 4827 / info@liya-all.com
+                                         info@liya-all.com
                                     </td>
                                 </tr>
-                                </t>
-                                <tr>
-                                    <td style="vertical-align:top; width:25%; padding:0px;color:grey;">
-                                        SİNEM KÖSEM
-                                    </td>
-                                    <td style="vertical-align:top; width:32%; padding:2px;color:grey;">
-                                        +90 530 842 9291 / sinem@liya-all.com
-                                    </td>
-                                    <td style="vertical-align:top; width:10%; padding:2px;">
 
-                                    </td>
-                                    <td style="vertical-align:top; width:32%; padding:2px;color:grey;">
-                                        www.liya-all.com
-                                    </td>
-                                </tr>
+
                             </table>
                             <p style="margin:0;color:grey;font-size:10.5pt;">
                                 Our proposal is valid for 3 (three) days. After this period, we kindly recommend contacting us again for the most up-to-date information.
