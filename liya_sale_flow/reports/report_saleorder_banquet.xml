@@ -16,7 +16,7 @@
         <field name="report_name">liya_sale_flow.report_saleorder_banquet_quot</field>
         <field name="report_file">liya_sale_flow.report_saleorder_banquet_quot</field>
         <field name="paperformat_id" ref="paperformat_saleorder_landscape"/>
-        <field name="print_report_name">string('SaleOrder - %s', object.name)</field>
+        <field name="print_report_name">Event Quotation</field>
     </record>
 
     <template id="report_saleorder_banquet_quot">
