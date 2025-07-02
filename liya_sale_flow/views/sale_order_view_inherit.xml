@@ -123,7 +123,7 @@
             <group string="Other Infos">
 
                   <field name="event_type"/>
-                  <field name="duration_display"/>
+                  <field name="duration_display" invisible="1"/>
 
 
             </group>
