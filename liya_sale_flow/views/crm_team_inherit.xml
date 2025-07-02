@@ -32,7 +32,7 @@
     <record id="action_crm_wedding_leads" model="ir.actions.act_window">
         <field name="name">Wedding Leads</field>
         <field name="res_model">crm.lead</field>
-        <field name="view_mode">kanban,list,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="domain">
             [
             ('team_id.wedding_team', '=', True),
@@ -45,7 +45,7 @@
     <record id="action_crm_event_leads" model="ir.actions.act_window">
         <field name="name">Event Leads</field>
         <field name="res_model">crm.lead</field>
-        <field name="view_mode">kanban,list,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="domain">
             [
             ('team_id.event_team', '=', True),

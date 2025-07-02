@@ -399,27 +399,30 @@
                                 <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Ürün</th>
                                 <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Miktar</th>
                                 <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Birim Fiyatı</th>
-                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Toplam</th>
+<!--                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Toplam</th>-->
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="doc.order_line" t-as="l">
+                                <t t-if="l.price_subtotal>0">
                                 <tr>
                                     <td style="padding: 8px; border: 1px solid #ccc;">
                                         <t t-esc="l.product_id.name"/>
                                     </td>
                                     <td style="padding: 8px; border: 1px solid #ccc; text-align:center;">
-                                        <t t-esc="l.product_uom_qty"/>
+                                        <t t-esc="l.product_uom_qty"/>/<t t-esc="l.product_uom.name"/>
                                     </td>
                                     <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
                                         <t t-esc="l.price_unit"/>
                                         TL
                                     </td>
-                                    <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                        <t t-esc="l.price_subtotal"/>
-                                        TL
-                                    </td>
+<!--                                    <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">-->
+<!--                                        <t t-esc="l.price_subtotal"/>-->
+<!--                                        TL-->
+<!--                                    </td>-->
                                 </tr>
+                                </t>
+
                             </t>
                         </tbody>
                     </table>

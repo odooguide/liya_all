@@ -8,14 +8,14 @@
                 <group colspan="2">
                     <group string="Event Details">
                         <field name="is_stage_lead" invisible="1"/>
-                        <field name="request_date" required="is_stage_lead == False"/>
-                        <field name="source_id" required="is_stage_lead == False"/>
+                        <field name="request_date" required="1"/>
+                        <field name="source_id" required="1"/>
                         <field name="wedding_place"/>
                         <field name="wedding_type"/>
-                        <field name="people" required="is_stage_lead == False"/>
+                        <field name="people" required="1 "/>
                     </group>
                     <group string="Event Date">
-                        <field name="wedding_year" required="is_stage_lead == False"/>
+                        <field name="wedding_year" required="1"/>
                         <field name="option1"/>
                         <field name="option2"/>
                         <field name="option3"/>
@@ -23,11 +23,11 @@
                 </group>
             </xpath>
             <xpath expr="//field[@name='lost_reason_id']" position="before">
-                <field name="second_contact" invisible="type == 'lead'" required="is_stage_lead == False"/>
-                <field name="second_title" invisible="type == 'lead'" required="is_stage_lead == False"/>
-                <field name="second_mail" widget="email" invisible="type == 'lead'" required="is_stage_lead == False"/>
-                <field name="second_phone" widget="phone" invisible="type == 'lead'" required="is_stage_lead == False"/>
-                <field name="second_job_position" invisible="type == 'lead'" required="is_stage_lead == False"/>
+                <field name="second_contact" invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity'"/>
+                <field name="second_title" invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity'"/>
+                <field name="second_mail" widget="email" invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity'"/>
+                <field name="second_phone" widget="phone" invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity'"/>
+                <field name="second_job_position" invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity'"/>
                 <field name="my_activity_date_clock" invisible="1"/>
                 <field name="my_activity_day" invisible="1"/>
                 <field name="my_activity_date" invisible="1"/>
@@ -134,10 +134,10 @@
             </xpath>
             <xpath expr="//field[@name='second_contact']" position="after">
                 <field name="second_country" placeholder="Country" class="o_address_country"
-                       invisible="type == 'lead'" required="is_stage_lead == False"/>
+                       invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity'"/>
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="after">
-                <field name="yt" required="is_stage_lead == False"/>
+                <field name="yt" required="is_stage_lead == False and type=='opportunity'"/>
             </xpath>
 
 
