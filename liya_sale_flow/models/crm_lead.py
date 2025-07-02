@@ -87,9 +87,17 @@ class CrmLead(models.Model):
         store=True,
     )
     is_stage_lead=fields.Boolean(string='Is Stage Lead',compute='_compute_stage_lead')
+    is_event_team=fields.Boolean(string="Is Event Team",compute='_compute_event_team', store=True)
 
     #####Compute #####
 
+    @api.depends('team_id')
+    def _compute_event_team(self):
+        for rec in self:
+            if rec.team_id.event_team:
+                rec.is_event_team = True
+            else:
+                rec.is_event_team = False
 
     @api.depends('request_date', 'date_conversion')
     def _compute_month_names(self):

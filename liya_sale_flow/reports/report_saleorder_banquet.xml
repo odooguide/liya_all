@@ -16,7 +16,9 @@
         <field name="report_name">liya_sale_flow.report_saleorder_banquet_quot</field>
         <field name="report_file">liya_sale_flow.report_saleorder_banquet_quot</field>
         <field name="paperformat_id" ref="paperformat_saleorder_landscape"/>
-        <field name="print_report_name">'Liya All Banquet - %s - %s - %s' % (     object.sale_order_template_id.name,     object.people_count,     object.wedding_date, )</field>
+        <field name="print_report_name">'Liya All Banquet - %s - %s - %s' % ( object.sale_order_template_id.name,
+            object.people_count, object.wedding_date, )
+        </field>
     </record>
 
     <template id="report_saleorder_banquet_quot">
@@ -51,18 +53,18 @@
             <main>
 
                 <div>
-                <!-- Page 1 -->
-                <div class="footer">
-                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"
-                                     style="max-height:60px; display:block; margin:0 auto; margin-top:-40px"/>
-                        </div>
-                  <div class="page" style="text-align: center; margin-top:10px">
+                    <!-- Page 1 -->
+                    <div class="footer">
+                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                        <img t-att-src="image_data_uri(doc.company_id.logo)"
+                             style="max-height:60px; display:block; margin:0 auto; margin-top:-40px"/>
+                    </div>
+                    <div class="page" style="text-align: center; margin-top:10px">
 
                         <div>
 
-                        <img src="/liya_sale_flow/static/src/img/img4.jpeg" style="width:90%; "/>
-                                               </div>
+                            <img src="/liya_sale_flow/static/src/img/img4.jpeg" style="width:90%; "/>
+                        </div>
 
                     </div>
                 </div>
@@ -324,15 +326,14 @@
                     <p>Davetin süresi
                         <strong>
                             <t t-esc="doc.duration_display"/>
-                            saat
                         </strong>
-                        tir. Örnek program akışı:
+                        Örnek program akışı:
                     </p>
                     <ul style="list-style-type: disc; margin-left: 20px;">
                         <t t-foreach="doc.program_ids" t-as="p">
                             <li>
                                 <strong t-esc="p.name"/>: (
-                                <t t-esc="'%.1f' % p.hours"/>
+                                <t t-esc="'%.1f' % p.duration_display"/>
                                 saat)
                                 <t t-esc="p.start_datetime and p.start_datetime.strftime('%H:%M')"/>
                                 -
@@ -399,32 +400,67 @@
                                 <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Ürün</th>
                                 <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Miktar</th>
                                 <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Birim Fiyatı</th>
-<!--                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Toplam</th>-->
+                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Toplam</th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="doc.order_line" t-as="l">
                                 <t t-if="l.price_subtotal>0">
-                                <tr>
-                                    <td style="padding: 8px; border: 1px solid #ccc;">
-                                        <t t-esc="l.product_id.name"/>
-                                    </td>
-                                    <td style="padding: 8px; border: 1px solid #ccc; text-align:center;">
-                                        <t t-esc="l.product_uom_qty"/>/<t t-esc="l.product_uom.name"/>
-                                    </td>
-                                    <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                        <t t-esc="l.price_unit"/>
-                                        TL
-                                    </td>
-<!--                                    <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">-->
-<!--                                        <t t-esc="l.price_subtotal"/>-->
-<!--                                        TL-->
-<!--                                    </td>-->
-                                </tr>
+                                    <tr>
+                                        <td style="padding: 8px; border: 1px solid #ccc;">
+                                            <t t-esc="l.product_id.name"/>
+                                        </td>
+                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:center;">
+                                            <t t-esc="l.product_uom_qty"/>
+                                            <t t-esc="l.product_uom.name"/>
+                                        </td>
+                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
+                                            <t t-esc="l.price_unit"/>
+                                            TL
+                                        </td>
+                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
+                                            <t t-esc="l.price_subtotal"/>
+                                            TL
+                                        </td>
+                                    </tr>
                                 </t>
 
                             </t>
                         </tbody>
+
+                        <tfoot>
+                            <t t-set="disc"
+                               t-value="sum([l.price_subtotal for l in doc.order_line if l.price_subtotal &lt; 0])"/>
+                            <tr t-if="disc">
+                                <td colspan="3" style="padding: 8px; border: 1px solid #ccc; text-align:right;">
+                                    İndirim
+                                </td>
+                                <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
+                                    <t t-esc="(-disc)"/>
+                                    TL
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding: 8px; border: 1px solid #ccc; text-align:right;">
+                                    <strong>Toplam (İndirim Öncesi)</strong>
+                                </td>
+                                <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
+                                    <t t-esc="(doc.amount_total - disc)"/>
+                                    TL
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="padding: 8px; border: 1px solid #ccc; text-align:right;">
+                                    <strong>İndirimli Tutar</strong>
+                                </td>
+                                <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
+                                    <strong>
+                                        <t t-esc="doc.amount_total"/>
+                                        TL
+                                    </strong>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                     <p style="margin-top: 20px;">Teklifin geçerlilik süresi 1 haftadır.</p>
                 </div>

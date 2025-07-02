@@ -105,7 +105,8 @@
                   <field name="name"/>
                   <field name="start_datetime"/>
                   <field name="end_datetime"/>
-                  <field name="hours"/>
+                  <field name="hours" invisible="1"/>
+                  <field name="duration_display"/>
 
                 </list>
               </field>

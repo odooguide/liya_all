@@ -51,6 +51,8 @@ class SaleOrder(models.Model):
         store=False,
     )
 
+
+
     @api.depends('program_ids.hours')
     def _compute_total_duration(self):
         for order in self:
@@ -63,6 +65,7 @@ class SaleOrder(models.Model):
             if minutes:
                 parts.append(_("%d Dakika") % minutes)
             order.duration_display = ' '.join(parts) or _("0 Dakika")
+
     @api.onchange('sale_order_template_id')
     def _onchange_sale_order_event_template_id(self):
         if self.sale_order_template_id and self.sale_order_template_id.template_type == 'event':
