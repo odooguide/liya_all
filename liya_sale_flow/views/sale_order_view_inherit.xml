@@ -10,6 +10,8 @@
     <xpath expr="//field[@name='payment_term_id']" position="after">
       <field name="confirmed_contract"/>
       <field name="contract_date"/>
+      <field name="is_event_selected" invisible="1" force-save="1"/>
+
     </xpath>
     <xpath expr="//field[@name='partner_id']" position="after">
       <field name="second_contact"/>
@@ -104,6 +106,7 @@
                   <field name="start_datetime"/>
                   <field name="end_datetime"/>
                   <field name="hours"/>
+
                 </list>
               </field>
             </group>
@@ -120,6 +123,8 @@
             <group string="Other Infos">
 
                   <field name="event_type"/>
+                  <field name="duration_display"/>
+
 
             </group>
           </group>
