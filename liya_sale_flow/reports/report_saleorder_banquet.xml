@@ -10,13 +10,13 @@
     </record>
 
     <record id="action_report_saleorder_banquet_quot" model="ir.actions.report">
-        <field name="name">Banquet Quot</field>
+        <field name="name">Event Quotation</field>
         <field name="model">sale.order</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">liya_sale_flow.report_saleorder_banquet_quot</field>
         <field name="report_file">liya_sale_flow.report_saleorder_banquet_quot</field>
         <field name="paperformat_id" ref="paperformat_saleorder_landscape"/>
-        <field name="print_report_name">Event Quotation</field>
+        <field name="print_report_name">'Liya All Banquet - %s - %s - %s' % (     object.sale_order_template_id.name,     object.people_count,     object.wedding_date, )</field>
     </record>
 
     <template id="report_saleorder_banquet_quot">
