@@ -332,9 +332,9 @@
                     <ul style="list-style-type: disc; margin-left: 20px;">
                         <t t-foreach="doc.program_ids" t-as="p">
                             <li>
-                                <strong t-esc="p.name"/>: (
+                                <strong t-esc="p.name"/>:
                                 <t t-esc="p.duration_display"/>
-                                saat)
+
                                 <t t-esc="p.start_datetime and p.start_datetime.strftime('%H:%M')"/>
                                 -
                                 <t t-esc="p.end_datetime and p.end_datetime.strftime('%H:%M')"/>
@@ -415,12 +415,14 @@
                                             <t t-esc="l.product_uom.name"/>
                                         </td>
                                         <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                            <t t-esc="l.price_unit"/>
-                                            TL
+                                            <t t-esc="l.price_unit"
+                                               t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+
                                         </td>
                                         <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                            <t t-esc="l.price_subtotal"/>
-                                            TL
+                                            <t t-esc="l.price_subtotal"
+                                               t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+
                                         </td>
                                     </tr>
                                 </t>
@@ -436,8 +438,9 @@
                                     İndirim
                                 </td>
                                 <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                    <t t-esc="(-disc)"/>
-                                    TL
+                                    <t t-esc="(-disc)"
+                                       t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+
                                 </td>
                             </tr>
                             <tr>
@@ -445,8 +448,9 @@
                                     <strong>Toplam (İndirim Öncesi)</strong>
                                 </td>
                                 <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                    <t t-esc="(doc.amount_total - disc)"/>
-                                    TL
+                                    <t t-esc="(doc.amount_total - disc)"
+                                       t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+
                                 </td>
                             </tr>
                             <tr>
@@ -455,8 +459,9 @@
                                 </td>
                                 <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
                                     <strong>
-                                        <t t-esc="doc.amount_total"/>
-                                        TL
+                                        <t t-esc="doc.amount_total"
+                                           t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
+
                                     </strong>
                                 </td>
                             </tr>
