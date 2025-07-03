@@ -12,7 +12,7 @@
                         <field name="request_date" required="1"/>
                         <field name="source_id" required="1"/>
                         <field name="wedding_place"/>
-                        <field name="wedding_type"/>
+                        <field name="wedding_type"  required="is_stage_lead == False and type=='opportunity'"/>
                         <field name="people" required="1"/>
                     </group>
                     <group string="Event Date">
