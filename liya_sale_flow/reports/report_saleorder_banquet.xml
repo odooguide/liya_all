@@ -333,7 +333,7 @@
                         <t t-foreach="doc.program_ids" t-as="p">
                             <li>
                                 <strong t-esc="p.name"/>: (
-                                <t t-esc="'%.1f' % p.duration_display"/>
+                                <t t-esc="p.duration_display"/>
                                 saat)
                                 <t t-esc="p.start_datetime and p.start_datetime.strftime('%H:%M')"/>
                                 -
