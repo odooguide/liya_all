@@ -38,15 +38,11 @@ class CalendarEvent(models.Model):
         if not self.env.context.get('skip_sale_tagging'):
             categ_model = self._fields['categ_ids'].comodel_name
             sale_cat = self.env[categ_model].search(
-                [('name', '=', 'Satış Toplantısı')], limit=1
+                [('name', '=', events.activity_ids.activity_type_id.display_name)], limit=1
             )
             if sale_cat:
                 for ev in events:
-                    if any(act.activity_type_id.id == 12 for act in ev.activity_ids):
-                        ev.write({'categ_ids': [(4, sale_cat.id)]})
-
-        # if not self.env.context.get('skip_categ_check'):
-        #     self.check_categ_ids(vals_list)
+                    ev.write({'categ_ids': [(4, sale_cat.id)]})
 
         return events
 

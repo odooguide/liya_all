@@ -41,11 +41,35 @@ class SaleOrder(models.Model):
         inverse_name='order_id',
         string='Transportation'
     )
+    contract_date=fields.Date(string='Contract Date')
     event_type=fields.Char(string="Type of Invitation")
+    is_event_selected=fields.Boolean(string="Is Event Template Selected", store=True)
+
+    duration_display = fields.Char(
+        string='Toplam Süre',
+        compute='_compute_total_duration',
+        store=False,
+    )
+
+
+
+    @api.depends('program_ids.hours')
+    def _compute_total_duration(self):
+        for order in self:
+            total = sum(order.program_ids.mapped('hours') or [0.0])
+            hours = int(total)
+            minutes = int(round((total - hours) * 60))
+            parts = []
+            if hours:
+                parts.append(_("%d Saat") % hours)
+            if minutes:
+                parts.append(_("%d Dakika") % minutes)
+            order.duration_display = ' '.join(parts) or _("0 Dakika")
 
     @api.onchange('sale_order_template_id')
     def _onchange_sale_order_event_template_id(self):
         if self.sale_order_template_id and self.sale_order_template_id.template_type == 'event':
+            self.is_event_selected = True
             self.service_ids = [(5, 0, 0)]
             self.program_ids = [(5, 0, 0)]
             self.transport_ids = [(5, 0, 0)]
@@ -67,9 +91,12 @@ class SaleOrder(models.Model):
                     'arrival_datetime': tr.arrival_datetime,
                 })]
         else:
+            self.is_event_selected = False
             self.service_ids = [(5, 0, 0)]
             self.program_ids = [(5, 0, 0)]
             self.transport_ids = [(5, 0, 0)]
+
+
 
     @api.depends('wedding_date', 'partner_id.lang')
     def _compute_wedding_date_display(self):
@@ -106,10 +133,12 @@ class SaleOrder(models.Model):
     def action_confirm(self):
         res=super().action_confirm()
         for order in self:
-            if not order.coordinator_ids:
+            if not order.coordinator_ids and order.team_id.wedding_team:
                 raise UserError(_("Koordinatör seçilmeden bu teklifi onaylayamazsınız. Lütfen koordinatör seçin."))
             if not order.wedding_date:
                 raise UserError(_("Etkinlik tarihi seçilmeden satışı onaylayamazsınız."))
+
+
         return res
 
 

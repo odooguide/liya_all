@@ -86,7 +86,19 @@ class CrmLead(models.Model):
         compute='_compute_month_names',
         store=True,
     )
-    ##### Compute #####
+    is_stage_lead=fields.Boolean(string='Is Stage Lead',compute='_compute_stage_lead')
+    is_event_team=fields.Boolean(string="Is Event Team",compute='_compute_event_team', store=True)
+
+    #####Compute #####
+
+    @api.depends('team_id')
+    def _compute_event_team(self):
+        for rec in self:
+            if rec.team_id.event_team:
+                rec.is_event_team = True
+            else:
+                rec.is_event_team = False
+
     @api.depends('request_date', 'date_conversion')
     def _compute_month_names(self):
         month_names = {
@@ -118,6 +130,14 @@ class CrmLead(models.Model):
                 lead.type = 'opportunity'
                 lead.date_conversion = date.today()
 
+        return None
+    @api.depends('stage_id')
+    def _compute_stage_lead(self):
+        for lead in self:
+            if lead.stage_id.name in ('Toplantı Adayı', 'Meeting'):
+                lead.is_stage_lead=True
+            else:
+                lead.is_stage_lead=False
         return None
 
     @api.depends('my_activity_date')
@@ -203,25 +223,25 @@ class CrmLead(models.Model):
             new_stage = self.env['crm.stage'].browse(vals['stage_id'])
 
             if (new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation'):
-                missing = []
-                required_fields = {
-                    'people': _('People'),
-                    'second_contact': _('Secondary Contact'),
-                    'second_phone': _('Secondary Phone'),
-                    'second_mail': _('Secondary E-mail'),
-                    'second_job_position': _('Secondary Job Position'),
-                    'second_title': _('Secondary Title'),
-                    'second_country': _('Second Country'),
-                    'yt':_('YT')
-                }
-                for field_name, pretty in required_fields.items():
-                    val = vals.get(field_name, getattr(lead, field_name))
-                    if not val:
-                        missing.append(pretty)
-                if missing:
-                    raise UserError(_(
-                        '“Görüşülüyor” aşamasına geçebilmek için şu alanlar zorunlu:\n%s'
-                    ) % (', '.join(missing)))
+                # missing = []
+                # required_fields = {
+                #     'people': _('People'),
+                #     'second_contact': _('Secondary Contact'),
+                #     'second_phone': _('Secondary Phone'),
+                #     'second_mail': _('Secondary E-mail'),
+                #     'second_job_position': _('Secondary Job Position'),
+                #     'second_title': _('Secondary Title'),
+                #     'second_country': _('Second Country'),
+                #     'yt':_('YT')
+                # }
+                # for field_name, pretty in required_fields.items():
+                #     val = vals.get(field_name, getattr(lead, field_name))
+                #     if not val:
+                #         missing.append(pretty)
+                # if missing:
+                #     raise UserError(_(
+                #         '“Görüşülüyor” aşamasına geçebilmek için şu alanlar zorunlu:\n%s'
+                #     ) % (', '.join(missing)))
 
                 if lead.quotation_count < 1:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
@@ -247,6 +267,9 @@ class CrmLead(models.Model):
                     raise UserError(
                         _('Hiçbir onaylı sözleşme bulunamadı. "Kazanıldı" aşamasına geçemezsiniz.')
                     )
+
+                if not orders[0].contract_date:
+                    raise UserError(_("Sözleşme tarihi seçilmeden satışı onaylayamazsınız."))
 
                 self.create_activity(lead)
 

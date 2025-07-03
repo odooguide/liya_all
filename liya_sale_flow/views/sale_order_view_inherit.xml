@@ -9,6 +9,9 @@
     </xpath>
     <xpath expr="//field[@name='payment_term_id']" position="after">
       <field name="confirmed_contract"/>
+      <field name="contract_date"/>
+      <field name="is_event_selected" invisible="1" force-save="1"/>
+
     </xpath>
     <xpath expr="//field[@name='partner_id']" position="after">
       <field name="second_contact"/>
@@ -84,7 +87,7 @@
     <field name="inherit_id" ref="sale.view_order_form"/>
     <field name="arch" type="xml">
       <xpath expr="//notebook" position="inside">
-        <page string="Event" name="page_event">
+        <page string="Event" name="page_event" invisible="is_event_selected != True">
           <group>
             <!-- 1) Services -->
             <group string="Services">
@@ -102,7 +105,9 @@
                   <field name="name"/>
                   <field name="start_datetime"/>
                   <field name="end_datetime"/>
-                  <field name="hours"/>
+                  <field name="hours" invisible="1"/>
+                  <field name="duration_display"/>
+
                 </list>
               </field>
             </group>
@@ -119,6 +124,8 @@
             <group string="Other Infos">
 
                   <field name="event_type"/>
+                  <field name="duration_display" invisible="1"/>
+
 
             </group>
           </group>

@@ -6,14 +6,26 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-27 15:42+0000\n"
-"PO-Revision-Date: 2025-06-27 15:42+0000\n"
+"POT-Creation-Date: 2025-07-02 01:15+0000\n"
+"PO-Revision-Date: 2025-07-02 01:15+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: liya_sale_flow
+#. odoo-python
+#: code:addons/liya_sale_flow/models/sale_order.py:0
+msgid "%d Dakika"
+msgstr ""
+
+#. module: liya_sale_flow
+#. odoo-python
+#: code:addons/liya_sale_flow/models/sale_order.py:0
+msgid "%d Saat"
+msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
@@ -28,25 +40,15 @@ msgid ""
 msgstr ""
 
 #. module: liya_sale_flow
-#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
-msgid "+90 216 382 4827 / info@liya-all.com"
+#. odoo-python
+#: code:addons/liya_sale_flow/models/sale_order.py:0
+msgid "0 Dakika"
 msgstr ""
-
-#. module: liya_sale_flow
-#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
-msgid "+90 537 264 7588 / paris@liya-all.com"
-msgstr "+90 530 842 9291 / sinem@liya-all.com"
-
-#. module: liya_sale_flow
-#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
-msgid "+90 537 264 7588 / paris@liya-all.com"
-msgstr "+90 530 842 9291 / sinem@liya-all.com"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
 msgid ""
 "1. Four-Theme Table Styling\n"
-
 "                                        <br/>\n"
 "                                        2. DJ Performance\n"
 "                                        <br/>\n"
@@ -236,7 +238,6 @@ msgstr ""
 "                                        47. PERKÜSYON PERFORMANSI\n"
 "                                        <br/>"
 
-
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
 msgid ""
@@ -259,19 +260,9 @@ msgstr ""
 "                                        <br/>"
 
 #. module: liya_sale_flow
-#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
-msgid "500 TL + kdv"
-msgstr ""
-
-#. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
 msgid "52. Exclusive Yacht Shoot with Wedding Attire"
 msgstr "52. GELİNLİK DAMATLIKLA ÖZEL YAT ÇEKİMİ"
-
-#. module: liya_sale_flow
-#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
-msgid "6.000 TL + kdv"
-msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
@@ -292,7 +283,6 @@ msgid ""
 "                                        <br/>\n"
 "                                        16. Decoration\n"
 "                                        <br/>"
-
 msgstr ""
 "9. PHOTO BOOTH\n"
 "                                        <br/>\n"
@@ -334,7 +324,7 @@ msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
-msgid "<s>6.500 TL + kdv</s>"
+msgid "<em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>"
 msgstr ""
 
 #. module: liya_sale_flow
@@ -465,6 +455,11 @@ msgid "Ada Güzeli"
 msgstr ""
 
 #. module: liya_sale_flow
+#: model:ir.ui.menu,name:liya_sale_flow.menu_crm_all_leads_opps
+msgid "Adaylar/Fırsatlar"
+msgstr "Leads/Opportunities"
+
+#. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
 msgid "Akdeniz Cacığı"
 msgstr ""
@@ -477,14 +472,9 @@ msgid ""
 msgstr "Fiyatlara tercih edilen pakete göre aşağıdaki tüm hizmetler dahildir."
 
 #. module: liya_sale_flow
-#: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_transport__arrival_datetime
-msgid "Arrival DateTime"
-msgstr ""
-
-#. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_transport__arrival_location
 msgid "Arrival Location"
-msgstr ""
+msgstr "Geliş Yeri"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
@@ -523,6 +513,11 @@ msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
+msgid "Birim Fiyatı"
+msgstr ""
+
+#. module: liya_sale_flow
+#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
 msgid "Brownie"
 msgstr ""
 
@@ -557,6 +552,11 @@ msgid "Coca Cola grubu meşrubatlar<br/>Cappy meyve suları<br/>Erikli Su"
 msgstr ""
 
 #. module: liya_sale_flow
+#: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__contract_date
+msgid "Contract Date"
+msgstr "Sözleşme Tarihi"
+
+#. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__date_conversion
 msgid "Conversion Date"
 msgstr "Dönüştürme Tarihi"
@@ -564,8 +564,7 @@ msgstr "Dönüştürme Tarihi"
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__conversion_month
 msgid "Conversion Month"
-msgstr "Dönüşüm Ayı"
-
+msgstr "Değişim Ayı"
 
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_crm_lead2opportunity_partner
@@ -575,8 +574,7 @@ msgstr "Adayı Fırsata Dönüştür  (topluca olmadan)"
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_crm_lead_opportunity_filter_inherit
 msgid "Convertion Month"
-msgstr "Dönüşüm Ayı"
-
+msgstr "Değişim Ayı"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__coordinator_ids
@@ -625,17 +623,22 @@ msgstr "Sayın"
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_calendar_event_search_inherit_sales_meeting
 msgid "Demo"
-msgstr "Demo"
+msgstr ""
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_transport__departure_location
 msgid "Departure Location"
-msgstr ""
+msgstr "Ayrılış Lokasyonu"
+
+#. module: liya_sale_flow
+#: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_transport__arrival_datetime
+msgid "Departure Time"
+msgstr "Ayrılış Vakti"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_service__description
 msgid "Description"
-msgstr ""
+msgstr "Açıklama"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
@@ -654,18 +657,18 @@ msgstr "Görünen İsim"
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_program__hours
 msgid "Duration (hours)"
-msgstr ""
+msgstr "Süre"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields.selection,name:liya_sale_flow.selection__sale_order_template__template_type__wedding
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_calendar_event_search_inherit_sales_meeting
-msgid "Wedding"
-msgstr "Düğün"
+msgid "Düğün"
+msgstr ""
 
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_wedding_type
-msgid "Wedding Type"
-msgstr "Düğün Tipi"
+msgid "Düğün Tipi"
+msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_order_form_custom_send
@@ -674,8 +677,8 @@ msgstr ""
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_program__end_datetime
-msgid "End DateTime"
-msgstr ""
+msgid "End Time"
+msgstr "Bitiş Saati"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
@@ -684,8 +687,14 @@ msgstr ""
 
 #. module: liya_sale_flow
 #: model:ir.model.fields.selection,name:liya_sale_flow.selection__sale_order_template__template_type__event
-msgid "Event
-msgstr "Etkinlik"
+msgid "Etkinlik"
+msgstr ""
+
+#. module: liya_sale_flow
+#. odoo-python
+#: code:addons/liya_sale_flow/models/sale_order.py:0
+msgid "Etkinlik tarihi seçilmeden satışı onaylayamazsınız."
+msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
@@ -693,11 +702,10 @@ msgid "Etkinliği"
 msgstr ""
 
 #. module: liya_sale_flow
-#: model:ir.ui.menu,name:liya_sale_flow.menu_crm_event
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_order_form_event
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_sale_order_template_form_inherit_activity
 msgid "Event"
-msgstr ""
+msgstr "Etkinlik"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__wedding_date
@@ -722,14 +730,21 @@ msgid "Event Details"
 msgstr "Etkinlik Detayları"
 
 #. module: liya_sale_flow
-#: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_program__name
-msgid "Event Name"
-msgstr ""
+#: model:ir.actions.act_window,name:liya_sale_flow.action_crm_event_leads
+#: model:ir.ui.menu,name:liya_sale_flow.menu_crm_event
+msgid "Event Leads"
+msgstr "Etkinlik Adayları"
 
 #. module: liya_sale_flow
-#: model:ir.actions.act_window,name:liya_sale_flow.action_crm_event_leads
-msgid "Event Opportunities"
-msgstr ""
+#: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_program__name
+msgid "Event Name"
+msgstr "Etkinlik İsmi"
+
+#. module: liya_sale_flow
+#: model:ir.actions.act_window,name:liya_sale_flow.action_crm_event_opportunity
+#: model:ir.ui.menu,name:liya_sale_flow.menu_crm_event_pipeline
+msgid "Event Pipeline"
+msgstr "Etkinlik Süreci"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_team__event_team
@@ -739,7 +754,7 @@ msgstr "Etkinlik Ekibi"
 #. module: liya_sale_flow
 #: model:res.groups,name:liya_sale_flow.group_crm_event_user
 msgid "Event Team User"
-msgstr ""
+msgstr "Etkinlik Takımı"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__wedding_type
@@ -796,14 +811,8 @@ msgstr ""
 #. module: liya_sale_flow
 #. odoo-python
 #: code:addons/liya_sale_flow/models/crm_lead.py:0
-msgid "There is no Apporved Contract."
-msgstr "Hiçbir onaylı sözleşme bulunamadı."
-
-#. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/crm_lead.py:0
-msgid "No approved contracts were found. You cannot proceed to the \"Won\" stage."
-msgstr "Hiçbir onaylı sözleşme bulunamadı. \"Kazanıldı\" aşamasına geçemezsiniz."
+msgid "Hiçbir onaylı sözleşme bulunamadı. \"Kazanıldı\" aşamasına geçemezsiniz."
+msgstr ""
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_program__id
@@ -827,6 +836,11 @@ msgid ""
 msgstr ""
 
 #. module: liya_sale_flow
+#: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__is_event_selected
+msgid "Is Event Template Selected"
+msgstr ""
+
+#. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_mail_activity_type__is_reminder
 msgid "Is Quotation Reminder?"
 msgstr "Teklif Hatırlatıcısı mı?"
@@ -835,6 +849,11 @@ msgstr "Teklif Hatırlatıcısı mı?"
 #: model:ir.model.fields,field_description:liya_sale_flow.field_mail_activity_type__is_quot
 msgid "Is Quotation?"
 msgstr "Teklif için mi?"
+
+#. module: liya_sale_flow
+#: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__is_stage_lead
+msgid "Is Stage Lead"
+msgstr ""
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__is_project_true
@@ -873,18 +892,12 @@ msgid "Kavaklıdere “Ancyra”"
 msgstr ""
 
 #. module: liya_sale_flow
-#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
-msgid "Kişi Başı Fiyatı"
-msgstr ""
-
-#. module: liya_sale_flow
 #. odoo-python
 #: code:addons/liya_sale_flow/models/sale_order.py:0
 msgid ""
-"You cannot approve this proposal without selecting a coordinator. Please select a coordinator."
-msgstr ""
 "Koordinatör seçilmeden bu teklifi onaylayamazsınız. Lütfen koordinatör "
 "seçin."
+msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
@@ -977,12 +990,6 @@ msgid "Lüks Çerezler"
 msgstr ""
 
 #. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/calendar_alarm.py:0
-msgid "Lütfen en az bir etiket seçin."
-msgstr ""
-
-#. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
 msgid "LİYA ALL DAVET ZİYAFET MENÜLERİ"
 msgstr ""
@@ -1009,13 +1016,13 @@ msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
-msgid "MEYVE &amp; TATLİ"
+msgid "MEYVE &amp; TATLI"
 msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
-msgid "MEYVE ve TATLİ"
-msgstr ""
+msgid "MEYVE ve TATLI"
+msgstr "MEYVE ve TATLİ"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
@@ -1035,6 +1042,11 @@ msgstr ""
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
 msgid "Meyveli Tartolet"
+msgstr ""
+
+#. module: liya_sale_flow
+#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
+msgid "Miktar"
 msgstr ""
 
 #. module: liya_sale_flow
@@ -1060,8 +1072,8 @@ msgstr ""
 #. module: liya_sale_flow
 #. odoo-python
 #: code:addons/liya_sale_flow/models/crm_lead.py:0
-msgid "There is no Confirmed Quotation. You can not proceed to the 'Contracting' Stage"
-msgstr "Onaylı teklif yok, \"Sözleşme Süreci\"ne geçemezsiniz."
+msgid "Onaylı teklif yok, \"Sözleşme Süreci\"ne geçemezsiniz."
+msgstr ""
 
 #. module: liya_sale_flow
 #: model:ir.model.fields.selection,name:liya_sale_flow.selection__crm_lead__type__opportunity
@@ -1098,12 +1110,12 @@ msgstr "Opsiyonel Hizmet Tutarı"
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_service__order_id
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_transport__order_id
 msgid "Order"
-msgstr ""
+msgstr "Teklif"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_order_form_event
 msgid "Other Infos"
-msgstr ""
+msgstr "Diğer Bilgiler"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
@@ -1118,26 +1130,6 @@ msgstr ""
 "                                Sevgilerimizle."
 
 #. module: liya_sale_flow
-#: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__option1
-msgid "Optional Date 1"
-msgstr ""
-
-#. module: liya_sale_flow
-#: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__option2
-msgid "Optional Date 2"
-msgstr ""
-
-#. module: liya_sale_flow
-#: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__option3
-msgid "Optional Date 3"
-msgstr ""
-
-#. module: liya_sale_flow
-#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
-msgid "PARISA MIRABI"
-msgstr ""
-
-#. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
 msgid "Package Selection"
 msgstr "Paket Tercihi"
@@ -1148,16 +1140,10 @@ msgid "Parmesanlı Grisiniye Sarılı Rozbif"
 msgstr ""
 
 #. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/crm_lead.py:0
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__people
-msgid "People"
-msgstr "Kişiler"
-
-#. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__people_count
 msgid "People Count"
-msgstr "Kişi Sayısı"
+msgstr "Kişiler"
 
 #. module: liya_sale_flow
 #. odoo-python
@@ -1170,7 +1156,7 @@ msgstr ""
 #. module: liya_sale_flow
 #: model:ir.model.fields,help:liya_sale_flow.field_crm_lead__second_title
 msgid "Please choose one of the titles from Contact Titles."
-msgstr ""
+msgstr "Lütfen kontağın içindeki başlığı seçin."
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
@@ -1188,7 +1174,7 @@ msgstr "Ürün"
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_order_form_event
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_sale_order_template_form_inherit_activity
 msgid "Program Flow"
-msgstr ""
+msgstr "Program Akışı"
 
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_sale_order_template
@@ -1233,12 +1219,12 @@ msgstr ""
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_sale_order_program
 msgid "Sale Order Program Flow"
-msgstr ""
+msgstr "Program Akışı"
 
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_sale_order_service
 msgid "Sale Order Services"
-msgstr ""
+msgstr "Servisler"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_program__sale_order_template_id
@@ -1250,7 +1236,7 @@ msgstr "Teklif Şablonu"
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_sale_order_transport
 msgid "Sale Order Transportation"
-msgstr ""
+msgstr "Ulaşım"
 
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_sale_order
@@ -1276,18 +1262,10 @@ msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_calendar_event_search_inherit_sales_meeting
-msgid "Sale Meeting"
-msgstr "Satış Toplantısı"
+msgid "Satış Toplantısı"
+msgstr ""
 
 #. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/crm_lead.py:0
-msgid "Second Country"
-msgstr "İkincil Ülke"
-
-#. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/crm_lead.py:0
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__second_contact
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__second_contact
 msgid "Secondary Contact"
@@ -1299,29 +1277,21 @@ msgid "Secondary Country"
 msgstr "İkincil Ülke"
 
 #. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/crm_lead.py:0
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__second_mail
 msgid "Secondary E-mail"
 msgstr "İkincil E-Posta"
 
 #. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/crm_lead.py:0
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__second_job_position
 msgid "Secondary Job Position"
 msgstr "İkincil Meslek"
 
 #. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/crm_lead.py:0
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__second_phone
 msgid "Secondary Phone"
 msgstr "İkincil Telefon"
 
 #. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/crm_lead.py:0
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__second_title
 msgid "Secondary Title"
 msgstr "İkincil Başlık"
@@ -1339,7 +1309,7 @@ msgstr ""
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_service__name
 msgid "Service Name"
-msgstr ""
+msgstr "Servis Adı"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__service_ids
@@ -1347,7 +1317,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_order_form_event
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_sale_order_template_form_inherit_activity
 msgid "Services"
-msgstr ""
+msgstr "Servisler"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
@@ -1366,17 +1336,18 @@ msgstr "Kaynak Kategorisi"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_program__start_datetime
-msgid "Start DateTime"
+msgid "Start Time"
+msgstr "Başlangıç Saati"
+
+#. module: liya_sale_flow
+#. odoo-python
+#: code:addons/liya_sale_flow/models/crm_lead.py:0
+msgid "Sözleşme tarihi seçilmeden satışı onaylayamazsınız."
 msgstr ""
 
 #. module: liya_sale_flow
-#: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__wedding_place
-msgid "Source Category"
-msgstr "Kaynak Kategorisi"
-
-#. module: liya_sale_flow
-#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
-msgid "SİNEM KÖSEM"
+#: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_order_form_inherit_tasks
+msgid "Sözleşmeyi Tamamla"
 msgstr ""
 
 #. module: liya_sale_flow
@@ -1396,6 +1367,11 @@ msgstr "TEKLIF"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
+msgid "TL"
+msgstr ""
+
+#. module: liya_sale_flow
+#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
 msgid "Tavuk Şiş"
 msgstr ""
 
@@ -1407,8 +1383,8 @@ msgstr ""
 #. module: liya_sale_flow
 #. odoo-python
 #: code:addons/liya_sale_flow/models/crm_lead.py:0
-msgid "You cannot proceed to the \"Quotation Process\" without creating an offer."
-msgstr "Teklif oluşturmadan \"Teklif Süreci\"ne geçemezsiniz."
+msgid "Teklif oluşturmadan \"Teklif Süreci\"ne geçemezsiniz."
+msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
@@ -1427,6 +1403,16 @@ msgid ""
 msgstr ""
 
 #. module: liya_sale_flow
+#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
+msgid "Toplam"
+msgstr ""
+
+#. module: liya_sale_flow
+#: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__duration_display
+msgid "Toplam Süre"
+msgstr ""
+
+#. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
 msgid "Total Amount"
 msgstr "Toplam Tutar"
@@ -1437,7 +1423,7 @@ msgstr "Toplam Tutar"
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_order_form_event
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.view_sale_order_template_form_inherit_activity
 msgid "Transportation"
-msgstr ""
+msgstr "Ulaşım"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__type
@@ -1448,7 +1434,12 @@ msgstr "Tip"
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__event_type
 msgid "Type of Invitation"
-msgstr ""
+msgstr "Davet Tipi"
+
+#. module: liya_sale_flow
+#: model:ir.actions.act_window,name:liya_sale_flow.action_crm_all_leads_opps
+msgid "Tüm Leads & Opportunities"
+msgstr "Tüm Adaylar & Fırsatla"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
@@ -1471,14 +1462,21 @@ msgstr ""
 "Sorularınızı memnuniyetle yanıtlamaya ve olumlu geri dönüşünüzü heyecanla bekliyoruz."
 
 #. module: liya_sale_flow
+#: model:ir.actions.act_window,name:liya_sale_flow.action_crm_wedding_leads
 #: model:ir.ui.menu,name:liya_sale_flow.menu_crm_wedding
-msgid "Wedding"
-msgstr ""
+msgid "Wedding Leads"
+msgstr "Düğün Adayları"
 
 #. module: liya_sale_flow
-#: model:ir.actions.act_window,name:liya_sale_flow.action_crm_wedding_leads
-msgid "Wedding Opportunities"
-msgstr ""
+#: model:ir.actions.act_window,name:liya_sale_flow.action_crm_wedding_opportunity
+#: model:ir.ui.menu,name:liya_sale_flow.menu_crm_wedding_pipeline
+msgid "Wedding Pipeline"
+msgstr "Düğün Süreci"
+
+#. module: liya_sale_flow
+#: model:ir.model,name:liya_sale_flow.model_wedding_place
+msgid "Wedding Place"
+msgstr "Etkinlik Kategorisi"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_team__wedding_team
@@ -1488,7 +1486,7 @@ msgstr "Düğün Ekibi"
 #. module: liya_sale_flow
 #: model:res.groups,name:liya_sale_flow.group_crm_wedding_user
 msgid "Wedding Team User"
-msgstr ""
+msgstr "Düğün Ekibi Kullanıcısı"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__yt
@@ -1496,8 +1494,6 @@ msgid "Y/T"
 msgstr ""
 
 #. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/crm_lead.py:0
 #: model:ir.model.fields.selection,name:liya_sale_flow.selection__crm_lead__yt__yt
 msgid "YT"
 msgstr ""
@@ -1538,6 +1534,11 @@ msgid "couple"
 msgstr "çiftimiz"
 
 #. module: liya_sale_flow
+#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
+msgid "info@liya-all.com"
+msgstr ""
+
+#. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
 msgid "için hazırlanmıştır."
 msgstr ""
@@ -1573,16 +1574,6 @@ msgid "tir. Örnek program akışı:"
 msgstr ""
 
 #. module: liya_sale_flow
-#: model:ir.model,name:liya_sale_flow.model_wedding_place
-msgid "wedding.place"
-msgstr ""
-
-#. module: liya_sale_flow
-#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
-msgid "www.liya-all.com"
-msgstr ""
-
-#. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
 msgid "yapılması planlanan"
 msgstr ""
@@ -1609,14 +1600,7 @@ msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
-msgid ""
-"İndirimli Kişi Başı\n"
-"                                    Fiyat"
-msgstr ""
-
-#. module: liya_sale_flow
-#: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
-msgid "İskonto"
+msgid "Ürün"
 msgstr ""
 
 #. module: liya_sale_flow
@@ -1627,12 +1611,4 @@ msgstr ""
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
 msgid "Şişte Mantarlı Bonfile"
-msgstr ""
-
-#. module: liya_sale_flow
-#. odoo-python
-#: code:addons/liya_sale_flow/models/crm_lead.py:0
-msgid ""
-"“Görüşülüyor” aşamasına geçebilmek için şu alanlar zorunlu:\n"
-"%s"
 msgstr ""

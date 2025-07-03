@@ -9,7 +9,7 @@
         <field name="template_type"/>
       </field>
         <xpath expr="//notebook" position="inside">
-        <page string="Event" name="page_event">
+        <page string="Event" name="page_event" invisible="template_type != 'event'">
           <group>
             <group string="Services">
               <field name="service_ids">

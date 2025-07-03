@@ -25,6 +25,7 @@
         "reports/report_saleorder_document_inherit.xml",
         "reports/external_layout_light_view_inherit.xml",
         "reports/report_saleorder_banquet.xml",
+        #"reports/report_sale_order_raw_inherit.xml",
         "data/ir_sequence.xml",
         "data/calendar_alarm_data.xml",
         "data/menu_restrict.xml",
