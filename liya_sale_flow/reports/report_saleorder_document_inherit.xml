@@ -24,8 +24,8 @@
                                 Dear
                                 <t t-esc="doc.partner_id.name"/>
                                 and
-                                <t t-esc="doc.second_contact"/>
-                                couple
+                                <t t-esc="doc.second_contact"/>,
+
                             </span>
                             <br/>
                             <br/>
@@ -326,7 +326,7 @@
                                     </td>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
 
-                                        52. Exclusive Yacht Shoot with Wedding Attire 
+                                        52. Exclusive Yacht Photo Shoot with Wedding Attire
                                     </td>
                                 </tr>
                             </table>
