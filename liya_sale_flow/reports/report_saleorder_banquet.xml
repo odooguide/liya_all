@@ -394,79 +394,98 @@
                         </strong>
                         sayısı için geçerlidir.
                     </p>
-                    <table style="width:100%; border-collapse: collapse; margin-top: 15px; background: #eaf4e4;">
+                    <table style="width:100%; table-layout: fixed; border-collapse: collapse; margin-top: 15px; background: #eaf4e4;">
                         <thead>
                             <tr style="background: #d4e8d4;">
-                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Ürün</th>
-                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Miktar</th>
-                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Birim Fiyatı</th>
-                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center;">Toplam</th>
+                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:45%;">
+                                    <strong>Ürün</strong>
+                                </th>
+                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:15%;">
+                                    <strong>Miktar</strong>
+                                </th>
+                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:15%;">
+                                    <strong>Birim Fiyatı</strong>
+                                </th>
+                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:25%;">
+                                    <strong>Toplam</strong>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="doc.order_line" t-as="l">
-                                <t t-if="l.price_subtotal>0">
+                                <t t-if="l.price_subtotal &gt; 0">
                                     <tr>
-                                        <td style="padding: 8px; border: 1px solid #ccc;">
+                                        <td style="padding: 8px; border: 1px solid #ccc; width:45%;">
                                             <t t-esc="l.product_id.name"/>
                                         </td>
-                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:center;">
-                                            <t t-esc="l.product_uom_qty"/>
+                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:center; width:15%;">
+                                            <t t-esc="int(l.product_uom_qty)"/>
                                             <t t-esc="l.product_uom.name"/>
                                         </td>
-                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
+                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:15%;">
                                             <t t-esc="l.price_unit"
-                                               t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
-
+                                               t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
                                         </td>
-                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
+                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:25%;">
                                             <t t-esc="l.price_subtotal"
-                                               t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
-
+                                               t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
                                         </td>
                                     </tr>
                                 </t>
-
                             </t>
                         </tbody>
-
-                        <tfoot>
-                            <t t-set="disc"
-                               t-value="sum([l.price_subtotal for l in doc.order_line if l.price_subtotal &lt; 0])"/>
-                            <tr t-if="disc">
-                                <td colspan="3" style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                    İndirim
-                                </td>
-                                <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                    <t t-esc="(-disc)"
-                                       t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                    <strong>Toplam (İndirim Öncesi)</strong>
-                                </td>
-                                <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                    <t t-esc="(doc.amount_total - disc)"
-                                       t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                    <strong>İndirimli Tutar</strong>
-                                </td>
-                                <td style="padding: 8px; border: 1px solid #ccc; text-align:right;">
-                                    <strong>
-                                        <t t-esc="doc.amount_total"
-                                           t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.currency_id}"/>
-
-                                    </strong>
-                                </td>
-                            </tr>
-                        </tfoot>
                     </table>
+
+                    <div class="so_total_summary clearfix">
+                        <div class="row justify-content-end mt-3">
+                            <div class="col-auto" style="width:40%;">
+                                <table
+                                        class="table table-borderless o_total_table"
+                                        style="width:100%; line-height:10pt; border:none; border-collapse: collapse;"
+                                >
+                                    <t t-set="disc"
+                                       t-value="sum([l.price_subtotal for l in doc.order_line if l.price_subtotal &lt; 0])"/>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3"
+                                                style="padding: 8px; border:none; text-align:right;">
+                                                <strong>Vergi Hariç Tutar:</strong>
+                                            </td>
+                                            <td style="padding: 8px; border:none; text-align:right;">
+                                                <t t-esc="(doc.amount_total - disc)"
+                                                   t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="disc">
+                                            <td colspan="3"
+                                                style="padding: 8px; border:none; text-align:right;">
+                                                <strong>İndirim Tutarı:</strong>
+
+                                            </td>
+                                            <td style="padding: 8px; border:none; text-align:right;">
+                                                <t t-esc="(-disc)"
+                                                   t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"
+                                                style="padding: 8px; border:none; text-align:right;">
+                                                <strong>Toplam Tutar:</strong>
+                                            </td>
+                                            <td style="padding: 8px; border:none; text-align:right;">
+                                                <strong>
+                                                    <t t-esc="doc.amount_total"
+                                                       t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <p style="margin-top: 20px;">Teklifin geçerlilik süresi 1 haftadır.</p>
                 </div>
                 <!-- Page 10 -->
