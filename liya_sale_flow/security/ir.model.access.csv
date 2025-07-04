@@ -4,3 +4,4 @@ access_wedding_place_user,wedding.place user,model_wedding_place,base.group_user
 access_sale_order_service,access_sale_order_service,model_sale_order_service,base.group_user,1,1,1,1
 access_sale_order_program,access_sale_order_program,model_sale_order_program,base.group_user,1,1,1,1
 access_sale_order_transport,access_sale_order_transport,model_sale_order_transport,base.group_user,1,1,1,1
+access_foreign_local,access_foreign_local,model_foreign_local,base.group_user,1,1,1,1

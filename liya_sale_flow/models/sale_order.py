@@ -188,30 +188,12 @@ class SaleOrder(models.Model):
         if sale.opportunity_id:
             sale_model = self.env['ir.model'].sudo().search(
                 [('model', '=', 'sale.order')], limit=1)
+            if sale.team_id.event_team:
 
-            activity_types = self.env['mail.activity.type'].search(
-                [('is_quot', '=', True)])
-
-            for atype in activity_types:
-                self.env['mail.activity'].create({
-                    'res_model_id': sale_model.id,
-                    'res_model': 'sale.order',
-                    'res_id': sale.id,
-                    'activity_type_id': atype.id,
-                    'user_id': sale.user_id.id or sale.create_uid.id,
-                    'date_deadline': date.today(),
-                })
-
-        return sale
-
-    def action_quotation_sent(self):
-        action = super(SaleOrder, self).action_quotation_sent()
-        for sale in self:
-            if sale.opportunity_id:
-                sale_model = self.env['ir.model'].sudo().search(
-                    [('model', '=', 'sale.order')], limit=1)
                 activity_types = self.env['mail.activity.type'].search(
-                    [('is_reminder', '=', True)])
+                    [('is_quot', '=', True),
+                     ('is_event','=',True)])
+
                 for atype in activity_types:
                     self.env['mail.activity'].create({
                         'res_model_id': sale_model.id,
@@ -219,8 +201,68 @@ class SaleOrder(models.Model):
                         'res_id': sale.id,
                         'activity_type_id': atype.id,
                         'user_id': sale.user_id.id or sale.create_uid.id,
-                        'date_deadline': date.today() + timedelta(days=2),
+                        'date_deadline': date.today(),
                     })
+            elif not sale.team_id.event_team:
+
+                activity_types = self.env['mail.activity.type'].search(
+                    [('is_quot', '=', True),
+                     ('is_event','=',False)])
+
+                for atype in activity_types:
+                    self.env['mail.activity'].create({
+                        'res_model_id': sale_model.id,
+                        'res_model': 'sale.order',
+                        'res_id': sale.id,
+                        'activity_type_id': atype.id,
+                        'user_id': sale.user_id.id or sale.create_uid.id,
+                        'date_deadline': date.today(),
+                    })
+            else:
+                return sale
+
+        return sale
+
+    def action_quotation_sent(self):
+        action = super(SaleOrder, self).action_quotation_sent()
+        for sale in self:
+            if sale.opportunity_id:
+                if sale.team_id.event_team:
+                    sale_model = self.env['ir.model'].sudo().search(
+                        [('model', '=', 'sale.order')], limit=1)
+                    activity_types = self.env['mail.activity.type'].search(
+                        [('is_reminder', '=', True),
+                         ('is_event','=',True)
+                         ])
+
+                    for atype in activity_types:
+                        self.env['mail.activity'].create({
+                            'res_model_id': sale_model.id,
+                            'res_model': 'sale.order',
+                            'res_id': sale.id,
+                            'activity_type_id': atype.id,
+                            'user_id': sale.user_id.id or sale.create_uid.id,
+                            'date_deadline': date.today() + timedelta(days=2),
+                        })
+                elif not sale.team_id.event_team:
+                    sale_model = self.env['ir.model'].sudo().search(
+                        [('model', '=', 'sale.order')], limit=1)
+                    activity_types = self.env['mail.activity.type'].search(
+                        [('is_reminder', '=', True),
+                         ('is_event','=',False)
+                         ])
+
+                    for atype in activity_types:
+                        self.env['mail.activity'].create({
+                            'res_model_id': sale_model.id,
+                            'res_model': 'sale.order',
+                            'res_id': sale.id,
+                            'activity_type_id': atype.id,
+                            'user_id': sale.user_id.id or sale.create_uid.id,
+                            'date_deadline': date.today() + timedelta(days=2),
+                        })
+                else:
+                    return action
         return action
 
     def get_discount_total(self):

@@ -8,6 +8,7 @@
       <xpath expr="//field[@name='keep_done']" position="after">
         <field name="is_quot"/>
         <field name="is_reminder"/>
+        <field name="is_event"/>
       </xpath>
     </field>
   </record>
