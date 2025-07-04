@@ -65,12 +65,8 @@ class CrmLead(models.Model):
         string='Source Category',
         ondelete="set null"
     )
-    yt = fields.Selection([
-        ('yt', 'YT'),
-        ('y', 'Y'),
-        ('t', 'T'),
-    ], string='Y/T'
-    )
+    yabanci_turk = fields.Many2one('foreign.local', string='Y/T')
+
     request_month = fields.Char(
         string='Request Month',
         compute='_compute_month_names',
@@ -341,3 +337,8 @@ class CrmLead(models.Model):
             )
             if rec:
                 self.wedding_place = rec.id
+
+class ForeignLocal(models.Model):
+    _name='foreign.local'
+
+    name=fields.Char('Name')

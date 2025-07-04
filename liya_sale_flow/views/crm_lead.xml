@@ -138,7 +138,7 @@
                        invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="after">
-                <field name="yt" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
+                <field name="yabanci_turk" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
             </xpath>
 
 
