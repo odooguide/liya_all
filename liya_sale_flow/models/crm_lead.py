@@ -4,9 +4,10 @@ from odoo import models, fields, api, _
 from datetime import date, datetime, timedelta
 from odoo.exceptions import ValidationError, UserError
 
+
 class CrmLead(models.Model):
     _inherit = "crm.lead"
-    
+
     date_conversion = fields.Datetime('Conversion Date', readonly=False)
     option1 = fields.Date(string="Optional Date 1")
     option2 = fields.Date(string="Optional Date 2")
@@ -22,7 +23,7 @@ class CrmLead(models.Model):
         size=4,
         help="Event Year (between 2025-2100)"
     )
-    people = fields.Integer(string="People Count",default=False)
+    people = fields.Integer(string="People Count", default=False)
     second_contact = fields.Char(
         string="Secondary Contact",
     )
@@ -60,7 +61,7 @@ class CrmLead(models.Model):
         compute='_compute_activity_day',
         store=True,
     )
-    wedding_place=fields.Many2one(
+    wedding_place = fields.Many2one(
         'wedding.place',
         string='Source Category',
         ondelete="set null"
@@ -82,8 +83,8 @@ class CrmLead(models.Model):
         compute='_compute_month_names',
         store=True,
     )
-    is_stage_lead=fields.Boolean(string='Is Stage Lead',compute='_compute_stage_lead')
-    is_event_team=fields.Boolean(string="Is Event Team",compute='_compute_event_team', store=True)
+    is_stage_lead = fields.Boolean(string='Is Stage Lead', compute='_compute_stage_lead')
+    is_event_team = fields.Boolean(string="Is Event Team", compute='_compute_event_team', store=True)
 
     #####Compute #####
 
@@ -110,30 +111,30 @@ class CrmLead(models.Model):
             else:
                 rec.request_month = False
 
-
             if rec.date_conversion:
                 rec.conversion_month = month_names.get(
                     rec.date_conversion.month, False
                 )
             else:
                 rec.conversion_month = False
-        
+
     @api.depends('activity_type_id')
     def _compute_type(self):
         for lead in self:
             disp = lead.activity_type_id and lead.activity_type_id.category or ''
-            if disp=='meeting':
+            if disp == 'meeting':
                 lead.type = 'opportunity'
                 lead.date_conversion = date.today()
 
         return None
+
     @api.depends('stage_id')
     def _compute_stage_lead(self):
         for lead in self:
             if lead.stage_id.name in ('Toplantı Adayı', 'Meeting'):
-                lead.is_stage_lead=True
+                lead.is_stage_lead = True
             else:
-                lead.is_stage_lead=False
+                lead.is_stage_lead = False
         return None
 
     @api.depends('my_activity_date')
@@ -216,48 +217,27 @@ class CrmLead(models.Model):
             return super().write(vals)
 
         for lead in self:
+            old_stage = lead.stage_id
             new_stage = self.env['crm.stage'].browse(vals['stage_id'])
 
-            if (new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation'):
-                # missing = []
-                # required_fields = {
-                #     'people': _('People'),
-                #     'second_contact': _('Secondary Contact'),
-                #     'second_phone': _('Secondary Phone'),
-                #     'second_mail': _('Secondary E-mail'),
-                #     'second_job_position': _('Secondary Job Position'),
-                #     'second_title': _('Secondary Title'),
-                #     'second_country': _('Second Country'),
-                #     'yt':_('YT')
-                # }
-                # for field_name, pretty in required_fields.items():
-                #     val = vals.get(field_name, getattr(lead, field_name))
-                #     if not val:
-                #         missing.append(pretty)
-                # if missing:
-                #     raise UserError(_(
-                #         '“Görüşülüyor” aşamasına geçebilmek için şu alanlar zorunlu:\n%s'
-                #     ) % (', '.join(missing)))
+            if old_stage.name in ('Kazanıldı', 'Won') and new_stage.name not in ('Kazanıldı', 'Won'):
+                raise UserError(_('Kazanıldı aşamasındayken başka bir aşamaya geçemezsiniz.'))
 
-                if lead.quotation_count < 1:
+            orders = self.env['sale.order'].search([
+                ('opportunity_id', '=', lead.id),
+                ('state', 'in', ('sale', 'done'))
+            ])
+
+            if new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation':
+                if lead.quotation_count < 1 or not orders:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
 
-            elif (new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting'):
-
-                orders = self.env['sale.order'].search([
-                    ('opportunity_id', '=', lead.id),
-                    ('state', 'in', ('sale', 'done'))
-                ])
+            elif new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting':
                 if not orders:
                     raise UserError(
                         _('Onaylı teklif yok, "Sözleşme Süreci"ne geçemezsiniz.')
                     )
-            if (new_stage.name == 'Kazanıldı' or new_stage.name == 'Won'):
-                orders = self.env['sale.order'].search([
-                    ('opportunity_id', '=', lead.id),
-                    ('state', 'in', ('sale', 'done'))
-                ])
-
+            if new_stage.name == 'Kazanıldı' or new_stage.name == 'Won':
                 has_confirmed = any(order.confirmed_contract for order in orders)
                 if not has_confirmed:
                     raise UserError(
@@ -269,17 +249,17 @@ class CrmLead(models.Model):
 
                 self.create_activity(lead)
 
-                orders_to_cancel=self.env['sale.order'].search([
+                orders_to_cancel = self.env['sale.order'].search([
                     ('opportunity_id', '=', lead.id),
-                    ('state', 'in', ('draft','sent'))
+                    ('state', 'in', ('draft', 'sent'))
                 ])
 
                 for o in orders_to_cancel:
                     o._action_cancel()
 
-
         return super().write(vals)
-    #???
+
+    # ???
     def create_activity(self, lead):
 
         orders = self.env['sale.order'].search([
@@ -289,14 +269,12 @@ class CrmLead(models.Model):
         if not orders:
             raise UserError(_('Hiçbir onaylı sözleşme bulunamadı.'))
         order = orders
-
         wedding_tag = self.env['calendar.event.type'].search(
             [('name', 'in', ['Düğün', 'Wedding'])], limit=1
         )
         event_tag = self.env['calendar.event.type'].search(
             [('name', 'in', ['Etkinlik', 'Event'])], limit=1
         )
-
         partner_ids = [(4, pid) for pid in order.coordinator_ids.ids]
 
         vals = {
@@ -338,7 +316,8 @@ class CrmLead(models.Model):
             if rec:
                 self.wedding_place = rec.id
 
-class ForeignLocal(models.Model):
-    _name='foreign.local'
 
-    name=fields.Char('Name')
+class ForeignLocal(models.Model):
+    _name = 'foreign.local'
+
+    name = fields.Char('Name')

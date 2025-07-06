@@ -30,7 +30,8 @@
                             <br/>
                             <br/>
                             <span>
-                                Below, you’ll find our personalized All’N One proposal, prepared based on our recent meeting — reflecting your preferred wedding date and selected service options.
+                                Below, you’ll find our personalized All’N One proposal, prepared based on our recent
+                                meeting — reflecting your preferred wedding date and selected service options.
                             </span>
 
 
@@ -176,7 +177,7 @@
                                    style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;">
                                 <tr>
                                     <td style="vertical-align:top; width:25%; padding:2px;">
-                                       1. Four-Theme Table Styling
+                                        1. Four-Theme Table Styling
                                         <br/>
                                         2. DJ Performance
                                         <br/>
@@ -336,7 +337,9 @@
                             <p style="margin:0;font-size:10.5pt;">
                                 We hope this offer brings you one step closer to the day you’ve been dreaming of.
                                 <br/>
-We would be happy to answer any questions you may have and look forward to hearing from you soon.                            </p>
+                                We would be happy to answer any questions you may have and look forward to hearing from
+                                you soon.
+                            </p>
                             <br/>
                             <table class="table table-borderless"
                                    style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;font-size:10.5pt;">
@@ -345,20 +348,23 @@ We would be happy to answer any questions you may have and look forward to heari
                                         <t t-esc="user_id.name"/>
                                     </td>
                                     <td style="vertical-align:top; width:32%; padding:2px;color:grey;">
-                                        <t t-esc="user_id.phone"/> / <t t-esc="user_id.login"/>
+                                        <t t-esc="user_id.phone"/>
+                                        /
+                                        <t t-esc="user_id.login"/>
                                     </td>
                                     <td style="vertical-align:top; width:10%; padding:2px;color:grey;">
 
                                     </td>
                                     <td style="vertical-align:top; width:32%; padding:2px;color:grey;">
-                                         info@liya-all.com
+                                        info@liya-all.com
                                     </td>
                                 </tr>
 
 
                             </table>
                             <p style="margin:0;color:grey;font-size:10.5pt;">
-                                Our proposal is valid for 3 (three) days. After this period, we kindly recommend contacting us again for the most up-to-date information.
+                                Our proposal is valid for 3 (three) days. After this period, we kindly recommend
+                                contacting us again for the most up-to-date information.
                                 <br/>
                                 Best Regards.
                             </p>

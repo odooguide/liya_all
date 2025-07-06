@@ -1,4 +1,5 @@
-from odoo import  fields, models
+from odoo import fields, models
+
 
 class SaleOrderTemplate(models.Model):
     _inherit = 'sale.order.template'
@@ -25,4 +26,3 @@ class SaleOrderTemplate(models.Model):
         inverse_name='sale_order_template_id',
         string='Transportation'
     )
-

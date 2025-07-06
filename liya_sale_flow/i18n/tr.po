@@ -742,7 +742,7 @@ msgstr "Etkinlik İsmi"
 #: model:ir.actions.act_window,name:liya_sale_flow.action_crm_event_opportunity
 #: model:ir.ui.menu,name:liya_sale_flow.menu_crm_event_pipeline
 msgid "Event Pipeline"
-msgstr "Etkinlik Süreci"
+msgstr "Etkinlik Fırsatları"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_team__event_team
@@ -1141,7 +1141,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__people
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__people_count
 msgid "People Count"
-msgstr "Kişiler"
+msgstr "Kişiler Sayısı"
 
 #. module: liya_sale_flow
 #. odoo-python
@@ -1469,7 +1469,7 @@ msgstr "Düğün Adayları"
 #: model:ir.actions.act_window,name:liya_sale_flow.action_crm_wedding_opportunity
 #: model:ir.ui.menu,name:liya_sale_flow.menu_crm_wedding_pipeline
 msgid "Wedding Pipeline"
-msgstr "Düğün Süreci"
+msgstr "Düğün Fırsatları"
 
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_wedding_place
