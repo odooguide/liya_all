@@ -809,7 +809,7 @@ msgstr "Etkinlik İsmi"
 #: model:ir.actions.act_window,name:liya_sale_flow.action_crm_event_opportunity
 #: model:ir.ui.menu,name:liya_sale_flow.menu_crm_event_pipeline
 msgid "Event Pipeline"
-msgstr "Etkinlik Süreci"
+msgstr "Etkinlik Fırsatları"
 
 #. module: liya_sale_flow
 #: model:ir.actions.report,name:liya_sale_flow.action_report_saleorder_banquet_quot
@@ -1583,7 +1583,7 @@ msgstr "Düğün Adayları"
 #: model:ir.actions.act_window,name:liya_sale_flow.action_crm_wedding_opportunity
 #: model:ir.ui.menu,name:liya_sale_flow.menu_crm_wedding_pipeline
 msgid "Wedding Pipeline"
-msgstr "Düğün Süreci"
+msgstr "Düğün Fırsatları"
 
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_wedding_place
