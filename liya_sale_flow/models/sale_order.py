@@ -51,24 +51,16 @@ class SaleOrder(models.Model):
     )
     banquet_pages = fields.Many2many('banquet.pages', string='Banquet Sayfaları')
 
-    is_admin_user = fields.Boolean(
-        string="Is Admin User",
-        compute='_compute_is_admin_user',
-        store=False,
-    )
-
-    @api.depends()
-    def _compute_is_admin_user(self):
-        admin_group = self.env.ref('base.group_system')
+    @api.onchange('confirmed_contract')
+    def _onchange_confirmed_contract_security(self):
         for rec in self:
-            rec.is_admin_user = admin_group in self.env.user.groups_id
-
-    def write(self, vals):
-        if 'confirmed_contract' in vals and not self.env.user.has_group('base.group_system'):
-            raise UserError(
-                _('Only administrators can modify or delete the Signed Contract.')
-            )
-        return super().write(vals)
+            origin = rec._origin
+            if origin.confirmed_contract and not self.env.user.has_group('base.group_system'):
+                rec.confirmed_contract = origin.confirmed_contract
+                rec.confirmed_contract_name = origin.confirmed_contract_name
+                raise UserError(
+                    _('Only administrators can modify or delete the Signed Contract once uploaded.')
+                )
 
     @api.onchange('program_ids', 'program_ids.hours')
     def _onchange_hours(self):
