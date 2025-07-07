@@ -511,7 +511,7 @@ msgstr ""
 #. module: liya_sale_flow
 #: model:ir.ui.menu,name:liya_sale_flow.menu_crm_all_leads_opps
 msgid "Adaylar/Fırsatlar"
-msgstr ""
+msgstr "Adaylar/Fırsatlar"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
@@ -1257,7 +1257,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__people
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order__people_count
 msgid "People Count"
-msgstr "Kişiler"
+msgstr "Kişi Sayısı"
 
 #. module: liya_sale_flow
 #. odoo-python
@@ -1484,7 +1484,7 @@ msgstr ""
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_document_external_replace
 msgid "THE OFFER"
-msgstr "TEKLIF"
+msgstr "TEKLİF"
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
