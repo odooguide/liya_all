@@ -29,6 +29,7 @@
         "data/ir_sequence.xml",
         "data/calendar_alarm_data.xml",
         "data/menu_restrict.xml",
+        "data/crm_menu_actions.xml",
 
     ],
     "auto_install": False,

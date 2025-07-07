@@ -1,4 +1,4 @@
-from odoo import models,api,fields, _
+from odoo import models, api, fields, _
 from odoo.exceptions import UserError
 from datetime import date, timedelta, datetime
 from odoo.tools.misc import formatLang
@@ -6,16 +6,16 @@ from babel.dates import format_date as babel_format_date
 
 
 class SaleOrder(models.Model):
-    _inherit='sale.order'
+    _inherit = 'sale.order'
 
-
-    is_project_true=fields.Boolean(string='Is There Any Project?')
-    confirmed_contract=fields.Binary(string="Signed Contract")
+    is_project_true = fields.Boolean(string='Is There Any Project?')
+    confirmed_contract = fields.Binary(string="Signed Contract")
+    confirmed_contract_name = fields.Char(string="Contract Filename")
     coordinator_ids = fields.Many2many(comodel_name='res.partner', string="Coordinators",
                                        domain=[('employee_ids', '!=', False)])
-    wedding_date=fields.Date(string="Event Date")
-    people_count=fields.Integer(string="People Count")
-    second_contact=fields.Char(string="Secondary Contact")
+    wedding_date = fields.Date(string="Event Date")
+    people_count = fields.Integer(string="People Count")
+    second_contact = fields.Char(string="Secondary Contact")
     wedding_day = fields.Char(
         string='Event Day',
         compute='_compute_wedding_day',
@@ -41,30 +41,50 @@ class SaleOrder(models.Model):
         inverse_name='order_id',
         string='Transportation'
     )
-    contract_date=fields.Date(string='Contract Date')
-    event_type=fields.Char(string="Type of Invitation")
-    is_event_selected=fields.Boolean(string="Is Event Template Selected", store=True)
+    contract_date = fields.Date(string='Contract Date')
+    event_type = fields.Char(string="Type of Invitation")
+    is_event_selected = fields.Boolean(string="Is Event Template Selected", store=True)
 
     duration_display = fields.Char(
         string='Toplam Süre',
-        compute='_compute_total_duration',
-        store=False,
+        store=True,
     )
+    banquet_pages = fields.Many2many('banquet.pages', string='Banquet Sayfaları')
 
+    @api.onchange('confirmed_contract')
+    def _onchange_confirmed_contract_security(self):
+        for rec in self:
+            origin = rec._origin
+            if origin.confirmed_contract and not self.env.user.has_group('base.group_system'):
+                rec.confirmed_contract = origin.confirmed_contract
+                rec.confirmed_contract_name = origin.confirmed_contract_name
+                raise UserError(
+                    _('Only administrators can modify or delete the Signed Contract once uploaded.')
+                )
 
+    @api.onchange('program_ids', 'program_ids.hours')
+    def _onchange_hours(self):
+        for record in self:
+            total_minutes = 0
+            for prog in record.program_ids:
+                hours_str = prog.hours or ''
+                try:
+                    h, m = hours_str.split(':')
+                    total_minutes += int(h) * 60 + int(m)
+                except ValueError:
 
-    @api.depends('program_ids.hours')
-    def _compute_total_duration(self):
-        for order in self:
-            total = sum(order.program_ids.mapped('hours') or [0.0])
-            hours = int(total)
-            minutes = int(round((total - hours) * 60))
+                    continue
+
+            hours = total_minutes // 60
+            minutes = total_minutes % 60
+
             parts = []
             if hours:
                 parts.append(_("%d Saat") % hours)
-            if minutes:
+            if minutes or not parts:
                 parts.append(_("%d Dakika") % minutes)
-            order.duration_display = ' '.join(parts) or _("0 Dakika")
+
+            record.duration_display = ' '.join(parts)
 
     @api.onchange('sale_order_template_id')
     def _onchange_sale_order_event_template_id(self):
@@ -95,8 +115,6 @@ class SaleOrder(models.Model):
             self.service_ids = [(5, 0, 0)]
             self.program_ids = [(5, 0, 0)]
             self.transport_ids = [(5, 0, 0)]
-
-
 
     @api.depends('wedding_date', 'partner_id.lang')
     def _compute_wedding_date_display(self):
@@ -129,19 +147,15 @@ class SaleOrder(models.Model):
             else:
                 rec.wedding_day = False
 
-
     def action_confirm(self):
-        res=super().action_confirm()
+        res = super().action_confirm()
         for order in self:
             if not order.coordinator_ids and order.team_id.wedding_team:
                 raise UserError(_("Koordinatör seçilmeden bu teklifi onaylayamazsınız. Lütfen koordinatör seçin."))
             if not order.wedding_date:
                 raise UserError(_("Etkinlik tarihi seçilmeden satışı onaylayamazsınız."))
 
-
         return res
-
-
 
     def action_project_create(self):
         self.ensure_one()
@@ -169,18 +183,18 @@ class SaleOrder(models.Model):
 
         self.project_id = project.id
 
-        self.is_project_true=True
+        self.is_project_true = True
 
         return True
 
     @api.onchange('project_id')
     def _is_project(self):
 
-        project_id=self.project_id
+        project_id = self.project_id
         if project_id:
-            self.is_project_true=True
+            self.is_project_true = True
         else:
-            self.is_project_true=False
+            self.is_project_true = False
 
     @api.model_create_multi
     def create(self, vals):
@@ -192,7 +206,7 @@ class SaleOrder(models.Model):
 
                 activity_types = self.env['mail.activity.type'].search(
                     [('is_quot', '=', True),
-                     ('is_event','=',True)])
+                     ('is_event', '=', True)])
 
                 for atype in activity_types:
                     self.env['mail.activity'].create({
@@ -207,7 +221,7 @@ class SaleOrder(models.Model):
 
                 activity_types = self.env['mail.activity.type'].search(
                     [('is_quot', '=', True),
-                     ('is_event','=',False)])
+                     ('is_event', '=', False)])
 
                 for atype in activity_types:
                     self.env['mail.activity'].create({
@@ -232,7 +246,7 @@ class SaleOrder(models.Model):
                         [('model', '=', 'sale.order')], limit=1)
                     activity_types = self.env['mail.activity.type'].search(
                         [('is_reminder', '=', True),
-                         ('is_event','=',True)
+                         ('is_event', '=', True)
                          ])
 
                     for atype in activity_types:
@@ -249,7 +263,7 @@ class SaleOrder(models.Model):
                         [('model', '=', 'sale.order')], limit=1)
                     activity_types = self.env['mail.activity.type'].search(
                         [('is_reminder', '=', True),
-                         ('is_event','=',False)
+                         ('is_event', '=', False)
                          ])
 
                     for atype in activity_types:
@@ -268,7 +282,6 @@ class SaleOrder(models.Model):
     def get_discount_total(self):
         self.ensure_one()
         return sum(line.price_subtotal for line in self.order_line if line.price_subtotal < 0)
-
 
     def get_lines_with_options_total(self):
         self.ensure_one()
@@ -298,4 +311,3 @@ class SaleOrder(models.Model):
     def action_custom_send_quotation(self):
         for order in self:
             return order.with_context(hide_default_template=True).action_quotation_send()
-

@@ -1,6 +1,7 @@
-from odoo import fields,models
+from odoo import fields, models
+
 
 class ProductTemplate(models.Model):
-    _inherit='product.template'
+    _inherit = 'product.template'
 
-    is_wedding=fields.Boolean(string="Is Wedding Package?")
+    is_wedding = fields.Boolean(string="Is Wedding Package?")

@@ -1,5 +1,6 @@
-from odoo import models, api,fields,_
+from odoo import models, api, fields, _
 from odoo.exceptions import UserError
+
 
 class CalendarEvent(models.Model):
     _inherit = 'calendar.event'
@@ -11,9 +12,9 @@ class CalendarEvent(models.Model):
         partners = self.env.user.partner_id
         active_id = self._context.get('active_id')
         if self._context.get('active_model') == 'res.partner' and active_id and active_id not in partners.ids:
-                partners |= self.env['res.partner'].browse(active_id)
+            partners |= self.env['res.partner'].browse(active_id)
         return partners
-    
+
     @api.model
     def default_get(self, fields_list):
         """ Adding 24 Hour Reminder every event"""
@@ -23,13 +24,12 @@ class CalendarEvent(models.Model):
             if alarm:
                 res['alarm_ids'] = [(6, 0, [alarm.id])]
         return res
-    
+
     partner_ids = fields.Many2many(
         'res.partner', 'calendar_event_res_partner_rel',
         string='Attendees', default=_default_attendees,
         domain=[('employee_ids', '!=', False)]
-        )
-
+    )
 
     @api.model_create_multi
     def create(self, vals_list):

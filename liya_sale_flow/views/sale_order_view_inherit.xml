@@ -8,15 +8,16 @@
       <button name="action_lock" type="object" string="Sözleşmeyi Tamamla"  invisible="locked or state != 'sale'" groups="sales_team.group_sale_manager"/>
     </xpath>
     <xpath expr="//field[@name='payment_term_id']" position="after">
-      <field name="confirmed_contract"/>
+      <field name="confirmed_contract" widget="binary"
+       filename="confirmed_contract_name"
+       context="{'bin_size': True}"/>
+      <field name="confirmed_contract_name" invisible="1"/>
       <field name="contract_date"/>
       <field name="is_event_selected" invisible="1" force-save="1"/>
-
     </xpath>
     <xpath expr="//field[@name='partner_id']" position="after">
       <field name="second_contact"/>
     </xpath>
-
   </field>
 </record>
     <record id="view_order_form_inherit_wedding_info" model="ir.ui.view">
@@ -33,6 +34,7 @@
       </xpath>
     </field>
   </record>
+
 
   <record id="view_sale_order_form_unlock_admin_only" model="ir.ui.view">
       <field name="name">sale.order.form.unlock.admin.only</field>
@@ -100,13 +102,14 @@
             </group>
             <!-- 2) Program Flow -->
             <group string="Program Flow">
+
+              <field name="duration_display"/>
               <field name="program_ids">
                 <list editable="bottom">
                   <field name="name"/>
                   <field name="start_datetime"/>
                   <field name="end_datetime"/>
-                  <field name="hours" invisible="1"/>
-                  <field name="duration_display"/>
+                  <field name="hours"/>
 
                 </list>
               </field>
@@ -122,11 +125,8 @@
               </field>
             </group>
             <group string="Other Infos">
-
                   <field name="event_type"/>
-                  <field name="duration_display" invisible="1"/>
-
-
+                  <field name="banquet_pages" widget="many2many_checkboxes"/>
             </group>
           </group>
         </page>

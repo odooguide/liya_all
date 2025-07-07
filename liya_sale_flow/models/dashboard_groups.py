@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 
+
 class SpreadsheetDashboardGroup(models.Model):
     _inherit = 'spreadsheet.dashboard.group'
 

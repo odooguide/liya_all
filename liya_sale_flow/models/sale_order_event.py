@@ -1,4 +1,6 @@
-from odoo import models, fields, api,_
+from odoo import models, fields, api, _
+from datetime import datetime, timedelta
+
 
 class SaleOrderService(models.Model):
     _name = 'sale.order.service'
@@ -6,7 +8,7 @@ class SaleOrderService(models.Model):
 
     order_id = fields.Many2one('sale.order', string='Order')
     sale_order_template_id = fields.Many2one('sale.order.template', string='Sale Order Template')
-    name = fields.Char(string='Service Name',)
+    name = fields.Char(string='Service Name', )
     description = fields.Text(string='Description')
 
 
@@ -17,33 +19,37 @@ class SaleOrderProgram(models.Model):
     order_id = fields.Many2one('sale.order', string='Order')
     sale_order_template_id = fields.Many2one('sale.order.template', string='Sale Order Template')
     name = fields.Char(string='Event Name', )
-    start_datetime = fields.Datetime(string='Start Time',)
-    end_datetime = fields.Datetime(string='End Time',)
-    hours = fields.Float(string='Duration (hours)', compute='_compute_hours', store=True)
-    duration_display = fields.Char(
-        string='Toplam Süre',
-        compute='_compute_total_duration',
-        store=False,
+    start_datetime = fields.Char(string='Start Time')
+    end_datetime = fields.Char(string='End Time' )
+    hours = fields.Char(
+        string='Duration (hours)',
+        compute='_compute_hours',
+        store=True,
     )
-
-    @api.depends('hours')
-    def _compute_total_duration(self):
-        for rec in self:
-            hours_int = int(rec.hours)
-            minutes = int(round((rec.hours - hours_int) * 60))
-            parts = []
-            if hours_int:
-                parts.append(_("%d Saat") % hours_int)
-            if minutes:
-                parts.append(_("%d Dakika") % minutes)
-            rec.duration_display = ' '.join(parts) or _("0 Dakika")
 
     @api.depends('start_datetime', 'end_datetime')
     def _compute_hours(self):
+        fmt = '%H:%M'
         for rec in self:
-            if rec.start_datetime and rec.end_datetime:
-                delta = rec.end_datetime - rec.start_datetime
-                rec.hours = delta.total_seconds() / 3600.0
+            sd = rec.start_datetime
+            ed = rec.end_datetime
+            if sd and ed:
+                try:
+                    t1 = datetime.strptime(sd, fmt)
+                    t2 = datetime.strptime(ed, fmt)
+                except ValueError:
+                    rec.hours = False
+                    continue
+
+                if t2 < t1:
+                    t2 += timedelta(days=1)
+
+                diff = t2 - t1
+                h = diff.seconds // 3600
+                m = (diff.seconds % 3600) // 60
+                rec.hours = '{}:{:02d}'.format(h, m)
+            else:
+                rec.hours = False
 
 
 class SaleOrderTransport(models.Model):
@@ -54,5 +60,4 @@ class SaleOrderTransport(models.Model):
     sale_order_template_id = fields.Many2one('sale.order.template', string='Sale Order Template')
     departure_location = fields.Char(string='Departure Location')
     arrival_location = fields.Char(string='Arrival Location')
-    arrival_datetime = fields.Datetime(string='Departure Time')
-
+    arrival_datetime = fields.Char(string='Departure Time')

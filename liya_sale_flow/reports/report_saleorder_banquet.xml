@@ -29,15 +29,23 @@
                 @page { size: A4 landscape; }
                 .page {
                 page-break-after: always;
-
                 height: 200mm;
                 border: 4px double #8c6a3b;
                 box-sizing: border-box;
                 padding: 10mm;
+                padding-bottom:20mm;
                 width:100%;
+                }
+                body, p, ul, li, span, div {
+                font-family: 'Century Gothic', sans-serif;
+                }
+                /* Headings use Century font */
+                h1, h2, h3, h4, h5, h6 {
+                font-family: Century, 'Century Gothic', serif;
                 }
                 .footer {
                 position: absolute;
+                display:block;
                 bottom: 10mm;
                 left: 0;
                 right: 0;
@@ -45,268 +53,298 @@
                 font-size: 10pt;
                 font-style: italic;
                 color: grey;
+
+                }
+                .avoid-break {
+                page-break-inside: avoid;
+                break-inside: avoid;
+                padding-top: 20px;
                 }
             </style>
 
 
             <!-- Page 1 -->
             <main>
-
-                <div>
-                    <!-- Page 1 -->
-                    <div class="footer">
-                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                        <img t-att-src="image_data_uri(doc.company_id.logo)"
-                             style="max-height:60px; display:block; margin:0 auto; margin-top:-40px"/>
-                    </div>
-                    <div class="page" style="text-align: center; margin-top:10px">
-
-                        <div>
-
-                            <img src="/liya_sale_flow/static/src/img/img4.jpeg" style="width:90%; "/>
+                <t t-if="'Kapak' in doc.banquet_pages.mapped('name')">
+                    <div>
+                        <!-- Page 1 -->
+                        <div class="footer">
+                            <span>
+                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"
+                                     style="max-height:60px; display:block; margin:0 auto; margin-left:125mm;margin-top:-5mm"/>
+                            </span>
                         </div>
+                        <div class="page" style="text-align: center; margin-top:10px">
+                            <div>
+                                <img src="/liya_sale_flow/static/src/img/img4.jpeg" style="width:90%; "/>
+<!--                                <br/>-->
+<!--                                <span style="margin-top:5pt;text-align:center;">-->
+<!--                                    <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>-->
+<!--                                </span>-->
+                            </div>
 
+                        </div>
                     </div>
-                </div>
-
+                </t>
                 <!-- Page 2 -->
-                <div class="page">
-                    <h2>LİYA ALL hakkında</h2>
-                    <p>
-                        Liya, İstanbul Prens adalarının en küçüğü ve en az tanınanı olan Sedef adasında denize sıfır
-                        şekilde konumlanmış, 4 dönüm büyüklüğe sahip, 280 kişi oturma-350 kişi prolonge kapasiteli,
-                        misafirlerine 12 ay hizmet verebilen bir işletmedir. İçerisinde deniz kenarı alanı, açılır
-                        kapanır pergola sistemi ile korunan ısıtmalı restoran alanı ve teras alanı ile misafirlerin
-                        davetlerde uğrak yeri olan doğal bir bahçe ve balkona sahiptir. Restoran ve Teras alanları
-                        otomatik giyotin cam sistemi ile çevrilmiştir. Restoran alanı kış aylarında 25 derece ortam
-                        ısısına sahip olacak şekilde hazır edilmektedir. Mekâna giriş ve çıkışlar kendi iskelemizden
-                        yapılmaktadır.
-                    </p>
-                    <p>
-                        Liya, gerçekleştirdiği davetlerin büyük çoğunluğu düğün davetleri olmakla birlikte aşağıdaki
-                        davet türlerine de ev sahipliği yapmaktadır:
-                    </p>
-                    <ul>
-                        <li>Kurumsal Etkinlik</li>
-                        <li>Özel Davetler</li>
-                        <li>Kına, Sünnet, Evlilik Teklifi, Bekarlığa Veda Partileri</li>
-                        <li>Balo ve After Party</li>
-                    </ul>
-                    <p>
-                        Liya’ya ait görselleri incelemek için aşağıdaki bağlantıları ziyaret edebilirsiniz:
-                    </p>
-                    <p>
-                        Instagram / liya_all
-                        <br/>
-                        YouTube / liya_all
-                        <br/>
-                        Google / liya_all
-                        <br/>
-                        www.liya-all.com
-                    </p>
-                </div>
+                <t t-if="'Liya All Hakkında' in doc.banquet_pages.mapped('name')">
+
+                    <div class="page">
+                        <h2>LİYA ALL hakkında</h2>
+                        <p>
+                            Liya, İstanbul Prens adalarının en küçüğü ve en az tanınanı olan Sedef adasında denize sıfır
+                            şekilde konumlanmış, 4 dönüm büyüklüğe sahip, 280 kişi oturma-350 kişi prolonge kapasiteli,
+                            misafirlerine 12 ay hizmet verebilen bir işletmedir. İçerisinde deniz kenarı alanı, açılır
+                            kapanır pergola sistemi ile korunan ısıtmalı restoran alanı ve teras alanı ile misafirlerin
+                            davetlerde uğrak yeri olan doğal bir bahçe ve balkona sahiptir. Restoran ve Teras alanları
+                            otomatik giyotin cam sistemi ile çevrilmiştir. Restoran alanı kış aylarında 25 derece ortam
+                            ısısına sahip olacak şekilde hazır edilmektedir. Mekâna giriş ve çıkışlar kendi iskelemizden
+                            yapılmaktadır.
+                        </p>
+                        <p>
+                            Liya, gerçekleştirdiği davetlerin büyük çoğunluğu düğün davetleri olmakla birlikte aşağıdaki
+                            davet türlerine de ev sahipliği yapmaktadır:
+                        </p>
+                        <ul>
+                            <li>Kurumsal Etkinlik</li>
+                            <li>Özel Davetler</li>
+                            <li>Kına, Sünnet, Evlilik Teklifi, Bekarlığa Veda Partileri</li>
+                            <li>Balo ve After Party</li>
+                        </ul>
+                        <p>
+                            Liya’ya ait görselleri incelemek için aşağıdaki bağlantıları ziyaret edebilirsiniz:
+                        </p>
+                        <p>
+                            Instagram / liya_all
+                            <br/>
+                            YouTube / liya_all
+                            <br/>
+                            Google / liya_all
+                            <br/>
+                            www.liya-all.com
+                            <br/>
+                            Instagram / liyaallevents
+                            <br/>
+                            TikTok / liyaall_official
+                        </p>
+                    </div>
+                </t>
                 <!-- Page 3 -->
+
                 <div class="page">
                     <div style="text-align: center;">
-                        <img src="/liya_sale_flow/static/src/img/img3.jpeg" style="width:80%;height:90%"/>
+                        <img src="/liya_sale_flow/static/src/img/img3.jpeg" style="width:80%; height:90%;"/>
                     </div>
                 </div>
                 <!-- Page 4 -->
-                <div class="page">
-                    <h2 style="text-align: center;">LİYA ALL DAVET ZİYAFET MENÜLERİ</h2>
-                    <p style="text-align: center; font-style: italic;">(3 farklı menü seçeneği sunulmaktadır)</p>
-                    <h3 style="text-align: center; margin-bottom: 10px;">MENÜ 1</h3>
-                    <!-- Two-column layout for Meze and Ana Yemekler -->
-                    <div style="width: 24%; float: left; padding-right: 5px; border-right: 1px solid #8c6a3b;">
-                        <h4>MEZELER</h4>
-                        <ul>
-                            <li>Atom</li>
-                            <li>Akdeniz Cacığı</li>
-                            <li>Şakşuka</li>
-                            <li>Ezine Peyniri</li>
-                            <li>Zeytinyağlı Enginar</li>
-                            <li>Ada Güzeli</li>
-                            <li>Vişneli Yaprak Sarma</li>
-                            <li>Levrek Carpaccio</li>
-                            <li>Tütsülenmiş Uskumru</li>
-                        </ul>
+                <t t-if="'Liya Menu 1' in doc.banquet_pages.mapped('name')">
+
+                    <div class="page">
+                        <h2 style="text-align: center;">LİYA ALL DAVET ZİYAFET MENÜLERİ</h2>
+                        <p style="text-align: center; font-style: italic;">(3 farklı menü seçeneği sunulmaktadır)</p>
+                        <h3 style="text-align: center; margin-bottom: 10px;">MENÜ 1</h3>
+                        <!-- Two-column layout for Meze and Ana Yemekler -->
+                        <div style="width: 24%; float: left; padding-right: 5px; border-right: 1px solid #8c6a3b;">
+                            <h4>MEZELER</h4>
+                            <ul>
+                                <li>Atom</li>
+                                <li>Akdeniz Cacığı</li>
+                                <li>Şakşuka</li>
+                                <li>Ezine Peyniri</li>
+                                <li>Zeytinyağlı Enginar</li>
+                                <li>Ada Güzeli</li>
+                                <li>Vişneli Yaprak Sarma</li>
+                                <li>Levrek Carpaccio</li>
+                                <li>Tütsülenmiş Uskumru</li>
+                            </ul>
+                        </div>
+                        <div style="width: 72%; float: right;">
+                            <h4>ANA YEMEKLER
+                                <small style="font-style: italic;">(Davetliler seçmektedir)</small>
+                            </h4>
+                            <p>
+                                <strong>LEVREK SARMA</strong>
+                                – Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında patates püresi ve
+                                fesleğen
+                                sos ile
+                            </p>
+                            <p>
+                                <strong>MANTARLI BONFİLE</strong>
+                                – Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                            </p>
+                            <p>
+                                <strong>DANA KABURGA</strong>
+                                – Fırında özel sos ile 10 saat pişirilen dana kaburga
+                            </p>
+                            <p>
+                                <strong>VEGAN BOWL</strong>
+                                – %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze çeşitleri
+                            </p>
+                        </div>
+                        <div style="clear: both; margin-top: 20px;"/>
+                        <div style="width: 24%; float: left; padding-right: 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>SALATA</h4>
+                            <p>Roka ve Domates</p>
+                        </div>
+                        <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>ARA SICAK</h4>
+                            <p>Yaprak Ciğer ve<br/>Deniz Mahsullü Kalamar Dolma
+                            </p>
+                        </div>
+                        <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>MEYVE ve TATLI</h4>
+                            <p>Mevsim Meyveleri ve<br/>San Sebastian Cheesecake
+                            </p>
+                        </div>
+                        <div style="width: 24%; float: left; padding-left: 10px;">
+                            <h4>SOFT İÇECEK</h4>
+                            <p>Coca Cola grubu meşrubatlar<br/>Cappy meyve suları<br/>Erikli Su
+                            </p>
+                        </div>
+                        <div style="width: 48%; float: left; margin-top: 20px;">
+                            <h4>ALKOLLÜ İÇKİ</h4>
+                            <p>Sangria, Martini, Mojito (kokteyl esnasında)<br/>Tekirdağ “Altın Seri”<br/>Kavaklıdere
+                                “Ancyra”<br/>Bira “Carlsberg”
+                            </p>
+                        </div>
                     </div>
-                    <div style="width: 72%; float: right;">
-                        <h4>ANA YEMEKLER
-                            <small style="font-style: italic;">(Davetliler seçmektedir)</small>
-                        </h4>
-                        <p>
-                            <strong>LEVREK SARMA</strong>
-                            – Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında patates püresi ve fesleğen
-                            sos ile
-                        </p>
-                        <p>
-                            <strong>MANTARLI BONFİLE</strong>
-                            – Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
-                        </p>
-                        <p>
-                            <strong>DANA KABURGA</strong>
-                            – Fırında özel sos ile 10 saat pişirilen dana kaburga
-                        </p>
-                        <p>
-                            <strong>VEGAN BOWL</strong>
-                            – %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze çeşitleri
-                        </p>
+                </t>
+                <t t-if="'Liya Menu 2' in doc.banquet_pages.mapped('name')">
+
+                    <!-- Page 5 -->
+                    <div class="page">
+                        <h3 style="text-align: center;">MENÜ 2</h3>
+                        <!-- Meze column -->
+                        <div style="width: 24%; float: left; padding-right: 5px; border-right: 1px solid #8c6a3b;">
+                            <h4>MEZELER</h4>
+                            <ul>
+                                <li>Selanik Mezesi</li>
+                                <li>Yoğurtlu Semizotu</li>
+                                <li>Köpoğlu</li>
+                                <li>Girit Ezmesi</li>
+                                <li>Fesleğenli Enginar</li>
+                                <li>Cibes Otu</li>
+                                <li>Çerkez Tavuğu</li>
+                                <li>Zeytinyağlı Kuru Patlıcan Dolması</li>
+                                <li>Hardallı Levrek Marine</li>
+                                <li>Karides Söğüş</li>
+                            </ul>
+                        </div>
+                        <!-- Ana Yemekler column -->
+                        <div style="width: 72%; float: right;">
+                            <h4>ANA YEMEKLER
+                                <small style="font-style: italic;">(Davetliler seçmektedir)</small>
+                            </h4>
+                            <p>
+                                <strong>LEVREK SARMA</strong>
+                                – Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında patates püresi ve
+                                fesleğen
+                                sos ile
+                            </p>
+                            <p>
+                                <strong>MANTARLI BONFİLE</strong>
+                                – Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                            </p>
+                            <p>
+                                <strong>DANA KABURGA</strong>
+                                – Fırında özel sos ile 10 saat pişirilen dana kaburga
+                            </p>
+                            <p>
+                                <strong>VEGAN BOWL</strong>
+                                – %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze çeşitleri
+                            </p>
+                        </div>
+                        <div style="clear: both; margin-top: 20px;"/>
+                        <div style="width: 24%; float: left; padding-right: 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>SALATA</h4>
+                            <p>Roka ve Domates</p>
+                        </div>
+                        <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>ARA SICAK</h4>
+                            <p>Yaprak Ciğer ve<br/>Deniz Mahsullü Kalamar Dolma
+                            </p>
+                        </div>
+                        <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>MEYVE ve TATLI</h4>
+                            <p>Mevsim Meyveleri ve<br/>San Sebastian Cheesecake
+                            </p>
+                        </div>
+                        <div style="width: 24%; float: left; padding-left: 10px;">
+                            <h4>SOFT İÇECEK</h4>
+                            <p>Coca Cola grubu meşrubatlar<br/>Cappy meyve suları<br/>Erikli Su
+                            </p>
+                        </div>
+                        <div style="width: 48%; float: left; margin-top: 20px;">
+                            <h4>ALKOLLÜ İÇKİ</h4>
+                            <p>Sangria, Martini, Mojito (kokteyl esnasında)<br/>Tekirdağ “Altın Seri”<br/>Kavaklıdere
+                                “Ancyra”<br/>Bira “Carlsberg”
+                            </p>
+                        </div>
                     </div>
-                    <div style="clear: both; margin-top: 20px;"/>
-                    <div style="width: 24%; float: left; padding-right: 10px; border-right: 1px solid #8c6a3b;">
-                        <h4>SALATA</h4>
-                        <p>Roka ve Domates</p>
-                    </div>
-                    <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
-                        <h4>ARA SICAK</h4>
-                        <p>Yaprak Ciğer ve<br/>Deniz Mahsullü Kalamar Dolma
-                        </p>
-                    </div>
-                    <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
-                        <h4>MEYVE ve TATLI</h4>
-                        <p>Mevsim Meyveleri ve<br/>San Sebastian Cheesecake
-                        </p>
-                    </div>
-                    <div style="width: 24%; float: left; padding-left: 10px;">
-                        <h4>SOFT İÇECEK</h4>
-                        <p>Coca Cola grubu meşrubatlar<br/>Cappy meyve suları<br/>Erikli Su
-                        </p>
-                    </div>
-                    <div style="width: 48%; float: left; margin-top: 20px;">
-                        <h4>ALKOLLÜ İÇKİ</h4>
-                        <p>Sangria, Martini, Mojito (kokteyl esnasında)<br/>Tekirdağ “Altın Seri”<br/>Kavaklıdere
-                            “Ancyra”<br/>Bira “Carlsberg”
-                        </p>
-                    </div>
-                </div>
-                <!-- Page 5 -->
-                <div class="page">
-                    <h3 style="text-align: center;">MENÜ 2</h3>
-                    <!-- Meze column -->
-                    <div style="width: 24%; float: left; padding-right: 5px; border-right: 1px solid #8c6a3b;">
-                        <h4>MEZELER</h4>
-                        <ul>
-                            <li>Selanik Mezesi</li>
-                            <li>Yoğurtlu Semizotu</li>
-                            <li>Köpoğlu</li>
-                            <li>Girit Ezmesi</li>
-                            <li>Fesleğenli Enginar</li>
-                            <li>Cibes Otu</li>
-                            <li>Çerkez Tavuğu</li>
-                            <li>Zeytinyağlı Kuru Patlıcan Dolması</li>
-                            <li>Hardallı Levrek Marine</li>
-                            <li>Karides Söğüş</li>
-                        </ul>
-                    </div>
-                    <!-- Ana Yemekler column -->
-                    <div style="width: 72%; float: right;">
-                        <h4>ANA YEMEKLER
-                            <small style="font-style: italic;">(Davetliler seçmektedir)</small>
-                        </h4>
-                        <p>
-                            <strong>LEVREK SARMA</strong>
-                            – Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında patates püresi ve fesleğen
-                            sos ile
-                        </p>
-                        <p>
-                            <strong>MANTARLI BONFİLE</strong>
-                            – Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
-                        </p>
-                        <p>
-                            <strong>DANA KABURGA</strong>
-                            – Fırında özel sos ile 10 saat pişirilen dana kaburga
-                        </p>
-                        <p>
-                            <strong>VEGAN BOWL</strong>
-                            – %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze çeşitleri
-                        </p>
-                    </div>
-                    <div style="clear: both; margin-top: 20px;"/>
-                    <div style="width: 24%; float: left; padding-right: 10px; border-right: 1px solid #8c6a3b;">
-                        <h4>SALATA</h4>
-                        <p>Roka ve Domates</p>
-                    </div>
-                    <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
-                        <h4>ARA SICAK</h4>
-                        <p>Yaprak Ciğer ve<br/>Deniz Mahsullü Kalamar Dolma
-                        </p>
-                    </div>
-                    <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
-                        <h4>MEYVE ve TATLI</h4>
-                        <p>Mevsim Meyveleri ve<br/>San Sebastian Cheesecake
-                        </p>
-                    </div>
-                    <div style="width: 24%; float: left; padding-left: 10px;">
-                        <h4>SOFT İÇECEK</h4>
-                        <p>Coca Cola grubu meşrubatlar<br/>Cappy meyve suları<br/>Erikli Su
-                        </p>
-                    </div>
-                    <div style="width: 48%; float: left; margin-top: 20px;">
-                        <h4>ALKOLLÜ İÇKİ</h4>
-                        <p>Sangria, Martini, Mojito (kokteyl esnasında)<br/>Tekirdağ “Altın Seri”<br/>Kavaklıdere
-                            “Ancyra”<br/>Bira “Carlsberg”
-                        </p>
-                    </div>
-                </div>
+                </t>
                 <!-- Page 6 -->
                 <div class="page">
                     <div style="text-align: center;margin-top:10px ">
                         <img src="/liya_sale_flow/static/src/img/img2.jpeg" style="width:80%; height:90%"/>
                     </div>
                 </div>
+
                 <!-- Page 7 -->
-                <div class="page">
-                    <h3 style="text-align: center;">MENÜ 3</h3>
-                    <p style="text-align: center; margin-top: 5px; font-style: italic;">KOKTEYL - PROLONGE</p>
-                    <div style="width: 35%; float: left; padding-right: 10px;border-right: 1px solid #8c6a3b;">
-                        <h4>KRUDİTE</h4>
-                        <ul>
-                            <li>Havuç &amp; Salatalık</li>
-                            <li>Kırmızı Üzüm</li>
-                            <li>Lüks Çerezler</li>
-                        </ul>
-                        <h4 style="margin-top: 15px;">BAŞLANGIÇLAR</h4>
-                        <ul>
-                            <li>Avokadolu Somon Tartine</li>
-                            <li>Yaban Mantarlı Stracciatella Bruschetta</li>
-                            <li>Renkli Domatesli Bruschetta</li>
-                            <li>Parmesanlı Grisiniye Sarılı Rozbif</li>
-                        </ul>
-                        <h4 style="margin-top: 15px;">SICAKLAR</h4>
-                        <ul>
-                            <li>Kabak Mücver</li>
-                            <li>Sicilya Usulü Arancini</li>
-                            <li>Tavuk Şiş</li>
-                            <li>Mini Ribs</li>
-                            <li>Şişte Mantarlı Bonfile</li>
-                            <li>Çıtır Karides</li>
-                        </ul>
+                <t t-if="'Liya Menu 3' in doc.banquet_pages.mapped('name')">
+
+                    <div class="page">
+                        <h3 style="text-align: center;">MENÜ 3</h3>
+                        <p style="text-align: center; margin-top: 5px; font-style: italic;">KOKTEYL - PROLONGE</p>
+                        <div style="width: 35%; float: left; padding-right: 10px;border-right: 1px solid #8c6a3b;">
+                            <h4>KRUDİTE</h4>
+                            <ul>
+                                <li>Havuç &amp; Salatalık</li>
+                                <li>Kırmızı Üzüm</li>
+                                <li>Lüks Çerezler</li>
+                            </ul>
+                            <h4 style="margin-top: 15px;">BAŞLANGIÇLAR</h4>
+                            <ul>
+                                <li>Avokadolu Somon Tartine</li>
+                                <li>Yaban Mantarlı Stracciatella Bruschetta</li>
+                                <li>Renkli Domatesli Bruschetta</li>
+                                <li>Parmesanlı Grisiniye Sarılı Rozbif</li>
+                            </ul>
+                            <h4 style="margin-top: 15px;">SICAKLAR</h4>
+                            <ul>
+                                <li>Kabak Mücver</li>
+                                <li>Sicilya Usulü Arancini</li>
+                                <li>Tavuk Şiş</li>
+                                <li>Mini Ribs</li>
+                                <li>Şişte Mantarlı Bonfile</li>
+                                <li>Çıtır Karides</li>
+                            </ul>
+                        </div>
+                        <div style="width: 1px; background: #8c6a3b; height: auto; float: left; margin: 0 10px;"/>
+                        <div style="width: 50%; float: left; padding-left: 40px;">
+                            <h4>MEYVE &amp; TATLI</h4>
+                            <ul>
+                                <li>Meyveli Tartolet</li>
+                                <li>Brownie</li>
+                                <li>Mevsim Meyveleri</li>
+                            </ul>
+                            <h4 style="margin-top: 15px;">SOFT İÇECEK</h4>
+                            <ul>
+                                <li>Coca Cola grubu meşrubatlar</li>
+                                <li>Cappy meyve suları</li>
+                                <li>Erikli Su</li>
+                            </ul>
+                            <h4 style="margin-top: 15px;">ALKOLLÜ İÇKİ</h4>
+                            <ul>
+                                <li>Sangria, Martini, Mojito (kokteyl esnasında)</li>
+                                <li>Tekirdağ “Altın Seri”</li>
+                                <li>Kavaklıdere “Ancyra”</li>
+                                <li>Bira “Carlsberg”</li>
+                            </ul>
+                        </div>
+                        <div style="clear: both;"/>
                     </div>
-                    <div style="width: 1px; background: #8c6a3b; height: auto; float: left; margin: 0 10px;"/>
-                    <div style="width: 50%; float: left; padding-left: 40px;">
-                        <h4>MEYVE &amp; TATLI</h4>
-                        <ul>
-                            <li>Meyveli Tartolet</li>
-                            <li>Brownie</li>
-                            <li>Mevsim Meyveleri</li>
-                        </ul>
-                        <h4 style="margin-top: 15px;">SOFT İÇECEK</h4>
-                        <ul>
-                            <li>Coca Cola grubu meşrubatlar</li>
-                            <li>Cappy meyve suları</li>
-                            <li>Erikli Su</li>
-                        </ul>
-                        <h4 style="margin-top: 15px;">ALKOLLÜ İÇKİ</h4>
-                        <ul>
-                            <li>Sangria, Martini, Mojito (kokteyl esnasında)</li>
-                            <li>Tekirdağ “Altın Seri”</li>
-                            <li>Kavaklıdere “Ancyra”</li>
-                            <li>Bira “Carlsberg”</li>
-                        </ul>
-                    </div>
-                    <div style="clear: both;"/>
-                </div>
+                </t>
                 <!-- Page 8 -->
                 <div class="page">
                     <!-- Dynamic Services -->
@@ -327,13 +365,14 @@
                         <strong>
                             <t t-esc="doc.duration_display"/>
                         </strong>
+                        <br/>
                         Örnek program akışı:
                     </p>
                     <ul style="list-style-type: disc; margin-left: 20px;">
                         <t t-foreach="doc.program_ids" t-as="p">
                             <li>
                                 <strong t-esc="p.name"/>:
-                                <t t-esc="p.duration_display"/>
+                                <t t-esc="p.hours"/>
 
                                 <t t-esc="p.start_datetime and p.start_datetime.strftime('%H:%M')"/>
                                 -
@@ -343,18 +382,23 @@
                     </ul>
 
                     <!-- Dynamic Transportation -->
-                    <h2 style="text-align: center; margin-top: 20px;">TEKNE SAATLERİ</h2>
-                    <ul style="list-style-type: disc; margin-left: 20px;">
+                    <div class="avoid-break">
+                        <h2 style="text-align: center; margin-top: 20px;">TEKNE SAATLERİ</h2>
+                        <ul style="list-style-type: disc; margin-left: 20px; padding-bottom:10mm;">
 
-                        <t t-foreach="doc.transport_ids" t-as="tr">
-                            <li>
-                                <strong t-esc="tr.departure_location"/>
-                                →<strong t-esc="tr.arrival_location"/>:
-                                <t t-esc="tr.arrival_datetime and tr.arrival_datetime.strftime('%H:%M')"/>
-                            </li>
-                        </t>
-                    </ul>
+                            <t t-foreach="doc.transport_ids" t-as="tr">
+                                <li>
+                                    <strong t-esc="tr.departure_location"/>
+                                    →<strong t-esc="tr.arrival_location"/>:
+                                    <t t-esc="tr.arrival_datetime and tr.arrival_datetime.strftime('%H:%M')"/>
+                                </li>
+                            </t>
+                        </ul>
+                    </div>
                 </div>
+                <t t-if="len(doc.service_ids) + len(doc.program_ids) + len(doc.transport_ids) &gt; 15">
+                    <div class="page"></div>
+                </t>
 
 
                 <!-- Page 9 -->
@@ -367,8 +411,7 @@
                         </strong>
                         yapılması planlanan
                         <strong>
-                            <t t-esc="doc.partner_id.name"/>
-                            Etkinliği
+                            <t t-esc="doc.opportunity_id.name"/>
                         </strong>
                         için hazırlanmıştır.
                     </p>
@@ -394,9 +437,9 @@
                         </strong>
                         sayısı için geçerlidir.
                     </p>
-                    <table style="width:100%; table-layout: fixed; border-collapse: collapse; margin-top: 15px; background: #eaf4e4;">
+                    <table style="width:100%; table-layout: fixed; border-collapse: collapse; margin-top: 15px;">
                         <thead>
-                            <tr style="background: #d4e8d4;">
+                            <tr style="background: ##a1cbc4;">
                                 <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:45%;">
                                     <strong>Ürün</strong>
                                 </th>
@@ -424,11 +467,11 @@
                                         </td>
                                         <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:15%;">
                                             <t t-esc="l.price_unit"
-                                               t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                               t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                         </td>
                                         <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:25%;">
                                             <t t-esc="l.price_subtotal"
-                                               t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                               t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                         </td>
                                     </tr>
                                 </t>
@@ -439,43 +482,38 @@
                     <div class="so_total_summary clearfix">
                         <div class="row justify-content-end mt-3">
                             <div class="col-auto" style="width:40%;">
-                                <table
-                                        class="table table-borderless o_total_table"
-                                        style="width:100%; line-height:10pt; border:none; border-collapse: collapse;"
-                                >
+                                <table class="table table-borderless o_total_table"
+                                       style="width:100%; line-height:10pt; border:none; border-collapse: collapse;">
                                     <t t-set="disc"
                                        t-value="sum([l.price_subtotal for l in doc.order_line if l.price_subtotal &lt; 0])"/>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="3"
-                                                style="padding: 8px; border:none; text-align:right;">
+                                            <td colspan="3" style="padding: 8px; border:none; text-align:right;">
                                                 <strong>Vergi Hariç Tutar:</strong>
                                             </td>
                                             <td style="padding: 8px; border:none; text-align:right;">
                                                 <t t-esc="(doc.amount_total - disc)"
-                                                   t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                                   t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                             </td>
                                         </tr>
                                         <tr t-if="disc">
-                                            <td colspan="3"
-                                                style="padding: 8px; border:none; text-align:right;">
+                                            <td colspan="3" style="padding: 8px; border:none; text-align:right;">
                                                 <strong>İndirim Tutarı:</strong>
 
                                             </td>
                                             <td style="padding: 8px; border:none; text-align:right;">
                                                 <t t-esc="(-disc)"
-                                                   t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                                   t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3"
-                                                style="padding: 8px; border:none; text-align:right;">
+                                            <td colspan="3" style="padding: 8px; border:none; text-align:right;">
                                                 <strong>Toplam Tutar:</strong>
                                             </td>
                                             <td style="padding: 8px; border:none; text-align:right;">
                                                 <strong>
                                                     <t t-esc="doc.amount_total"
-                                                       t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                                       t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                                 </strong>
                                             </td>
                                         </tr>
