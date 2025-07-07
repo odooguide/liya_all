@@ -374,9 +374,9 @@
                                 <strong t-esc="p.name"/>:
                                 <t t-esc="p.hours"/>
 
-                                <t t-esc="p.start_datetime and p.start_datetime.strftime('%H:%M')"/>
+                                <t t-esc="p.start_datetime and p.start_datetime"/>
                                 -
-                                <t t-esc="p.end_datetime and p.end_datetime.strftime('%H:%M')"/>
+                                <t t-esc="p.end_datetime and p.end_datetime"/>
                             </li>
                         </t>
                     </ul>
@@ -390,7 +390,7 @@
                                 <li>
                                     <strong t-esc="tr.departure_location"/>
                                     →<strong t-esc="tr.arrival_location"/>:
-                                    <t t-esc="tr.arrival_datetime and tr.arrival_datetime.strftime('%H:%M')"/>
+                                    <t t-esc="tr.arrival_datetime and tr.arrival_datetime"/>
                                 </li>
                             </t>
                         </ul>

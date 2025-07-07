@@ -219,9 +219,9 @@ class CrmLead(models.Model):
         for lead in self:
             old_stage = lead.stage_id
             new_stage = self.env['crm.stage'].browse(vals['stage_id'])
-
-            if old_stage.name in ('Kazanıldı', 'Won') and new_stage.name not in ('Kazanıldı', 'Won'):
-                raise UserError(_('Kazanıldı aşamasındayken başka bir aşamaya geçemezsiniz.'))
+            if not self.env.user.has_group('base.group_system'):
+                if old_stage.name in ('Kazanıldı', 'Won') and new_stage.name not in ('Kazanıldı', 'Won'):
+                    raise UserError(_('Kazanıldı aşamasındayken başka bir aşamaya geçemezsiniz.'))
 
             orders = self.env['sale.order'].search([
                 ('opportunity_id', '=', lead.id),
@@ -229,7 +229,7 @@ class CrmLead(models.Model):
             ])
 
             if new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation':
-                if lead.quotation_count < 1 or not orders:
+                if lead.quotation_count < 1 and not orders:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
 
             elif new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting':
