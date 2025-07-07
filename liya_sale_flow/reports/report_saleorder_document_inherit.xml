@@ -345,12 +345,12 @@
                                    style="width:100%;margin-bottom:.5rem;border-top:1px dashed black;font-size:10.5pt;">
                                 <tr>
                                     <td style="vertical-align:top; width:25%; padding:0px;color:grey;">
-                                        <t t-esc="user_id.name"/>
+                                        <t t-esc="doc.user_id.name"/>
                                     </td>
                                     <td style="vertical-align:top; width:32%; padding:2px;color:grey;">
-                                        <t t-esc="user_id.phone"/>
+                                        <t t-esc="doc.user_id.phone"/>
                                         /
-                                        <t t-esc="user_id.login"/>
+                                        <t t-esc="doc.user_id.login"/>
                                     </td>
                                     <td style="vertical-align:top; width:10%; padding:2px;color:grey;">
 

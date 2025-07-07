@@ -511,7 +511,7 @@ msgstr ""
 #. module: liya_sale_flow
 #: model:ir.ui.menu,name:liya_sale_flow.menu_crm_all_leads_opps
 msgid "Adaylar/Fırsatlar"
-msgstr "Leads/Opportunities"
+msgstr ""
 
 #. module: liya_sale_flow
 #: model_terms:ir.ui.view,arch_db:liya_sale_flow.report_saleorder_banquet_quot
