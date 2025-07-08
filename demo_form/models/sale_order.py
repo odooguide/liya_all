@@ -7,7 +7,6 @@ class SaleOrder(models.Model):
     project_task_ids = fields.Many2many(
         comodel_name='sale.order.template.task',
         string='Projedeki Görevler',
-        compute='_compute_project_task_ids',
     )
 
     def action_confirm(self):

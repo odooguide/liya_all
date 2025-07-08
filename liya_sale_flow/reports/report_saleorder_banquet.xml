@@ -44,20 +44,30 @@
                 h1, h2, h3, h4, h5, h6 {
                 font-family: Century, 'Century Gothic', serif;
                 }
-                .bottom-text {
+             .bottom-text {
                   position: absolute;
                   bottom: -25mm;
-                  left: 5mm;
-                  z-index: 10;
-                  color: grey;
+                  left: 0;
+                  width: 100%;
                   font-style: italic;
                   font-size: 11pt;
+                  color: grey;
                 }
-                .bottom-text img
-                {
-                 height:80px;
-                 margin-left:200px;
-                 margin-top:15px;
+
+                .bottom-text em {
+                  position: absolute;
+                  width:400px;
+                  left: 5mm;
+                  bottom: 0;
+                  margin-bottom:15px;
+                }
+
+                .bottom-text img {
+                  position: absolute;
+                  left: 45%;
+                  transform: translateX(-50%);
+                  bottom: 0;
+                  height: 80px;
                 }
 
                 .avoid-break {
@@ -68,7 +78,6 @@
             </style>
 
 
-            <!-- Page 1 -->
             <main>
                 <t t-if="'Kapak' in doc.banquet_pages.mapped('name')">
                     <div>
@@ -140,12 +149,13 @@
 
                 <div class="page">
                     <div style="text-align: center;">
-                        <img src="/liya_sale_flow/static/src/img/img3.jpeg" style="width:80%; height:90%;"/>
-                        <div class="bottom-text">
+                        <img src="/liya_sale_flow/static/src/img/img3.jpeg" style="width:80%; height:98%;"/>
+
+                    </div>
+                    <div class="bottom-text">
                                 <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
                                 <img t-att-src="image_data_uri(doc.company_id.logo)"/>
                             </div>
-                    </div>
                 </div>
                 <!-- Page 4 -->
                 <t t-if="'Liya Menu 1' in doc.banquet_pages.mapped('name')">
@@ -406,7 +416,7 @@
                     <!-- Dynamic Transportation -->
                     <div class="avoid-break">
                         <h2 style="text-align: center; margin-top: 20px;">TEKNE SAATLERİ</h2>
-                        <ul style="list-style-type: disc; margin-left: 20px; padding-bottom:25mm;">
+                        <ul style="list-style-type: disc; margin-left: 20px; padding-bottom:30mm;">
 
                             <t t-foreach="doc.transport_ids" t-as="tr">
                                 <li>
