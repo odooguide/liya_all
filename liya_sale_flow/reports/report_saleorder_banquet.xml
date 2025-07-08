@@ -4,7 +4,7 @@
         <field name="format">A4</field>
         <field name="orientation">Landscape</field>
         <field name="margin_top">15</field>
-        <field name="margin_bottom">15</field>
+        <field name="margin_bottom">0</field>
         <field name="margin_left">10</field>
         <field name="margin_right">10</field>
     </record>
@@ -22,13 +22,14 @@
     </record>
 
     <template id="report_saleorder_banquet_quot">
-        <t t-call="web.external_layout">
+         <t t-call="web.external_layout">
             <t t-set="doc" t-value="docs and docs[0] or doc"/>
 
             <style>
                 @page { size: A4 landscape; }
                 .page {
                 page-break-after: always;
+                position:relative;
                 height: 200mm;
                 border: 4px double #8c6a3b;
                 box-sizing: border-box;
@@ -43,18 +44,32 @@
                 h1, h2, h3, h4, h5, h6 {
                 font-family: Century, 'Century Gothic', serif;
                 }
-                .footer {
-                position: absolute;
-                display:block;
-                bottom: 10mm;
-                left: 0;
-                right: 0;
-                text-align: center;
-                font-size: 10pt;
-                font-style: italic;
-                color: grey;
-
+             .bottom-text {
+                  position: absolute;
+                  bottom: -25mm;
+                  left: 0;
+                  width: 100%;
+                  font-style: italic;
+                  font-size: 11pt;
+                  color: grey;
                 }
+
+                .bottom-text em {
+                  position: absolute;
+                  width:400px;
+                  left: 5mm;
+                  bottom: 0;
+                  margin-bottom:15px;
+                }
+
+                .bottom-text img {
+                  position: absolute;
+                  left: 45%;
+                  transform: translateX(-50%);
+                  bottom: 0;
+                  height: 80px;
+                }
+
                 .avoid-break {
                 page-break-inside: avoid;
                 break-inside: avoid;
@@ -63,28 +78,23 @@
             </style>
 
 
-            <!-- Page 1 -->
             <main>
                 <t t-if="'Kapak' in doc.banquet_pages.mapped('name')">
                     <div>
                         <!-- Page 1 -->
-                        <div class="footer">
-                            <span>
-                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"
-                                     style="max-height:60px; display:block; margin:0 auto; margin-left:125mm;margin-top:-5mm"/>
-                            </span>
-                        </div>
+
                         <div class="page" style="text-align: center; margin-top:10px">
                             <div>
                                 <img src="/liya_sale_flow/static/src/img/img4.jpeg" style="width:90%; "/>
-<!--                                <br/>-->
-<!--                                <span style="margin-top:5pt;text-align:center;">-->
-<!--                                    <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>-->
-<!--                                </span>-->
+                                <br/><br/>
+                                <span style="margin-top:10pt;text-align:center;font-size:14pt">
+                                    <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                </span>
                             </div>
 
+
                         </div>
+
                     </div>
                 </t>
                 <!-- Page 2 -->
@@ -128,14 +138,24 @@
                             <br/>
                             TikTok / liyaall_official
                         </p>
+                        <div class="bottom-text">
+                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                            </div>
+
                     </div>
                 </t>
                 <!-- Page 3 -->
 
                 <div class="page">
                     <div style="text-align: center;">
-                        <img src="/liya_sale_flow/static/src/img/img3.jpeg" style="width:80%; height:90%;"/>
+                        <img src="/liya_sale_flow/static/src/img/img3.jpeg" style="width:80%; height:98%;"/>
+
                     </div>
+                    <div class="bottom-text">
+                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                            </div>
                 </div>
                 <!-- Page 4 -->
                 <t t-if="'Liya Menu 1' in doc.banquet_pages.mapped('name')">
@@ -208,6 +228,10 @@
                                 “Ancyra”<br/>Bira “Carlsberg”
                             </p>
                         </div>
+                        <div class="bottom-text">
+                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                            </div>
                     </div>
                 </t>
                 <t t-if="'Liya Menu 2' in doc.banquet_pages.mapped('name')">
@@ -281,6 +305,10 @@
                                 “Ancyra”<br/>Bira “Carlsberg”
                             </p>
                         </div>
+                        <div class="bottom-text">
+                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                            </div>
                     </div>
                 </t>
                 <!-- Page 6 -->
@@ -342,6 +370,10 @@
                                 <li>Bira “Carlsberg”</li>
                             </ul>
                         </div>
+                        <div class="bottom-text">
+                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                            </div>
                         <div style="clear: both;"/>
                     </div>
                 </t>
@@ -384,7 +416,7 @@
                     <!-- Dynamic Transportation -->
                     <div class="avoid-break">
                         <h2 style="text-align: center; margin-top: 20px;">TEKNE SAATLERİ</h2>
-                        <ul style="list-style-type: disc; margin-left: 20px; padding-bottom:10mm;">
+                        <ul style="list-style-type: disc; margin-left: 20px; padding-bottom:30mm;">
 
                             <t t-foreach="doc.transport_ids" t-as="tr">
                                 <li>
@@ -395,9 +427,13 @@
                             </t>
                         </ul>
                     </div>
+                    <div class="bottom-text">
+                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                            </div>
                 </div>
                 <t t-if="len(doc.service_ids) + len(doc.program_ids) + len(doc.transport_ids) &gt; 15">
-                    <div class="page"></div>
+                    <div class="page"/>
                 </t>
 
 
@@ -466,12 +502,10 @@
                                             <t t-esc="l.product_uom.name"/>
                                         </td>
                                         <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:15%;">
-                                            <t t-esc="l.price_unit"
-                                               t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                            <t t-esc="l.price_unit" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                         </td>
                                         <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:25%;">
-                                            <t t-esc="l.price_subtotal"
-                                               t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                            <t t-esc="l.price_subtotal" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                         </td>
                                     </tr>
                                 </t>
@@ -482,18 +516,15 @@
                     <div class="so_total_summary clearfix">
                         <div class="row justify-content-end mt-3">
                             <div class="col-auto" style="width:40%;">
-                                <table class="table table-borderless o_total_table"
-                                       style="width:100%; line-height:10pt; border:none; border-collapse: collapse;">
-                                    <t t-set="disc"
-                                       t-value="sum([l.price_subtotal for l in doc.order_line if l.price_subtotal &lt; 0])"/>
+                                <table class="table table-borderless o_total_table" style="width:100%; line-height:10pt; border:none; border-collapse: collapse;">
+                                    <t t-set="disc" t-value="sum([l.price_subtotal for l in doc.order_line if l.price_subtotal &lt; 0])"/>
                                     <tfoot>
                                         <tr>
                                             <td colspan="3" style="padding: 8px; border:none; text-align:right;">
                                                 <strong>Vergi Hariç Tutar:</strong>
                                             </td>
                                             <td style="padding: 8px; border:none; text-align:right;">
-                                                <t t-esc="(doc.amount_total - disc)"
-                                                   t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                                <t t-esc="(doc.amount_total - disc)" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                             </td>
                                         </tr>
                                         <tr t-if="disc">
@@ -502,8 +533,7 @@
 
                                             </td>
                                             <td style="padding: 8px; border:none; text-align:right;">
-                                                <t t-esc="(-disc)"
-                                                   t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                                <t t-esc="(-disc)" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -512,8 +542,7 @@
                                             </td>
                                             <td style="padding: 8px; border:none; text-align:right;">
                                                 <strong>
-                                                    <t t-esc="doc.amount_total"
-                                                       t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                                    <t t-esc="doc.amount_total" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                                 </strong>
                                             </td>
                                         </tr>
@@ -521,16 +550,25 @@
                                 </table>
                             </div>
                         </div>
+
                     </div>
 
 
                     <p style="margin-top: 20px;">Teklifin geçerlilik süresi 1 haftadır.</p>
+                    <div class="bottom-text">
+                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                            </div>
                 </div>
                 <!-- Page 10 -->
                 <div class="page">
                     <div style="text-align: center; margin-top:10px">
                         <img src="/liya_sale_flow/static/src/img/img1.jpeg" style="width:90%; "/>
                     </div>
+                    <div class="bottom-text">
+                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                            </div>
                 </div>
             </main>
         </t>
