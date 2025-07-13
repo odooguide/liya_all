@@ -1,60 +1,50 @@
-from odoo import api,fields,models,_
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
+
 class SaleOrder(models.Model):
-    _inherit='sale.order'
+    _inherit = 'sale.order'
+    is_project_true = fields.Boolean(string='Is There Any Project?')
 
     project_task_ids = fields.Many2many(
         comodel_name='sale.order.template.task',
-        string='Projedeki Görevler',
+        inverse_name='sale_order_id',
+        string='Project Tasks',
     )
 
-    def action_confirm(self):
-
-        res = super().action_confirm()
+    @api.onchange('sale_order_template_id', 'order_line.product_id')
+    def _onchange_project_task_ids(self):
         for order in self:
-            if order.sale_order_template_id:
-                if not order.project_id:
-                    raise UserError(_(
-                        "Sipariş %s için proje oluşturulmamış. "
-                        "Önce bir proje atanmalı."
-                    ) % order.name)
-                for tmpl in order.project_task_ids:
-                    self.env['project.task'].create({
-                        'project_id': order.project_id.id,
-                        'name': tmpl.name,
-                        'description': tmpl.description,
-                        'stage_id': tmpl.stage_id.id,
-                        'user_ids': [(6, 0, tmpl.user_ids.ids)],
-                    })
-        return res
+            if not order.sale_order_template_id:
+                order.project_task_ids = [(5, 0, 0)]
+                continue
 
-    def action_project_create(self):
+            tasks = order.sale_order_template_id.project_task_ids
+            prod_ids = order.order_line.mapped('product_id.id')
+
+            valid_tasks = tasks.filtered(lambda t:
+                                         not t.optional_product_id or
+                                         t.optional_product_id.id in prod_ids
+                                         )
+            if valid_tasks:
+                valid_tasks.write({'sale_order_id': order.id})
+            order.project_task_ids = [(6, 0, valid_tasks.ids)]
+
+    def action_open_project_wizard(self):
         self.ensure_one()
+        if self.opportunity_id.stage_id.name not in ('Won', 'Kazanıldı'):
+            raise UserError(_('Fırsat kazanıldı olmadan proje oluşturamazsın.'))
+        if not self.project_task_ids:
+            raise UserError(_('Görev girmeden proje oluşturamazsın..'))
 
-        if self.project_id:
-            return True
+        return {
+            'name': 'Proje Oluştur',
+            'type': 'ir.actions.act_window',
+            'res_model': 'sale.order.project.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_sale_order_id': self.id,
 
-        seq_num = self.env['ir.sequence'].next_by_code('sale.order.project') or '0000'
-        today = fields.Date.context_today(self)
-        date_str = today.strftime('%Y-%m-%d')
-        partner_slug = self.partner_id.name.replace(' ', '-')
-        project_name = f"D{seq_num}-{date_str}-{partner_slug}"
-
-        vals = {
-            'name': project_name,
-            'partner_id': self.partner_id.id,
-            'company_id': self.company_id.id,
-            'user_id': self.user_id.id or self.env.uid,
-            'allow_billable': True,
-            'privacy_visibility': 'portal',
-            'sale_order_id': self.id,
+            },
         }
-
-        project = self.env['project.project'].create(vals)
-
-        self.project_id = project.id
-
-        self.is_project_true=True
-
-        return True

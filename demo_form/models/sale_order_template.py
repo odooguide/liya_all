@@ -1,4 +1,6 @@
 from odoo import api, fields, models
+from datetime import timedelta
+
 
 class SaleOrderTemplate(models.Model):
     _inherit = 'sale.order.template'
@@ -24,32 +26,79 @@ class SaleOrderTemplateTask(models.Model):
         string='Sale Order',
         ondelete='cascade',
     )
-    name = fields.Char(string='Görev Adı', required=True)
-    description = fields.Text(string='Açıklama')
+    name = fields.Char(string='Task Name', required=True)
+    description = fields.Text(string='Description')
     stage_id = fields.Many2one(
         comodel_name='project.task.type',
-        string='Aşama',
+        string='Stage',
     )
     planned_date = fields.Selection(
         selection=[
-            ('before_wedding', 'Düğünden Önce'),
-            ('after_wedding', 'Düğünden Sonra'),
+            ('before_wedding', 'Before Wedding'),
+            ('border', 'Border Date'),
+            ('casual_date', 'Stable Date'),
         ],
-        string='Planlanan Tarih',
+        string='Planned Type',
         default='before_wedding',
     )
-    days = fields.Integer(string='Gün')
+    deadline_date = fields.Date(string='Deadline Date')
+    date_line = fields.Date(string='Date Line')
+    days = fields.Integer(string='Days')
     user_ids = fields.Many2many(
         comodel_name='res.users',
-        string='Sorumlular',
-        help="Birden fazla kullanıcıyı atayabilirsiniz."
+        string='Responsibles',
+
     )
-    activity_type_id = fields.Many2one(
-        comodel_name='mail.activity.type',
-        string='Aktivite Tipi',
+
+    email_template_id = fields.Many2one(
+        comodel_name='mail.template',
+        string='E-mail Template',
+
     )
     optional_product_id = fields.Many2one(
         'product.product',
-        string='Koşul',
-        help="Bu template için tanımlı Optional Products listesinden seçin."
+        string='Optional Products',
     )
+    communication_type = fields.Selection(selection=[
+        ('mail', 'E-Mail'),
+        ('phone', 'Whatsapp'),
+    ],
+        string='Communication Type',
+        default='phone', )
+
+    @api.onchange('planned_date', 'days', 'date_line')
+    def _onchange_deadline_date(self):
+        for rec in self:
+            today = fields.Date.today()
+
+            if rec.planned_date == 'before_wedding':
+                wedd = rec.sale_order_id.wedding_date
+                if wedd and rec.days:
+                    rec.deadline_date = fields.Date.to_string(
+                        fields.Date.from_string(wedd) - timedelta(days=rec.days)
+                    )
+                else:
+                    rec.deadline_date = False
+
+            elif rec.planned_date == 'border':
+                if not rec.date_line:
+                    rec.deadline_date = False
+                    continue
+
+                date_line = fields.Date.from_string(rec.date_line)
+                wedd = rec.sale_order_id.wedding_date
+                same_year = wedd and (fields.Date.from_string(wedd).year == today.year)
+
+                if same_year and today > date_line:
+                    rec.deadline_date = fields.Date.to_string(today + timedelta(days=1))
+
+                else:
+                    target_year = today.year
+                    candidate = date_line.replace(year=target_year)
+                    if candidate <= today:
+                        candidate = date_line.replace(year=target_year + 1)
+                    rec.deadline_date = fields.Date.to_string(candidate)
+
+            # 3) Sabit tarih (casual_date) veya diğer durumlar
+            else:
+                rec.deadline_date = False

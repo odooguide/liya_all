@@ -1,104 +1,73 @@
-from odoo import fields,models,_,api
+from odoo import fields, models, _, api
+
 
 class ProjectProject(models.Model):
-    _inherit='project.project'
+    _inherit = 'project.project'
 
-    demo_form_ids = fields.One2many(
-        'demo.form', 'project_id', string='Demo Formlar')
-    demo_form_count = fields.Integer(
-        string='Demo Form Adedi', compute='_compute_demo_form_count')
-
-    davet_sahibi = fields.Char(string="Davet Sahibi")
-    davet_tarihi = fields.Date(string="Davet Tarihi")
-    gun = fields.Selection(
-        [
-            ('pazartesi', 'Pazartesi'),
-            ('sali', 'Salı'),
-            ('carsamba', 'Çarşamba'),
-            ('persembe', 'Perşembe'),
-            ('cuma', 'Cuma'),
-            ('cumartesi', 'Cumartesi'),
-            ('pazar', 'Pazar'),
-        ], string="Gün"
+    event_ids = fields.One2many(
+        'calendar.event', 'res_id',
+        string='Calendar Events',
+        domain=[('res_model', '=', 'project.project')]
     )
-    dugun_tipi = fields.Selection(
-        [
-            ('mini', 'Mini'),
-            ('all_in_one', 'All-In-One'),
-            ('premium', 'Premium'),
-        ], string="Düğün Tipi"
-    )
-    kisi_sayisi = fields.Integer(string="Kişi Sayısı")
-    nikah_tipi = fields.Selection(
-        [
-            ('gercek', 'Gerçek'),
-            ('mizansen', 'Mizansen'),
-        ], string="Nikah"
-    )
-    baslangic_saati = fields.Float(string="Başlangıç Saati", help="Örn. 19.30")
-    bitis_saati = fields.Float(string="Bitiş Saati", help="Örn. 01.30")
 
-    # 2) Demo & Notlar
-    demo_tarihi = fields.Date(string="Demo Tarihi")
-    ozel_notlar = fields.Text(string="Özel Notlar")
-
-    # 3) Saat Akışı (A)
-    tekne_kalkis_zamani = fields.Float(string="Tekne Kalkış Zamanı")
-    tekne_kalkis_not = fields.Char(string="Tekne Kalkış Açıklama")
-    kokteyl_zamani = fields.Float(string="Kokteyl Zamanı")
-    kokteyl_not = fields.Char(string="Kokteyl Açıklama")
-    nikah_zamani = fields.Float(string="Nikah Zamanı")
-    nikah_mekan = fields.Selection(
-        [
-            ('restaurant', 'Restaurant'),
-            ('beach', 'Beach'),
-        ], string="Nikah Mekanı"
+    next_event_id = fields.Many2one(
+        'calendar.event',
+        string='Next Event',
+        compute='_compute_next_event',
     )
-    nikah_konusma_var = fields.Boolean(string="Nikah Konuşması Var mı?")
-    nikah_konusma_sure = fields.Char(string="Konuşma Süresi")
-    yemek_zamani = fields.Float(string="Yemek Zamanı")
-    yemek_not = fields.Char(string="Yemek Açıklama")
-    party_zamani = fields.Float(string="Party Zamanı")
-    party_mekan = fields.Selection(
-        [
-            ('restaurant', 'Restaurant'),
-            ('beach', 'Beach'),
-        ], string="Party Mekanı"
+    next_event_date = fields.Char(
+        string='Next Event Date',
+        compute='_compute_next_event',
     )
-    afterparty_baslangic = fields.Float(string="After Party Başlangıç")
-    afterparty_bitis = fields.Float(string="After Party Bitiş")
 
-    ulasim_cift_gelis_zamani = fields.Float(string="Çift Geliş Zamanı")
-    ulasim_cift_gelis_liman = fields.Selection(
-        [
-            ('dragos', 'Dragos'),
-            ('diger', 'Diğer'),
-        ], string="Liman"
-    )
-    ulasim_cift_gelis_not_zamani = fields.Float(string="Bilgi Notu Zamanı")
-    ulasim_cift_gelis_not = fields.Char(string="Ulaşım Açıklama")
-
-    @api.depends('demo_form_ids')
-    def _compute_demo_form_count(self):
-        for proj in self:
-            proj.demo_form_count = len(proj.demo_form_ids)
-
-    def action_demo_form(self):
+    def action_schedule_meeting(self):
+        """Takvim’de yeni bir etkinlik (meeting) açmak için calendar.action_calendar_event action'ını döner."""
         self.ensure_one()
-        if self.demo_form_count == 1:
-            demo = self.demo_form_ids[0]
-            action = self.env.ref(
-                'demo_form.action_demo_form_form').read()[0]
-            action.update({
-                'res_id': demo.id,
-                'target': 'current',
-            })
-            return action
-        return {
-            'name': _('Demo Formları'),
-            'type': 'ir.actions.act_window',
-            'res_model': 'demo.form',
-            'view_mode': 'list,form',
-            'domain': [('project_id', '=', self.id)],
-            'context': {'default_project_id': self.id},
-        }
+        action = self.env.ref('calendar.action_calendar_event').read()[0]
+
+        demo_cat = self.env['calendar.event.type'].search(
+            [('name', 'ilike', 'demo')], limit=1
+        )
+        default_cats = [(6, 0, [demo_cat.id])] if demo_cat else []
+        ctx = dict(self.env.context or {},
+                   default_res_model='project.project',
+                   default_res_id=self.id,
+                   default_name=self.name,
+                   default_start=fields.Datetime.now(),
+                   default_categ_ids=default_cats,
+                   )
+        action.update({
+            'context': ctx,
+            'domain': [('res_model', '=', 'project.project'), ('res_id', '=', self.id)],
+        })
+        return action
+
+    @api.depends('event_ids.start')
+    def _compute_next_event(self):
+        now = fields.Datetime.now()
+        for rec in self:
+            # Gelecekteki etkinlikleri filtrele ve sıralı al
+            future = rec.event_ids.filtered(lambda e: e.start and e.start >= now)
+            future = future.sorted(key='start')
+            if future:
+                rec.next_event_id = future[0]
+                rec.next_event_date = fields.Datetime.to_string(future[0].start)
+            else:
+                rec.next_event_id = False
+                rec.next_event_date = False
+
+    def action_view_next_event(self):
+        """Tıklanınca takvimi o etkinliğe odaklayarak açar."""
+        self.ensure_one()
+        if not self.next_event_id:
+            return {'type': 'ir.actions.act_window_close'}
+        action = self.env.ref('calendar.action_calendar_event').read()[0]
+        action.update({
+            'view_mode': 'calendar,form',
+            'domain': [('id', '=', self.next_event_id.id)],
+            'context': dict(self.env.context or {},
+                            default_res_model='project.project',
+                            default_res_id=self.id,
+                            ),
+        })
+        return action

@@ -17,12 +17,12 @@
         <field name="report_file">liya_sale_flow.report_saleorder_banquet_quot</field>
         <field name="paperformat_id" ref="paperformat_saleorder_landscape"/>
         <field name="print_report_name">'Liya All Banquet - %s - %s - %s' % ( object.sale_order_template_id.name,
-            object.people_count, object.wedding_date, )
+            object.opportunity_id.name, object.wedding_date, )
         </field>
     </record>
 
     <template id="report_saleorder_banquet_quot">
-         <t t-call="web.external_layout">
+ <t t-call="web.external_layout">
             <t t-set="doc" t-value="docs and docs[0] or doc"/>
 
             <style>
@@ -90,6 +90,10 @@
                                 <span style="margin-top:10pt;text-align:center;font-size:14pt">
                                     <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
                                 </span>
+                            </div>
+                             <div class="bottom-text">
+                                <!--<em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>-->
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
                             </div>
 
 
@@ -316,6 +320,10 @@
                     <div style="text-align: center;margin-top:10px ">
                         <img src="/liya_sale_flow/static/src/img/img2.jpeg" style="width:80%; height:90%"/>
                     </div>
+                        <div class="bottom-text">
+                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                            </div>
                 </div>
 
                 <!-- Page 7 -->
@@ -404,7 +412,6 @@
                         <t t-foreach="doc.program_ids" t-as="p">
                             <li>
                                 <strong t-esc="p.name"/>:
-                                <t t-esc="p.hours"/>
 
                                 <t t-esc="p.start_datetime and p.start_datetime"/>
                                 -
