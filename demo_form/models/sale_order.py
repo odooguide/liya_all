@@ -4,73 +4,86 @@ from odoo.exceptions import UserError
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
-    is_project_true = fields.Boolean(string='Is There Any Project?')
 
+    is_project_true = fields.Boolean(string='Is There Any Project?')
     project_task_ids = fields.One2many(
-        comodel_name='sale.order.template.task',
-        inverse_name='sale_order_id',
+        'sale.project.task',
+        'sale_order_id',
         string='Project Tasks',
     )
+    
+    @api.onchange('sale_order_template_id')
+    def _onchange_sale_order_template_id(self):
+        if not self.sale_order_template_id:
+            self.project_task_ids = [(5, 0, 0)]
+            self.is_project_true = False
+            return
 
-    @api.onchange('sale_order_template_id', 'order_line.product_id', 'order_line')
-    def _onchange_project_task_ids(self):
-        for order in self:
-            order.project_task_ids = [(5, 0, 0)]
-            if not order.sale_order_template_id:
+        new_tasks = []
+        for tmpl in self.sale_order_template_id.project_task_ids:
+            if tmpl.optional_product_id:
                 continue
 
-            template_tasks = order.sale_order_template_id.project_task_ids
-            prod_ids = order.order_line.mapped('product_id.id')
-            valid_tasks = template_tasks.filtered(lambda t:
-                                                  not t.optional_product_id or t.optional_product_id.id in prod_ids
-                                                  )
+            new_tasks.append((0, 0, {
+                'name': tmpl.name,
+                'description': tmpl.description,
+                'stage_id': tmpl.stage_id.id,
+                'planned_date': tmpl.planned_date,
+                'deadline_date': tmpl.deadline_date,
+                'date_line': tmpl.date_line,
+                'days': tmpl.days,
+                'user_ids': [(6, 0, tmpl.user_ids.ids)],
+                'email_template_id': tmpl.email_template_id.id,
+                'communication_type': tmpl.communication_type,
+                'event_date': tmpl.event_date,
+            }))
 
-            commands = []
-            for tmpl in valid_tasks:
-                vals = tmpl.copy_data()[0]
-                vals.update({
-                    'sale_order_id': order.id,
-                    'event_date': order.wedding_date,
-                })
-                commands.append((0, 0, vals))
+        self.project_task_ids = [(5, 0, 0)] + new_tasks
+        self.is_project_true = bool(new_tasks)
+    
+    # @api.onchange('order_line')
+    # def _onchange_order_line(self):
+    #     for order in self:
+    #         if not order.sale_order_template_id:
+    #             # template yoksa hiçbir değişiklik
+    #             return
 
-            order.project_task_ids = commands
+    #         # 1) Satırdaki aktif ürünler
+    #         products = order.order_line.mapped('product_id')
 
-    @api.onchange('sale_order_template_id', 'order_line.product_id','order_line')
-    def _onchange_project_task_ids(self):
-        for order in self:
-            if not order.sale_order_template_id:
-                order.project_task_ids = [(5, 0, 0)]
-                continue
+    #         # 2) Mevcut kayıtlardan, hâlâ satırda var olanları koru
+    #         preserve = order.project_task_ids.filtered(
+    #             lambda task: task.optional_product_id and task.optional_product_id in products
+    #         )
+    #         preserved_opts = preserve.mapped('optional_product_id')
 
-            tasks = order.sale_order_template_id.project_task_ids
-            prod_ids = order.order_line.mapped('product_id.id')
+    #         # 3) Template’den, satırda olup henüz eklenmemiş görevler
+    #         to_add = order.sale_order_template_id.project_task_ids.filtered(
+    #             lambda tmpl: tmpl.optional_product_id
+    #                          and tmpl.optional_product_id in products
+    #                          and tmpl.optional_product_id not in preserved_opts
+    #         )
 
-            valid_tasks = tasks.filtered(lambda t:
-                                         not t.optional_product_id or
-                                         t.optional_product_id.id in prod_ids
-                                         )
-            if valid_tasks:
-                vals={
-                    'sale_order_id':order.id,
-                    'event_date':order.wedding_date
-                }
-                valid_tasks.write(vals)
-            order.project_task_ids = [(6, 0, valid_tasks.ids)]
-    def _add_tasks_for_product(self, product):
-        """ Sadece bu product için tanımlı template task’larını kopyala ve ekle """
-        self.ensure_one()
-        tmpl_tasks = self.sale_order_template_id.project_task_ids.filtered(
-            lambda t: t.optional_product_id and t.optional_product_id.id == product.id
-        )
-        for tmpl in tmpl_tasks:
-            vals = tmpl.copy_data()[0]
-            vals.update({
-                'sale_order_id': self.id,
-                'event_date': self.wedding_date,
-            })
-            self.project_task_ids = [(0, 0, vals)]
-        return True
+    #         # 4) Komut listesi: önce korunan mevcutlar, sonra yeni eklemeler
+    #         commands = [(4, task.id) for task in preserve]
+    #         for tmpl in to_add:
+    #             commands.append((0, 0, {
+    #                 'name':                tmpl.name,
+    #                 'description':         tmpl.description,
+    #                 'stage_id':            tmpl.stage_id.id,
+    #                 'planned_date':        tmpl.planned_date,
+    #                 'deadline_date':       tmpl.deadline_date,
+    #                 'date_line':           tmpl.date_line,
+    #                 'days':                tmpl.days,
+    #                 'user_ids':            [(6, 0, tmpl.user_ids.ids)],
+    #                 'email_template_id':   tmpl.email_template_id.id,
+    #                 'optional_product_id': tmpl.optional_product_id.id,
+    #                 'communication_type':  tmpl.communication_type,
+    #                 'event_date':          tmpl.event_date,
+    #             }))
+
+    #         # 5) Uygula: artık silinmesi gerekenler komut listesinde yok
+    #         order.project_task_ids = commands
 
     def action_open_project_wizard(self):
         self.ensure_one()
@@ -90,13 +103,48 @@ class SaleOrder(models.Model):
 
             },
         }
-
+    
 class SaleOrderOption(models.Model):
     _inherit = 'sale.order.option'
 
-    def add_option_to_order(self):
-        order_line = super().add_option_to_order()
-        sale_order = order_line.order_id
-
-        sale_order._add_tasks_for_product(order_line.product_id)
-        return order_line
+    @api.onchange('is_present')
+    def _onchange_is_present(self):
+        for option in self:
+            # Eğer işaretlendiyse -> görevleri yarat
+            if option.is_present:
+                # 1) Şablon görevlerinden bu seçeneğe (product_id) bağlı olanları filtrele
+                template_tasks = option.order_id.sale_order_template_id.project_task_ids.filtered(
+                    lambda t: t.optional_product_id.id == option.product_id.id
+                )
+                # 2) sale.project.task modeli
+                task_model = self.env['sale.project.task']
+                for tmpl in template_tasks:
+                    # Aynı görev zaten varsa tekrar ekleme
+                    exists = task_model.search([
+                        ('sale_order_id', '=', option.order_id.id),
+                        ('optional_product_id', '=', option.product_id.id),
+                        ('name', '=', tmpl.name),
+                    ], limit=1)
+                    if not exists:
+                        task_model.create({
+                            'sale_order_id': option.order_id.id,
+                            'name': tmpl.name,
+                            'description': tmpl.description,
+                            'stage_id': tmpl.stage_id.id,
+                            'planned_date': tmpl.planned_date,
+                            'deadline_date': tmpl.deadline_date,
+                            'date_line': tmpl.date_line,
+                            'days': tmpl.days,
+                            'user_ids': [(6, 0, tmpl.user_ids.ids)],
+                            'email_template_id': tmpl.email_template_id.id,
+                            'optional_product_id': tmpl.optional_product_id.id,
+                            'communication_type': tmpl.communication_type,
+                            'event_date': tmpl.event_date,
+                        })
+            else:
+                # Eğer işaret kaldırıldıysa -> ilgili sale.project.task kayıtlarını sil
+                tasks = self.env['sale.project.task'].search([
+                    ('sale_order_id', '=', option.order_id.id),
+                    ('optional_product_id', '=', option.product_id.id),
+                ])
+                tasks.unlink()

@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sale_order_template_task,access_sale_order_template_task,model_sale_order_template_task,base.group_user,1,1,1,1
 access_sale_order_project_wizard,access_sale_order_project_wizard,model_sale_order_project_wizard,base.group_user,1,1,1,1
 access_sale_order_project_wizard_line,access_sale_order_project_wizard_line,model_sale_order_project_wizard_line,base.group_user,1,1,1,1
+access_sale_project_task,access_sale_project_task,model_sale_project_task,base.group_user,1,1,1,1

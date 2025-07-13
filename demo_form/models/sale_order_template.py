@@ -49,7 +49,6 @@ class SaleOrderTemplateTask(models.Model):
         string='Responsibles',
 
     )
-
     email_template_id = fields.Many2one(
         comodel_name='mail.template',
         domain=[('model_id.model', '=', 'project.task')],
@@ -67,64 +66,3 @@ class SaleOrderTemplateTask(models.Model):
         string='Communication Type',
         default='phone', )
     event_date=fields.Date(string='Event Date')
-
-    # @api.onchange('sale_order_template_id')
-    # def _onchange_sale_template(self):
-    #     """Seçilen şablonun optional_product_ids'ine göre domain koy."""
-    #     if self.sale_order_template_id and self.sale_order_template_id.optional_product_ids:
-    #         return {
-    #             'domain': {
-    #                 'optional_product_id': [
-    #                     ('id', 'in', self.sale_order_template_id.optional_product_ids.ids)
-    #                 ]
-    #             }
-    #         }
-    #     return {
-    #         'domain': {
-    #             'optional_product_id': []
-    #         }
-    #     }
-    @api.onchange('planned_date', 'days', 'date_line','event_date')
-    def _onchange_deadline_date(self):
-        for rec in self:
-            today = fields.Date.today()
-            wedd=rec.sale_order_id.wedding_date
-            if rec.planned_date == 'before_wedding':
-                if wedd and rec.days:
-                    rec.deadline_date = wedd - timedelta(days=rec.days)
-                else:
-                    rec.deadline_date = False
-
-            elif rec.planned_date == 'border':
-
-                if not rec.date_line:
-                    rec.deadline_date = False
-                    continue
-                try:
-                    day_str, month_str = rec.date_line.split('-')
-                    day, month = int(day_str), int(month_str)
-                except (ValueError, AttributeError):
-                    rec.deadline_date = False
-                    continue
-
-                try:
-                    base_dt = date(today.year, month, day)
-                except ValueError:
-                    rec.deadline_date = False
-                    continue
-                same_year = False
-                try:
-                    same_year = (wedd.year == today.year)
-                except ValueError:
-                    wedd = None
-                if same_year and wedd and wedd > base_dt and today > base_dt:
-                    target = today + timedelta(days=1)
-
-                else:
-                    target = base_dt
-                    if target <= today:
-                        target = date(today.year + 1, month, day)
-                rec.deadline_date = target
-                continue
-            else:
-                rec.deadline_date = False
