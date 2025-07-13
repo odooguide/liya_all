@@ -46,28 +46,33 @@ class SaleOrder(models.Model):
         for order in self:
             if not order.sale_order_template_id:
                 return
-            
+
             current_products = order.order_line.mapped('product_id')
+            template_tasks = order.sale_order_template_id.project_task_ids
+
+            # ———— 1) Hangi task’lar artık satırda *yok*? ————
             to_remove = order.project_task_ids.filtered(
                 lambda t: t.optional_product_id and t.optional_product_id not in current_products
             )
-            if to_remove:
-                to_remove.unlink()
+            # Bu komut, UI’den hemen satırdan çıkarır (kaydetmeye gerek kalmaz)
+            remove_cmds = [(2, t.id) for t in to_remove]
 
+            # ———— 2) Hangi task’lar hâlâ korunacak? ————
             preserve = order.project_task_ids.filtered(
                 lambda t: t.optional_product_id and t.optional_product_id in current_products
             )
-            preserved_opts = preserve.mapped('optional_product_id')
+            preserve_cmds = [(4, t.id) for t in preserve]
 
-            to_add = order.sale_order_template_id.project_task_ids.filtered(
+            # ———— 3) Hangi yeni template task’ları ekleyeceğiz? ————
+            preserved_prods = preserve.mapped('optional_product_id')
+            to_add = template_tasks.filtered(
                 lambda tmpl: tmpl.optional_product_id
                              and tmpl.optional_product_id in current_products
-                             and tmpl.optional_product_id not in preserved_opts
+                             and tmpl.optional_product_id not in preserved_prods
             )
-
-            commands = [(4, task.id) for task in preserve]
+            add_cmds = []
             for tmpl in to_add:
-                commands.append((0, 0, {
+                add_cmds.append((0, 0, {
                     'name':                tmpl.name,
                     'description':         tmpl.description,
                     'stage_id':            tmpl.stage_id.id,
@@ -82,8 +87,9 @@ class SaleOrder(models.Model):
                     'event_date':          tmpl.event_date,
                 }))
 
-            order.project_task_ids = commands
-
+            # ———— 4) Tüm komutları birleştirip UI’a gönder ————
+            order.project_task_ids = remove_cmds + preserve_cmds + add_cmds
+            
     def action_open_project_wizard(self):
         self.ensure_one()
         if self.opportunity_id.stage_id.name not in ('Won', 'Kazanıldı'):
