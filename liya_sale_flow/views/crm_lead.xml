@@ -60,6 +60,18 @@
 
     </record>
 
+    <record id="view_crm_lead_partner_create_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.partner.create.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[@name='lead_partner']/field[@name='partner_id']" position="attributes">
+                <attribute name="options">{"no_quick_create":true}</attribute>
+             </xpath>
+        </field>
+
+    </record>
+
 <!--    <record id="crm_lead_view_form_iap_enrich_hide" model="ir.ui.view">-->
 <!--        <field name="name">crm.lead.form.iap.enrich.hide</field>-->
 <!--        <field name="model">crm.lead</field>-->
@@ -170,16 +182,16 @@
         </field>
     </record>
 
-    <record id="view_crm_case_tree_hide_email_button" model="ir.ui.view">
-        <field name="name">crm.case.tree.hide.email.button</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='358']" position="attributes">
-                <attribute name="groups">base.group_system</attribute>
-            </xpath>
-        </field>
-    </record>
+<!--    <record id="view_crm_case_tree_hide_email_button" model="ir.ui.view">-->
+<!--        <field name="name">crm.case.tree.hide.email.button</field>-->
+<!--        <field name="model">crm.lead</field>-->
+<!--        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//button[@name='358']" position="attributes">-->
+<!--                <attribute name="groups">base.group_system</attribute>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
 <!--    <record id="view_crm_sms_case_tree_hide_sms_buttons" model="ir.ui.view">-->
 <!--        <field name="name">crm.sms.case.tree.hide.sms.buttons</field>-->

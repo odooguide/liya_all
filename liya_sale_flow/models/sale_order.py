@@ -250,6 +250,7 @@ class SaleOrder(models.Model):
             for line in self.order_line
             if line.sale_order_option_ids
         )
+        return total
 
     def get_lines_with_options_total_formatted(self):
         self.ensure_one()

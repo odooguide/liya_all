@@ -9,4 +9,8 @@
       </xpath>
     </field>
   </record>
+
+    <record id="calendar.action_calendar_event" model="ir.actions.act_window">
+    <field name="view_mode" eval="'calendar,pivot,form,list'"/>
+  </record>
 </odoo>

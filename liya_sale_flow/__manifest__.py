@@ -30,6 +30,7 @@
         "data/calendar_alarm_data.xml",
         "data/menu_restrict.xml",
         "data/crm_menu_actions.xml",
+        "data/sale_order_menu_actions.xml",
 
     ],
     "auto_install": False,

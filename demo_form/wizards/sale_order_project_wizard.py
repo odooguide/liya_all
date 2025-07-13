@@ -57,13 +57,20 @@ class SaleOrderProjectWizard(models.TransientModel):
 
         order.project_id = project.id
 
+
+
         for tmpl in self.project_task_line_ids:
+            if tmpl.user_ids:
+                responsibles=tmpl.user_ids.ids
+            else:
+                responsibles=order.coordinator_ids.ids
+
             new_task = self.env['project.task'].create({
                 'project_id': project.id,
                 'name': tmpl.name,
                 'description': tmpl.description,
                 'stage_id': tmpl.stage_id.id,
-                'user_ids': [(6, 0, tmpl.user_ids.ids)],
+                'user_ids': [(6, 0, responsibles)],
                 'date_deadline': tmpl.deadline_date,
                 'email_template_id': tmpl.email_template_id.id
             })
@@ -121,7 +128,7 @@ class SaleOrderProjectWizardLine(models.TransientModel):
         string='Planlanan Tarih',
         readonly=False,
     )
-    date_line = fields.Date(
+    date_line = fields.Char(
         related='task_id.date_line',
         string='Date Line',
         readonly=False,

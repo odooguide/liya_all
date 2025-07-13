@@ -22,7 +22,7 @@
     </record>
 
     <template id="report_saleorder_banquet_quot">
- <t t-call="web.external_layout">
+        <t t-call="web.external_layout">
             <t t-set="doc" t-value="docs and docs[0] or doc"/>
 
             <style>
@@ -44,30 +44,30 @@
                 h1, h2, h3, h4, h5, h6 {
                 font-family: Century, 'Century Gothic', serif;
                 }
-             .bottom-text {
-                  position: absolute;
-                  bottom: -25mm;
-                  left: 0;
-                  width: 100%;
-                  font-style: italic;
-                  font-size: 11pt;
-                  color: grey;
+                .bottom-text {
+                position: absolute;
+                bottom: -25mm;
+                left: 0;
+                width: 100%;
+                font-style: italic;
+                font-size: 11pt;
+                color: grey;
                 }
 
                 .bottom-text em {
-                  position: absolute;
-                  width:400px;
-                  left: 5mm;
-                  bottom: 0;
-                  margin-bottom:15px;
+                position: absolute;
+                width:400px;
+                left: 5mm;
+                bottom: 0;
+                margin-bottom:15px;
                 }
 
                 .bottom-text img {
-                  position: absolute;
-                  left: 45%;
-                  transform: translateX(-50%);
-                  bottom: 0;
-                  height: 80px;
+                position: absolute;
+                left: 45%;
+                transform: translateX(-50%);
+                bottom: 0;
+                height: 80px;
                 }
 
                 .avoid-break {
@@ -86,12 +86,13 @@
                         <div class="page" style="text-align: center; margin-top:10px">
                             <div>
                                 <img src="/liya_sale_flow/static/src/img/img4.jpeg" style="width:90%; "/>
-                                <br/><br/>
+                                <br/>
+                                <br/>
                                 <span style="margin-top:10pt;text-align:center;font-size:14pt">
                                     <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
                                 </span>
                             </div>
-                             <div class="bottom-text">
+                            <div class="bottom-text">
                                 <!--<em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>-->
                                 <img t-att-src="image_data_uri(doc.company_id.logo)"/>
                             </div>
@@ -143,9 +144,9 @@
                             TikTok / liyaall_official
                         </p>
                         <div class="bottom-text">
-                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                            </div>
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
 
                     </div>
                 </t>
@@ -157,9 +158,9 @@
 
                     </div>
                     <div class="bottom-text">
-                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                            </div>
+                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                        <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                    </div>
                 </div>
                 <!-- Page 4 -->
                 <t t-if="'Liya Menu 1' in doc.banquet_pages.mapped('name')">
@@ -233,9 +234,9 @@
                             </p>
                         </div>
                         <div class="bottom-text">
-                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                            </div>
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
                     </div>
                 </t>
                 <t t-if="'Liya Menu 2' in doc.banquet_pages.mapped('name')">
@@ -310,9 +311,9 @@
                             </p>
                         </div>
                         <div class="bottom-text">
-                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                            </div>
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
                     </div>
                 </t>
                 <!-- Page 6 -->
@@ -320,10 +321,10 @@
                     <div style="text-align: center;margin-top:10px ">
                         <img src="/liya_sale_flow/static/src/img/img2.jpeg" style="width:80%; height:90%"/>
                     </div>
-                        <div class="bottom-text">
-                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                            </div>
+                    <div class="bottom-text">
+                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                        <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                    </div>
                 </div>
 
                 <!-- Page 7 -->
@@ -379,9 +380,206 @@
                             </ul>
                         </div>
                         <div class="bottom-text">
-                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                            </div>
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
+                        <div style="clear: both;"/>
+                    </div>
+                </t>
+                <t t-if="'Liya Menu 1' in doc.banquet_pages.mapped('name')">
+
+                    <div class="page">
+                        <h2 style="text-align: center;">LİYA ALL DAVET ZİYAFET MENÜLERİ</h2>
+                        <p style="text-align: center; font-style: italic;">(3 farklı menü seçeneği sunulmaktadır)</p>
+                        <h3 style="text-align: center; margin-bottom: 10px;">MENÜ 1 <em>(Alkolsüz)</em></h3>
+                        <!-- Two-column layout for Meze and Ana Yemekler -->
+                        <div style="width: 24%; float: left; padding-right: 5px; border-right: 1px solid #8c6a3b;">
+                            <h4>MEZELER</h4>
+                            <ul>
+                                <li>Atom</li>
+                                <li>Akdeniz Cacığı</li>
+                                <li>Şakşuka</li>
+                                <li>Ezine Peyniri</li>
+                                <li>Zeytinyağlı Enginar</li>
+                                <li>Ada Güzeli</li>
+                                <li>Vişneli Yaprak Sarma</li>
+                                <li>Levrek Carpaccio</li>
+                                <li>Tütsülenmiş Uskumru</li>
+                            </ul>
+                        </div>
+                        <div style="width: 72%; float: right;">
+                            <h4>ANA YEMEKLER
+                                <small style="font-style: italic;">(Davetliler seçmektedir)</small>
+                            </h4>
+                            <p>
+                                <strong>LEVREK SARMA</strong>
+                                – Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında patates püresi ve
+                                fesleğen
+                                sos ile
+                            </p>
+                            <p>
+                                <strong>MANTARLI BONFİLE</strong>
+                                – Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                            </p>
+                            <p>
+                                <strong>DANA KABURGA</strong>
+                                – Fırında özel sos ile 10 saat pişirilen dana kaburga
+                            </p>
+                            <p>
+                                <strong>VEGAN BOWL</strong>
+                                – %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze çeşitleri
+                            </p>
+                        </div>
+                        <div style="clear: both; margin-top: 20px;"/>
+                        <div style="width: 24%; float: left; padding-right: 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>SALATA</h4>
+                            <p>Roka ve Domates</p>
+                        </div>
+                        <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>ARA SICAK</h4>
+                            <p>Yaprak Ciğer ve<br/>Deniz Mahsullü Kalamar Dolma
+                            </p>
+                        </div>
+                        <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>MEYVE ve TATLI</h4>
+                            <p>Mevsim Meyveleri ve<br/>San Sebastian Cheesecake
+                            </p>
+                        </div>
+                        <div style="width: 24%; float: left; padding-left: 10px;">
+                            <h4>SOFT İÇECEK</h4>
+                            <p>Coca Cola grubu meşrubatlar<br/>Cappy meyve suları<br/>Erikli Su
+                            </p>
+                        </div>
+
+                        <div class="bottom-text">
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
+                    </div>
+                </t>
+                <t t-if="'Liya Menu 2' in doc.banquet_pages.mapped('name')">
+
+                    <!-- Page 5 -->
+                    <div class="page">
+                        <h3 style="text-align: center;">MENÜ 2 <em>(Alkolsüz)</em></h3>
+                        <!-- Meze column -->
+                        <div style="width: 24%; float: left; padding-right: 5px; border-right: 1px solid #8c6a3b;">
+                            <h4>MEZELER</h4>
+                            <ul>
+                                <li>Selanik Mezesi</li>
+                                <li>Yoğurtlu Semizotu</li>
+                                <li>Köpoğlu</li>
+                                <li>Girit Ezmesi</li>
+                                <li>Fesleğenli Enginar</li>
+                                <li>Cibes Otu</li>
+                                <li>Çerkez Tavuğu</li>
+                                <li>Zeytinyağlı Kuru Patlıcan Dolması</li>
+                                <li>Hardallı Levrek Marine</li>
+                                <li>Karides Söğüş</li>
+                            </ul>
+                        </div>
+                        <!-- Ana Yemekler column -->
+                        <div style="width: 72%; float: right;">
+                            <h4>ANA YEMEKLER
+                                <small style="font-style: italic;">(Davetliler seçmektedir)</small>
+                            </h4>
+                            <p>
+                                <strong>LEVREK SARMA</strong>
+                                – Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında patates püresi ve
+                                fesleğen
+                                sos ile
+                            </p>
+                            <p>
+                                <strong>MANTARLI BONFİLE</strong>
+                                – Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                            </p>
+                            <p>
+                                <strong>DANA KABURGA</strong>
+                                – Fırında özel sos ile 10 saat pişirilen dana kaburga
+                            </p>
+                            <p>
+                                <strong>VEGAN BOWL</strong>
+                                – %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze çeşitleri
+                            </p>
+                        </div>
+                        <div style="clear: both; margin-top: 20px;"/>
+                        <div style="width: 24%; float: left; padding-right: 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>SALATA</h4>
+                            <p>Roka ve Domates</p>
+                        </div>
+                        <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>ARA SICAK</h4>
+                            <p>Yaprak Ciğer ve<br/>Deniz Mahsullü Kalamar Dolma
+                            </p>
+                        </div>
+                        <div style="width: 24%; float: left; padding: 0 10px; border-right: 1px solid #8c6a3b;">
+                            <h4>MEYVE ve TATLI</h4>
+                            <p>Mevsim Meyveleri ve<br/>San Sebastian Cheesecake
+                            </p>
+                        </div>
+                        <div style="width: 24%; float: left; padding-left: 10px;">
+                            <h4>SOFT İÇECEK</h4>
+                            <p>Coca Cola grubu meşrubatlar<br/>Cappy meyve suları<br/>Erikli Su
+                            </p>
+                        </div>
+
+                        <div class="bottom-text">
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
+                    </div>
+                </t>
+
+                <!-- Page 7 -->
+                <t t-if="'Liya Menu 3' in doc.banquet_pages.mapped('name')">
+
+                    <div class="page">
+                        <h3 style="text-align: center;">MENÜ 3 <em>(Alkolsüz)</em></h3>
+                        <p style="text-align: center; margin-top: 5px; font-style: italic;">KOKTEYL - PROLONGE</p>
+                        <div style="width: 35%; float: left; padding-right: 10px;border-right: 1px solid #8c6a3b;">
+                            <h4>KRUDİTE</h4>
+                            <ul>
+                                <li>Havuç &amp; Salatalık</li>
+                                <li>Kırmızı Üzüm</li>
+                                <li>Lüks Çerezler</li>
+                            </ul>
+                            <h4 style="margin-top: 15px;">BAŞLANGIÇLAR</h4>
+                            <ul>
+                                <li>Avokadolu Somon Tartine</li>
+                                <li>Yaban Mantarlı Stracciatella Bruschetta</li>
+                                <li>Renkli Domatesli Bruschetta</li>
+                                <li>Parmesanlı Grisiniye Sarılı Rozbif</li>
+                            </ul>
+                            <h4 style="margin-top: 15px;">SICAKLAR</h4>
+                            <ul>
+                                <li>Kabak Mücver</li>
+                                <li>Sicilya Usulü Arancini</li>
+                                <li>Tavuk Şiş</li>
+                                <li>Mini Ribs</li>
+                                <li>Şişte Mantarlı Bonfile</li>
+                                <li>Çıtır Karides</li>
+                            </ul>
+                        </div>
+                        <div style="width: 1px; background: #8c6a3b; height: auto; float: left; margin: 0 10px;"/>
+                        <div style="width: 50%; float: left; padding-left: 40px;">
+                            <h4>MEYVE &amp; TATLI</h4>
+                            <ul>
+                                <li>Meyveli Tartolet</li>
+                                <li>Brownie</li>
+                                <li>Mevsim Meyveleri</li>
+                            </ul>
+                            <h4 style="margin-top: 15px;">SOFT İÇECEK</h4>
+                            <ul>
+                                <li>Coca Cola grubu meşrubatlar</li>
+                                <li>Cappy meyve suları</li>
+                                <li>Erikli Su</li>
+                            </ul>
+
+                        </div>
+                        <div class="bottom-text">
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
                         <div style="clear: both;"/>
                     </div>
                 </t>
@@ -435,9 +633,9 @@
                         </ul>
                     </div>
                     <div class="bottom-text">
-                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                            </div>
+                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                        <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                    </div>
                 </div>
                 <t t-if="len(doc.service_ids) + len(doc.program_ids) + len(doc.transport_ids) &gt; 15">
                     <div class="page"/>
@@ -563,9 +761,9 @@
 
                     <p style="margin-top: 20px;">Teklifin geçerlilik süresi 1 haftadır.</p>
                     <div class="bottom-text">
-                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                            </div>
+                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                        <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                    </div>
                 </div>
                 <!-- Page 10 -->
                 <div class="page">
@@ -573,9 +771,9 @@
                         <img src="/liya_sale_flow/static/src/img/img1.jpeg" style="width:90%; "/>
                     </div>
                     <div class="bottom-text">
-                                <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                                <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                            </div>
+                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                        <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                    </div>
                 </div>
             </main>
         </t>

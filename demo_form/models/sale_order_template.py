@@ -1,5 +1,5 @@
 from odoo import api, fields, models
-from datetime import timedelta
+from datetime import timedelta, date,datetime
 
 
 class SaleOrderTemplate(models.Model):
@@ -42,7 +42,7 @@ class SaleOrderTemplateTask(models.Model):
         default='before_wedding',
     )
     deadline_date = fields.Date(string='Deadline Date')
-    date_line = fields.Date(string='Date Line')
+    date_line = fields.Char(string='Date Line')
     days = fields.Integer(string='Days')
     user_ids = fields.Many2many(
         comodel_name='res.users',
@@ -52,6 +52,7 @@ class SaleOrderTemplateTask(models.Model):
 
     email_template_id = fields.Many2one(
         comodel_name='mail.template',
+        domain=[('model_id.model', '=', 'project.task')],
         string='E-mail Template',
 
     )
@@ -65,40 +66,65 @@ class SaleOrderTemplateTask(models.Model):
     ],
         string='Communication Type',
         default='phone', )
+    event_date=fields.Date(string='Event Date')
 
-    @api.onchange('planned_date', 'days', 'date_line')
+    # @api.onchange('sale_order_template_id')
+    # def _onchange_sale_template(self):
+    #     """Seçilen şablonun optional_product_ids'ine göre domain koy."""
+    #     if self.sale_order_template_id and self.sale_order_template_id.optional_product_ids:
+    #         return {
+    #             'domain': {
+    #                 'optional_product_id': [
+    #                     ('id', 'in', self.sale_order_template_id.optional_product_ids.ids)
+    #                 ]
+    #             }
+    #         }
+    #     return {
+    #         'domain': {
+    #             'optional_product_id': []
+    #         }
+    #     }
+    @api.onchange('planned_date', 'days', 'date_line','event_date')
     def _onchange_deadline_date(self):
         for rec in self:
             today = fields.Date.today()
-
+            wedd=rec.sale_order_id.wedding_date
             if rec.planned_date == 'before_wedding':
-                wedd = rec.sale_order_id.wedding_date
                 if wedd and rec.days:
-                    rec.deadline_date = fields.Date.to_string(
-                        fields.Date.from_string(wedd) - timedelta(days=rec.days)
-                    )
+                    rec.deadline_date = wedd - timedelta(days=rec.days)
                 else:
                     rec.deadline_date = False
 
             elif rec.planned_date == 'border':
+
                 if not rec.date_line:
                     rec.deadline_date = False
                     continue
+                try:
+                    day_str, month_str = rec.date_line.split('-')
+                    day, month = int(day_str), int(month_str)
+                except (ValueError, AttributeError):
+                    rec.deadline_date = False
+                    continue
 
-                date_line = fields.Date.from_string(rec.date_line)
-                wedd = rec.sale_order_id.wedding_date
-                same_year = wedd and (fields.Date.from_string(wedd).year == today.year)
-
-                if same_year and today > date_line:
-                    rec.deadline_date = fields.Date.to_string(today + timedelta(days=1))
+                try:
+                    base_dt = date(today.year, month, day)
+                except ValueError:
+                    rec.deadline_date = False
+                    continue
+                same_year = False
+                try:
+                    same_year = (wedd.year == today.year)
+                except ValueError:
+                    wedd = None
+                if same_year and wedd and wedd > base_dt and today > base_dt:
+                    target = today + timedelta(days=1)
 
                 else:
-                    target_year = today.year
-                    candidate = date_line.replace(year=target_year)
-                    if candidate <= today:
-                        candidate = date_line.replace(year=target_year + 1)
-                    rec.deadline_date = fields.Date.to_string(candidate)
-
-            # 3) Sabit tarih (casual_date) veya diğer durumlar
+                    target = base_dt
+                    if target <= today:
+                        target = date(today.year + 1, month, day)
+                rec.deadline_date = target
+                continue
             else:
                 rec.deadline_date = False
