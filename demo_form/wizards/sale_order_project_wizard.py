@@ -62,9 +62,12 @@ class SaleOrderProjectWizard(models.TransientModel):
 
         for tmpl in self.project_task_line_ids:
             if tmpl.user_ids:
-                responsibles=tmpl.user_ids.ids
+                responsibles = tmpl.user_ids.ids
             else:
-                responsibles=order.coordinator_ids.ids
+                users = self.env['res.users'].search([
+                    ('partner_id', 'in', order.coordinator_ids.ids)
+                ])
+                responsibles = users.ids
 
             sale_line = order.order_line.filtered(lambda l: l.product_id == tmpl.optional_product_id)
             sale_line_id = sale_line and sale_line[0].id or False

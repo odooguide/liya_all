@@ -15,9 +15,9 @@
                                 <field name="name" readonly="0"/>
                                 <field name="description"/>
                                 <field name="stage_id"/>
-                                <field name="planned_date" optional_hide="1"/>
-                                <field name="date_line" optional_hide="1"/>
-                                <field name="days" optional_hide="1"/>
+                                <field name="planned_date" optional="hide"/>
+                                <field name="date_line" optional="hide"/>
+                                <field name="days" optional="hide"/>
                                 <field name="deadline_date" readonly="0"/>
                                 <field name="email_template_id" readonly="0"/>
                                 <field name="communication_type" readonly="0"/>
