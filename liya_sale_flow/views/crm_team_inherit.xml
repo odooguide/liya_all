@@ -10,8 +10,7 @@
             <field name="category_id" ref="base.module_category_usability"/>
         </record>
     </data>
-
-
+    
     <record id="view_crm_team_boolean_inherit" model="ir.ui.view">
         <field name="name">crm.team.boolean.inherit</field>
         <field name="model">crm.team</field>
@@ -56,24 +55,29 @@
     </record>
 
     <menuitem
-            id="menu_crm_wedding"
-            name="Wedding Leads"
-            parent="crm.crm_menu_root"
-            action="action_crm_wedding_leads"
-            sequence="6"
-            groups="liya_sale_flow.group_crm_wedding_user"
-
-    />
+        id="crm_menu_leads"
+        name="Leads"
+        parent="crm.crm_menu_leads"
+        action="crm.crm_lead_all_leads"
+        groups="base.group_system"
+        sequence="5"/>
 
     <menuitem
-            id="menu_crm_event"
-            name="Event Leads"
-            parent="crm.crm_menu_root"
-            action="action_crm_event_leads"
-            sequence="7"
-            groups="liya_sale_flow.group_crm_event_user"
+        id="menu_crm_wedding"
+        name="Wedding Leads"
+        parent="crm.crm_menu_leads"
+        action="action_crm_wedding_leads"
+        sequence="6"
+        groups="liya_sale_flow.group_crm_wedding_user"/>
 
-    />
+    <menuitem
+        id="menu_crm_event"
+        name="Event Leads"
+        parent="crm.crm_menu_leads"
+        action="action_crm_event_leads"
+        sequence="7"
+        groups="liya_sale_flow.group_crm_event_user"/>
+
     <record id="action_crm_wedding_opportunity" model="ir.actions.act_window">
         <field name="name">Wedding Pipeline</field>
         <field name="res_model">crm.lead</field>
@@ -106,18 +110,14 @@
             parent="crm.crm_menu_sales"
             action="action_crm_wedding_opportunity"
             sequence="1"
-            groups="liya_sale_flow.group_crm_wedding_user"
-
-    />
+            groups="liya_sale_flow.group_crm_wedding_user"/>
 
     <menuitem
             id="menu_crm_event_pipeline"
             name="Event Pipeline"
             parent="crm.crm_menu_sales"
             action="action_crm_event_opportunity"
-            sequence="1"
-            groups="liya_sale_flow.group_crm_event_user"
-
-    />
+            sequence="2"
+            groups="liya_sale_flow.group_crm_event_user"/>
 
 </odoo>
