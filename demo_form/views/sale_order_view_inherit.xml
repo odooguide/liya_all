@@ -20,12 +20,12 @@
 
                             <field name="sale_order_id" invisible="1"/>
                             <field name="name"/>
-                            <field name="event_date"/>
+                            <field name="event_date" invisible="1"/>
                             <field name="description"/>
                             <field name="stage_id"/>
-                            <field name="planned_date"/>
-                            <field name="date_line"/>
-                            <field name="days"/>
+                            <field name="planned_date" optional_hide="1"/>
+                            <field name="date_line" optional_hide="1"/>
+                            <field name="days" optional_hide="1"/>
                             <field name="deadline_date"/>
                             <field name="user_ids" widget="many2many_tags"/>
                             <field name="email_template_id"/>

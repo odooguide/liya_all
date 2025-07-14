@@ -51,6 +51,7 @@ class SaleOrderProjectWizard(models.TransientModel):
             'allow_billable': True,
             'privacy_visibility': 'portal',
             'reinvoiced_sale_order_id': order.id,
+            'sale_line_id':order.order_line[0].id or False
         }
 
         project = self.env['project.project'].create(vals)
@@ -65,6 +66,9 @@ class SaleOrderProjectWizard(models.TransientModel):
             else:
                 responsibles=order.coordinator_ids.ids
 
+            sale_line = order.order_line.filtered(lambda l: l.product_id == tmpl.optional_product_id)
+            sale_line_id = sale_line and sale_line[0].id or False
+
             new_task = self.env['project.task'].create({
                 'project_id': project.id,
                 'name': tmpl.name,
@@ -72,7 +76,9 @@ class SaleOrderProjectWizard(models.TransientModel):
                 'stage_id': tmpl.stage_id.id,
                 'user_ids': [(6, 0, responsibles)],
                 'date_deadline': tmpl.deadline_date,
-                'email_template_id': tmpl.email_template_id.id
+                'email_template_id': tmpl.email_template_id.id,
+                'communication_type':tmpl.communication_type,
+                'sale_line_id':sale_line_id,
             })
             if tmpl.communication_type == 'phone' and tmpl.email_template_id:
                 template = tmpl.email_template_id

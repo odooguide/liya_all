@@ -11,9 +11,9 @@
                         class="btn-secondary"/>
             </header>
             <xpath expr="//field[@name='tag_ids']" position="after">
-                <field name="next_event_date"/>
-                <field name="next_event_id"/>
-                <field name="event_ids"/>
+                <field name="next_event_date" invisible="1"/>
+                <field name="next_event_id" invisible="1"/>
+                <field name="event_ids" invisible="1"/>
             </xpath>
             <xpath expr="//button[@name='action_view_tasks']" position="after">
                 <button name="action_view_next_event" string="Demo Meeting" type="object" class="oe_stat_button"

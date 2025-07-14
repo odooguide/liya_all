@@ -9,13 +9,15 @@
                 <button name="action_send_task_email"
                         string="Send E-mail"
                         type="object"
-                        class="btn-primary"/>
+                        class="btn-primary"
+                        invisible="communication_type=='phone'"/>
 
 
             </header>
 
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="email_template_id"/>
+                <field name="communication_type"/>
 
             </xpath>
 
