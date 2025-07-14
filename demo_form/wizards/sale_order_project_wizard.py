@@ -14,7 +14,7 @@ class SaleOrderProjectWizard(models.TransientModel):
     project_task_line_ids = fields.One2many(
         comodel_name='sale.order.project.wizard.line',
         inverse_name='wizard_id',
-        string='Projeye Eklenebilecek Görevler',
+        string='Tasks Which Will Be Add to Project',
     )
 
     @api.model
@@ -50,7 +50,7 @@ class SaleOrderProjectWizard(models.TransientModel):
             'user_id': order.user_id.id or self.env.uid,
             'allow_billable': True,
             'privacy_visibility': 'portal',
-            'sale_order_id': order.id,
+            'reinvoiced_sale_order_id': order.id,
         }
 
         project = self.env['project.project'].create(vals)
@@ -98,44 +98,44 @@ class SaleOrderProjectWizardLine(models.TransientModel):
         required=True,
     )
     task_id = fields.Many2one(
-        comodel_name='sale.order.template.task',
-        string='Görev Şablonu',
+        comodel_name='sale.project.task',
+        string='Project Template',
         required=True,
     )
     name = fields.Char(
         related='task_id.name',
-        string='Görev Adı',
+        string='Task Name',
         readonly=False,
     )
     description = fields.Text(
         related='task_id.description',
-        string='Açıklama',
+        string='Description',
         readonly=False,
     )
     stage_id = fields.Many2one(
         related='task_id.stage_id',
         comodel_name='project.task.type',
-        string='Aşama',
+        string='Stage',
         readonly=False,
     )
     planned_date = fields.Selection(
         related='task_id.planned_date',
         selection=[
-            ('before_wedding', 'Düğünden Önce'),
-            ('border', 'Sınır Tarihi'),
-            ('casual_date', 'Sabit Tarih'),
+            ('before_wedding', 'Before Wedding'),
+            ('border', 'Border Date'),
+            ('casual_date', 'Stable Date'),
         ],
-        string='Planlanan Tarih',
+        string='Planned Type',
         readonly=False,
     )
     date_line = fields.Char(
         related='task_id.date_line',
-        string='Date Line',
+        string='Border Date Line',
         readonly=False,
     )
     days = fields.Integer(
         related='task_id.days',
-        string='Gün',
+        string='Days',
         readonly=False,
     )
     deadline_date = fields.Date(
@@ -146,20 +146,20 @@ class SaleOrderProjectWizardLine(models.TransientModel):
     user_ids = fields.Many2many(
         related='task_id.user_ids',
         comodel_name='res.users',
-        string='Sorumlular',
+        string='Responsibles',
         readonly=False,
         help="Birden fazla kullanıcıyı atayabilirsiniz."
     )
     email_template_id = fields.Many2one(
         related='task_id.email_template_id',
         comodel_name='mail.template',
-        string='E-posta Şablonu',
+        string='E-Mail Template',
         readonly=False,
     )
     optional_product_id = fields.Many2one(
         related='task_id.optional_product_id',
         comodel_name='product.product',
-        string='Koşul',
+        string='Optional Product',
         readonly=False,
     )
     communication_type = fields.Selection(
