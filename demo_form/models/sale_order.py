@@ -13,7 +13,7 @@ class SaleOrder(models.Model):
     )
     
     @api.onchange('sale_order_template_id')
-    def _onchange_sale_order_template_id(self):
+    def _onchange_sale_template_task(self):
         if not self.sale_order_template_id:
             self.project_task_ids = [(5, 0, 0)]
             self.is_project_true = False
