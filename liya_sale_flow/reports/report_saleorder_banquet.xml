@@ -663,6 +663,7 @@
                         <img t-att-src="image_data_uri(doc.company_id.logo)"/>
                     </div>
                 </div>
+                </t>
                 <t t-if="len(doc.service_ids) + len(doc.program_ids) + len(doc.transport_ids) &gt; 15">
                     <div class="page"/>
                 </t>
