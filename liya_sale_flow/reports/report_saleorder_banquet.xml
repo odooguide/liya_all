@@ -151,17 +151,32 @@
                     </div>
                 </t>
                 <!-- Page 3 -->
+                <t t-if="'Liya Resim 1' in doc.banquet_pages.mapped('name')">
 
-                <div class="page">
-                    <div style="text-align: center;">
-                        <img src="/liya_sale_flow/static/src/img/img3.jpeg" style="width:80%; height:98%;"/>
+                    <div class="page">
+                        <div style="text-align: center;">
+                            <img src="/liya_sale_flow/static/src/img/img3.jpeg" style="width:80%; height:98%;"/>
 
+                        </div>
+                        <div class="bottom-text">
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
                     </div>
-                    <div class="bottom-text">
-                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                        <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                </t>
+                <t t-if="'Liya Resim 2' in doc.banquet_pages.mapped('name')">
+
+                    <div class="page">
+                        <div style="text-align: center;">
+                            <img src="/liya_sale_flow/static/src/img/img5.jpeg" style="width:80%; height:98%;"/>
+
+                        </div>
+                        <div class="bottom-text">
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
                     </div>
-                </div>
+                </t>
                 <!-- Page 4 -->
                 <t t-if="'Liya Menu 1' in doc.banquet_pages.mapped('name')">
 
@@ -317,15 +332,18 @@
                     </div>
                 </t>
                 <!-- Page 6 -->
-                <div class="page">
-                    <div style="text-align: center;margin-top:10px ">
-                        <img src="/liya_sale_flow/static/src/img/img2.jpeg" style="width:80%; height:90%"/>
+                <t t-if="'Liya Resim 3' in doc.banquet_pages.mapped('name')">
+
+                    <div class="page">
+                        <div style="text-align: center;margin-top:10px ">
+                            <img src="/liya_sale_flow/static/src/img/img2.jpeg" style="width:80%; height:90%"/>
+                        </div>
+                        <div class="bottom-text">
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
                     </div>
-                    <div class="bottom-text">
-                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                        <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                    </div>
-                </div>
+                </t>
 
                 <!-- Page 7 -->
                 <t t-if="'Liya Menu 3' in doc.banquet_pages.mapped('name')">
@@ -386,12 +404,14 @@
                         <div style="clear: both;"/>
                     </div>
                 </t>
-                <t t-if="'Liya Menu 1' in doc.banquet_pages.mapped('name')">
+                <t t-if="'Liya Menu 1 Alkolsüz' in doc.banquet_pages.mapped('name')">
 
                     <div class="page">
                         <h2 style="text-align: center;">LİYA ALL DAVET ZİYAFET MENÜLERİ</h2>
                         <p style="text-align: center; font-style: italic;">(3 farklı menü seçeneği sunulmaktadır)</p>
-                        <h3 style="text-align: center; margin-bottom: 10px;">MENÜ 1 <em>(Alkolsüz)</em></h3>
+                        <h3 style="text-align: center; margin-bottom: 10px;">MENÜ 1
+                            <em>(Alkolsüz)</em>
+                        </h3>
                         <!-- Two-column layout for Meze and Ana Yemekler -->
                         <div style="width: 24%; float: left; padding-right: 5px; border-right: 1px solid #8c6a3b;">
                             <h4>MEZELER</h4>
@@ -457,11 +477,13 @@
                         </div>
                     </div>
                 </t>
-                <t t-if="'Liya Menu 2' in doc.banquet_pages.mapped('name')">
+                <t t-if="'Liya Menu 2 Alkolsüz' in doc.banquet_pages.mapped('name')">
 
                     <!-- Page 5 -->
                     <div class="page">
-                        <h3 style="text-align: center;">MENÜ 2 <em>(Alkolsüz)</em></h3>
+                        <h3 style="text-align: center;">MENÜ 2
+                            <em>(Alkolsüz)</em>
+                        </h3>
                         <!-- Meze column -->
                         <div style="width: 24%; float: left; padding-right: 5px; border-right: 1px solid #8c6a3b;">
                             <h4>MEZELER</h4>
@@ -531,10 +553,12 @@
                 </t>
 
                 <!-- Page 7 -->
-                <t t-if="'Liya Menu 3' in doc.banquet_pages.mapped('name')">
+                <t t-if="'Liya Menu 3 Alkolsüz' in doc.banquet_pages.mapped('name')">
 
                     <div class="page">
-                        <h3 style="text-align: center;">MENÜ 3 <em>(Alkolsüz)</em></h3>
+                        <h3 style="text-align: center;">MENÜ 3
+                            <em>(Alkolsüz)</em>
+                        </h3>
                         <p style="text-align: center; margin-top: 5px; font-style: italic;">KOKTEYL - PROLONGE</p>
                         <div style="width: 35%; float: left; padding-right: 10px;border-right: 1px solid #8c6a3b;">
                             <h4>KRUDİTE</h4>
@@ -584,6 +608,8 @@
                     </div>
                 </t>
                 <!-- Page 8 -->
+                <t t-if="'Liya Etkinlik Süreleri' in doc.banquet_pages.mapped('name')">
+
                 <div class="page">
                     <!-- Dynamic Services -->
                     <h2 style="text-align: center;">ÜCRETE DAHİL OLAN HİZMETLER</h2>
@@ -641,6 +667,7 @@
                     <div class="page"/>
                 </t>
 
+                <t t-if="'Liya Teklif' in doc.banquet_pages.mapped('name')">
 
                 <!-- Page 9 -->
                 <div class="page">
@@ -707,10 +734,12 @@
                                             <t t-esc="l.product_uom.name"/>
                                         </td>
                                         <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:15%;">
-                                            <t t-esc="l.price_unit" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                            <t t-esc="l.price_unit"
+                                               t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                         </td>
                                         <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:25%;">
-                                            <t t-esc="l.price_subtotal" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                            <t t-esc="l.price_subtotal"
+                                               t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                         </td>
                                     </tr>
                                 </t>
@@ -721,15 +750,18 @@
                     <div class="so_total_summary clearfix">
                         <div class="row justify-content-end mt-3">
                             <div class="col-auto" style="width:40%;">
-                                <table class="table table-borderless o_total_table" style="width:100%; line-height:10pt; border:none; border-collapse: collapse;">
-                                    <t t-set="disc" t-value="sum([l.price_subtotal for l in doc.order_line if l.price_subtotal &lt; 0])"/>
+                                <table class="table table-borderless o_total_table"
+                                       style="width:100%; line-height:10pt; border:none; border-collapse: collapse;">
+                                    <t t-set="disc"
+                                       t-value="sum([l.price_subtotal for l in doc.order_line if l.price_subtotal &lt; 0])"/>
                                     <tfoot>
                                         <tr>
                                             <td colspan="3" style="padding: 8px; border:none; text-align:right;">
                                                 <strong>Vergi Hariç Tutar:</strong>
                                             </td>
                                             <td style="padding: 8px; border:none; text-align:right;">
-                                                <t t-esc="(doc.amount_total - disc)" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                                <t t-esc="(doc.amount_total - disc)"
+                                                   t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                             </td>
                                         </tr>
                                         <tr t-if="disc">
@@ -738,7 +770,8 @@
 
                                             </td>
                                             <td style="padding: 8px; border:none; text-align:right;">
-                                                <t t-esc="(-disc)" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                                <t t-esc="(-disc)"
+                                                   t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                             </td>
                                         </tr>
                                         <tr>
@@ -747,7 +780,8 @@
                                             </td>
                                             <td style="padding: 8px; border:none; text-align:right;">
                                                 <strong>
-                                                    <t t-esc="doc.amount_total" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                                    <t t-esc="doc.amount_total"
+                                                       t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
                                                 </strong>
                                             </td>
                                         </tr>
@@ -765,16 +799,21 @@
                         <img t-att-src="image_data_uri(doc.company_id.logo)"/>
                     </div>
                 </div>
+
                 <!-- Page 10 -->
-                <div class="page">
-                    <div style="text-align: center; margin-top:10px">
-                        <img src="/liya_sale_flow/static/src/img/img1.jpeg" style="width:90%; "/>
+                <t t-if="'Liya Son' in doc.banquet_pages.mapped('name')">
+
+                    <div class="page">
+
+                        <div style="text-align: center; margin-top:10px">
+                            <img src="/liya_sale_flow/static/src/img/img1.jpeg" style="width:90%; "/>
+                        </div>
+                        <div class="bottom-text">
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
                     </div>
-                    <div class="bottom-text">
-                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                        <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                    </div>
-                </div>
+                </t>
             </main>
         </t>
     </template>

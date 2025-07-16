@@ -51,20 +51,16 @@ class SaleOrder(models.Model):
             current_products = order.order_line.mapped('product_id')
             template_tasks = order.sale_order_template_id.project_task_ids
 
-            # ———— 1) Hangi task’lar artık satırda *yok*? ————
             to_remove = order.project_task_ids.filtered(
                 lambda t: t.optional_product_id and t.optional_product_id not in current_products
             )
-            # Bu komut, UI’den hemen satırdan çıkarır (kaydetmeye gerek kalmaz)
             remove_cmds = [(2, t.id) for t in to_remove]
 
-            # ———— 2) Hangi task’lar hâlâ korunacak? ————
             preserve = order.project_task_ids.filtered(
                 lambda t: t.optional_product_id and t.optional_product_id in current_products
             )
             preserve_cmds = [(4, t.id) for t in preserve]
 
-            # ———— 3) Hangi yeni template task’ları ekleyeceğiz? ————
             preserved_prods = preserve.mapped('optional_product_id')
             to_add = template_tasks.filtered(
                 lambda tmpl: tmpl.optional_product_id
@@ -88,8 +84,8 @@ class SaleOrder(models.Model):
                     'event_date':          tmpl.event_date,
                 }))
 
-            # ———— 4) Tüm komutları birleştirip UI’a gönder ————
             order.project_task_ids = remove_cmds + preserve_cmds + add_cmds
+            order.project_task_ids._onchange_deadline_date()
             
     def action_open_project_wizard(self):
         self.ensure_one()
@@ -109,6 +105,12 @@ class SaleOrder(models.Model):
 
             },
         }
+
+    @api.onchange('wedding_date')
+    def _onchange_wedding_date(self):
+        for rec in self:
+            if rec.project_task_ids:
+                rec.project_task_ids._onchange_deadline_date()
     
 class SaleOrderOption(models.Model):
     _inherit = 'sale.order.option'

@@ -18,9 +18,9 @@
                     <field name="project_task_ids">
                         <list editable="bottom" creatable="true">
 
-                            <field name="sale_order_id" invisible="1"/>
+                            <field name="sale_order_id" column_invisible="1"/>
                             <field name="name"/>
-                            <field name="event_date" invisible="1"/>
+                            <field name="event_date" column_invisible="1"/>
                             <field name="description"/>
                             <field name="stage_id"/>
                             <field name="planned_date" optional="hide"/>

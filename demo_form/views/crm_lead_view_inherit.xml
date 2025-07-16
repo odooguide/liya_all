@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_crm_lead_form_inherit_wedding" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.wedding</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <header>
+                <button name="action_open_project_wizard"
+                        string="Create Project"
+                        type="object"
+                        class="btn btn-primary"
+                        invisible="has_contract==False"
+                />
+            </header>
+            <xpath expr="//field[@name='option3']" position="after">
+                <field name="project_id"/>
+                <field name="has_contract"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
