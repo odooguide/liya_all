@@ -86,7 +86,7 @@ class SaleProjectTask(models.Model):
                     except ValueError:
                         wedd = None
                     if same_year and wedd and wedd > base_dt and today > base_dt:
-                        target = today + timedelta(days=1)
+                        target = today + timedelta(days=rec.days)
 
                     else:
                         target = base_dt
