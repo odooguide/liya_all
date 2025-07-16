@@ -245,5 +245,4 @@ class SaleOrderProjectWizardLine(models.TransientModel):
                             target = date(today.year + 1, month, day)
                     rec.deadline_date = target
                     continue
-                else:
-                    rec.deadline_date = False
+
