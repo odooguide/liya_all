@@ -799,6 +799,7 @@
                         <img t-att-src="image_data_uri(doc.company_id.logo)"/>
                     </div>
                 </div>
+                </t>
 
                 <!-- Page 10 -->
                 <t t-if="'Liya Son' in doc.banquet_pages.mapped('name')">
