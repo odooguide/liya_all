@@ -1,26 +1,40 @@
 <odoo>
     <record id="view_order_form_inherit_demo_tasks" model="ir.ui.view">
-  <field name="name">sale.order.form.demo.tasks</field>
-  <field name="model">sale.order</field>
-  <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
-  <field name="arch" type="xml">
-    <xpath expr="//page[@name='optional_products']" position="after">
-      <page string="Projedeki Görevler">
-        <field name="project_task_ids">
-          <list editable="bottom" creatable="true">
-            <field name="name"/>
-            <field name="description"/>
-            <field name="stage_id"/>
-            <field name="planned_date"/>
-            <field name="days"/>
-            <field name="user_ids" widget="many2many_tags"/>
-            <field name="activity_type_id"/>
-            <field name="optional_product_id"/>
-          </list>
-        </field>
-      </page>
-    </xpath>
+        <field name="name">sale.order.form.demo.tasks</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
+        <field name="arch" type="xml">
+            <header>
+                <button name="action_open_project_wizard"
+                        string="Create Project"
+                        type="object"
+                        class="btn btn-primary"
+                        invisible="is_project_true != False or confirmed_contract==False"
+                />
+            </header>
+            <xpath expr="//page[@name='optional_products']" position="after">
+                <page string="Project Tasks">
+                    <field name="is_project_true" invisible="1"/>
+                    <field name="project_task_ids">
+                        <list editable="bottom" creatable="true">
 
-  </field>
-</record>
+                            <field name="sale_order_id" column_invisible="1"/>
+                            <field name="name"/>
+                            <field name="event_date" column_invisible="1"/>
+                            <field name="description"/>
+                            <field name="stage_id"/>
+                            <field name="planned_date" optional="hide"/>
+                            <field name="date_line" optional="hide"/>
+                            <field name="days" optional="hide"/>
+                            <field name="deadline_date"/>
+                            <field name="user_ids" widget="many2many_tags"/>
+                            <field name="email_template_id"/>
+                            <field name="communication_type"/>
+                            <field name="optional_product_id"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
 </odoo>

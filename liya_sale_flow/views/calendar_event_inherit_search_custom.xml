@@ -6,21 +6,11 @@
     <field name="arch" type="xml">
 
       <xpath expr="//filter" position="inside">
-        <filter
-          string="Satış Toplantısı"
-          name="filter_sales_meeting"
-          domain="[('categ_ids.name', '=', 'Satış Toplantısı')]"
-        />
-          <filter
-          string="Düğün"
-          name="filter_wedding_meeting"
-          domain="[('categ_ids.name', '=', 'Düğün')]"
-        />
-          <filter
-          string="Demo"
-          name="filter_demo_meeting"
-          domain="[('categ_ids.name', '=', 'Demo')]"
-        />
+         <filter string="Düğün Takvimi" name="filter_reserve_wedding" domain="[('categ_ids.name', 'in', ['Düğün Rezerve','Düğün'])]"/>
+        <filter string="Etkinlik Takvimi" name="filter_reserve_event" domain="[('categ_ids.name', 'in', ['Etkinlik','Etkinlik Rezerve'])]"/>
+        <filter string="Düğün ve Etkinlik Takvimi" name="filter_reserve_event" domain="[('categ_ids.name', 'in', ['Etkinlik','Etkinlik Rezerve','Düğün Rezerve','Düğün'])]"/>
+        <filter string="Satış Toplantısı" name="filter_sales_meeting_wedding" domain="[('categ_ids.name', 'in', ['Düğün Satış Toplantısı','Etkinlik Satış Toplantısı'])]"/>
+        <filter string="Demo" name="filter_demo_meeting" domain="[('categ_ids.name', '=', 'Demo Toplantısı')]"/>
       </xpath>
     </field>
   </record>

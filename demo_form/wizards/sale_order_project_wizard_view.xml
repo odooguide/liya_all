@@ -1,0 +1,40 @@
+<odoo>
+
+    <record id="view_sale_order_project_wizard_form" model="ir.ui.view">
+        <field name="name">sale.order.project.wizard.form</field>
+        <field name="model">sale.order.project.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Proje Oluştur">
+                <sheet>
+                    <group>
+                        <field name="sale_order_id" invisible="1"/>
+                        <field name="project_task_line_ids" nolabel="1">
+                            <list editable="bottom" create="true" >
+
+                                <field name="task_id" column_invisible="1"/>
+                                <field name="sale_order_id" column_invisible="1"/>
+                                <field name="name" readonly="0"/>
+                                <field name="description"/>
+                                <field name="stage_id"/>
+                                <field name="planned_date" optional="hide"/>
+                                <field name="date_line" optional="hide"/>
+                                <field name="days" optional="hide"/>
+                                <field name="deadline_date" readonly="0"/>
+                                <field name="email_template_id" readonly="0"/>
+                                <field name="communication_type" readonly="0"/>
+                                <field name="user_ids" widget="many2many_tags" readonly="0"/>
+                                <field name="optional_product_id" readonly="1"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="İptal" class="btn-secondary" special="cancel"/>
+                    <button string="Onayla ve Oluştur" type="object"
+                            name="action_confirm_create"
+                            class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

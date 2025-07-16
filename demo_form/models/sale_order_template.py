@@ -1,4 +1,6 @@
 from odoo import api, fields, models
+from datetime import timedelta, date,datetime
+
 
 class SaleOrderTemplate(models.Model):
     _inherit = 'sale.order.template'
@@ -24,32 +26,43 @@ class SaleOrderTemplateTask(models.Model):
         string='Sale Order',
         ondelete='cascade',
     )
-    name = fields.Char(string='Görev Adı', required=True)
-    description = fields.Text(string='Açıklama')
+    name = fields.Char(string='Task Name', required=True)
+    description = fields.Text(string='Description')
     stage_id = fields.Many2one(
         comodel_name='project.task.type',
-        string='Aşama',
+        string='Stage',
     )
     planned_date = fields.Selection(
         selection=[
-            ('before_wedding', 'Düğünden Önce'),
-            ('after_wedding', 'Düğünden Sonra'),
+            ('before_wedding', 'Before Wedding'),
+            ('border', 'Border Date'),
+            ('casual_date', 'Stable Date'),
         ],
-        string='Planlanan Tarih',
+        string='Planned Type',
         default='before_wedding',
     )
-    days = fields.Integer(string='Gün')
+    deadline_date = fields.Date(string='Deadline Date')
+    date_line = fields.Char(string='Date Line')
+    days = fields.Integer(string='Days')
     user_ids = fields.Many2many(
         comodel_name='res.users',
-        string='Sorumlular',
-        help="Birden fazla kullanıcıyı atayabilirsiniz."
+        string='Responsibles',
+
     )
-    activity_type_id = fields.Many2one(
-        comodel_name='mail.activity.type',
-        string='Aktivite Tipi',
+    email_template_id = fields.Many2one(
+        comodel_name='mail.template',
+        domain=[('model_id.model', '=', 'project.task')],
+        string='E-mail Template',
+
     )
     optional_product_id = fields.Many2one(
         'product.product',
-        string='Koşul',
-        help="Bu template için tanımlı Optional Products listesinden seçin."
+        string='Optional Products',
     )
+    communication_type = fields.Selection(selection=[
+        ('mail', 'E-Mail'),
+        ('phone', 'Whatsapp'),
+    ],
+        string='Communication Type',
+        default='phone', )
+    event_date=fields.Date(string='Event Date')

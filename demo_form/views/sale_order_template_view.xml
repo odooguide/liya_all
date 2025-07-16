@@ -1,39 +1,47 @@
 <odoo>
-  <record id="view_sale_order_template_form_inherit_tasks" model="ir.ui.view">
-    <field name="name">sale.order.template.form.tasks</field>
-    <field name="model">sale.order.template</field>
-    <field name="inherit_id" ref="sale_management.sale_order_template_view_form"/>
-    <field name="arch" type="xml">
-      <notebook position="inside">
-        <page string="Projedeki Görevler">
-          <field name="project_task_ids">
-            <list editable="bottom">
-              <field name="name"/>
-              <field name="description"/>
-              <field name="stage_id"/>
-              <field name="planned_date"/>
-              <field name="days"/>
-              <field name="user_ids" widget="many2many_tags"/>
-              <field name="activity_type_id"/>
-              <field name="optional_product_id"/>
-            </list>
-            <form>
-              <sheet>
-                <group>
-                  <field name="name"/>
-                  <field name="description"/>
-                  <field name="stage_id"/>
-                  <field name="planned_date"/>
-                  <field name="days"/>
-                  <field name="user_ids" widget="many2many_tags"/>
-                  <field name="activity_type_id"/>
-                  <field name="optional_product_id"/>
-                </group>
-              </sheet>
-            </form>
-          </field>
-        </page>
-      </notebook>
-    </field>
-  </record>
+    <record id="view_sale_order_template_form_inherit_tasks" model="ir.ui.view">
+        <field name="name">sale.order.template.form.tasks</field>
+        <field name="model">sale.order.template</field>
+        <field name="inherit_id" ref="sale_management.sale_order_template_view_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Projedeki Görevler">
+                    <field name="project_task_ids">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="stage_id"/>
+                            <field name="planned_date"/>
+                            <field name="date_line"/>
+                            <field name="days"/>
+                            <field name="deadline_date"/>
+                            <field name="user_ids" widget="many2many_tags"/>
+                            <field name="email_template_id"/>
+                            <field name="communication_type"/>
+                            <field name="optional_product_id"/>
+                        </list>
+                        <form>
+                            <sheet>
+                                <group>
+
+                                    <field name="sale_order_id" invisible="1"/>
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="stage_id"/>
+                                    <field name="planned_date"/>
+                                    <field name="date_line"/>
+                                    <field name="days"/>
+                                    <field name="deadline_date"/>
+                                    <field name="user_ids" widget="many2many_tags"/>
+                                    <field name="email_template_id"/>
+                                    <field name="communication_type"/>
+                                    <field name="optional_product_id"/>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
 </odoo>

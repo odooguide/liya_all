@@ -1,0 +1,26 @@
+<odoo>
+    <record id="view_project_task_email_inherit" model="ir.ui.view">
+        <field name="name">view.project.task.email.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+
+            <header>
+                <button name="action_send_task_email"
+                        string="Send E-mail"
+                        type="object"
+                        class="btn-primary"
+                        invisible="communication_type=='phone'"/>
+
+
+            </header>
+
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="email_template_id"/>
+                <field name="communication_type"/>
+
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
