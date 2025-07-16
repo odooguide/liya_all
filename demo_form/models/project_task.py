@@ -47,5 +47,5 @@ class ProjectTask(models.Model):
             ):
                 raise ValidationError(_(
                     '“Demo Randevu Oluşturma” görevini "Tamamlandı" durumuna getirebilmek için '
-                    'projeye en az bir takvim etkinliği eklenmelidir.'
+                    'Demo tarihi belirlenmelidir.'
                 ))
