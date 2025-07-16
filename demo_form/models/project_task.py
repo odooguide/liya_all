@@ -1,4 +1,5 @@
 from odoo import fields, api, models, _
+from odoo.exceptions import ValidationError
 
 
 class ProjectTask(models.Model):
@@ -35,3 +36,16 @@ class ProjectTask(models.Model):
             'target': 'new',
             'context': ctx,
         }
+
+    @api.constrains('state')
+    def _check_demo_task_event(self):
+        for task in self:
+            if (
+                    task.name == 'Demo Randevu Oluşturma'
+                    and task.state == '1_done'
+                    and not task.project_id.event_ids
+            ):
+                raise ValidationError(_(
+                    '“Demo Randevu Oluşturma” görevini "Tamamlandı" durumuna getirebilmek için '
+                    'projeye en az bir takvim etkinliği eklenmelidir.'
+                ))
