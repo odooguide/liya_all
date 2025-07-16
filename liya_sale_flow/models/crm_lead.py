@@ -131,7 +131,7 @@ class CrmLead(models.Model):
     @api.depends('stage_id')
     def _compute_stage_lead(self):
         for lead in self:
-            if lead.stage_id.name in ('Toplantı Adayı', 'Meeting'):
+            if lead.stage_id.name in ('Aday', 'Meeting'):
                 lead.is_stage_lead = True
             else:
                 lead.is_stage_lead = False
@@ -228,7 +228,7 @@ class CrmLead(models.Model):
                 ('state', 'in', ('sale', 'done'))
             ])
 
-            if new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation':
+            if new_stage.name == 'Görüşülen' or new_stage.name == 'In Contact / Quotation':
                 if lead.quotation_count < 1 and not orders:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
 

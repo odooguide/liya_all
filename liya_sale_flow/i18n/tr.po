@@ -798,7 +798,7 @@ msgstr "Etkinlik Detayları"
 #: model:ir.actions.act_window,name:liya_sale_flow.action_crm_event_leads
 #: model:ir.ui.menu,name:liya_sale_flow.menu_crm_event
 msgid "Event Leads"
-msgstr "Etkinlik Adayları"
+msgstr "Etkinlik Talepleri"
 
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_sale_order_program__name
@@ -1577,7 +1577,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:liya_sale_flow.action_crm_wedding_leads
 #: model:ir.ui.menu,name:liya_sale_flow.menu_crm_wedding
 msgid "Wedding Leads"
-msgstr "Düğün Adayları"
+msgstr "Düğün Talepleri"
 
 #. module: liya_sale_flow
 #: model:ir.actions.act_window,name:liya_sale_flow.action_crm_wedding_opportunity
