@@ -708,7 +708,7 @@
                     </p>
                     <table style="width:100%; table-layout: fixed; border-collapse: collapse; margin-top: 15px;">
                         <thead>
-                            <tr style="background: ##a1cbc4;">
+                            <tr style="background: #a1cbc4;">
                                 <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:45%;">
                                     <strong>Ürün</strong>
                                 </th>
