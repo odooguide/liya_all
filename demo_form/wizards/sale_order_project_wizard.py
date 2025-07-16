@@ -90,7 +90,7 @@ class SaleOrderProjectWizard(models.TransientModel):
             else:
                 user_recs = order.coordinator_ids.mapped('employee_ids.user_id')
                 users = self.env['res.users'].search([
-                    ('id', 'in', user_recs)
+                    ('id', 'in', user_recs.ids)
                 ])
                 responsibles = users.ids
 
