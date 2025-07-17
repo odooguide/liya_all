@@ -324,49 +324,71 @@ class CrmLead(models.Model):
 
     @api.model
     def backfill_stage_dates(self):
-        """Geçmiş mail.message loglarına bakıp,
-           new_value_char üzerinden stage isimlerini kıyaslayarak
-           date alanlarını doldurur."""
+        """mail.tracking.value üzerinden stage_id değişimlerini okuyup,
+           ilgili date alanlarını doldurur."""
+        # 1) İlgili stage isimlerini bul
         Stage = self.env['crm.stage']
-        seeing_stage = Stage.search([('name', '=', 'Görüşülüyor / Teklif Süreci')], limit=1)
-        contract_stage = Stage.search([('name', '=', 'Sözleşme Süreci')], limit=1)
-        won_stage = Stage.search([('name', '=', 'Kazanıldı')], limit=1)
+        seeing_name = 'Görüşülüyor / Teklif Süreci'
+        contract_name = 'Sözleşme Süreci'
+        won_name = 'Kazanıldı'
+        # (İsterseniz xml_id ile de arayabilirsiniz)
 
-        for lead in self.search([]):
-            to_write = {}
+        # 2) Tüm ilgili tracking.value kayıtlarını al
+        Track = self.env['mail.tracking.value']
+        tracking_vals = Track.search([
+            ('field_id.name', '=', 'stage_id'),
+            ('mail_message_id.model', '=', 'crm.lead'),
+        ], order='mail_message_id.date asc, id asc')
 
-            msgs = self.env['mail.message'].search([
+        # 3) Lead bazında bir dict hazırlayalım: { lead_id: { seeing_state_date: date, ... } }
+        data = {}
+        for tv in tracking_vals:
+            lead_id = tv.mail_message_id.res_id
+            date = fields.Date.to_date(tv.mail_message_id.date)
+            new = tv.new_value_char or ''
+            # initialize
+            if lead_id not in data:
+                data[lead_id] = {}
+            vals = data[lead_id]
+
+            # ilk kez Görüşülüyor
+            if new == seeing_name and 'seeing_state_date' not in vals:
+                vals['seeing_state_date'] = date
+            # ilk kez Sözleşme Süreci
+            if new == contract_name and 'contract_state_date' not in vals:
+                vals['contract_state_date'] = date
+            # ilk kez Kazanıldı
+            if new == won_name and 'won_state_date' not in vals:
+                vals['won_state_date'] = date
+
+        # 4) Ayrıca Opportunity Won subtype’ı ile gelen kayıtlar varsa, onları da ekleyelim
+        Msg = self.env['mail.message']
+        # sadece won tarihi eksik kalanlar için
+        missing_won = [lead_id for lead_id, vals in data.items() if 'won_state_date' not in vals]
+        if missing_won:
+            won_msgs = Msg.search([
                 ('model', '=', 'crm.lead'),
-                ('res_id', '=', lead.id),
-                ('subtype_id.name', '=', 'Stage Changed'),
+                ('res_id', 'in', missing_won),
+                ('subtype_id.name', '=', 'Opportunity Won'),
             ], order='date asc')
+            for msg in won_msgs:
+                lid = msg.res_id
+                if lid in data and 'won_state_date' not in data[lid]:
+                    data[lid]['won_state_date'] = fields.Date.to_date(msg.date)
 
-            for msg in msgs:
-                msg_date = fields.Date.to_date(msg.date)
-                for tv in msg.tracking_value_ids.filtered(lambda r: r.field_id.name == 'stage_id'):
-                    new_name = tv.new_value_char or ''
-                    # İlk kez Seeing
-                    if new_name == seeing_stage.name and not lead.seeing_state_date and 'seeing_state_date' not in to_write:
-                        to_write['seeing_state_date'] = msg_date
-                    # İlk kez Contract
-                    if new_name == contract_stage.name and not lead.contract_state_date and 'contract_state_date' not in to_write:
-                        to_write['contract_state_date'] = msg_date
-                    # İlk kez Won
-                    if new_name == won_stage.name and not lead.won_state_date and 'won_state_date' not in to_write:
-                        to_write['won_state_date'] = msg_date
-
-            # Eğer Opportunity Won subtype’ı varsa ve won_state_date hâlâ boşsa
-            if not lead.won_state_date and 'won_state_date' not in to_write:
-                won_msgs = self.env['mail.message'].search([
-                    ('model', '=', 'crm.lead'),
-                    ('res_id', '=', lead.id),
-                    ('subtype_id.name', '=', 'Opportunity Won'),
-                ], order='date asc', limit=1)
-                if won_msgs:
-                    to_write['won_state_date'] = fields.Date.to_date(won_msgs[0].date)
-
-            if to_write:
-                lead.write(to_write)
+        # 5) Son olarak, gerçek lead kayıtlarını güncelle
+        for lead_id, vals in data.items():
+            # lead zaten doluysa (örneğin manuel girilmişse) atla
+            lead = self.browse(lead_id)
+            write_vals = {}
+            if vals.get('seeing_state_date') and not lead.seeing_state_date:
+                write_vals['seeing_state_date'] = vals['seeing_state_date']
+            if vals.get('contract_state_date') and not lead.contract_state_date:
+                write_vals['contract_state_date'] = vals['contract_state_date']
+            if vals.get('won_state_date') and not lead.won_state_date:
+                write_vals['won_state_date'] = vals['won_state_date']
+            if write_vals:
+                lead.write(write_vals)
 
         return True
 
