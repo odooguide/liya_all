@@ -85,6 +85,9 @@ class CrmLead(models.Model):
     )
     is_stage_lead = fields.Boolean(string='Is Stage Lead', compute='_compute_stage_lead')
     is_event_team = fields.Boolean(string="Is Event Team", compute='_compute_event_team', store=True)
+    seeing_date=fields.Date(string='Seeing Date')
+    contract_date=fields.Date(string='Contract Date')
+    won_date=fields.Date(string='Won Date')
 
     #####Compute #####
 
@@ -231,12 +234,15 @@ class CrmLead(models.Model):
             if new_stage.name == 'Görüşülen' or new_stage.name == 'In Contact / Quotation':
                 if lead.quotation_count < 1 and not orders:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
+                self.seeing_date=fields.Date.today()
 
             elif new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting':
                 if not orders:
                     raise UserError(
                         _('Onaylı teklif yok, "Sözleşme Süreci"ne geçemezsiniz.')
                     )
+                self.contract_date=fields.Date.today()
+
             if new_stage.name == 'Kazanıldı' or new_stage.name == 'Won':
                 has_confirmed = any(order.confirmed_contract for order in orders)
                 if not has_confirmed:
@@ -246,7 +252,7 @@ class CrmLead(models.Model):
 
                 if not orders[0].contract_date:
                     raise UserError(_("Sözleşme tarihi seçilmeden satışı onaylayamazsınız."))
-
+                self.won_date=fields.Date.today()
                 self.create_activity(lead)
 
                 orders_to_cancel = self.env['sale.order'].search([

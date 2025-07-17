@@ -151,6 +151,9 @@
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="yabanci_turk" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
+                <field name="seeing_date" invisible="1"/>
+                <field name="contract_date" invisible="1"/>
+                <field name="won_date" invisible="1"/>
             </xpath>
 
 
