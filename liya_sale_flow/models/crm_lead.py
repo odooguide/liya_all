@@ -85,9 +85,9 @@ class CrmLead(models.Model):
     )
     is_stage_lead = fields.Boolean(string='Is Stage Lead', compute='_compute_stage_lead')
     is_event_team = fields.Boolean(string="Is Event Team", compute='_compute_event_team', store=True)
-    seeing_date=fields.Date(string='Seeing Date')
-    contract_date=fields.Date(string='Contract Date')
-    won_date=fields.Date(string='Won Date')
+    seeing_state_date=fields.Date(string='Seeing Date')
+    contract_state_date=fields.Date(string='Contract Date')
+    won_state_date=fields.Date(string='Won Date')
 
     #####Compute #####
 
@@ -231,7 +231,7 @@ class CrmLead(models.Model):
                 ('state', 'in', ('sale', 'done'))
             ])
 
-            if new_stage.name == 'Görüşülen' or new_stage.name == 'In Contact / Quotation':
+            if new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation':
                 if lead.quotation_count < 1 and not orders:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
                 self.seeing_date=fields.Date.today()
@@ -321,6 +321,54 @@ class CrmLead(models.Model):
             )
             if rec:
                 self.wedding_place = rec.id
+
+    @api.model
+    def backfill_stage_dates(self):
+        """Geçmiş mail.message loglarına bakıp,
+           new_value_char üzerinden stage isimlerini kıyaslayarak
+           date alanlarını doldurur."""
+        Stage = self.env['crm.stage']
+        seeing_stage = Stage.search([('name', '=', 'Görüşülüyor / Teklif Süreci')], limit=1)
+        contract_stage = Stage.search([('name', '=', 'Sözleşme Süreci')], limit=1)
+        won_stage = Stage.search([('name', '=', 'Kazanıldı')], limit=1)
+
+        for lead in self.search([]):
+            to_write = {}
+
+            msgs = self.env['mail.message'].search([
+                ('model', '=', 'crm.lead'),
+                ('res_id', '=', lead.id),
+                ('subtype_id.name', '=', 'Stage Changed'),
+            ], order='date asc')
+
+            for msg in msgs:
+                msg_date = fields.Date.to_date(msg.date)
+                for tv in msg.tracking_value_ids.filtered(lambda r: r.field == 'stage_id'):
+                    new_name = tv.new_value_char or ''
+                    # İlk kez Seeing
+                    if new_name == seeing_stage.name and not lead.seeing_state_date and 'seeing_state_date' not in to_write:
+                        to_write['seeing_state_date'] = msg_date
+                    # İlk kez Contract
+                    if new_name == contract_stage.name and not lead.contract_state_date and 'contract_state_date' not in to_write:
+                        to_write['contract_state_date'] = msg_date
+                    # İlk kez Won
+                    if new_name == won_stage.name and not lead.won_state_date and 'won_state_date' not in to_write:
+                        to_write['won_state_date'] = msg_date
+
+            # Eğer Opportunity Won subtype’ı varsa ve won_state_date hâlâ boşsa
+            if not lead.won_state_date and 'won_state_date' not in to_write:
+                won_msgs = self.env['mail.message'].search([
+                    ('model', '=', 'crm.lead'),
+                    ('res_id', '=', lead.id),
+                    ('subtype_id.name', '=', 'Opportunity Won'),
+                ], order='date asc', limit=1)
+                if won_msgs:
+                    to_write['won_state_date'] = fields.Date.to_date(won_msgs[0].date)
+
+            if to_write:
+                lead.write(to_write)
+
+        return True
 
 
 class ForeignLocal(models.Model):
