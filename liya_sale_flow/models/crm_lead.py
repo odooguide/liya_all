@@ -343,7 +343,7 @@ class CrmLead(models.Model):
 
             for msg in msgs:
                 msg_date = fields.Date.to_date(msg.date)
-                for tv in msg.tracking_value_ids.filtered(lambda r: r.field == 'stage_id'):
+                for tv in msg.tracking_value_ids.filtered(lambda r: r.field_id.name == 'stage_id'):
                     new_name = tv.new_value_char or ''
                     # İlk kez Seeing
                     if new_name == seeing_stage.name and not lead.seeing_state_date and 'seeing_state_date' not in to_write:
