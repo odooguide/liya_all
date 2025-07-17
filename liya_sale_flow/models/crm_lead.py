@@ -338,7 +338,7 @@ class CrmLead(models.Model):
         tracking_vals = Track.search([
             ('field_id.name', '=', 'stage_id'),
             ('mail_message_id.model', '=', 'crm.lead'),
-        ], order='mail_message_id.date asc, id asc')
+        ])
 
         # 3) Lead bazında bir dict hazırlayalım: { lead_id: { seeing_state_date: date, ... } }
         data = {}
