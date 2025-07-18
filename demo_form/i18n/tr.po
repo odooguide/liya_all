@@ -1,0 +1,408 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* demo_form
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-18 19:54+0000\n"
+"PO-Revision-Date: 2025-07-18 19:54+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_project_demo_inherit
+msgid "<span class=\"o_stat_text\">Demo Tarihi:</span>"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_project_demo_inherit
+msgid "Assing Demo Date"
+msgstr "Demo Tarihi Ata"
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_project_wizard_line__planned_date__before_wedding
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_template_task__planned_date__before_wedding
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_project_task__planned_date__before_wedding
+msgid "Before Wedding"
+msgstr "Düğünden Önce"
+
+#. module: demo_form
+#: model:ir.model.fields,help:demo_form.field_sale_order_project_wizard_line__user_ids
+msgid "Birden fazla kullanıcıyı atayabilirsiniz."
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_project_wizard_line__planned_date__border
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_template_task__planned_date__border
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_project_task__planned_date__border
+msgid "Border Date"
+msgstr "Sınır Tarihi"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__date_line
+msgid "Border Date Line"
+msgstr "Sınır Tarihi (gün.ay)"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard__lead_id
+msgid "CRM Lead ID"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_project__event_ids
+msgid "Calendar Events"
+msgstr "Takvim Etkinliği"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_task__communication_type
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__communication_type
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__communication_type
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__communication_type
+msgid "Communication Type"
+msgstr "İletişim Türü"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_crm_lead_form_inherit_wedding
+#: model_terms:ir.ui.view,arch_db:demo_form.view_order_form_inherit_demo_tasks
+msgid "Create Project"
+msgstr "Proje Oluştur"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard__create_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__create_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__create_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__date_line
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__date_line
+msgid "Date Line"
+msgstr "Tarih Çizgisi"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__days
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__days
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__days
+msgid "Days"
+msgstr "Gün"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__deadline_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__deadline_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__deadline_date
+msgid "Deadline Date"
+msgstr "Zaman Sınırı"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_project_demo_inherit
+msgid "Demo Meeting"
+msgstr "Demo Toplantısı"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__description
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__description
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__description
+msgid "Description"
+msgstr "Açıklama"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard__display_name
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__display_name
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__display_name
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__project_task__communication_type__mail
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_project_wizard_line__communication_type__mail
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_template_task__communication_type__mail
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_project_task__communication_type__mail
+msgid "E-Mail"
+msgstr "E-Posta"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__email_template_id
+msgid "E-Mail Template"
+msgstr "E-Posta Şablonu"
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/project_task.py:0
+msgid "E-Posta Gönder"
+msgstr "E-Posta Gönder"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_task__email_template_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__email_template_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__email_template_id
+msgid "E-mail Template"
+msgstr "E-Posta Şablonu"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__event_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__event_date
+msgid "Event Date"
+msgstr "Etkinlik Tarihi"
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/sale_order.py:0
+msgid "Fırsat kazanıldı olmadan proje oluşturamazsın."
+msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/sale_order.py:0
+msgid "Görev girmeden proje oluşturamazsın.."
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_crm_lead__has_contract
+msgid "Has Contract?"
+msgstr "Sözleşme Var mı?"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard__id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__id
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__id
+msgid "ID"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order__is_project_true
+msgid "Is There Any Project?"
+msgstr "Proje Var mı?"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard__write_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__write_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__write_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Aday/Fırsat"
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/sale_order_line.py:0
+msgid "Lütfen bu ürünü optional products bölümünden seçin."
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_project__next_event_id
+msgid "Next Event"
+msgstr "Bir Sonraki Etkinlik"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_project__next_event_date
+msgid "Next Event Date"
+msgstr "Sonraki Etkinlik Tarihi"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_sale_order_project_wizard_form
+msgid "Onayla ve Oluştur"
+msgstr "Onayla ve Oluştur"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__optional_product_id
+msgid "Optional Product"
+msgstr "Opsiyonel Hizmet"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__optional_product_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__optional_product_id
+msgid "Optional Products"
+msgstr "Opsiyonel Hizmetler"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__planned_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__planned_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__planned_date
+msgid "Planned Type"
+msgstr "Planlama Tipi"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_sale_order_project_wizard_form
+msgid "Proje Oluştur"
+msgstr "Proje Oluştur"
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/crm_lead.py:0
+msgid "Proje atanmadan Kazanıldı/Won aşamasına geçemezsiniz."
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_project_project
+#: model:ir.model.fields,field_description:demo_form.field_crm_lead__project_id
+msgid "Project"
+msgstr "Proje"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order__project_task_ids
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template__project_task_ids
+#: model_terms:ir.ui.view,arch_db:demo_form.view_order_form_inherit_demo_tasks
+#: model_terms:ir.ui.view,arch_db:demo_form.view_sale_order_template_form_inherit_tasks
+msgid "Project Tasks"
+msgstr "Projedeki Görevler"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__task_id
+msgid "Project Template"
+msgstr "Proje Şablonu"
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_sale_order_project_wizard_line
+msgid "Projeye Eklenebilecek Görev Satırı (Wizard)"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_sale_order_template
+msgid "Quotation Template"
+msgstr "Teklif Şablonu"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__user_ids
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__user_ids
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__user_ids
+msgid "Responsibles"
+msgstr "Sorumlular"
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_sale_order_option
+msgid "Sale Options"
+msgstr "Satış Seçenekleri"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard__sale_order_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__sale_order_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__sale_order_id
+msgid "Sale Order"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__sale_order_id
+msgid "Sale Order Id"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__sale_order_template_id
+msgid "Sale Order Template"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_sale_order_template_task
+msgid "Sale Order Template Task"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_sale_project_task
+msgid "Sale Project Task"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_sale_order
+msgid "Sales Order"
+msgstr "Satış Siparişi"
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Satış Sipariş Satırı"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_task_email_inherit
+msgid "Send E-mail"
+msgstr "E-Posta Gönder"
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_project_wizard_line__planned_date__casual_date
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_template_task__planned_date__casual_date
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_project_task__planned_date__casual_date
+msgid "Stable Date"
+msgstr "Sabit Tarih"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__stage_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__stage_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__stage_id
+msgid "Stage"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_project_task
+msgid "Task"
+msgstr "Görev"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__name
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__name
+#: model:ir.model.fields,field_description:demo_form.field_sale_project_task__name
+msgid "Task Name"
+msgstr "Görev Adı"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard__project_task_line_ids
+msgid "Tasks Which Will Be Add to Project"
+msgstr "Projeye Eklenecek Görevler"
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__project_task__communication_type__phone
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_project_wizard_line__communication_type__phone
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_template_task__communication_type__phone
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_project_task__communication_type__phone
+msgid "Whatsapp"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__wizard_id
+msgid "Wizard"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_sale_order_project_wizard
+msgid "Wizard for creating project from Sale Order"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_sale_order_project_wizard_form
+msgid "İptal"
+msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/project_task.py:0
+msgid ""
+"“Demo Randevu Oluşturma” görevini \"Tamamlandı\" durumuna getirebilmek için "
+"Demo tarihi belirlenmelidir."
+msgstr ""

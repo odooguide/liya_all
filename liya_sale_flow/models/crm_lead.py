@@ -85,6 +85,9 @@ class CrmLead(models.Model):
     )
     is_stage_lead = fields.Boolean(string='Is Stage Lead', compute='_compute_stage_lead')
     is_event_team = fields.Boolean(string="Is Event Team", compute='_compute_event_team', store=True)
+    seeing_state_date=fields.Date(string='Seeing Date')
+    contract_state_date=fields.Date(string='Contract Date')
+    won_state_date=fields.Date(string='Won Date')
 
     #####Compute #####
 
@@ -228,15 +231,18 @@ class CrmLead(models.Model):
                 ('state', 'in', ('sale', 'done'))
             ])
 
-            if new_stage.name == 'Görüşülen' or new_stage.name == 'In Contact / Quotation':
+            if new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation':
                 if lead.quotation_count < 1 and not orders:
                     raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
+                self.seeing_state_date=fields.Date.today()
 
             elif new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting':
                 if not orders:
                     raise UserError(
                         _('Onaylı teklif yok, "Sözleşme Süreci"ne geçemezsiniz.')
                     )
+                self.contract_state_date=fields.Date.today()
+
             if new_stage.name == 'Kazanıldı' or new_stage.name == 'Won':
                 has_confirmed = any(order.confirmed_contract for order in orders)
                 if not has_confirmed:
@@ -246,7 +252,7 @@ class CrmLead(models.Model):
 
                 if not orders[0].contract_date:
                     raise UserError(_("Sözleşme tarihi seçilmeden satışı onaylayamazsınız."))
-
+                self.won_state_date=fields.Date.today()
                 self.create_activity(lead)
 
                 orders_to_cancel = self.env['sale.order'].search([
@@ -315,6 +321,67 @@ class CrmLead(models.Model):
             )
             if rec:
                 self.wedding_place = rec.id
+
+    @api.model
+    def backfill_stage_dates(self):
+        """mail.tracking.value üzerinden stage_id değişimlerini okuyup,
+           ilgili date alanlarını doldurur."""
+        Stage = self.env['crm.stage']
+        seeing_name = 'Görüşülüyor / Teklif Süreci'
+        contract_name = 'Sözleşme Süreci'
+        won_name = 'Kazanıldı'
+
+        Track = self.env['mail.tracking.value']
+        tracking_vals = Track.search([
+            ('field_id.name', '=', 'stage_id'),
+            ('mail_message_id.model', '=', 'crm.lead'),
+        ])
+
+        data = {}
+        for tv in tracking_vals:
+            lead_id = tv.mail_message_id.res_id
+            date = fields.Date.to_date(tv.mail_message_id.date)
+            new = tv.new_value_char or ''
+            # initialize
+            if lead_id not in data:
+                data[lead_id] = {}
+            vals = data[lead_id]
+
+            if new == seeing_name and 'seeing_state_date' not in vals:
+                vals['seeing_state_date'] = date
+            if new == contract_name and 'contract_state_date' not in vals:
+                vals['contract_state_date'] = date
+            if new == won_name and 'won_state_date' not in vals:
+                vals['won_state_date'] = date
+
+        Msg = self.env['mail.message']
+        missing_won = [lead_id for lead_id, vals in data.items() if 'won_state_date' not in vals]
+        if missing_won:
+            won_msgs = Msg.search([
+                ('model', '=', 'crm.lead'),
+                ('res_id', 'in', missing_won),
+                ('subtype_id.name', '=', 'Opportunity Won'),
+            ], order='date asc')
+            for msg in won_msgs:
+                lid = msg.res_id
+                if lid in data and 'won_state_date' not in data[lid]:
+                    data[lid]['won_state_date'] = fields.Date.to_date(msg.date)
+
+        # 5) Son olarak, gerçek lead kayıtlarını güncelle
+        for lead_id, vals in data.items():
+            # lead zaten doluysa (örneğin manuel girilmişse) atla
+            lead = self.browse(lead_id)
+            write_vals = {}
+            if vals.get('seeing_state_date') and not lead.seeing_state_date:
+                write_vals['seeing_state_date'] = vals['seeing_state_date']
+            if vals.get('contract_state_date') and not lead.contract_state_date:
+                write_vals['contract_state_date'] = vals['contract_state_date']
+            if vals.get('won_state_date') and not lead.won_state_date:
+                write_vals['won_state_date'] = vals['won_state_date']
+            if write_vals:
+                lead.write(write_vals)
+
+        return True
 
 
 class ForeignLocal(models.Model):
