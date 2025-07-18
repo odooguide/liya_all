@@ -6,7 +6,14 @@ class CalendarEvent(models.Model):
     _inherit = 'calendar.event'
 
     event_place=fields.Selection([('online','Online'),('on_field','On Field')], string='Event Place')
+    categ_name=fields.Char('Event Name',compute='_compute_categ_name')
 
+    @api.depends('categ_ids')
+    def _compute_categ_name(self):
+        if self.categ_ids:
+            self.categ_name=self.categ_ids[0].name
+        else:
+            self.categ_name=False
     ##### Defaul Get #####
     @api.model
     def _default_attendees(self):

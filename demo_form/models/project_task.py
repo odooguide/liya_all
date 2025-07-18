@@ -15,7 +15,7 @@ class ProjectTask(models.Model):
         ('phone', 'Whatsapp'),
     ],
         string='Communication Type',
-        default='phone', )
+       )
 
     def action_send_task_email(self):
         self.ensure_one()
