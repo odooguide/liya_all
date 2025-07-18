@@ -43,6 +43,10 @@
                 /* Headings use Century font */
                 h1, h2, h3, h4, h5, h6 {
                 font-family: Century, 'Century Gothic', serif;
+                color: #833C0B !important;
+                }
+                h3 em {
+                  font-size: 0.7em;     
                 }
                 .bottom-text {
                 position: absolute;
@@ -61,6 +65,7 @@
                 bottom: 0;
                 margin-bottom:15px;
                 }
+                
 
                 .bottom-text img {
                 position: absolute;
@@ -74,6 +79,9 @@
                 page-break-inside: avoid;
                 break-inside: avoid;
                 padding-top: 20px;
+                }
+                div p span{
+                color:#C45911 !important;
                 }
             </style>
 
@@ -107,6 +115,7 @@
 
                     <div class="page">
                         <h2>LİYA ALL hakkında</h2>
+                        <div style="color:#457373 !important;">
                         <p>
                             Liya, İstanbul Prens adalarının en küçüğü ve en az tanınanı olan Sedef adasında denize sıfır
                             şekilde konumlanmış, 4 dönüm büyüklüğe sahip, 280 kişi oturma-350 kişi prolonge kapasiteli,
@@ -144,6 +153,7 @@
                             www.liya-all.com
 
                         </p>
+                        </div>
                         <div class="bottom-text">
                             <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
                             <img t-att-src="image_data_uri(doc.company_id.logo)"/>
@@ -206,21 +216,27 @@
                             </h4>
                             <p>
                                 <strong>LEVREK SARMA</strong>
-                                – Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında patates püresi ve
-                                fesleğen
-                                sos ile
+                                <span style="color:#C45911 !important;">- Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında
+                                    patates püresi ve
+                                    fesleğen
+                                    sos ile
+                                </span>
                             </p>
                             <p>
                                 <strong>MANTARLI BONFİLE</strong>
-                                – Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                                <span style="color:#C45911 !important;">- Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                                </span>
                             </p>
                             <p>
                                 <strong>DANA KABURGA</strong>
-                                – Fırında özel sos ile 10 saat pişirilen dana kaburga
+                                <span style="color:#C45911 !important;">- Fırında özel sos ile 10 saat pişirilen dana kaburga
+                                </span>
                             </p>
                             <p>
                                 <strong>VEGAN BOWL</strong>
-                                – %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze çeşitleri
+                                <span style="color:#C45911 !important;">- %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze
+                                    çeşitleri
+                                </span>
                             </p>
                         </div>
                         <div style="clear: both; margin-top: 20px;"/>
@@ -283,21 +299,27 @@
                             </h4>
                             <p>
                                 <strong>LEVREK SARMA</strong>
-                                – Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında patates püresi ve
-                                fesleğen
-                                sos ile
+                                <span style="color:#C45911 !important;">- Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında
+                                    patates püresi ve
+                                    fesleğen
+                                    sos ile
+                                </span>
                             </p>
                             <p>
                                 <strong>MANTARLI BONFİLE</strong>
-                                – Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                                <span style="color:#C45911 !important;">- Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                                </span>
                             </p>
                             <p>
                                 <strong>DANA KABURGA</strong>
-                                – Fırında özel sos ile 10 saat pişirilen dana kaburga
+                                <span style="color:#C45911 !important;">- Fırında özel sos ile 10 saat pişirilen dana kaburga
+                                </span>
                             </p>
                             <p>
                                 <strong>VEGAN BOWL</strong>
-                                – %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze çeşitleri
+                                <span style="color:#C45911 !important;">- %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze
+                                    çeşitleri
+                                </span>
                             </p>
                         </div>
                         <div style="clear: both; margin-top: 20px;"/>
@@ -408,10 +430,8 @@
                 <t t-if="'Liya Menu 1 Alkolsüz' in doc.banquet_pages.mapped('name')">
 
                     <div class="page">
-                        <h2 style="text-align: center;">LİYA ALL DAVET ZİYAFET MENÜLERİ</h2>
-                        <p style="text-align: center; font-style: italic;">(3 farklı menü seçeneği sunulmaktadır)</p>
                         <h3 style="text-align: center; margin-bottom: 10px;">MENÜ 1
-                            <em>(Alkolsüz)</em>
+                            <span><em>(Alkolsüz)</em></span>
                         </h3>
                         <!-- Two-column layout for Meze and Ana Yemekler -->
                         <div style="width: 24%; float: left; padding-right: 5px; border-right: 1px solid #8c6a3b;">
@@ -434,21 +454,27 @@
                             </h4>
                             <p>
                                 <strong>LEVREK SARMA</strong>
-                                – Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında patates püresi ve
-                                fesleğen
-                                sos ile
+                                <span style="color:#C45911 !important;">- Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında
+                                    patates püresi ve
+                                    fesleğen
+                                    sos ile
+                                </span>
                             </p>
                             <p>
                                 <strong>MANTARLI BONFİLE</strong>
-                                – Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                                <span style="color:#C45911 !important;">- Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                                </span>
                             </p>
                             <p>
                                 <strong>DANA KABURGA</strong>
-                                – Fırında özel sos ile 10 saat pişirilen dana kaburga
+                                <span style="color:#C45911 !important;">- Fırında özel sos ile 10 saat pişirilen dana kaburga
+                                </span>
                             </p>
                             <p>
                                 <strong>VEGAN BOWL</strong>
-                                – %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze çeşitleri
+                                <span style="color:#C45911 !important;">- %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze
+                                    çeşitleri
+                                </span>
                             </p>
                         </div>
                         <div style="clear: both; margin-top: 20px;"/>
@@ -508,22 +534,29 @@
                             </h4>
                             <p>
                                 <strong>LEVREK SARMA</strong>
-                                – Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında patates püresi ve
-                                fesleğen
-                                sos ile
+                                <span style="color:#C45911 !important;">- Kılçıksız rulo halinde, narenciye sosu ile fırınlanmış, yanında
+                                    patates püresi ve
+                                    fesleğen
+                                    sos ile
+                                </span>
                             </p>
                             <p>
                                 <strong>MANTARLI BONFİLE</strong>
-                                – Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                                <span style="color:#C45911 !important;">- Mantar, tereyağlı brokoli ve patates püresi ile derlenmiş bonfile
+                                </span>
                             </p>
                             <p>
                                 <strong>DANA KABURGA</strong>
-                                – Fırında özel sos ile 10 saat pişirilen dana kaburga
+                                <span style="color:#C45911 !important;">- Fırında özel sos ile 10 saat pişirilen dana kaburga
+                                </span>
                             </p>
                             <p>
                                 <strong>VEGAN BOWL</strong>
-                                – %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze çeşitleri
+                                <span style="color:#C45911 !important;">- %100 bitkisel marine edilmiş ve özel grill’de ızgara edilen sebze
+                                    çeşitleri
+                                </span>
                             </p>
+
                         </div>
                         <div style="clear: both; margin-top: 20px;"/>
                         <div style="width: 24%; float: left; padding-right: 10px; border-right: 1px solid #8c6a3b;">
@@ -558,7 +591,7 @@
 
                     <div class="page">
                         <h3 style="text-align: center;">MENÜ 3
-                            <em>(Alkolsüz)</em>
+                            <span style='font-size:9pt'><em>(Alkolsüz)</em></span>
                         </h3>
                         <p style="text-align: center; margin-top: 5px; font-style: italic;">KOKTEYL - PROLONGE</p>
                         <div style="width: 35%; float: left; padding-right: 10px;border-right: 1px solid #8c6a3b;">
@@ -611,59 +644,59 @@
                 <!-- Page 8 -->
                 <t t-if="'Liya Etkinlik Süreleri' in doc.banquet_pages.mapped('name')">
 
-                <div class="page">
-                    <!-- Dynamic Services -->
-                    <h2 style="text-align: center;">ÜCRETE DAHİL OLAN HİZMETLER</h2>
-                    <ul style="list-style-type: disc; margin-left: 20px;">
-                        <t t-foreach="doc.service_ids" t-as="srv">
-                            <li>
-                                <strong t-esc="srv.name"/>:
-                                <t t-esc="srv.description or '-'"/>
-                                <span/>
-                            </li>
-                        </t>
-                    </ul>
-
-                    <!-- Dynamic Program Flow -->
-                    <h2 style="text-align: center; margin-top: 20px;">ORGANİZASYON SÜRESİ</h2>
-                    <p>Davetin süresi
-                        <strong>
-                            <t t-esc="doc.duration_display"/>
-                        </strong>
-                        <br/>
-                        Örnek program akışı:
-                    </p>
-                    <ul style="list-style-type: disc; margin-left: 20px;">
-                        <t t-foreach="doc.program_ids" t-as="p">
-                            <li>
-                                <strong t-esc="p.name"/>:
-
-                                <t t-esc="p.start_datetime and p.start_datetime"/>
-                                -
-                                <t t-esc="p.end_datetime and p.end_datetime"/>
-                            </li>
-                        </t>
-                    </ul>
-
-                    <!-- Dynamic Transportation -->
-                    <div class="avoid-break">
-                        <h2 style="text-align: center; margin-top: 20px;">TEKNE SAATLERİ</h2>
-                        <ul style="list-style-type: disc; margin-left: 20px; padding-bottom:30mm;">
-
-                            <t t-foreach="doc.transport_ids" t-as="tr">
+                    <div class="page">
+                        <!-- Dynamic Services -->
+                        <h2 style="text-align: center;">ÜCRETE DAHİL OLAN HİZMETLER</h2>
+                        <ul style="list-style-type: disc; margin-left: 20px;">
+                            <t t-foreach="doc.service_ids" t-as="srv">
                                 <li>
-                                    <strong t-esc="tr.departure_location"/>
-                                    →<strong t-esc="tr.arrival_location"/>:
-                                    <t t-esc="tr.arrival_datetime and tr.arrival_datetime"/>
+                                    <strong t-esc="srv.name"/>:
+                                    <t t-esc="srv.description or '-'"/>
+                                    <span/>
                                 </li>
                             </t>
                         </ul>
+
+                        <!-- Dynamic Program Flow -->
+                        <h2 style="text-align: center; margin-top: 20px;">ORGANİZASYON SÜRESİ</h2>
+                        <p>Davetin süresi
+                            <strong>
+                                <t t-esc="doc.duration_display"/>
+                            </strong>
+                            <br/>
+                            Örnek program akışı:
+                        </p>
+                        <ul style="list-style-type: disc; margin-left: 20px;">
+                            <t t-foreach="doc.program_ids" t-as="p">
+                                <li>
+                                    <strong t-esc="p.name"/>:
+
+                                    <t t-esc="p.start_datetime and p.start_datetime"/>
+                                    -
+                                    <t t-esc="p.end_datetime and p.end_datetime"/>
+                                </li>
+                            </t>
+                        </ul>
+
+                        <!-- Dynamic Transportation -->
+                        <div class="avoid-break">
+                            <h2 style="text-align: center; margin-top: 20px;">TEKNE SAATLERİ</h2>
+                            <ul style="list-style-type: disc; margin-left: 20px; padding-bottom:30mm;">
+
+                                <t t-foreach="doc.transport_ids" t-as="tr">
+                                    <li>
+                                        <strong t-esc="tr.departure_location"/>
+                                        →<strong t-esc="tr.arrival_location"/>:
+                                        <t t-esc="tr.arrival_datetime and tr.arrival_datetime"/>
+                                    </li>
+                                </t>
+                            </ul>
+                        </div>
+                        <div class="bottom-text">
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
                     </div>
-                    <div class="bottom-text">
-                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                        <img t-att-src="image_data_uri(doc.company_id.logo)"/>
-                    </div>
-                </div>
                 </t>
                 <t t-if="len(doc.service_ids) + len(doc.program_ids) + len(doc.transport_ids) &gt; 15">
                     <div class="page"/>
@@ -671,136 +704,136 @@
 
                 <t t-if="'Liya Teklif' in doc.banquet_pages.mapped('name')">
 
-                <!-- Page 9 -->
-                <div class="page">
-                    <h2 style="text-align: center;">TEKLİF</h2>
-                    <p style="text-align: center; margin-top: 10px;">Bu teklif,
-                        <strong>
-                            <t t-esc="doc.people_count"/>
-                            kişi
-                        </strong>
-                        yapılması planlanan
-                        <strong>
-                            <t t-esc="doc.opportunity_id.name"/>
-                        </strong>
-                        için hazırlanmıştır.
-                    </p>
-                    <div style="margin-top: 20px;">
-                        <p>
-                            <strong>Davetin Türü:</strong>
-                            <t t-esc="doc.event_type"/>
+                    <!-- Page 9 -->
+                    <div class="page">
+                        <h2 style="text-align: center;">TEKLİF</h2>
+                        <p style="text-align: center; margin-top: 10px;">Bu teklif,
+                            <strong>
+                                <t t-esc="doc.people_count"/>
+                                kişi
+                            </strong>
+                            yapılması planlanan
+                            <strong>
+                                <t t-esc="doc.opportunity_id.name"/>
+                            </strong>
+                            için hazırlanmıştır.
                         </p>
-                        <p>
-                            <strong>Davetin Tarihi:</strong>
-                            <t t-esc="doc.wedding_date.strftime('%d.%m.%Y')"/>
+                        <div style="margin-top: 20px;">
+                            <p>
+                                <strong>Davetin Türü:</strong>
+                                <t t-esc="doc.event_type"/>
+                            </p>
+                            <p>
+                                <strong>Davetin Tarihi:</strong>
+                                <t t-esc="doc.wedding_date.strftime('%d.%m.%Y')"/>
+                            </p>
+                            <p>
+                                <strong>Kişi Sayısı:</strong>
+                                <t t-esc="doc.people_count"/>
+                            </p>
+                        </div>
+                        <p style="margin-top: 10px; font-style: italic;">*Aşağıdaki tabloda yer alan kişi başı fiyatlama
+                            garanti
+                            <strong>
+                                <t t-esc="doc.people_count"/>
+                                kişi
+                            </strong>
+                            sayısı için geçerlidir.
                         </p>
-                        <p>
-                            <strong>Kişi Sayısı:</strong>
-                            <t t-esc="doc.people_count"/>
-                        </p>
-                    </div>
-                    <p style="margin-top: 10px; font-style: italic;">*Aşağıdaki tabloda yer alan kişi başı fiyatlama
-                        garanti
-                        <strong>
-                            <t t-esc="doc.people_count"/>
-                            kişi
-                        </strong>
-                        sayısı için geçerlidir.
-                    </p>
-                    <table style="width:100%; table-layout: fixed; border-collapse: collapse; margin-top: 15px;">
-                        <thead>
-                            <tr style="background: #a1cbc4;">
-                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:45%;">
-                                    <strong>Ürün</strong>
-                                </th>
-                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:15%;">
-                                    <strong>Miktar</strong>
-                                </th>
-                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:15%;">
-                                    <strong>Birim Fiyatı</strong>
-                                </th>
-                                <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:25%;">
-                                    <strong>Toplam</strong>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <t t-foreach="doc.order_line" t-as="l">
-                                <t t-if="l.price_subtotal &gt; 0">
-                                    <tr>
-                                        <td style="padding: 8px; border: 1px solid #ccc; width:45%;">
-                                            <t t-esc="l.product_id.name"/>
-                                        </td>
-                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:center; width:15%;">
-                                            <t t-esc="int(l.product_uom_qty)"/>
-                                            <t t-esc="l.product_uom.name"/>
-                                        </td>
-                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:15%;">
-                                            <t t-esc="l.price_unit"
-                                               t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
-                                        </td>
-                                        <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:25%;">
-                                            <t t-esc="l.price_subtotal"
-                                               t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
-                                        </td>
-                                    </tr>
+                        <table style="width:100%; table-layout: fixed; border-collapse: collapse; margin-top: 15px;">
+                            <thead>
+                                <tr style="background: #a1cbc4;">
+                                    <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:45%;">
+                                        <strong>Ürün</strong>
+                                    </th>
+                                    <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:15%;">
+                                        <strong>Miktar</strong>
+                                    </th>
+                                    <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:15%;">
+                                        <strong>Birim Fiyatı</strong>
+                                    </th>
+                                    <th style="padding: 8px; border: 1px solid #ccc; text-align:center; width:25%;">
+                                        <strong>Toplam</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.order_line" t-as="l">
+                                    <t t-if="l.price_subtotal &gt; 0">
+                                        <tr>
+                                            <td style="padding: 8px; border: 1px solid #ccc; width:45%;">
+                                                <t t-esc="l.product_id.name"/>
+                                            </td>
+                                            <td style="padding: 8px; border: 1px solid #ccc; text-align:center; width:15%;">
+                                                <t t-esc="int(l.product_uom_qty)"/>
+                                                <t t-esc="l.product_uom.name"/>
+                                            </td>
+                                            <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:15%;">
+                                                <t t-esc="l.price_unit"
+                                                   t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                            </td>
+                                            <td style="padding: 8px; border: 1px solid #ccc; text-align:right; width:25%;">
+                                                <t t-esc="l.price_subtotal"
+                                                   t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                    </t>
                                 </t>
-                            </t>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
 
-                    <div class="so_total_summary clearfix">
-                        <div class="row justify-content-end mt-3">
-                            <div class="col-auto" style="width:40%;">
-                                <table class="table table-borderless o_total_table"
-                                       style="width:100%; line-height:10pt; border:none; border-collapse: collapse;">
-                                    <t t-set="disc"
-                                       t-value="sum([l.price_subtotal for l in doc.order_line if l.price_subtotal &lt; 0])"/>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="3" style="padding: 8px; border:none; text-align:right;">
-                                                <strong>Vergi Hariç Tutar:</strong>
-                                            </td>
-                                            <td style="padding: 8px; border:none; text-align:right;">
-                                                <t t-esc="(doc.amount_total - disc)"
-                                                   t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
-                                            </td>
-                                        </tr>
-                                        <tr t-if="disc">
-                                            <td colspan="3" style="padding: 8px; border:none; text-align:right;">
-                                                <strong>İndirim Tutarı:</strong>
-
-                                            </td>
-                                            <td style="padding: 8px; border:none; text-align:right;">
-                                                <t t-esc="(-disc)"
-                                                   t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3" style="padding: 8px; border:none; text-align:right;">
-                                                <strong>Toplam Tutar:</strong>
-                                            </td>
-                                            <td style="padding: 8px; border:none; text-align:right;">
-                                                <strong>
-                                                    <t t-esc="doc.amount_total"
+                        <div class="so_total_summary clearfix">
+                            <div class="row justify-content-end mt-3">
+                                <div class="col-auto" style="width:40%;">
+                                    <table class="table table-borderless o_total_table"
+                                           style="width:100%; line-height:10pt; border:none; border-collapse: collapse;">
+                                        <t t-set="disc"
+                                           t-value="sum([l.price_subtotal for l in doc.order_line if l.price_subtotal &lt; 0])"/>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" style="padding: 8px; border:none; text-align:right;">
+                                                    <strong>Vergi Hariç Tutar:</strong>
+                                                </td>
+                                                <td style="padding: 8px; border:none; text-align:right;">
+                                                    <t t-esc="(doc.amount_total - disc)"
                                                        t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
-                                                </strong>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                                                </td>
+                                            </tr>
+                                            <tr t-if="disc">
+                                                <td colspan="3" style="padding: 8px; border:none; text-align:right;">
+                                                    <strong>İndirim Tutarı:</strong>
+
+                                                </td>
+                                                <td style="padding: 8px; border:none; text-align:right;">
+                                                    <t t-esc="(-disc)"
+                                                       t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3" style="padding: 8px; border:none; text-align:right;">
+                                                    <strong>Toplam Tutar:</strong>
+                                                </td>
+                                                <td style="padding: 8px; border:none; text-align:right;">
+                                                    <strong>
+                                                        <t t-esc="doc.amount_total"
+                                                           t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.currency_id}"/>
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
+
                         </div>
 
-                    </div>
 
-
-                    <p style="margin-top: 20px;">Teklifin geçerlilik süresi 1 haftadır.</p>
-                    <div class="bottom-text">
-                        <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
-                        <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        <p style="margin-top: 20px;">Teklifin geçerlilik süresi 1 haftadır.</p>
+                        <div class="bottom-text">
+                            <em>LİYA ALL BANQUET ZİYAFET TEKLİFİ</em>
+                            <img t-att-src="image_data_uri(doc.company_id.logo)"/>
+                        </div>
                     </div>
-                </div>
                 </t>
 
                 <!-- Page 10 -->

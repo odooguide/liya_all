@@ -326,21 +326,17 @@ class CrmLead(models.Model):
     def backfill_stage_dates(self):
         """mail.tracking.value üzerinden stage_id değişimlerini okuyup,
            ilgili date alanlarını doldurur."""
-        # 1) İlgili stage isimlerini bul
         Stage = self.env['crm.stage']
         seeing_name = 'Görüşülüyor / Teklif Süreci'
         contract_name = 'Sözleşme Süreci'
         won_name = 'Kazanıldı'
-        # (İsterseniz xml_id ile de arayabilirsiniz)
 
-        # 2) Tüm ilgili tracking.value kayıtlarını al
         Track = self.env['mail.tracking.value']
         tracking_vals = Track.search([
             ('field_id.name', '=', 'stage_id'),
             ('mail_message_id.model', '=', 'crm.lead'),
         ])
 
-        # 3) Lead bazında bir dict hazırlayalım: { lead_id: { seeing_state_date: date, ... } }
         data = {}
         for tv in tracking_vals:
             lead_id = tv.mail_message_id.res_id
@@ -351,19 +347,14 @@ class CrmLead(models.Model):
                 data[lead_id] = {}
             vals = data[lead_id]
 
-            # ilk kez Görüşülüyor
             if new == seeing_name and 'seeing_state_date' not in vals:
                 vals['seeing_state_date'] = date
-            # ilk kez Sözleşme Süreci
             if new == contract_name and 'contract_state_date' not in vals:
                 vals['contract_state_date'] = date
-            # ilk kez Kazanıldı
             if new == won_name and 'won_state_date' not in vals:
                 vals['won_state_date'] = date
 
-        # 4) Ayrıca Opportunity Won subtype’ı ile gelen kayıtlar varsa, onları da ekleyelim
         Msg = self.env['mail.message']
-        # sadece won tarihi eksik kalanlar için
         missing_won = [lead_id for lead_id, vals in data.items() if 'won_state_date' not in vals]
         if missing_won:
             won_msgs = Msg.search([
