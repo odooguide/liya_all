@@ -5,6 +5,8 @@ from odoo.exceptions import UserError
 class CalendarEvent(models.Model):
     _inherit = 'calendar.event'
 
+    event_place=fields.Selection([('online','Online'),('on_field','On Field')], string='Event Place')
+
     ##### Defaul Get #####
     @api.model
     def _default_attendees(self):
