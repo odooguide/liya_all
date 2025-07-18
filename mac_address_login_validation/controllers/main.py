@@ -54,7 +54,7 @@ class Home(home.Home):
                                 request.params[
                                     'login'],
                                 request.params[
-                                    'password'])
+                                    'password'],None)
                             request.params['login_success'] = True
                             return request.redirect(
                                 self._login_redirect(uid, redirect=redirect))
@@ -73,7 +73,7 @@ class Home(home.Home):
                                                            request.params[
                                                                'login'],
                                                            request.params[
-                                                               'password'])
+                                                               'password'],None)
                         request.params['login_success'] = True
 
                         return request.redirect(
