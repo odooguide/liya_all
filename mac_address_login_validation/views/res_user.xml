@@ -9,17 +9,17 @@
                 <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
                     <field name="mac_address_login_toggle" invisible="1"/>
                     <button name="enable_validation" type="object" icon="fa-lock"
-                            class="oe_stat_button" invisible="mac_address_login_toggle = True">
+                            class="oe_stat_button" invisible="mac_address_login_toggle == True">
                         <span>Enable Login Validation</span>
                     </button>
                     <button name="disable_validation" type="object"  icon="fa-unlock"
-                           invisible="mac_address_login_toggle = False"
+                           invisible="mac_address_login_toggle == False"
                             class="oe_stat_button">
                         <span>Disable Login Validation</span>
                     </button>
                 </xpath>
                 <xpath expr="//notebook" position="inside">
-                    <page name="allowed_mac_ids" string="Allowed MAC Address" invisible="mac_address_login_toggle = False">
+                    <page name="allowed_mac_ids" string="Allowed MAC Address" invisible="mac_address_login_toggle == False">
                         <group>
                             <field name="current_mac_address" string="Current device MAC Address"/>
 
