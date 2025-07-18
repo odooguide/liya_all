@@ -25,10 +25,10 @@
 
                         </group>
                         <field name="mac_address_ids">
-                            <tree editable="bottom">
+                            <list editable="bottom">
                                 <field name="name"/>
                                 <field name="mac_address"/>
-                            </tree>
+                            </list>
                         </field>
                     </page>
                 </xpath>
