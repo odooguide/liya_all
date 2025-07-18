@@ -80,9 +80,7 @@
                 break-inside: avoid;
                 padding-top: 20px;
                 }
-                div p span{
-                color:#C45911 !important;
-                }
+
             </style>
 
 
