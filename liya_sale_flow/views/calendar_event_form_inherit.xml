@@ -6,7 +6,12 @@
     <field name="arch" type="xml">
       <xpath expr="//field[@name='partner_ids']" position="attributes">
         <attribute name="domain">[('employee_ids','!=', False)]</attribute>
+
       </xpath>
+        <xpath expr="//field[@name='location']" position="replace">
+            <field name="event_place" required="categ_name in ['Etkinlik Satış Toplantısı','Düğün Satış Toplantısı']"/>
+            <field name="categ_name" invisible="1"/>
+        </xpath>
     </field>
   </record>
 

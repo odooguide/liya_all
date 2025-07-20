@@ -15,7 +15,7 @@
             </header>
             <xpath expr="//field[@name='option3']" position="after">
                 <field name="project_id"/>
-                <field name="has_contract"/>
+                <field name="has_contract" invisible="1"/>
             </xpath>
         </field>
     </record>
