@@ -154,6 +154,7 @@
                 <field name="seeing_state_date" invisible="1"/>
                 <field name="contract_state_date" invisible="1"/>
                 <field name="won_state_date" invisible="1"/>
+                <field name="lost_state_date" invisible="1"/>
             </xpath>
 
 
