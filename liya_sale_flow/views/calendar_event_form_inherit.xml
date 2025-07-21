@@ -11,11 +11,12 @@
         <xpath expr="//field[@name='location']" position="replace">
             <field name="event_place" required="categ_name in ['Etkinlik Satış Toplantısı','Düğün Satış Toplantısı']"/>
             <field name="categ_name" invisible="1"/>
+            <field name="meeting_date" invisible="1"/>
         </xpath>
     </field>
-  </record>
+    </record>
 
     <record id="calendar.action_calendar_event" model="ir.actions.act_window">
-    <field name="view_mode" eval="'calendar,pivot,form,list'"/>
-  </record>
+        <field name="view_mode" eval="'calendar,pivot,form,list'"/>
+    </record>
 </odoo>

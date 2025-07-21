@@ -7,6 +7,20 @@ class CalendarEvent(models.Model):
 
     event_place=fields.Selection([('online','Online'),('on_field','On Field')], string='Event Place')
     categ_name=fields.Char('Event Name',compute='_compute_categ_name')
+    meeting_date=fields.Date(string='Meeting Date',compute='_compute_meeting_date')
+
+    @api.depends('start')
+    def _compute_meeting_date(self):
+        """
+        Compute the meeting_date as the date portion of the event's start datetime.
+        """
+        for rec in self:
+            if rec.start:
+                # Convert the stored string to a datetime, then take its date
+                dt = fields.Datetime.from_string(rec.start)
+                rec.meeting_date = dt.date()
+            else:
+                rec.meeting_date = False
 
     @api.depends('categ_ids')
     def _compute_categ_name(self):

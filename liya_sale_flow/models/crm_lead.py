@@ -88,6 +88,8 @@ class CrmLead(models.Model):
     seeing_state_date=fields.Date(string='Seeing Date')
     contract_state_date=fields.Date(string='Contract Date')
     won_state_date=fields.Date(string='Won Date')
+    meeting_date=fields.Date(string='Meeting Date')
+    lost_state_date=fields.Date(string='Lost State Date')
 
     #####Compute #####
 
@@ -324,8 +326,8 @@ class CrmLead(models.Model):
 
     @api.model
     def backfill_stage_dates(self):
-        """mail.tracking.value üzerinden stage_id değişimlerini okuyup,
-           ilgili date alanlarını doldurur."""
+        """mail.tracking.value üzerinden hem stage_id hem de lost_reason_id değişimlerini
+           okuyup ilgili date alanlarını doldurur."""
         Stage = self.env['crm.stage']
         seeing_name = 'Görüşülüyor / Teklif Süreci'
         contract_name = 'Sözleşme Süreci'
@@ -333,29 +335,36 @@ class CrmLead(models.Model):
 
         Track = self.env['mail.tracking.value']
         tracking_vals = Track.search([
-            ('field_id.name', '=', 'stage_id'),
             ('mail_message_id.model', '=', 'crm.lead'),
-        ])
+            ('field_id.name', 'in', ['stage_id', 'lost_reason_id']),
+        ], order='mail_message_id.date asc, id asc')
 
         data = {}
         for tv in tracking_vals:
             lead_id = tv.mail_message_id.res_id
             date = fields.Date.to_date(tv.mail_message_id.date)
             new = tv.new_value_char or ''
-            # initialize
+            f_name = tv.field_id.name
+
             if lead_id not in data:
                 data[lead_id] = {}
+
             vals = data[lead_id]
 
-            if new == seeing_name and 'seeing_state_date' not in vals:
-                vals['seeing_state_date'] = date
-            if new == contract_name and 'contract_state_date' not in vals:
-                vals['contract_state_date'] = date
-            if new == won_name and 'won_state_date' not in vals:
-                vals['won_state_date'] = date
+            if f_name == 'stage_id':
+                if new == seeing_name and 'seeing_state_date' not in vals:
+                    vals['seeing_state_date'] = date
+                if new == contract_name and 'contract_state_date' not in vals:
+                    vals['contract_state_date'] = date
+                if new == won_name and 'won_state_date' not in vals:
+                    vals['won_state_date'] = date
+
+            elif f_name == 'lost_reason_id':
+                if 'lost_state_date' not in vals:
+                    vals['lost_state_date'] = date
 
         Msg = self.env['mail.message']
-        missing_won = [lead_id for lead_id, vals in data.items() if 'won_state_date' not in vals]
+        missing_won = [lid for lid, v in data.items() if 'won_state_date' not in v]
         if missing_won:
             won_msgs = Msg.search([
                 ('model', '=', 'crm.lead'),
@@ -367,17 +376,19 @@ class CrmLead(models.Model):
                 if lid in data and 'won_state_date' not in data[lid]:
                     data[lid]['won_state_date'] = fields.Date.to_date(msg.date)
 
-        # 5) Son olarak, gerçek lead kayıtlarını güncelle
         for lead_id, vals in data.items():
-            # lead zaten doluysa (örneğin manuel girilmişse) atla
             lead = self.browse(lead_id)
             write_vals = {}
+
             if vals.get('seeing_state_date') and not lead.seeing_state_date:
                 write_vals['seeing_state_date'] = vals['seeing_state_date']
             if vals.get('contract_state_date') and not lead.contract_state_date:
                 write_vals['contract_state_date'] = vals['contract_state_date']
             if vals.get('won_state_date') and not lead.won_state_date:
                 write_vals['won_state_date'] = vals['won_state_date']
+            if vals.get('lost_state_date') and not lead.lost_state_date:
+                write_vals['lost_state_date'] = vals['lost_state_date']
+
             if write_vals:
                 lead.write(write_vals)
 
