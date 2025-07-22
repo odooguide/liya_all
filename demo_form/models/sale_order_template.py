@@ -86,7 +86,7 @@ class SaleOrderTemplateScheduleLine(models.Model):
         'sale.order.template', ondelete='cascade')
     sequence = fields.Integer(string="Step")
     event = fields.Char(string="Event")
-    time = fields.Float(string="Time")
+    time = fields.Char(string="Time")
     location_type = fields.Selection(
         [('restaurant', 'Restaurant'), ('beach', 'Beach')],
         string="Location Type")
@@ -100,7 +100,7 @@ class SaleOrderTemplateTransportLine(models.Model):
         'sale.order.template', ondelete='cascade')
     sequence = fields.Integer(string="Step")
     label = fields.Char(string="Description")
-    time = fields.Float(string="Time")
+    time = fields.Char(string="Time")
     port = fields.Selection(
         [('dragos', 'Dragos'), ('bostanci', 'Bostanci'),
          ('buyukada_dragos', 'Buyukada + Dragos'), ('other', 'Other')],
