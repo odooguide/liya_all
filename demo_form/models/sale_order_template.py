@@ -1,5 +1,4 @@
 from odoo import api, fields, models
-from datetime import timedelta, date,datetime
 
 
 class SaleOrderTemplate(models.Model):
@@ -9,6 +8,18 @@ class SaleOrderTemplate(models.Model):
         comodel_name='sale.order.template.task',
         inverse_name='sale_order_template_id',
         string='Project Tasks',
+    )
+    schedule_line_ids = fields.One2many(
+        'sale.order.template.schedule.line',
+        'sale_template_id',
+        string="Schedule Lines",
+        help="Scheduled events for this template"
+    )
+    transport_line_ids = fields.One2many(
+        'sale.order.template.transport.line',
+        'sale_template_id',
+        string="Transport Lines",
+        help="Transport steps for this template"
     )
 
 
@@ -66,3 +77,34 @@ class SaleOrderTemplateTask(models.Model):
         string='Communication Type',
         default='phone', )
     event_date=fields.Date(string='Event Date')
+
+class SaleOrderTemplateScheduleLine(models.Model):
+    _name = 'sale.order.template.schedule.line'
+    _description = "Sale Order Template Schedule Line"
+
+    sale_template_id = fields.Many2one(
+        'sale.order.template', ondelete='cascade')
+    sequence = fields.Integer(string="Step")
+    event = fields.Char(string="Event")
+    time = fields.Float(string="Time")
+    location_type = fields.Selection(
+        [('restaurant', 'Restaurant'), ('beach', 'Beach')],
+        string="Location Type")
+    location_notes = fields.Char(string="Details")
+
+class SaleOrderTemplateTransportLine(models.Model):
+    _name = 'sale.order.template.transport.line'
+    _description = "Sale Template Transport Line"
+
+    sale_template_id = fields.Many2one(
+        'sale.order.template', ondelete='cascade')
+    sequence = fields.Integer(string="Step")
+    label = fields.Char(string="Description")
+    time = fields.Float(string="Time")
+    port = fields.Selection(
+        [('dragos', 'Dragos'), ('bostanci', 'Bostanci'),
+         ('buyukada_dragos', 'Buyukada + Dragos'), ('other', 'Other')],
+        string="Port")
+    other_port = fields.Char(string="If Other, specify")
+
+

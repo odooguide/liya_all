@@ -10,7 +10,7 @@
 	""",
     "website": "https://broadmax.com.tr",
     "data": [
-        # "views/demo_form.xml",
+        "views/demo_form.xml",
         "views/project_template_view.xml",
         "views/sale_order_view_inherit.xml",
         "views/sale_order_template_view.xml",
