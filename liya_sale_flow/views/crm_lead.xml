@@ -12,7 +12,7 @@
                         <field name="request_date" required="1"/>
                         <field name="source_id" required="1"/>
                         <field name="wedding_place"/>
-                        <field name="wedding_type"  required="is_stage_lead == False and type=='opportunity'"/>
+                        <field name="wedding_type" required="is_stage_lead == False and type=='opportunity'"/>
                         <field name="people" required="1"/>
                     </group>
                     <group string="Event Date">
@@ -24,22 +24,28 @@
                 </group>
             </xpath>
             <xpath expr="//field[@name='lost_reason_id']" position="before">
-                <field name="second_contact" invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
-                <field name="second_title" invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
-                <field name="second_mail" widget="email" invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
-                <field name="second_phone" widget="phone" invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
-                <field name="second_job_position" invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
+                <field name="second_contact" invisible="type == 'lead'"
+                       required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
+                <field name="second_title" invisible="type == 'lead'"
+                       required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
+                <field name="second_mail" widget="email" invisible="type == 'lead'"
+                       required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
+                <field name="second_phone" widget="phone" invisible="type == 'lead'"
+                       required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
+                <field name="second_job_position" invisible="type == 'lead'"
+                       required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
                 <field name="my_activity_date_clock" invisible="1"/>
                 <field name="my_activity_day" invisible="1"/>
                 <field name="my_activity_date" invisible="1"/>
-                <field name="request_month" invisible="1" />
+                <field name="request_month" invisible="1"/>
                 <field name="conversion_month" invisible="1"/>
                 <field name="current_month" invisible="1"/>
 
             </xpath>
             <xpath expr="//field[@name='partner_id']" position="replace">
                 <field name="partner_id" widget="res_partner_many2one"
-                       context="{'default_name': contact_name,'default_title': title,'default_street': street,'default_street2': street2,'default_city': city,'default_state_id': state_id,'default_zip': zip,'default_country_id': country_id,'default_function': function,'default_phone': phone,'default_mobile': mobile,'default_email': email_from,'default_user_id': user_id,'default_team_id': team_id,'default_website': website,'default_lang': lang_code,'show_vat': True}" required="1"/>
+                       context="{'default_name': contact_name,'default_title': title,'default_street': street,'default_street2': street2,'default_city': city,'default_state_id': state_id,'default_zip': zip,'default_country_id': country_id,'default_function': function,'default_phone': phone,'default_mobile': mobile,'default_email': email_from,'default_user_id': user_id,'default_team_id': team_id,'default_website': website,'default_lang': lang_code,'show_vat': True}"
+                       required="1"/>
             </xpath>
         </field>
     </record>
@@ -65,29 +71,30 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//form[1]/sheet[1]/group[1]/group[@name='lead_partner']/field[@name='partner_id']" position="attributes">
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[@name='lead_partner']/field[@name='partner_id']"
+                   position="attributes">
                 <attribute name="options">{"no_quick_create":true}</attribute>
-             </xpath>
+            </xpath>
         </field>
 
     </record>
 
-<!--    <record id="crm_lead_view_form_iap_enrich_hide" model="ir.ui.view">-->
-<!--        <field name="name">crm.lead.form.iap.enrich.hide</field>-->
-<!--        <field name="model">crm.lead</field>-->
-<!--        <field name="inherit_id" ref="crm_iap_enrich.crm_lead_view_form"/>-->
-<!--        <field name="arch" type="xml">-->
+    <!--    <record id="crm_lead_view_form_iap_enrich_hide" model="ir.ui.view">-->
+    <!--        <field name="name">crm.lead.form.iap.enrich.hide</field>-->
+    <!--        <field name="model">crm.lead</field>-->
+    <!--        <field name="inherit_id" ref="crm_iap_enrich.crm_lead_view_form"/>-->
+    <!--        <field name="arch" type="xml">-->
 
-<!--            <xpath expr="//button[@name='iap_enrich'][1]" position="attributes">-->
-<!--                <attribute name="invisible">1</attribute>-->
-<!--            </xpath>-->
+    <!--            <xpath expr="//button[@name='iap_enrich'][1]" position="attributes">-->
+    <!--                <attribute name="invisible">1</attribute>-->
+    <!--            </xpath>-->
 
-<!--            <xpath expr="//button[@name='iap_enrich'][2]" position="attributes">-->
-<!--                <attribute name="invisible">1</attribute>-->
-<!--            </xpath>-->
+    <!--            <xpath expr="//button[@name='iap_enrich'][2]" position="attributes">-->
+    <!--                <attribute name="invisible">1</attribute>-->
+    <!--            </xpath>-->
 
-<!--        </field>-->
-<!--    </record>-->
+    <!--        </field>-->
+    <!--    </record>-->
     <record id="view_crm_lead_form_hide_revenue_prob" model="ir.ui.view">
         <field name="name">crm.lead.form.hide.revenue.probability</field>
         <field name="model">crm.lead</field>
@@ -95,7 +102,7 @@
         <field name="arch" type="xml">
 
             <xpath expr="//div[hasclass('col-auto','pb-2','pb-md-0','w-100','w-sm-auto')]" position="attributes">
-            <attribute name="invisible">1</attribute>
+                <attribute name="invisible">1</attribute>
             </xpath>
 
             <xpath expr="//div[button[@name='action_set_automated_probability']]" position="attributes">
@@ -147,10 +154,12 @@
             </xpath>
             <xpath expr="//field[@name='second_contact']" position="after">
                 <field name="second_country" placeholder="Country" class="o_address_country"
-                       invisible="type == 'lead'" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
+                       invisible="type == 'lead'"
+                       required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="after">
-                <field name="yabanci_turk" required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
+                <field name="yabanci_turk"
+                       required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
                 <field name="seeing_state_date" invisible="1"/>
                 <field name="contract_state_date" invisible="1"/>
                 <field name="won_state_date" invisible="1"/>
@@ -177,12 +186,60 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
         <field name="arch" type="xml">
-           <xpath expr="filter[@name='filter_creation_date']" position="after">
-                    <filter string="Current Month" name="filter_request_date_this_month" domain="[             ('request_date', '&gt;=', (context_today() + relativedelta(day=1))),             ('request_date', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
-           </xpath>
             <xpath expr="filter[@name='filter_creation_date']" position="after">
-                    <filter string="Convertion Month" name="filter_convertion_date_this_month" domain="[             ('date_conversion', '&gt;=', (context_today() + relativedelta(day=1))),             ('date_conversion', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
-           </xpath>
+                <filter string="Current Month" name="filter_request_date_this_month"
+                        domain="[             ('request_date', '&gt;=', (context_today() + relativedelta(day=1))),             ('request_date', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
+            </xpath>
+            <xpath expr="filter[@name='filter_creation_date']" position="after">
+                <filter string="Convertion Month" name="filter_convertion_date_this_month"
+                        domain="[             ('date_conversion', '&gt;=', (context_today() + relativedelta(day=1))),             ('date_conversion', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
+            </xpath>
+            <xpath expr="filter[@name='filter_conversion_date_this_month']" position="after">
+                <filter
+                        string="Seeing This Month"
+                        name="filter_seeing_state_date_this_month"
+                        domain="[
+            ('seeing_state_date', '>=', (context_today() + relativedelta(day=1))),
+            ('seeing_state_date', '<',  (context_today() + relativedelta(months=1, day=1)))
+        ]"
+                />
+            </xpath>
+
+            <!-- Contract Date This Month -->
+            <xpath expr="filter[@name='filter_seeing_state_date_this_month']" position="after">
+                <filter
+                        string="Contract This Month"
+                        name="filter_contract_state_date_this_month"
+                        domain="[
+            ('contract_state_date', '>=', (context_today() + relativedelta(day=1))),
+            ('contract_state_date', '<',  (context_today() + relativedelta(months=1, day=1)))
+        ]"
+                />
+            </xpath>
+
+            <!-- Won Date This Month -->
+            <xpath expr="filter[@name='filter_contract_state_date_this_month']" position="after">
+                <filter
+                        string="Won This Month"
+                        name="filter_won_state_date_this_month"
+                        domain="[
+            ('won_state_date', '>=', (context_today() + relativedelta(day=1))),
+            ('won_state_date', '<',  (context_today() + relativedelta(months=1, day=1)))
+        ]"
+                />
+            </xpath>
+
+            <!-- Lost Date This Month -->
+            <xpath expr="filter[@name='filter_won_state_date_this_month']" position="after">
+                <filter
+                        string="Lost This Month"
+                        name="filter_lost_state_date_this_month"
+                        domain="[
+            ('lost_state_date', '>=', (context_today() + relativedelta(day=1))),
+            ('lost_state_date', '<',  (context_today() + relativedelta(months=1, day=1)))
+        ]"
+                />
+            </xpath>
         </field>
     </record>
 
@@ -197,21 +254,21 @@
         </field>
     </record>
 
-<!--    <record id="view_crm_sms_case_tree_hide_sms_buttons" model="ir.ui.view">-->
-<!--        <field name="name">crm.sms.case.tree.hide.sms.buttons</field>-->
-<!--        <field name="model">crm.lead</field>-->
-<!--        <field name="inherit_id" ref="crm_sms.crm_case_tree_view_oppor"/>-->
-<!--        <field name="arch" type="xml">-->
+    <!--    <record id="view_crm_sms_case_tree_hide_sms_buttons" model="ir.ui.view">-->
+    <!--        <field name="name">crm.sms.case.tree.hide.sms.buttons</field>-->
+    <!--        <field name="model">crm.lead</field>-->
+    <!--        <field name="inherit_id" ref="crm_sms.crm_case_tree_view_oppor"/>-->
+    <!--        <field name="arch" type="xml">-->
 
-<!--            <xpath expr="//button[@name='466']" position="attributes">-->
-<!--                <attribute name="invisible">True</attribute>-->
-<!--            </xpath>-->
+    <!--            <xpath expr="//button[@name='466']" position="attributes">-->
+    <!--                <attribute name="invisible">True</attribute>-->
+    <!--            </xpath>-->
 
-<!--            <xpath expr="//button[@name='467']" position="attributes">-->
-<!--                <attribute name="invisible">True</attribute>-->
-<!--            </xpath>-->
-<!--        </field>-->
-<!--    </record>-->
+    <!--            <xpath expr="//button[@name='467']" position="attributes">-->
+    <!--                <attribute name="invisible">True</attribute>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
 
 
 </odoo>
