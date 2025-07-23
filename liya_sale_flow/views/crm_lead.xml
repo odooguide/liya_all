@@ -193,8 +193,6 @@
             <xpath expr="filter[@name='filter_creation_date']" position="after">
                 <filter string="Convertion Month" name="filter_convertion_date_this_month"
                         domain="[             ('date_conversion', '&gt;=', (context_today() + relativedelta(day=1))),             ('date_conversion', '&lt;',  (context_today() + relativedelta(months=1, day=1)))         ]"/>
-            </xpath>
-            <xpath expr="filter[@name='filter_conversion_date_this_month']" position="after">
                 <filter
                         string="Seeing This Month"
                         name="filter_seeing_state_date_this_month"
@@ -203,10 +201,6 @@
             ('seeing_state_date', '&lt;', (context_today() + relativedelta(months=1, day=1)))
         ]"
                 />
-            </xpath>
-
-            <!-- Contract Date This Month -->
-            <xpath expr="filter[@name='filter_seeing_state_date_this_month']" position="after">
                 <filter
                         string="Contract This Month"
                         name="filter_contract_state_date_this_month"
@@ -215,10 +209,6 @@
             ('contract_state_date', '&lt;',  (context_today() + relativedelta(months=1, day=1)))
         ]"
                 />
-            </xpath>
-
-            <!-- Won Date This Month -->
-            <xpath expr="filter[@name='filter_contract_state_date_this_month']" position="after">
                 <filter
                         string="Won This Month"
                         name="filter_won_state_date_this_month"
@@ -227,10 +217,6 @@
             ('won_state_date', '&lt;', (context_today() + relativedelta(months=1, day=1)))
         ]"
                 />
-            </xpath>
-
-            <!-- Lost Date This Month -->
-            <xpath expr="filter[@name='filter_won_state_date_this_month']" position="after">
                 <filter
                         string="Lost This Month"
                         name="filter_lost_state_date_this_month"
@@ -240,6 +226,7 @@
         ]"
                 />
             </xpath>
+
         </field>
     </record>
 
