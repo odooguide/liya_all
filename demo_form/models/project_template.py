@@ -132,10 +132,71 @@ class ProjectProject(models.Model):
                     'sequence': line.sequence,
                     'label': line.label,
                     'time': line.time,
-                    'port': line.port,
+                    'port_ids': [(6, 0, line.port_ids.ids)],
                     'other_port': line.other_port,
                 }))
             vals['transport_line_ids'] = trans_cmds
+
+            for sol in order.order_line:
+                name = sol.product_id.name.strip()
+
+                # Photography
+                if name == "Photo & Video Plus":
+                    vals['photo_video_plus'] = True
+                if name == "Drone Kamera":
+                    vals['photo_drone'] = True
+                if name == "Photo Print Service":
+                    vals['photo_print_service'] = True
+                if name in ("Hard Disk 1 TB Delivered", "Will Deliver Later"):
+                    # choose the correct key in your model:
+                    vals['photo_harddisk_delivered'] = (name == "Hard Disk 1 TB Delivered")
+                    vals['photo_harddisk_later'] = (name == "Will Deliver Later")
+
+                # After Party
+                if name == "After Party":
+                    vals['afterparty_service'] = True
+                if name == "After Party Shot Servisi":
+                    vals['afterparty_shot_service'] = True
+                if name == "Sushi Bar":
+                    vals['afterparty_sushi'] = True
+                if name == "Yabancı İçki Servisi":
+                    vals['bar_alcohol_service'] = True
+                if name == "Dans Show":
+                    vals['afterparty_dance_show'] = True
+                if name == "Fog + Laser Show":
+                    vals['afterparty_fog_laser'] = True
+
+                # Hair & Makeup
+                if name == "Saç & Makyaj":
+                    # we don’t know the studio, so mark “other”
+                    vals['hair_other'] = True
+
+                # Music: any “Canlı Müzik” product
+                if "Canlı Müzik" in name:
+                    vals['music_live'] = True
+                    if "PERKÜSYON" in name.upper():
+                        vals['music_percussion'] = True
+                    if "TRIO" in name.upper():
+                        vals['music_trio'] = True
+                    # special “Özel” product
+                    if "Özel" in name:
+                        vals['music_other'] = True
+                        vals['music_other_details'] = "Custom Live Music package"
+
+                # Pre‑Hosting
+                if name.upper() == "BARNEY":
+                    vals['prehost_barney'] = True
+                if name.upper() == "FRED":
+                    vals['prehost_fred'] = True
+                if name == "Breakfast Service":
+                    vals['prehost_breakfast'] = True
+                    vals['prehost_breakfast_count'] = int(sol.product_uom_qty)
+
+                # Table/Cake
+                if name == "Pasta Show'da Gerçek Pasta":
+                    vals['cake_choice'] = 'real'
+                if name == "Pasta Show'da Şampanya Kulesi":
+                    vals['cake_choice'] = 'champagne'
 
         demo = self.env['project.demo.form'].create(vals)
         return {

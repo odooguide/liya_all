@@ -66,59 +66,67 @@
                             <field name="demo_date"/>
                             <field name="sale_template_id"/>
                             <field name="guest_count"/>
-                            <field name="special_notes"/>
+                            <field name="special_notes" placeholder="Write your notes in here" />
 
                         </group>
                     </group>
                     <notebook>
-                        <page string="Schedule" name="schedule">
-
+                        <page string="Schedule and Transportation" name="schedule">
+                            <separator string="Schedule Infos" colspan="2"/>
                             <group>
-                                <field name="schedule_line_ids" nolabel="1">
-                                    <list editable="bottom">
-                                        <field name="event"/>
-                                        <field name="time"/>
-                                        <field name="location_type"/>
-                                        <field name="location_notes"/>
-                                    </list>
-                                </field>
+                                <group>
+                                    <field name="schedule_line_ids" nolabel="1">
+                                        <list editable="bottom">
+                                            <field name="event"/>
+                                            <field name="time"/>
+                                            <field name="location_type"/>
+                                            <field name="location_notes" placeholder="Write your notes in here" />
+                                        </list>
+                                    </field>
+                                </group>
+                                <group col="1">
+                                    <field name="schedule_description" placeholder="Write your notes in here"  widget="html" colspan="1"/>
+                                </group>
                             </group>
-                            <group col="1">
-                                <field name="schedule_description" widget="html" colspan="1"/>
+                            <separator string="Transportation Infos" colspan="2"/>
+                            <group >
+                                <group>
+                                    <field name="transport_line_ids" nolabel="1">
+                                        <list editable="bottom">
+                                            <field name="label"/>
+                                            <field name="time"/>
+                                            <field name="port_ids" widget="many2many_tags"/>
+                                            <field name="other_port"/>
+                                        </list>
+                                    </field>
+                                </group>
+                                <group col="1">
+                                    <field name="transportation_description" placeholder="Write your notes in here"  widget="html" colspan="1"/>
+                                </group>
                             </group>
                         </page>
-                        <page string="Transportation" name="transportation">
 
+                        <page string="Menu and Bar" name="menu">
+                            <separator string="Menu" colspan="2"/>
                             <group>
-                                <field name="transport_line_ids" nolabel="1">
-                                    <list editable="bottom">
-                                        <field name="label"/>
-                                        <field name="time"/>
-                                        <field name="port"/>
-                                        <field name="other_port"/>
-                                    </list>
-                                </field>
-                            </group>
-                            <group col="1">
-                                <field name="transportation_description" widget="html" colspan="1"/>
-                            </group>
-                        </page>
-                        <page string="Menu" name="menu">
-                            <group>
-                            <group col="2">
-                                <field name="menu_hot_appetizer" widget="radio"/>
-                            </group>
                                 <group col="2">
-                                <field name="menu_dessert_choice" widget="radio"/>
-                            </group>
+                                    <field name="menu_hot_appetizer" widget="radio"/>
+                                    <field name="menu_hot_appetizer_ultra" widget="radio" invisible="sale_template_id.name!='ULTRA'"/>
+                                </group>
+                                <group col="2">
+                                    <field name="menu_dessert_ids" widget="many2many_tags"/>
+                                </group>
+                                <group col="2">
+                                    <field name="menu_meze_ids" widget="many2many_tags"/>
+                                </group>
                             </group>
                             <group col="1">
 
-                                <field name="menu_description" widget="html" colspan="1"/>
+                                <field name="menu_description" placeholder="Write your notes in here"  widget="html" colspan="1"/>
+                                <field name="menu_meze_notes" placeholder="Write your notes in here" widget="html" colspan="1"/>
                             </group>
-                        </page>
-                        <page string="Bar" name="bar">
-                            <group string="Bar">
+                            <separator string="Bar" colspan="2"/>
+                            <group>
                                 <group col="2">
                                     <field name="bar_alcohol_service" widget="boolean_toggle"/>
                                     <field name="bar_purchase_advice"/>
@@ -128,7 +136,7 @@
                                 </group>
 
                                 <label for="bar_description"/>
-                                <field name="bar_description" widget="html" colspan="2"/>
+                                <field name="bar_description" placeholder="Write your notes in here"  widget="html" colspan="2"/>
                             </group>
                         </page>
 
@@ -167,16 +175,17 @@
                                         <field name="prehost_breakfast" widget="boolean_toggle"/>
                                         <field name="prehost_breakfast_count"/>
                                     </group>
-
+                                    <field name="prehost_notes" placeholder="Write your notes in here" widget="html" colspan="2"/>
                                     <separator string="Accommodation" colspan="2"/>
                                     <group col="2">
                                         <field name="accommodation_hotel"/>
                                         <field name="accommodation_service" widget="boolean_toggle"/>
+                                        <field name="accomodation_notes"  placeholder="Write your notes in here" widget="html" colspan="2"/>
                                     </group>
-
                                     <separator string="Dance Lesson" colspan="2"/>
                                     <group>
                                         <field name="dance_lesson" widget="boolean_toggle"/>
+                                        <field name="dance_lesson_notes" placeholder="Write your notes in here"  widget="html" colspan="2"/>
                                     </group>
                                 </group>
                             </group>
@@ -250,37 +259,37 @@
                             </group>
                         </page>
                         <page string="Table Decoration" name="table_decoration">
-                           <group>
+                            <group>
                                 <group>
-  <field name="table_theme"
-         widget="radio"
-         options="{'horizontal': true}"/>
-  <field name="table_charger"
-         widget="radio"
-         options="{'horizontal': true}"/>
-  <field name="table_runner_design"
-         widget="radio"
-         options="{'horizontal': true}"/>
-  <field name="table_color"
-         widget="radio"
-         options="{'horizontal': true}"/>
-  <field name="table_tag"
-         widget="radio"
-         options="{'horizontal': true}"/>
-  <field name="cake_choice"
-         widget="radio"
-         options="{'horizontal': true}"/>
-</group>
+                                    <field name="table_theme"
+                                           widget="radio"
+                                           options="{'horizontal': true}"/>
+                                    <field name="table_charger"
+                                           widget="radio"
+                                           options="{'horizontal': true}"/>
+                                    <field name="table_runner_design"
+                                           widget="radio"
+                                           options="{'horizontal': true}"/>
+                                    <field name="table_color"
+                                           widget="radio"
+                                           options="{'horizontal': true}"/>
+                                    <field name="table_tag"
+                                           widget="radio"
+                                           options="{'horizontal': true}"/>
+                                    <field name="cake_choice"
+                                           widget="radio"
+                                           options="{'horizontal': true}"/>
+                                </group>
 
-<group>
-  <field name="table_fresh_flowers"
-         widget="boolean_toggle"/>
-  <field name="table_dried_flowers"
-         widget="boolean_toggle"/>
-</group>
+                                <group>
+                                    <field name="table_fresh_flowers"
+                                           widget="boolean_toggle"/>
+                                    <field name="table_dried_flowers"
+                                           widget="boolean_toggle"/>
+                                </group>
 
                             </group>
-                             <group>
+                            <group>
                                 <field name="table_description" widget="html" colspan="2"/>
                             </group>
                         </page>
@@ -294,7 +303,7 @@
                                        invisible="other_social_media_tag==False"/>
                             </group>
                             <group>
-                                <field name="other_description" widget="html" colspan="2"/>
+                                <field name="other_description"  placeholder="Write your notes in here" widget="html" colspan="2"/>
                             </group>
                         </page>
 
