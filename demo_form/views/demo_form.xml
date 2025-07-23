@@ -1,93 +1,307 @@
 <odoo>
-    <record id="view_demo_form_form" model="ir.ui.view">
-        <field name="name">demo.form.form</field>
-        <field name="model">demo.form</field>
+    <record id="action_project_demo_form" model="ir.actions.act_window">
+        <field name="name">Demo Forms</field>
+        <field name="res_model">project.demo.form</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('project_id','=',active_id)]</field>
+        <field name="context">{'default_project_id': active_id}</field>
+    </record>
+
+    <record id="project_view_form_inherit_demo" model="ir.ui.view">
+        <field name="name">project.form.inherit.demo</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
         <field name="arch" type="xml">
-            <form string="Demo Form">
-                <sheet>
-                    <label for="name"/>
-                    <h2>
-                        <field name="name"/>
-                    </h2>
-
-                    <separator string="Düğün" colspan="4"
-                               style="font-size:1.5em; font-weight:bold; margin-top:1em; margin-bottom:0.5em;"/>
-                    <group>
-
-
-                        <group>
-                            <field name="davet_sahibi"/>
-                            <field name="davet_tarihi"/>
-                            <field name="gun"/>
-                            <field name="dugun_tipi"/>
-                        </group>
-                        <group>
-                            <field name="kisi_sayisi"/>
-                            <field name="nikah_tipi"/>
-                            <field name="baslangic_saati"/>
-                            <field name="bitis_saati"/>
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Demo ve Notlar">
-                            <group>
-                                <field name="demo_tarihi"/>
-                                <field name="ozel_notlar"/>
-                            </group>
-                        </page>
-                        <page string="Saat Akışı">
-                            <group>
-                                <group>
-                                    <field name="tekne_kalkis_zamani"/>
-                                    <field name="tekne_kalkis_not"/>
-                                    <field name="kokteyl_zamani"/>
-                                    <field name="kokteyl_not"/>
-                                    <field name="nikah_zamani"/>
-                                    <field name="nikah_mekan"/>
-                                    <field name="nikah_konusma_var"/>
-                                    <field name="nikah_konusma_sure"/>
-                                </group>
-                                <group>
-                                    <field name="yemek_zamani"/>
-                                    <field name="yemek_not"/>
-                                    <field name="party_zamani"/>
-                                    <field name="party_mekan"/>
-                                    <field name="afterparty_baslangic"/>
-                                    <field name="afterparty_bitis"/>
-                                </group>
-                            </group>
-                        </page>
-                        <page string="Ulaşım">
-                            <group>
-                                <field name="ulasim_cift_gelis_zamani"/>
-                                <field name="ulasim_cift_gelis_liman"/>
-                                <field name="ulasim_cift_gelis_not_zamani"/>
-                                <field name="ulasim_cift_gelis_not"/>
-                            </group>
-                        </page>
-                    </notebook>
-                </sheet>
-                <!--                 <div class="oe_chatter">-->
-                <!--                    <field name="message_follower_ids" groups="base.group_user"/>-->
-                <!--                    <field name="message_ids"/>-->
-                <!--                </div>-->
-            </form>
+            <xpath expr="//button[@name='action_view_tasks']" position="before">
+                <button name="action_open_demo_form"
+                        type="object"
+                        string="Demo Form"
+                        class="oe_stat_button"
+                        invisible="demo_form_count==0"
+                        icon="fa-files-o"/>
+            </xpath>
+            <header>
+                <button name="action_create_demo_form"
+                        type="object"
+                        string="Create Demo Form"
+                        invisible="demo_form_count>0"/>
+            </header>
         </field>
     </record>
 
-
-    <record id="action_demo_form_full" model="ir.actions.act_window">
-        <field name="name">Demo Formlar</field>
-        <field name="res_model">demo.form</field>
-        <field name="view_mode">form</field>
-        <field name="view_ids" eval="[
-      (ref('view_demo_form_form'), 'form')
-    ]"/>
-
+    <!-- Demo Form list -->
+    <record id="view_demo_form_list" model="ir.ui.view">
+        <field name="name">project.demo.form.list</field>
+        <field name="model">project.demo.form</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="invitation_date"/>
+                <field name="demo_date"/>
+            </list>
+        </field>
     </record>
-    <record id="action_demo_form_project" model="ir.actions.act_window">
-        <field name="name">Demo Formları</field>
-        <field name="res_model">demo.form</field>
-        <field name="view_mode">form</field>
+
+    <!-- Demo Form Form -->
+    <record id="view_demo_form_form" model="ir.ui.view">
+        <field name="name">project.demo.form.form</field>
+        <field name="model">project.demo.form</field>
+        <field name="arch" type="xml">
+            <form string="Demo Form">
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group col="2">
+                        <group>
+                            <field name="project_id" invisible="1"/>
+                            <field name="invitation_owner"/>
+                            <field name="invitation_date"/>
+                            <field name="duration_days"/>
+                            <field name="ceremony"/>
+                            <field name="start_time"/>
+                            <field name="end_time"/>
+                        </group>
+                        <group>
+                            <field name="demo_date"/>
+                            <field name="sale_template_id"/>
+                            <field name="guest_count"/>
+                            <field name="special_notes"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Schedule" name="schedule">
+
+                            <group>
+                                <field name="schedule_line_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="event"/>
+                                        <field name="time"/>
+                                        <field name="location_type"/>
+                                        <field name="location_notes"/>
+                                    </list>
+                                </field>
+                            </group>
+                            <group col="1">
+                                <field name="schedule_description" widget="html" colspan="1"/>
+                            </group>
+                        </page>
+                        <page string="Transportation" name="transportation">
+
+                            <group>
+                                <field name="transport_line_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="label"/>
+                                        <field name="time"/>
+                                        <field name="port"/>
+                                        <field name="other_port"/>
+                                    </list>
+                                </field>
+                            </group>
+                            <group col="1">
+                                <field name="transportation_description" widget="html" colspan="1"/>
+                            </group>
+                        </page>
+                        <page string="Menu" name="menu">
+                            <group>
+                            <group col="2">
+                                <field name="menu_hot_appetizer" widget="radio"/>
+                            </group>
+                                <group col="2">
+                                <field name="menu_dessert_choice" widget="radio"/>
+                            </group>
+                            </group>
+                            <group col="1">
+
+                                <field name="menu_description" widget="html" colspan="1"/>
+                            </group>
+                        </page>
+                        <page string="Bar" name="bar">
+                            <group string="Bar">
+                                <group col="2">
+                                    <field name="bar_alcohol_service" widget="boolean_toggle"/>
+                                    <field name="bar_purchase_advice"/>
+                                </group>
+                                <group col="2">
+                                    <field name="bar_raki_brand" widget="radio"/>
+                                </group>
+
+                                <label for="bar_description"/>
+                                <field name="bar_description" widget="html" colspan="2"/>
+                            </group>
+                        </page>
+
+                        <page string="After Party" name="afterparty">
+                            <group>
+                                <group col="2">
+                                    <field name="afterparty_service" widget="boolean_toggle"/>
+                                    <field name="afterparty_ultra" widget="boolean_toggle"/>
+                                    <field name="afterparty_more_drinks" widget="boolean_toggle"/>
+                                    <field name="afterparty_shot_service" widget="boolean_toggle"/>
+                                    <field name="afterparty_dance_show" widget="boolean_toggle"/>
+                                </group>
+
+                                <group col="2">
+                                    <field name="afterparty_fog_laser" widget="boolean_toggle"/>
+
+                                    <field name="afterparty_street_food" widget="boolean_toggle"/>
+                                    <field name="afterparty_bbq_wraps" widget="boolean_toggle"/>
+                                    <field name="afterparty_sushi" widget="boolean_toggle"/>
+                                </group>
+
+                                <label for="afterparty_description"/>
+                                <field name="afterparty_description" widget="html" colspan="2"/>
+
+                            </group>
+                        </page>
+                        <page string="Additional Services" name="additional_services">
+                            <group>
+                                <group>
+                                    <separator string="Pre‑Hosting" colspan="2"/>
+                                    <group col="2">
+                                        <field name="prehost_barney" widget="boolean_toggle"/>
+                                        <field name="prehost_fred" widget="boolean_toggle"/>
+                                    </group>
+                                    <group col="2">
+                                        <field name="prehost_breakfast" widget="boolean_toggle"/>
+                                        <field name="prehost_breakfast_count"/>
+                                    </group>
+
+                                    <separator string="Accommodation" colspan="2"/>
+                                    <group col="2">
+                                        <field name="accommodation_hotel"/>
+                                        <field name="accommodation_service" widget="boolean_toggle"/>
+                                    </group>
+
+                                    <separator string="Dance Lesson" colspan="2"/>
+                                    <group>
+                                        <field name="dance_lesson" widget="boolean_toggle"/>
+                                    </group>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Hair And Makeup" name="hair">
+                            <group>
+                                <group col="2">
+                                    <field name="hair_studio_3435" widget="boolean_toggle"/>
+                                    <field name="hair_garage_caddebostan" widget="boolean_toggle"/>
+                                </group>
+                                <group col="2">
+                                    <field name="hair_other" widget="boolean_toggle"/>
+                                    <field name="hair_other_company" invisible="hair_other==False"/>
+                                    <field name="hair_other_responsible" invisible="hair_other==False"/>
+                                    <field name="hair_other_phone" invisible="hair_other==False"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="hair_description" widget="html" colspan="2"/>
+                            </group>
+                        </page>
+                        <page string="Witnesses" name="witnesses">
+                            <group>
+                                <field name="witness_line_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                        <field name="phone"/>
+                                    </list>
+                                </field>
+                            </group>
+                            <group>
+                                <field name="witness_description" widget="html" colspan="4"/>
+                            </group>
+                        </page>
+                        <page string="Photography" name="photography">
+                            <group>
+                                <group col="2">
+                                    <field name="photo_standard" widget="boolean_toggle"/>
+                                    <field name="photo_video_plus" widget="boolean_toggle"/>
+                                    <field name="photo_homesession" widget="boolean_toggle"/>
+                                    <field name="photo_homesession_address"
+                                           invisible="photo_homesession==False"/>
+                                </group>
+                                <group col="2">
+                                    <field name="photo_print_service" widget="boolean_toggle"/>
+                                    <field name="photo_drone" widget="boolean_toggle"/>
+                                    <field name="photo_harddisk_delivered" widget="boolean_toggle"/>
+                                    <field name="photo_harddisk_later" widget="boolean_toggle"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="photo_description" widget="html" colspan="2"/>
+                            </group>
+                        </page>
+                        <page string="Music" name="music">
+                            <group>
+                                <group col="2">
+                                    <field name="music_live" widget="boolean_toggle"/>
+                                    <field name="music_trio" widget="boolean_toggle"/>
+                                    <field name="music_percussion" widget="boolean_toggle"/>
+                                    <field name="music_dj_fatih" widget="boolean_toggle"/>
+                                </group>
+                                <group col="2">
+                                    <field name="music_dj_engin" widget="boolean_toggle"/>
+                                    <field name="music_other" widget="boolean_toggle"/>
+                                    <field name="music_other_details" invisible="music_other==False"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="music_description" widget="html" colspan="2"/>
+                            </group>
+                        </page>
+                        <page string="Table Decoration" name="table_decoration">
+                           <group>
+                                <group>
+  <field name="table_theme"
+         widget="radio"
+         options="{'horizontal': true}"/>
+  <field name="table_charger"
+         widget="radio"
+         options="{'horizontal': true}"/>
+  <field name="table_runner_design"
+         widget="radio"
+         options="{'horizontal': true}"/>
+  <field name="table_color"
+         widget="radio"
+         options="{'horizontal': true}"/>
+  <field name="table_tag"
+         widget="radio"
+         options="{'horizontal': true}"/>
+  <field name="cake_choice"
+         widget="radio"
+         options="{'horizontal': true}"/>
+</group>
+
+<group>
+  <field name="table_fresh_flowers"
+         widget="boolean_toggle"/>
+  <field name="table_dried_flowers"
+         widget="boolean_toggle"/>
+</group>
+
+                            </group>
+                             <group>
+                                <field name="table_description" widget="html" colspan="2"/>
+                            </group>
+                        </page>
+
+                        <page string="Other Notes" name="other_notes">
+
+                            <group col="3">
+                                <field name="other_lcv" widget="boolean_toggle"/>
+                                <field name="other_social_media_tag" widget="boolean_toggle"/>
+                                <field name="other_social_media_details"
+                                       invisible="other_social_media_tag==False"/>
+                            </group>
+                            <group>
+                                <field name="other_description" widget="html" colspan="2"/>
+                            </group>
+                        </page>
+
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
     </record>
 </odoo>

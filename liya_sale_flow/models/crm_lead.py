@@ -88,8 +88,11 @@ class CrmLead(models.Model):
     seeing_state_date=fields.Date(string='Seeing Date')
     contract_state_date=fields.Date(string='Contract Date')
     won_state_date=fields.Date(string='Won Date')
-    meeting_date=fields.Date(string='Meeting Date')
     lost_state_date=fields.Date(string='Lost State Date')
+    seeing_state_month=fields.Char('Seeing Date Month',compute='_compute_month_names')
+    contract_state_month=fields.Char('Contract Date Month',compute='_compute_month_names')
+    won_state_month=fields.Char('Won Date Month',compute='_compute_month_names')
+    lost_state_month=fields.Char('Lost Date Month',compute='_compute_month_names')
 
     #####Compute #####
 
@@ -101,7 +104,7 @@ class CrmLead(models.Model):
             else:
                 rec.is_event_team = False
 
-    @api.depends('request_date', 'date_conversion')
+    @api.depends('request_date', 'date_conversion','lost_state_date','won_state_date','contract_state_date','seeing_state_date')
     def _compute_month_names(self):
         month_names = {
             1: 'Ocak', 2: 'Şubat', 3: 'Mart', 4: 'Nisan',
@@ -109,20 +112,41 @@ class CrmLead(models.Model):
             9: 'Eylül', 10: 'Ekim', 11: 'Kasım', 12: 'Aralık'
         }
         for rec in self:
+            # Request Date
             if rec.request_date:
-                rec.request_month = month_names.get(
-                    rec.request_date.month, False
-                )
+                rec.request_month = month_names.get(rec.request_date.month, False)
             else:
                 rec.request_month = False
 
+            # Conversion Date
             if rec.date_conversion:
-                rec.conversion_month = month_names.get(
-                    rec.date_conversion.month, False
-                )
+                rec.conversion_month = month_names.get(rec.date_conversion.month, False)
             else:
                 rec.conversion_month = False
 
+            # Seeing State Date
+            if rec.seeing_state_date:
+                rec.seeing_state_month = month_names.get(rec.seeing_state_date.month, False)
+            else:
+                rec.seeing_state_month = False
+
+            # Contract State Date
+            if rec.contract_state_date:
+                rec.contract_state_month = month_names.get(rec.contract_state_date.month, False)
+            else:
+                rec.contract_state_month = False
+
+            # Won State Date
+            if rec.won_state_date:
+                rec.won_state_month = month_names.get(rec.won_state_date.month, False)
+            else:
+                rec.won_state_month = False
+
+            # Lost State Date
+            if rec.lost_state_date:
+                rec.lost_state_month = month_names.get(rec.lost_state_date.month, False)
+            else:
+                rec.lost_state_month = False
     @api.depends('activity_type_id')
     def _compute_type(self):
         for lead in self:
@@ -215,6 +239,7 @@ class CrmLead(models.Model):
         ])
         for order in orders:
             order._action_cancel()
+        self.lost_state_date=fields.Date.today()
         return res
 
     def write(self, vals):

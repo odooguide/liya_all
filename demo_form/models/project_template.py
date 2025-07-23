@@ -19,6 +19,11 @@ class ProjectProject(models.Model):
         string='Next Event Date',
         compute='_compute_next_event',
     )
+    demo_form_ids = fields.One2many(
+        'project.demo.form', 'project_id', string="Demo Forms")
+    demo_form_count = fields.Integer(
+        string="Demo Form Count", compute='_compute_demo_form_count')
+
 
     def action_schedule_meeting(self):
         """Takvim’de yeni bir etkinlik (meeting) açmak için calendar.action_calendar_event action'ını döner."""
@@ -71,3 +76,72 @@ class ProjectProject(models.Model):
                             ),
         })
         return action
+
+
+    @api.depends('demo_form_ids')
+    def _compute_demo_form_count(self):
+        for proj in self:
+            proj.demo_form_count = len(proj.demo_form_ids)
+
+    def action_open_demo_form(self):
+        """Show the existing Demo Form."""
+        self.ensure_one()
+        if not self.demo_form_ids:
+            return {'type': 'ir.actions.act_window_close'}
+        demo = self.demo_form_ids[0]
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'project.demo.form',
+            'view_mode': 'form',
+            'res_id': demo.id,
+            'target': 'current',
+        }
+
+    def action_create_demo_form(self):
+        """Create a new Demo Form with pre‑filled values and open it."""
+        self.ensure_one()
+        if self.demo_form_ids:
+            return self.action_open_demo_form()
+
+        vals = {
+            'project_id': self.id,
+        }
+
+        order = self.reinvoiced_sale_order_id
+        if order:
+            vals.update({
+                'invitation_owner': order.partner_id.name,
+                'invitation_date': order.wedding_date,
+                'guest_count': order.people_count,
+                'sale_template_id': order.sale_order_template_id.id or False,
+                'demo_date':self.next_event_date
+            })
+            sched_cmds = []
+            for line in order.sale_order_template_id.schedule_line_ids:
+                sched_cmds.append((0, 0, {
+                    'sequence': line.sequence,
+                    'event': line.event,
+                    'time': line.time,
+                    'location_type': line.location_type,
+                    'location_notes': line.location_notes,
+                }))
+            vals['schedule_line_ids'] = sched_cmds
+            trans_cmds = []
+            for line in order.sale_order_template_id.transport_line_ids:
+                trans_cmds.append((0, 0, {
+                    'sequence': line.sequence,
+                    'label': line.label,
+                    'time': line.time,
+                    'port': line.port,
+                    'other_port': line.other_port,
+                }))
+            vals['transport_line_ids'] = trans_cmds
+
+        demo = self.env['project.demo.form'].create(vals)
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'project.demo.form',
+            'view_mode': 'form',
+            'res_id': demo.id,
+            'target': 'current',
+        }

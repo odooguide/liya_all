@@ -11,7 +11,7 @@ class SaleOrder(models.Model):
     confirmed_contract = fields.Binary(string="Signed Contract")
     confirmed_contract_name = fields.Char(string="Contract Filename")
     coordinator_ids = fields.Many2many(comodel_name='res.partner', string="Coordinators",
-                                       domain=[('employee_ids', '!=', False)])
+                                      )
     wedding_date = fields.Date(string="Event Date")
     people_count = fields.Integer(string="People Count")
     second_contact = fields.Char(string="Secondary Contact")
@@ -114,6 +114,12 @@ class SaleOrder(models.Model):
             self.service_ids = [(5, 0, 0)]
             self.program_ids = [(5, 0, 0)]
             self.transport_ids = [(5, 0, 0)]
+
+
+    @api.onchange('order_line')
+    def _onchange_order_line_template(self):
+        if not self.sale_order_template_id:
+            raise UserError(_("Lütfen teklif şablonunu seçin!."))
 
     @api.depends('wedding_date', 'partner_id.lang')
     def _compute_wedding_date_display(self):
