@@ -1,6 +1,7 @@
 import logging
 import sys
 import subprocess
+import re
 
 try:
     from getmac import get_mac_address as gma
@@ -49,25 +50,23 @@ class Home(BaseHome):
 
         if request.httprequest.method == 'POST':
             old_uid = request.session.uid
-            mac_address = gma()
-            login = request.params.get('login')
 
+            ip_address = request.httprequest.environ.get('REMOTE_ADDR')
+            mac_address = self._get_mac_from_ip(ip_address)
+            
+
+            login = request.params.get('login')
+            _logger.info(f"Giriş denemesi: user={login}, ip={ip_address}, mac={mac_address}")
             if login:
                 user_rec = request.env['res.users'].sudo().search(
                     [('login', '=', login)], limit=1
                 )
-                if user_rec and user_rec.mac_address_login_toggle:
+                if user_rec.mac_address_login_toggle:
                     allowed = user_rec.mac_address_ids.mapped('mac_address')
                     if mac_address not in allowed:
                         request.update_env(user=old_uid)
-                        values['error'] = _("Not allowed to login from this Device")
-                        response = request.render('web.login', values)
-                        response.headers.update({
-                            'Cache-Control': 'no-cache',
-                            'X-Frame-Options': 'SAMEORIGIN',
-                            'Content-Security-Policy': "frame-ancestors 'self'"
-                        })
-                        return response
+                        values['error'] = _("Bu cihazdan giriş yapmaya izniniz yok")
+                        return self._render_login(values)
 
             try:
                 credential = {
@@ -76,6 +75,7 @@ class Home(BaseHome):
                 }
                 credential.setdefault('type', 'password')
                 auth_info = request.session.authenticate(request.db, credential)
+                request.env['res.users'].sudo().browse(auth_info['uid']).write({'current_mac_address': mac_address})
                 request.params['login_success'] = True
                 return request.redirect(
                     _get_login_redirect_url(auth_info['uid'], redirect=redirect)
@@ -91,3 +91,44 @@ class Home(BaseHome):
         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
         response.headers['Content-Security-Policy'] = "frame-ancestors 'self'"
         return response
+    
+    def _render_login(self, values):
+        """Ortak login render ve header ayarları."""
+        response = request.render('web.login', values)
+        response.headers.update({
+            'Cache-Control': 'no-cache',
+            'X-Frame-Options': 'SAMEORIGIN',
+            'Content-Security-Policy': "frame-ancestors 'self'"
+        })
+        return response
+
+    def _get_mac_from_ip(self, ip):
+        """
+        Aynı LAN’da isek IP’den MAC döner.
+        - ping ile ARP tablosuna ekleme
+        - önce getmac(ip=...) dener, sonra fallback arp komutu
+        """
+        if not ip:
+            return None
+        try:
+            # ARP tablosuna eklemek için ping
+            subprocess.call(['ping', '-c', '1', ip],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            # getmac kütüphanesiyle al
+            mac = gma(ip=ip)
+            if mac:
+                return mac
+            # fallback arp sorgusu
+            out = subprocess.check_output(['arp', '-n', ip]).decode()
+            m = re.search(r'([0-9A-Fa-f]{2}(?::[0-9A-Fa-f]{2}){5})', out)
+            mac = m.group(1) if m else None
+            _logger.debug(f"ARP çıktısından IP={ip} için bulunan MAC: {mac}")
+            if mac:
+                _logger.info(f"IP {ip} → MAC {mac} (ARP fallback)")
+            else:
+                _logger.warning(f"IP {ip} için MAC bulunamadı (ARP fallback).")
+            return mac
+        
+        except Exception as e:
+            _logger.warning(f"MAC alınamadı ({ip}): {e}")
+            return None
