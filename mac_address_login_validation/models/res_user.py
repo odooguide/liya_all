@@ -22,7 +22,12 @@ class ResUsers(models.Model):
                                       string='Allowed MAC IDs')
     mac_address_login_toggle = fields.Boolean(default=False,
                                               string="Enable MAC Address Login Validation")
-    current_mac_address = fields.Char(string="Your Public Mac address")
+    current_mac_address = fields.Char(compute='_get_mac',
+                                      string="Your Public Mac address")
+
+    def _get_mac(self):
+        for rec in self:
+            rec.current_mac_address = gma()
 
     def enable_validation(self):
         for rec in self:
