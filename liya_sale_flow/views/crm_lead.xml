@@ -199,8 +199,8 @@
                         string="Seeing This Month"
                         name="filter_seeing_state_date_this_month"
                         domain="[
-            ('seeing_state_date', '>=', (context_today() + relativedelta(day=1))),
-            ('seeing_state_date', '<',  (context_today() + relativedelta(months=1, day=1)))
+            ('seeing_state_date', '&gt;=', (context_today() + relativedelta(day=1))),
+            ('seeing_state_date', '&lt;', (context_today() + relativedelta(months=1, day=1)))
         ]"
                 />
             </xpath>
@@ -211,8 +211,8 @@
                         string="Contract This Month"
                         name="filter_contract_state_date_this_month"
                         domain="[
-            ('contract_state_date', '>=', (context_today() + relativedelta(day=1))),
-            ('contract_state_date', '<',  (context_today() + relativedelta(months=1, day=1)))
+            ('contract_state_date', '&gt;=', (context_today() + relativedelta(day=1))),
+            ('contract_state_date', '&lt;',  (context_today() + relativedelta(months=1, day=1)))
         ]"
                 />
             </xpath>
@@ -223,8 +223,8 @@
                         string="Won This Month"
                         name="filter_won_state_date_this_month"
                         domain="[
-            ('won_state_date', '>=', (context_today() + relativedelta(day=1))),
-            ('won_state_date', '<',  (context_today() + relativedelta(months=1, day=1)))
+            ('won_state_date', '&gt;=', (context_today() + relativedelta(day=1))),
+            ('won_state_date', '&lt;', (context_today() + relativedelta(months=1, day=1)))
         ]"
                 />
             </xpath>
@@ -235,8 +235,8 @@
                         string="Lost This Month"
                         name="filter_lost_state_date_this_month"
                         domain="[
-            ('lost_state_date', '>=', (context_today() + relativedelta(day=1))),
-            ('lost_state_date', '<',  (context_today() + relativedelta(months=1, day=1)))
+            ('lost_state_date', '&gt;=', (context_today() + relativedelta(day=1))),
+            ('lost_state_date', '&lt;', (context_today() + relativedelta(months=1, day=1)))
         ]"
                 />
             </xpath>
