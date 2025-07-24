@@ -116,7 +116,7 @@ class SaleOrder(models.Model):
             self.transport_ids = [(5, 0, 0)]
 
 
-    @api.onchange('order_line')
+    @api.onchange('order_line.product_id')
     def _onchange_order_line_template(self):
         if not self.sale_order_template_id:
             raise UserError(_("Lütfen teklif şablonunu seçin!."))
