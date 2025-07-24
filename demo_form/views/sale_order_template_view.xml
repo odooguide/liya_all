@@ -45,8 +45,8 @@
         </field>
     </record>
 
-    <record id="view_sale_order_template_form_inherit" model="ir.ui.view">
-        <field name="name">sale.order.template.form.extend.lines</field>
+    <record id="view_sale_order_template_demo_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.template.demo.form.inherit</field>
         <field name="model">sale.order.template</field>
         <field name="inherit_id" ref="sale_management.sale_order_template_view_form"/>
         <field name="arch" type="xml">
@@ -67,7 +67,7 @@
                             <list editable="bottom">
                                 <field name="label"/>
                                 <field name="time"/>
-                                <field name="port"/>
+                                <field name="port_ids" widget="many2many_tags"/>
                                 <field name="other_port"/>
                             </list>
                         </field>

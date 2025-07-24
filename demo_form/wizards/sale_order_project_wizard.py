@@ -72,7 +72,18 @@ class SaleOrderProjectWizard(models.TransientModel):
             'sale_line_id': order.order_line and order.order_line[0].id or False
         }
 
+
         project = self.env['project.project'].create(vals)
+        done_stage = self.env['project.task.type'].search([
+            ('project_ids', 'in', project.id),
+            ('name', '=', 'Done')
+        ], limit=1)
+        if not done_stage:
+            done_stage = self.env['project.task.type'].create({
+                'name': 'Done',
+                'sequence':10,
+                'project_ids': [(4, project.id)],
+            })
         order.project_id = project.id
 
         lcv_subtasks = [

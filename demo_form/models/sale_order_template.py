@@ -101,10 +101,14 @@ class SaleOrderTemplateTransportLine(models.Model):
     sequence = fields.Integer(string="Step")
     label = fields.Char(string="Description")
     time = fields.Char(string="Time")
-    port = fields.Selection(
-        [('dragos', 'Dragos'), ('bostanci', 'Bostanci'),
-         ('buyukada_dragos', 'Buyukada + Dragos'), ('other', 'Other')],
-        string="Port")
+    port_ids = fields.Many2many(
+        'project.transport.port',  # the shared Port model
+        'sale_tpl_line_port_rel',  # your custom join‐table
+        'tpl_line_id',  # FK to this model
+        'port_id',  # FK to project.transport.port
+        string="Ports",
+        help="Select one or more ports"
+    )
     other_port = fields.Char(string="If Other, specify")
 
 

@@ -278,3 +278,4 @@ class SaleOrder(models.Model):
     def action_custom_send_quotation(self):
         for order in self:
             return order.with_context(hide_default_template=True).action_quotation_send()
+

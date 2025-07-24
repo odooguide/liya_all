@@ -10,3 +10,4 @@ from . import sales_teams
 from . import sale_order_event
 # from . import dashboard_groups
 from . import banquet_pages
+from . import sale_order_line

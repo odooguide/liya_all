@@ -3,7 +3,7 @@ from odoo import api, fields, models, _
 class ProjectDemoForm(models.Model):
     _name = 'project.demo.form'
     _description = "Project Demo Form"
-
+    
     sale_template_id=fields.Many2one('sale.order.template',string='Event Type')
     project_id = fields.Many2one(
         'project.project', string="Project", ondelete='cascade')
@@ -40,7 +40,7 @@ class ProjectDemoForm(models.Model):
 
     # ── Schedule page ─────────────────────────────────────────────────────────
     schedule_description = fields.Html(
-        string="Schedule Description",
+        string="Schedule Notes",
         sanitize=True,
         help="Provide notes or instructions for the Schedule page."
     )
@@ -51,7 +51,7 @@ class ProjectDemoForm(models.Model):
 
     # ── Transportation page ───────────────────────────────────────────────────
     transportation_description = fields.Html(
-        string="Transportation Description",
+        string="Transportation Notes",
         sanitize=True,
         help="Provide notes or instructions for the Transportation page."
     )
@@ -62,7 +62,7 @@ class ProjectDemoForm(models.Model):
 
     # ── Menu page ─────────────────────────────────────────────────────────────
     menu_description = fields.Html(
-        string="Menu Description",
+        string="Menu Notes",
         sanitize=True,
         help="Provide notes or instructions for the Menu page."
     )
@@ -70,12 +70,32 @@ class ProjectDemoForm(models.Model):
         ('lasagna_meat', "Lasagna (Meat)"),
         ('lasagna_vegan', "Lasagna (Vegan)"),
     ], string="Hot Appetizer")
-    menu_dessert_choice = fields.Selection([
-        ('sebastian', "Sebastian"),
-        ('magnolia', "Magnolia"),
-        ('ayva_tatlisi', "Quince Tart"),
-        ('pistachio_parfait', "Pistachio Parfait"),
-    ], string="Dessert Choice", )
+    menu_hot_appetizer_ultra = fields.Selection([
+        ('shrimpt', "Shrimp"),
+        ('lasagna_vegan', "Lasagna (Vegan)"),
+    ], string="Hot Appetizer Ultra")
+    menu_dessert_ids = fields.Many2many(
+        'project.demo.menu.dessert',
+        'demo_form_dessert_rel',
+        'form_id',
+        'dessert_id',
+        string="Dessert Choices",
+        help="Select one or more dessert options",
+    )
+    menu_meze_ids = fields.Many2many(
+        'project.demo.menu.meze',
+        'demo_form_meze_rel',
+        'form_id',
+        'meze_id',
+        string="Appetizers (Meze)",
+        help="Select one or more mezzes/appetizers",
+    )
+    menu_meze_notes=fields.Html(
+        string="Menu Meze Notes",
+        sanitize=True,
+        help="Provide notes or instructions for the Menu page."
+    )
+
 
     # ── Bar page ─────────────────────────────────────────────────────────────
     bar_description = fields.Html(
@@ -159,6 +179,11 @@ class ProjectDemoForm(models.Model):
     prehost_breakfast_count = fields.Integer(
         string="Breakfast Pax",
         help="If breakfast, how many people?" )
+    prehost_notes=fields.Html(
+        string="Prehost Notes",
+        sanitize=True,
+        help="Provide notes or instructions for the Menu page."
+    )
 
     accommodation_hotel = fields.Char(
         string="Hotel",
@@ -167,9 +192,21 @@ class ProjectDemoForm(models.Model):
         string="Accommodation Provided",
         help="Is accommodation provided?" )
 
+    accomodation_notes = fields.Html(
+        string="Accomodation Notes",
+        sanitize=True,
+        help="Provide notes or instructions for the Menu page."
+    )
+
     dance_lesson = fields.Boolean(
         string="Dance Lesson",
         help="Include a dance lesson?" )
+
+    dance_lesson_notes = fields.Html(
+        string="Dance Lesson Notes",
+        sanitize=True,
+        help="Provide notes or instructions for the Menu page."
+    )
 
     hair_description = fields.Html(
         string="Hair & Makeup Notes", sanitize=True,
@@ -315,12 +352,15 @@ class DemoTransportLine(models.Model):
     demo_form_id = fields.Many2one(
         'project.demo.form',  ondelete='cascade')
     sequence = fields.Integer(string="Step")
-    label = fields.Char(string="Description")
+    label = fields.Char(string="Notes")
     time = fields.Char(string="Time",)
-    port = fields.Selection(
-        [('dragos','Dragos'),('bostanci','Bostanci'),
-         ('buyukada_dragos','Buyukada + Dragos'),('other','Other')],
-        string="Port")
+    port_ids = fields.Many2many(
+        'project.transport.port',  # the Port model
+        'demo_line_port_rel',  # the join table name
+        'line_id',  # column in that table → project.demo.transport.line
+        'port_id',  # column in that table → project.transport.port
+        string="Ports",
+    )
     other_port = fields.Char(string="If Other, specify")
 
 class DemoWitnessLine(models.Model):
@@ -332,3 +372,20 @@ class DemoWitnessLine(models.Model):
     name = fields.Char(string="Name", required=True)
     phone = fields.Char(string="Phone")
 
+class TransportPort(models.Model):
+    _name = 'project.transport.port'
+    _description = 'Transport Port'
+
+    name = fields.Char(string="Port Name", required=True)
+
+class DemoMenuDessert(models.Model):
+    _name = 'project.demo.menu.dessert'
+    _description = "Demo Menu Dessert Option"
+
+    name = fields.Char(string="Dessert Name", required=True)
+
+class DemoMenuMeze(models.Model):
+    _name = 'project.demo.menu.meze'
+    _description = "Demo Menu Appetizer (Meze)"
+
+    name = fields.Char(string="Appetizer Name", required=True)
