@@ -18,6 +18,7 @@
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="email_template_id"/>
                 <field name="communication_type"/>
+                <field name="task_tags"/>
 
             </xpath>
 
