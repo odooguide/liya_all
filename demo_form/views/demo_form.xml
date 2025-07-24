@@ -67,7 +67,6 @@
                             <field name="sale_template_id"/>
                             <field name="guest_count"/>
                             <field name="special_notes" placeholder="Write your notes in here" />
-
                         </group>
                     </group>
                     <notebook>
@@ -292,7 +291,24 @@
                             <group>
                                 <field name="table_description" widget="html" colspan="2"/>
                             </group>
+                            <group>
+                                <field name="hair_description" widget="html" colspan="2"/>
+                            </group>
                         </page>
+                        <page string="Witnesses" name="witnesses">
+                            <group>
+                                <field name="witness_line_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                        <field name="phone"/>
+                                    </list>
+                                </field>
+                            </group>
+                            <group>
+                                <field name="witness_description" widget="html" colspan="4"/>
+                            </group>
+                        </page>
+
 
                         <page string="Other Notes" name="other_notes">
 
@@ -306,8 +322,6 @@
                                 <field name="other_description"  placeholder="Write your notes in here" widget="html" colspan="2"/>
                             </group>
                         </page>
-
-
                     </notebook>
                 </sheet>
             </form>
