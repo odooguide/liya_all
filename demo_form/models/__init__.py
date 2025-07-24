@@ -6,3 +6,5 @@ from . import project_task
 from . import sale_project_task
 from . import crm_lead
 from . import sale_order_line
+from . import many2many_fields
+from . import one2many_lines

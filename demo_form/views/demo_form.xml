@@ -260,24 +260,18 @@
                         <page string="Table Decoration" name="table_decoration">
                             <group>
                                 <group>
-                                    <field name="table_theme"
-                                           widget="radio"
-                                           options="{'horizontal': true}"/>
-                                    <field name="table_charger"
-                                           widget="radio"
-                                           options="{'horizontal': true}"/>
-                                    <field name="table_runner_design"
-                                           widget="radio"
-                                           options="{'horizontal': true}"/>
-                                    <field name="table_color"
-                                           widget="radio"
-                                           options="{'horizontal': true}"/>
-                                    <field name="table_tag"
-                                           widget="radio"
-                                           options="{'horizontal': true}"/>
-                                    <field name="cake_choice"
-                                           widget="radio"
-                                           options="{'horizontal': true}"/>
+                                    <field name="table_theme_ids"
+                                           widget="many2many_tags"/>
+                                    <field name="table_charger_ids"
+                                           widget="many2many_tags"/>
+                                    <field name="table_runner_design_ids"
+                                           widget="many2many_tags"/>
+                                    <field name="table_color_ids"
+                                           widget="many2many_tags"/>
+                                    <field name="table_tag_ids"
+                                           widget="many2many_tags"/>
+                                    <field name="cake_choice_ids"
+                                           widget="many2many_tags"/>
                                 </group>
 
                                 <group>

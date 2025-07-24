@@ -1,4 +1,5 @@
 from odoo import api, fields, models, _
+from datetime import date, datetime, timedelta
 
 class ProjectDemoForm(models.Model):
     _name = 'project.demo.form'
@@ -12,7 +13,7 @@ class ProjectDemoForm(models.Model):
         default=lambda self: _('New Demo Form'))
     invitation_owner = fields.Char(string="Invitation Owner")
     invitation_date = fields.Date(string="Invitation Date")
-    duration_days = fields.Integer(string="Duration (days)")
+    duration_days = fields.Char(string="Day")
     demo_date = fields.Date(string="Demo Date")
     special_notes = fields.Text(string="Special Notes")
 
@@ -257,46 +258,41 @@ class ProjectDemoForm(models.Model):
         sanitize=True,
         help="Any notes for the table decoration"
     )
-    table_theme = fields.Selection([
-        ('rustic', "Rustic"),
-        ('sea', "Sea"),
-        ('garden', "Garden"),
-        ('vintage', "Vintage"),
-    ], string="Table Theme", )
-    table_charger = fields.Selection([
-        ('silver', "Silver"),
-        ('wood', "Wood"),
-        ('glass', "Glass"),
-        ('wicker', "Wicker"),
-    ], string="Charger Type", )
-    table_runner_design = fields.Selection([
-        ('center_horizontal', "Center Horizontal"),
-        ('person_vertical', "Person-to-Person Vertical"),
-    ], string="Cloth & Runner Design", )
-    table_color = fields.Selection([
-        ('white', "White"),
-        ('turquoise', "Turquoise"),
-        ('brown', "Brown"),
-        ('blue', "Blue"),
-        ('salmon', "Salmon"),
-        ('beige', "Beige"),
-        ('green', "Green"),
-        ('terracotta', "Terracotta"),
-        ('grey', "Grey"),
-    ], string="Color Choice")
-    table_tag = fields.Selection([
-        ('romantic', "Romantic Tag"),
-        ('rustic_tag', "Rustic Tag"),
-        ('white_fairy', "White Fairy Tag"),
-    ], string="Ceremony Tag")
-    cake_choice = fields.Selection([
-        ('green', "Green"),
-        ('sea', "Sea"),
-        ('purple', "Purple"),
-        ('white_pink', "White & Pink"),
-        ('real', "Real Cake"),
-        ('champagne', "Champagne Tower"),
-    ], string="Cake Choice")
+    table_theme_ids = fields.Many2many(
+        'project.demo.table.theme',
+        'rel_form_table_theme',  # relation table
+        'demo_form_id', 'theme_id',  # fkeys
+        string="Table Themes")
+
+    table_charger_ids = fields.Many2many(
+        'project.demo.table.charger',
+        'rel_form_table_charger',
+        'demo_form_id', 'charger_id',
+        string="Charger Types")
+
+    table_runner_design_ids = fields.Many2many(
+        'project.demo.runner.design',
+        'rel_form_runner_design',
+        'demo_form_id', 'runner_id',
+        string="Cloth & Runner Designs")
+
+    table_color_ids = fields.Many2many(
+        'project.demo.table.color',
+        'rel_form_table_color',
+        'demo_form_id', 'color_id',
+        string="Color Choices")
+
+    table_tag_ids = fields.Many2many(
+        'project.demo.ceremony.tag',
+        'rel_form_ceremony_tag',
+        'demo_form_id', 'tag_id',
+        string="Ceremony Tags")
+
+    cake_choice_ids = fields.Many2many(
+        'project.demo.cake.choice',
+        'rel_form_cake_choice',
+        'demo_form_id', 'cake_id',
+        string="Cake Choices")
     table_fresh_flowers = fields.Boolean(
         string="Fresh Flowers",
         help="Include fresh flowers?")
@@ -327,65 +323,24 @@ class ProjectDemoForm(models.Model):
                 'project.demo.form') or vals['name']
         return super().create(vals)
 
+    @api.depends('invitation_date')
+    def _compute_activity_day(self):
+        turkish_days = [
+            'Pazartesi', 'Salı', 'Çarşamba',
+            'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'
+        ]
+        for rec in self:
+            if rec.invitation_date:
+                try:
+                    date_obj = datetime.strptime(rec.invitation_date, '%d.%m.%Y').date()
+                    rec.duration_day = turkish_days[date_obj.weekday()]
+                except ValueError:
+                    rec.duration_day = False
+            else:
+                rec.duration_day = False
 
 
 
-class DemoScheduleLine(models.Model):
-    _name = 'project.demo.schedule.line'
-    _description = "Demo Schedule Line"
-
-    demo_form_id = fields.Many2one(
-        'project.demo.form',  ondelete='cascade')
-    sequence = fields.Integer(string="Step")
-    event = fields.Char(string="Event")
-    time = fields.Char(string="Time")
-    location_type = fields.Selection(
-        [('restaurant','Restaurant'),('beach','Beach')],
-        string="Location Type")
-    location_notes = fields.Char(string="Details")
 
 
-class DemoTransportLine(models.Model):
-    _name = 'project.demo.transport.line'
-    _description = "Demo Transport Line"
 
-    demo_form_id = fields.Many2one(
-        'project.demo.form',  ondelete='cascade')
-    sequence = fields.Integer(string="Step")
-    label = fields.Char(string="Notes")
-    time = fields.Char(string="Time",)
-    port_ids = fields.Many2many(
-        'project.transport.port',  # the Port model
-        'demo_line_port_rel',  # the join table name
-        'line_id',  # column in that table → project.demo.transport.line
-        'port_id',  # column in that table → project.transport.port
-        string="Ports",
-    )
-    other_port = fields.Char(string="If Other, specify")
-
-class DemoWitnessLine(models.Model):
-    _name = 'project.demo.witness.line'
-    _description = "Demo Wedding Witness Line"
-
-    demo_form_id = fields.Many2one(
-        'project.demo.form', required=True, ondelete='cascade')
-    name = fields.Char(string="Name", required=True)
-    phone = fields.Char(string="Phone")
-
-class TransportPort(models.Model):
-    _name = 'project.transport.port'
-    _description = 'Transport Port'
-
-    name = fields.Char(string="Port Name", required=True)
-
-class DemoMenuDessert(models.Model):
-    _name = 'project.demo.menu.dessert'
-    _description = "Demo Menu Dessert Option"
-
-    name = fields.Char(string="Dessert Name", required=True)
-
-class DemoMenuMeze(models.Model):
-    _name = 'project.demo.menu.meze'
-    _description = "Demo Menu Appetizer (Meze)"
-
-    name = fields.Char(string="Appetizer Name", required=True)
