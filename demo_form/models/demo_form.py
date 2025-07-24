@@ -4,7 +4,7 @@ from datetime import date, datetime, timedelta
 class ProjectDemoForm(models.Model):
     _name = 'project.demo.form'
     _description = "Project Demo Form"
-
+    
     sale_template_id=fields.Many2one('sale.order.template',string='Event Type')
     project_id = fields.Many2one(
         'project.project', string="Project", ondelete='cascade')
