@@ -29,8 +29,7 @@ class ProjectDemoForm(models.Model):
         ('actual', "Actual"),
         ('staged', "Staged")],
         string="Ceremony Type")
-    start_time = fields.Datetime(string="Start Time")
-    end_time = fields.Datetime(string="End Time")
+    start_end_time = fields.Char(string="Start-End Time")
 
     schedule_line_ids = fields.One2many(
         'project.demo.schedule.line', 'demo_form_id',
