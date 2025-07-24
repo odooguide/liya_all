@@ -331,7 +331,7 @@ class ProjectDemoForm(models.Model):
         for rec in self:
             if rec.invitation_date:
                 try:
-                    date_obj = datetime.strptime(rec.invitation_date, '%d.%m.%Y').date()
+                    date_obj = rec.invitation_date.strftime('%d.%m.%Y')
                     rec.duration_days = turkish_days[date_obj.weekday()]
                 except ValueError:
                     rec.duration_days = False
