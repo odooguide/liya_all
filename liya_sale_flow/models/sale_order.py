@@ -115,12 +115,6 @@ class SaleOrder(models.Model):
             self.program_ids = [(5, 0, 0)]
             self.transport_ids = [(5, 0, 0)]
 
-
-    @api.onchange('order_line.product_template_id')
-    def _onchange_order_line_template(self):
-        if not self.sale_order_template_id:
-            raise UserError(_("Lütfen teklif şablonunu seçin!."))
-
     @api.depends('wedding_date', 'partner_id.lang')
     def _compute_wedding_date_display(self):
         for order in self:
@@ -278,3 +272,4 @@ class SaleOrder(models.Model):
     def action_custom_send_quotation(self):
         for order in self:
             return order.with_context(hide_default_template=True).action_quotation_send()
+
