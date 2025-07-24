@@ -7,7 +7,7 @@ class CalendarEvent(models.Model):
 
     event_place=fields.Selection([('online','Online'),('on_field','On Field')], string='Event Place')
     categ_name=fields.Char('Event Name',compute='_compute_categ_name')
-    meeting_date=fields.Date(string='Meeting Date',compute='_compute_meeting_date')
+    meeting_date=fields.Date(string='Meeting Date',compute='_compute_meeting_date', store=True)
 
     @api.depends('start')
     def _compute_meeting_date(self):
