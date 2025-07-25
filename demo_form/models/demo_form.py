@@ -370,6 +370,25 @@ class ProjectDemoForm(models.Model):
     seat_plan = fields.Binary(string="Seat Plan")
     seat_plan_name = fields.Char(string="Seat Plan Name")
 
+
+    local_music = fields.Boolean(
+        string="Local Music during Party")
+    local_music_songs = fields.Html(
+        string="If yes, specify songs")
+
+    cocktail_request = fields.Html(
+        string="Cocktail Request Musics", sanitize=True)
+    dinner_request = fields.Html(
+        string="Dinner Request Musics", sanitize=True)
+    party_request = fields.Html(
+        string="Party Request Musics", sanitize=True)
+    afterparty_request = fields.Html(
+        string="Afterparty Request Musics", sanitize=True)
+    ban_songs = fields.Html(
+        string="Ban any Songs or Artists",sanitize=True)
+    other_music_notes = fields.Html(
+        string="Other Notes about Music",sanitize=True)
+
     @api.model
     def create(self, vals):
         if 'name' in vals and vals.get('name') == _('New Demo Form'):

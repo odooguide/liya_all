@@ -26,4 +26,13 @@
             </xpath>
         </field>
     </record>
+
+    <record id="view_project_project_share_button_invisible" model="ir.ui.view">
+        <field name="name">view.project.project.share.button.invisible</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_share_project_wizard']" position="replace"/>
+        </field>
+    </record>
 </odoo>

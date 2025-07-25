@@ -68,9 +68,9 @@
                             <field name="guest_count"/>
                             <field name="special_notes" widget="html" placeholder="Write your notes in here"/>
                             <field name="seat_plan" widget="binary"
-                               filename="seat_plan_name"
-                               context="{'bin_size': True}"/>
-                              <field name="seat_plan_name" invisible="1"/>
+                                   filename="seat_plan_name"
+                                   context="{'bin_size': True}"/>
+                            <field name="seat_plan_name" invisible="1"/>
                         </group>
                     </group>
                     <notebook>
@@ -257,88 +257,122 @@
                         </page>
                         <page string="Music" name="music">
 
-                                <group>
-                                    <group col="2">
-                                        <field name="music_live" widget="boolean_toggle"/>
-                                        <field name="music_trio" widget="boolean_toggle"/>
-                                        <field name="music_percussion" widget="boolean_toggle"/>
-                                        <field name="music_dj_fatih" widget="boolean_toggle"/>
-                                    </group>
-                                    <group col="2">
-                                        <field name="music_dj_engin" widget="boolean_toggle"/>
-                                        <field name="music_other" widget="boolean_toggle"/>
-                                        <field name="music_other_details" invisible="music_other==False"/>
-                                    </group>
+                            <group>
+                                <group col="2">
+                                    <field name="music_live" widget="boolean_toggle"/>
+                                    <field name="music_trio" widget="boolean_toggle"/>
+                                    <field name="music_percussion" widget="boolean_toggle"/>
+                                    <field name="music_dj_fatih" widget="boolean_toggle"/>
                                 </group>
-                                <group>
-                                    <field name="music_description" placeholder="Write your music notes in here" widget="html" colspan="2" nolabel="1"/>
+                                <group col="2">
+                                    <field name="music_dj_engin" widget="boolean_toggle"/>
+                                    <field name="music_other" widget="boolean_toggle"/>
+                                    <field name="music_other_details" invisible="music_other==False"/>
                                 </group>
+                            </group>
+                            <group>
+                                <field name="music_description" placeholder="Write your music notes in here"
+                                       widget="html" colspan="2" nolabel="1"/>
+                            </group>
 
 
-                                <group string="Significant Songs" col="2">
-                                    <field name="entrance_song"/>
-                                    <field name="first_dance_song"/>
-                                    <field name="cake_song"/>
-                                    <field name="bouquet_toss_song"/>
-                                </group>
+                            <group string="Significant Songs" col="2">
+                                <field name="entrance_song"/>
+                                <field name="first_dance_song"/>
+                                <field name="cake_song"/>
+                                <field name="bouquet_toss_song"/>
+                            </group>
 
-                                <!-- 2A. Language Ratio -->
-                                <group string="Language Ratio" col="4">
-                                    <field name="ratio_choice" widget="radio" options="{'horizontal': true}"/>
-                                    <group col='2'>
+                            <!-- 2A. Language Ratio -->
+                            <group string="Language Ratio" col="4">
+                                <field name="ratio_choice" widget="radio" options="{'horizontal': true}"/>
+                                <group col='2'>
                                     <field name="ratio_turkish" invisible="ratio_choice != 'other'"/>
                                     <field name="ratio_foreign" invisible="ratio_choice != 'other'"/>
-                                    </group>
                                 </group>
+                            </group>
 
-                                <!-- 2B. Type of Music -->
-                                <group string="Type of Music" col="4">
-                                    <!-- Cocktail -->
-                                    <group col="1">
-                                        <field name="cocktail_lounge" widget="boolean_toggle"/>
-                                        <field name="cocktail_french" widget="boolean_toggle"/>
-                                        <field name="cocktail_italian" widget="boolean_toggle"/>
-                                        <field name="cocktail_greek" widget="boolean_toggle"/>
-                                        <field name="cocktail_house" widget="boolean_toggle"/>
-                                        <field name="cocktail_easy_bossa" widget="boolean_toggle"/>
-                                    </group>
-                                    <!-- Dinner -->
-                                    <group col="1">
-                                        <field name="dinner_lounge" widget="boolean_toggle"/>
-                                        <field name="dinner_turkish_acoustic" widget="boolean_toggle"/>
-                                        <field name="dinner_turkish_retro" widget="boolean_toggle"/>
-                                        <field name="dinner_italian_french_greek" widget="boolean_toggle"/>
-                                        <field name="dinner_oldies" widget="boolean_toggle"/>
-                                    </group>
-                                    <!-- Party -->
-                                    <group col="1">
-                                        <field name="party_turkish" widget="boolean_toggle"/>
-                                        <field name="party_turkish_80s_90s" widget="boolean_toggle"/>
-                                        <field name="party_local" widget="boolean_toggle"/>
-                                        <field name="party_radio_top50" widget="boolean_toggle"/>
-                                        <field name="party_oldies" widget="boolean_toggle"/>
-                                        <field name="party_latin_salsa" widget="boolean_toggle"/>
-                                        <field name="party_hiphop_rnb" widget="boolean_toggle"/>
-                                        <field name="party_90s_2000s_hits" widget="boolean_toggle"/>
-                                        <field name="party_turkish_rock" widget="boolean_toggle"/>
-                                        <field name="party_house_electronic" widget="boolean_toggle"/>
-                                    </group>
-                                    <!-- After Party -->
-                                    <group  col="1">
-                                        <field name="after_turkish" widget="boolean_toggle"/>
-                                        <field name="after_turkish_80s_90s" widget="boolean_toggle"/>
-                                        <field name="after_radio_top50" widget="boolean_toggle"/>
-                                        <field name="after_party_hits" widget="boolean_toggle"/>
-                                        <field name="after_oldies" widget="boolean_toggle"/>
-                                        <field name="after_latin_salsa" widget="boolean_toggle"/>
-                                        <field name="after_hiphop_rnb" widget="boolean_toggle"/>
-                                        <field name="after_90s_2000s_hits" widget="boolean_toggle"/>
-                                        <field name="after_turkish_rock" widget="boolean_toggle"/>
-                                        <field name="after_house_electronic" widget="boolean_toggle"/>
-                                    </group>
+                            <!-- 2B. Type of Music -->
+                            <group string="Type of Music" col="4">
+                                <!-- Cocktail -->
+                                <group col="1">
+                                    <field name="cocktail_lounge" widget="boolean_toggle"/>
+                                    <field name="cocktail_french" widget="boolean_toggle"/>
+                                    <field name="cocktail_italian" widget="boolean_toggle"/>
+                                    <field name="cocktail_greek" widget="boolean_toggle"/>
+                                    <field name="cocktail_house" widget="boolean_toggle"/>
+                                    <field name="cocktail_easy_bossa" widget="boolean_toggle"/>
                                 </group>
+                                <!-- Dinner -->
+                                <group col="1">
+                                    <field name="dinner_lounge" widget="boolean_toggle"/>
+                                    <field name="dinner_turkish_acoustic" widget="boolean_toggle"/>
+                                    <field name="dinner_turkish_retro" widget="boolean_toggle"/>
+                                    <field name="dinner_italian_french_greek" widget="boolean_toggle"/>
+                                    <field name="dinner_oldies" widget="boolean_toggle"/>
+                                </group>
+                                <!-- Party -->
+                                <group col="1">
+                                    <field name="party_turkish" widget="boolean_toggle"/>
+                                    <field name="party_turkish_80s_90s" widget="boolean_toggle"/>
+                                    <field name="party_local" widget="boolean_toggle"/>
+                                    <field name="party_radio_top50" widget="boolean_toggle"/>
+                                    <field name="party_oldies" widget="boolean_toggle"/>
+                                    <field name="party_latin_salsa" widget="boolean_toggle"/>
+                                    <field name="party_hiphop_rnb" widget="boolean_toggle"/>
+                                    <field name="party_90s_2000s_hits" widget="boolean_toggle"/>
+                                    <field name="party_turkish_rock" widget="boolean_toggle"/>
+                                    <field name="party_house_electronic" widget="boolean_toggle"/>
+                                </group>
+                                <!-- After Party -->
+                                <group col="1">
+                                    <field name="after_turkish" widget="boolean_toggle"/>
+                                    <field name="after_turkish_80s_90s" widget="boolean_toggle"/>
+                                    <field name="after_radio_top50" widget="boolean_toggle"/>
+                                    <field name="after_party_hits" widget="boolean_toggle"/>
+                                    <field name="after_oldies" widget="boolean_toggle"/>
+                                    <field name="after_latin_salsa" widget="boolean_toggle"/>
+                                    <field name="after_hiphop_rnb" widget="boolean_toggle"/>
+                                    <field name="after_90s_2000s_hits" widget="boolean_toggle"/>
+                                    <field name="after_turkish_rock" widget="boolean_toggle"/>
+                                    <field name="after_house_electronic" widget="boolean_toggle"/>
+                                </group>
+                            </group>
 
+                            <group string="Local Music" col="2">
+                                <field name="local_music" widget="boolean_toggle"/>
+                                <field name="local_music_songs"
+                                       widget="html"
+                                       invisible="local_music == False"/>
+                            </group>
 
+                            <!-- 4) Request songs as HTML editors -->
+                            <group col="2">
+                                <group string="Cocktail Request Songs">
+                                    <field name="cocktail_request" widget="html"/>
+                                </group>
+                                <group string="Dinner Request Songs">
+                                    <field name="dinner_request" widget="html"/>
+                                </group>
+                            </group>
+                            <group col="2">
+                                <group string="Party Request Songs">
+                                    <field name="party_request" widget="html"/>
+                                </group>
+                                <group string="After Party Request Songs">
+                                    <field name="afterparty_request" widget="html"/>
+                                </group>
+                            </group>
+
+                            <!-- 5) Ban Songs/Artists -->
+                            <group string="Ban Songs/Artists">
+                                <field name="ban_songs" widget="html"/>
+                            </group>
+
+                            <!-- 6) Other Music Notes -->
+                            <group string="Other Notes about Music">
+                                <field name="other_music_notes" widget="html"/>
+                            </group>
                         </page>
 
                         <page string="Table Decoration" name="table_decoration">
