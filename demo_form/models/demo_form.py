@@ -13,7 +13,7 @@ class ProjectDemoForm(models.Model):
         default=lambda self: _('New Demo Form'))
     invitation_owner = fields.Char(string="Invitation Owner")
     invitation_date = fields.Date(string="Invitation Date")
-    duration_days = fields.Char(string="Day")
+    duration_days = fields.Char(string="Day",compute='_compute_day')
     demo_date = fields.Date(string="Demo Date")
     special_notes = fields.Text(string="Special Notes")
 
@@ -323,21 +323,17 @@ class ProjectDemoForm(models.Model):
         return super().create(vals)
 
     @api.depends('invitation_date')
-    def _compute_activity_day(self):
+    def _compute_day(self):
         turkish_days = [
             'Pazartesi', 'Salı', 'Çarşamba',
             'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'
         ]
         for rec in self:
             if rec.invitation_date:
-                try:
-                    date_obj = datetime.strptime(rec.invitation_date, '%d.%m.%Y').date()
-                    rec.duration_day = turkish_days[date_obj.weekday()]
-                except ValueError:
-                    rec.duration_day = False
+                dt = fields.Date.from_string(rec.invitation_date)
+                rec.duration_days = turkish_days[dt.weekday()]
             else:
-                rec.duration_day = False
-
+                rec.duration_days = False
 
 
 

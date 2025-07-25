@@ -144,20 +144,17 @@ class ProjectProject(models.Model):
 
             for sol in order.order_line:
                 name = sol.product_id.name.strip()
-
-                # Photography
                 if name == "Photo & Video Plus":
                     vals['photo_video_plus'] = True
                 if name == "Drone Kamera":
                     vals['photo_drone'] = True
                 if name == "Photo Print Service":
                     vals['photo_print_service'] = True
-                if name in ("Hard Disk 1 TB Delivered", "Will Deliver Later"):
-                    # choose the correct key in your model:
-                    vals['photo_harddisk_delivered'] = (name == "Hard Disk 1 TB Delivered")
-                    vals['photo_harddisk_later'] = (name == "Will Deliver Later")
+                if name == "Hard Disk 1 TB Delivered":
+                    vals['photo_harddisk_delivered'] = True
+                if name == "Will Deliver Later":
+                    vals['photo_harddisk_later'] = True
 
-                # After Party
                 if name == "After Party":
                     vals['afterparty_service'] = True
                 if name == "After Party Shot Servisi":
@@ -171,24 +168,19 @@ class ProjectProject(models.Model):
                 if name == "Fog + Laser Show":
                     vals['afterparty_fog_laser'] = True
 
-                # Hair & Makeup
                 if name == "Saç & Makyaj":
-                    # we don’t know the studio, so mark “other”
                     vals['hair_other'] = True
 
-                # Music: any “Canlı Müzik” product
                 if "Canlı Müzik" in name:
                     vals['music_live'] = True
                     if "PERKÜSYON" in name.upper():
                         vals['music_percussion'] = True
                     if "TRIO" in name.upper():
                         vals['music_trio'] = True
-                    # special “Özel” product
                     if "Özel" in name:
                         vals['music_other'] = True
                         vals['music_other_details'] = "Custom Live Music package"
 
-                # Pre‑Hosting
                 if name.upper() == "BARNEY":
                     vals['prehost_barney'] = True
                 if name.upper() == "FRED":
@@ -197,11 +189,33 @@ class ProjectProject(models.Model):
                     vals['prehost_breakfast'] = True
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty)
 
-                # Table/Cake
                 if name == "Pasta Show'da Gerçek Pasta":
                     vals['cake_choice'] = 'real'
                 if name == "Pasta Show'da Şampanya Kulesi":
                     vals['cake_choice'] = 'champagne'
+
+            tmpl = (order.sale_order_template_id.name or '').strip().lower()
+            elite_fields = [
+                'photo_video_plus', 'photo_drone',
+                'photo_print_service', 'photo_harddisk_delivered',
+                'photo_harddisk_later',
+                'afterparty_service', 'afterparty_shot_service',
+                'afterparty_sushi', 'bar_alcohol_service',
+                'afterparty_dance_show', 'afterparty_fog_laser',
+                'hair_other',
+                'music_live', 'music_percussion',
+                'music_trio', 'music_other',
+                'prehost_barney', 'prehost_fred',
+            ]
+            if tmpl == 'plus':
+                for f in elite_fields:
+                    vals[f] = True
+                if name=='After Party Ultra':
+                    vals['afterparty_ultra'] = True
+            elif tmpl == 'ultra':
+                for f in elite_fields:
+                    vals[f] = True
+                vals['afterparty_ultra'] = True
 
         demo = self.env['project.demo.form'].create(vals)
         return {
