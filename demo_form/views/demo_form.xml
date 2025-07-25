@@ -113,7 +113,7 @@
                                     <field name="menu_hot_appetizer_ultra" widget="radio" invisible="sale_template_id.name!='ULTRA'"/>
                                 </group>
                                 <group col="2">
-                                    <field name="menu_dessert_ids" widget="many2many_checkbox"/>
+                                    <field name="menu_dessert_ids" widget="many2many_checkboxes"/>
                                 </group>
                                 <field name="menu_description" placeholder="Write your menu notes in here"  widget="html" colspan="1" nolabel="1"/>
 
@@ -261,17 +261,17 @@
                             <group>
                                 <group>
                                     <field name="table_theme_ids"
-                                           widget="many2many_checkbox"/>
+                                           widget="many2many_checkboxes"/>
                                     <field name="table_charger_ids"
-                                           widget="many2many_checkbox"/>
+                                           widget="many2many_checkboxes"/>
                                     <field name="table_runner_design_ids"
-                                           widget="many2many_checkbox"/>
+                                           widget="many2many_checkboxes"/>
                                     <field name="table_color_ids"
-                                           widget="many2many_checkbox"/>
+                                           widget="many2many_checkboxes"/>
                                     <field name="table_tag_ids"
-                                           widget="many2many_checkbox"/>
+                                           widget="many2many_checkboxes"/>
                                     <field name="cake_choice_ids"
-                                           widget="many2many_checkbox"/>
+                                           widget="many2many_checkboxes"/>
                                 </group>
 
                                 <group>
