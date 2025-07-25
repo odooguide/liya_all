@@ -15,7 +15,7 @@ class ProjectDemoForm(models.Model):
     invitation_date = fields.Date(string="Invitation Date")
     duration_days = fields.Char(string="Day",compute='_compute_day')
     demo_date = fields.Date(string="Demo Date")
-    special_notes = fields.Text(string="Special Notes")
+    special_notes = fields.Html(string="Special Notes")
 
     # header fields (example)
     wedding_type = fields.Selection([
