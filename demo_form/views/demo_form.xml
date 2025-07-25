@@ -66,7 +66,7 @@
                             <field name="demo_date"/>
                             <field name="sale_template_id"/>
                             <field name="guest_count"/>
-                            <field name="special_notes" widget="html" placeholder="Write your notes in here" />
+                            <field name="special_notes" widget="html" placeholder="Write your notes in here"/>
                         </group>
                     </group>
                     <notebook>
@@ -79,16 +79,17 @@
                                             <field name="event"/>
                                             <field name="time"/>
                                             <field name="location_type"/>
-                                            <field name="location_notes" placeholder="Write your notes in here" />
+                                            <field name="location_notes" placeholder="Write your notes in here"/>
                                         </list>
                                     </field>
                                 </group>
                                 <group col="1">
-                                    <field name="schedule_description" placeholder="Write your schedule notes in here"  widget="html" colspan="1" nolabel="1"/>
+                                    <field name="schedule_description" placeholder="Write your schedule notes in here"
+                                           widget="html" colspan="1" nolabel="1"/>
                                 </group>
                             </group>
                             <separator string="Transportation Infos" colspan="2"/>
-                            <group >
+                            <group>
                                 <group>
                                     <field name="transport_line_ids" nolabel="1">
                                         <list editable="bottom">
@@ -100,7 +101,9 @@
                                     </field>
                                 </group>
                                 <group col="1">
-                                    <field name="transportation_description" placeholder="Write your transportation notes in here"  widget="html" colspan="1" nolabel=""/>
+                                    <field name="transportation_description"
+                                           placeholder="Write your transportation notes in here" widget="html"
+                                           colspan="1" nolabel=""/>
                                 </group>
                             </group>
                         </page>
@@ -110,19 +113,22 @@
                             <group>
                                 <group col="2">
                                     <field name="menu_hot_appetizer" widget="radio"/>
-                                    <field name="menu_hot_appetizer_ultra" widget="radio" invisible="sale_template_id.name!='ULTRA'"/>
+                                    <field name="menu_hot_appetizer_ultra" widget="radio"
+                                           invisible="sale_template_id.name!='ULTRA'"/>
                                 </group>
                                 <group col="2">
                                     <field name="menu_dessert_ids" widget="many2many_checkboxes"/>
                                 </group>
-                                <field name="menu_description" placeholder="Write your menu notes in here"  widget="html" colspan="1" nolabel="1"/>
+                                <field name="menu_description" placeholder="Write your menu notes in here" widget="html"
+                                       colspan="1" nolabel="1"/>
 
                             </group>
                             <group>
                                 <group col="2">
                                     <field name="menu_meze_ids" widget="many2many_tags"/>
                                 </group>
-                                <field name="menu_meze_notes" placeholder="Write your meze notes in here" widget="html" colspan="1" nolabel="1"/>
+                                <field name="menu_meze_notes" placeholder="Write your meze notes in here" widget="html"
+                                       colspan="1" nolabel="1"/>
                             </group>
                             <separator string="Bar" colspan="2"/>
                             <group>
@@ -133,7 +139,8 @@
                                 <group col="2">
                                     <field name="bar_raki_brand" widget="radio"/>
                                 </group>
-                                <field name="bar_description" placeholder="Write your bar notes in here"  widget="html" colspan="2" nolabel="1"/>
+                                <field name="bar_description" placeholder="Write your bar notes in here" widget="html"
+                                       colspan="2" nolabel="1"/>
                             </group>
                         </page>
 
@@ -155,7 +162,8 @@
                                     <field name="afterparty_sushi" widget="boolean_toggle"/>
                                 </group>
 
-                                <field name="afterparty_description" placeholder="Write your bar notes in here" widget="html" colspan="2" nolabel="1"/>
+                                <field name="afterparty_description" placeholder="Write your bar notes in here"
+                                       widget="html" colspan="2" nolabel="1"/>
 
                             </group>
                         </page>
@@ -171,17 +179,21 @@
                                         <field name="prehost_breakfast" widget="boolean_toggle"/>
                                         <field name="prehost_breakfast_count"/>
                                     </group>
-                                    <field name="prehost_notes" placeholder="Write your prehost notes in here" widget="html" colspan="2" nolabel="1"/>
+                                    <field name="prehost_notes" placeholder="Write your prehost notes in here"
+                                           widget="html" colspan="2" nolabel="1"/>
                                     <separator string="Accommodation" colspan="2"/>
                                     <group col="2">
                                         <field name="accommodation_hotel"/>
                                         <field name="accommodation_service" widget="boolean_toggle"/>
-                                        <field name="accomodation_notes"  placeholder="Write your accommodation notes in here" widget="html" colspan="2" nolabel="1"/>
+                                        <field name="accomodation_notes"
+                                               placeholder="Write your accommodation notes in here" widget="html"
+                                               colspan="2" nolabel="1"/>
                                     </group>
                                     <separator string="Dance Lesson" colspan="2"/>
                                     <group>
                                         <field name="dance_lesson" widget="boolean_toggle"/>
-                                        <field name="dance_lesson_notes" placeholder="Write your dance notes in here"  widget="html" colspan="2" nolabel="1"/>
+                                        <field name="dance_lesson_notes" placeholder="Write your dance notes in here"
+                                               widget="html" colspan="2" nolabel="1"/>
                                     </group>
                                 </group>
                             </group>
@@ -200,7 +212,8 @@
                                 </group>
                             </group>
                             <group>
-                                <field name="hair_description" placeholder="Write your hair notes in here" widget="html" colspan="2" nolabel="1"/>
+                                <field name="hair_description" placeholder="Write your hair notes in here" widget="html"
+                                       colspan="2" nolabel="1"/>
                             </group>
                         </page>
                         <page string="Witnesses" name="witnesses">
@@ -213,7 +226,8 @@
                                 </field>
                             </group>
                             <group>
-                                <field name="witness_description" placeholder="Write your witness notes in here" widget="html" colspan="2" nolabel="1"/>
+                                <field name="witness_description" placeholder="Write your witness notes in here"
+                                       widget="html" colspan="2" nolabel="1"/>
                             </group>
                         </page>
                         <page string="Photography" name="photography">
@@ -233,27 +247,93 @@
                                 </group>
                             </group>
                             <group>
-                                <field name="photo_description" placeholder="Write your photo shoot notes in here" widget="html" colspan="2" nolabel="1"/>
+                                <field name="photo_description" placeholder="Write your photo shoot notes in here"
+                                       widget="html" colspan="2" nolabel="1"/>
                             </group>
                         </page>
                         <page string="Music" name="music">
                             <group>
-                            <group>
-                                <group col="2">
-                                    <field name="music_live" widget="boolean_toggle"/>
-                                    <field name="music_trio" widget="boolean_toggle"/>
-                                    <field name="music_percussion" widget="boolean_toggle"/>
-                                    <field name="music_dj_fatih" widget="boolean_toggle"/>
+                                <group>
+                                    <group col="2">
+                                        <field name="music_live" widget="boolean_toggle"/>
+                                        <field name="music_trio" widget="boolean_toggle"/>
+                                        <field name="music_percussion" widget="boolean_toggle"/>
+                                        <field name="music_dj_fatih" widget="boolean_toggle"/>
+                                    </group>
+                                    <group col="2">
+                                        <field name="music_dj_engin" widget="boolean_toggle"/>
+                                        <field name="music_other" widget="boolean_toggle"/>
+                                        <field name="music_other_details" invisible="music_other==False"/>
+                                    </group>
                                 </group>
-                                <group col="2">
-                                    <field name="music_dj_engin" widget="boolean_toggle"/>
-                                    <field name="music_other" widget="boolean_toggle"/>
-                                    <field name="music_other_details" invisible="music_other==False"/>
+                                <group>
+                                    <field name="music_description" placeholder="Write your music notes in here"
+                                           widget="html" colspan="2" nolabel="1"/>
                                 </group>
                             </group>
                             <group>
-                                <field name="music_description" placeholder="Write your music notes in here" widget="html" colspan="2" nolabel="1"/>
-                            </group>
+                                <group string="Significant Songs" col="2">
+                                    <field name="entrance_song"/>
+                                    <field name="first_dance_song"/>
+                                    <field name="cake_song"/>
+                                    <field name="bouquet_toss_song"/>
+                                </group>
+
+                                <!-- 2A. Language Ratio -->
+                                <group string="Language Ratio" col="4">
+                                    <field name="ratio_choice" widget="radio"/>
+                                    <field name="ratio_turkish"
+                                           attrs="{'invisible': [('ratio_choice','!=','other')]}"/>
+                                    <field name="ratio_foreign"
+                                           attrs="{'invisible': [('ratio_choice','!=','other')]}"/>
+                                </group>
+
+                                <!-- 2B. Type of Music -->
+                                <group string="Type of Music" col="4">
+                                    <!-- Cocktail -->
+                                    <group string="Cocktail" col="1">
+                                        <field name="cocktail_lounge" widget="boolean_toggle"/>
+                                        <field name="cocktail_french" widget="boolean_toggle"/>
+                                        <field name="cocktail_italian" widget="boolean_toggle"/>
+                                        <field name="cocktail_greek" widget="boolean_toggle"/>
+                                        <field name="cocktail_house" widget="boolean_toggle"/>
+                                        <field name="cocktail_easy_bossa" widget="boolean_toggle"/>
+                                    </group>
+                                    <!-- Dinner -->
+                                    <group string="Dinner" col="1">
+                                        <field name="dinner_lounge" widget="boolean_toggle"/>
+                                        <field name="dinner_turkish_acoustic" widget="boolean_toggle"/>
+                                        <field name="dinner_turkish_retro" widget="boolean_toggle"/>
+                                        <field name="dinner_italian_french_greek" widget="boolean_toggle"/>
+                                        <field name="dinner_oldies" widget="boolean_toggle"/>
+                                    </group>
+                                    <!-- Party -->
+                                    <group string="Party" col="1">
+                                        <field name="party_turkish" widget="boolean_toggle"/>
+                                        <field name="party_turkish_80s_90s" widget="boolean_toggle"/>
+                                        <field name="party_local" widget="boolean_toggle"/>
+                                        <field name="party_radio_top50" widget="boolean_toggle"/>
+                                        <field name="party_oldies" widget="boolean_toggle"/>
+                                        <field name="party_latin_salsa" widget="boolean_toggle"/>
+                                        <field name="party_hiphop_rnb" widget="boolean_toggle"/>
+                                        <field name="party_90s_2000s_hits" widget="boolean_toggle"/>
+                                        <field name="party_turkish_rock" widget="boolean_toggle"/>
+                                        <field name="party_house_electronic" widget="boolean_toggle"/>
+                                    </group>
+                                    <!-- After Party -->
+                                    <group string="After Party" col="1">
+                                        <field name="after_turkish" widget="boolean_toggle"/>
+                                        <field name="after_turkish_80s_90s" widget="boolean_toggle"/>
+                                        <field name="after_radio_top50" widget="boolean_toggle"/>
+                                        <field name="after_party_hits" widget="boolean_toggle"/>
+                                        <field name="after_oldies" widget="boolean_toggle"/>
+                                        <field name="after_latin_salsa" widget="boolean_toggle"/>
+                                        <field name="after_hiphop_rnb" widget="boolean_toggle"/>
+                                        <field name="after_90s_2000s_hits" widget="boolean_toggle"/>
+                                        <field name="after_turkish_rock" widget="boolean_toggle"/>
+                                        <field name="after_house_electronic" widget="boolean_toggle"/>
+                                    </group>
+                                </group>
                             </group>
 
                         </page>
@@ -283,7 +363,8 @@
 
                             </group>
                             <group>
-                                <field name="table_description" widget="html" placeholder="Write your table decoration notes in here" colspan="2" nolabel="1"/>
+                                <field name="table_description" widget="html"
+                                       placeholder="Write your table decoration notes in here" colspan="2" nolabel="1"/>
                             </group>
                         </page>
                         <page string="Other Notes" name="other_notes">
@@ -295,7 +376,8 @@
                                        invisible="other_social_media_tag==False"/>
                             </group>
                             <group>
-                                <field name="other_description"  placeholder="Write your other notes in here" widget="html" colspan="2" nolabel="1"/>
+                                <field name="other_description" placeholder="Write your other notes in here"
+                                       widget="html" colspan="2" nolabel="1"/>
                             </group>
                         </page>
                     </notebook>
