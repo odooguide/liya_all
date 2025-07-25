@@ -160,10 +160,10 @@
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="yabanci_turk"
                        required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
-                <field name="seeing_state_date" invisible="1"/>
-                <field name="contract_state_date" invisible="1"/>
-                <field name="won_state_date" invisible="1"/>
-                <field name="lost_state_date" invisible="1"/>
+                <field name="seeing_state_date"/>
+                <field name="contract_state_date"/>
+                <field name="won_state_date" />
+                <field name="lost_state_date" />
                 <field name="seeing_state_month" invisible="1"/>
                 <field name="contract_state_month" invisible="1"/>
                 <field name="won_state_month" invisible="1"/>
