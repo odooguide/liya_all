@@ -85,8 +85,8 @@ class CrmLead(models.Model):
     )
     is_stage_lead = fields.Boolean(string='Is Stage Lead', compute='_compute_stage_lead')
     is_event_team = fields.Boolean(string="Is Event Team", compute='_compute_event_team', store=True)
-    seeing_state_date=fields.Date(string='Seeing Date')
-    contract_state_date=fields.Date(string='Contract Date')
+    seeing_state_date=fields.Date(string='Quotation Date')
+    contract_state_date=fields.Date(string='Contract Share Date')
     won_state_date=fields.Date(string='Won Date')
     lost_state_date=fields.Date(string='Lost State Date')
     seeing_state_month=fields.Char('Seeing Date Month',compute='_compute_month_names',store=True)
@@ -235,9 +235,18 @@ class CrmLead(models.Model):
     @api.onchange('seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date')
     def _onchange_protect_state_dates(self):
         if not self.env.user.has_group('base.group_system'):
-            raise UserError(
-                _('Only admin can edit this field.')
-            )
+            for fname in ['seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date']:
+                setattr(self, fname, getattr(self._origin, fname))
+            return {
+                'warning': {
+                    'title': _("Permission Denied"),
+                    'message': _("Only administrators can modify these dates.")
+                },
+                'type': 'ir.actions.client',
+                'tag': 'reload',
+            }
+        return None
+
 
 
     def action_set_lost(self, **additional_values):
