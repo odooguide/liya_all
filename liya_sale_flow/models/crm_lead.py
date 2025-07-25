@@ -240,12 +240,9 @@ class CrmLead(models.Model):
                 old = getattr(self._origin, fname)
                 if new != old:
                     setattr(self, fname, old)
-                    return {
-                        'warning': {
-                            'title': _("Permission Denied"),
-                            'message': _("Only administrators can modify the “%s” field.") % self._fields[fname].string
-                        }
-                    }
+                    raise UserError(
+                        _('Only admin can edit this field.')
+                    )
 
 
     def action_set_lost(self, **additional_values):

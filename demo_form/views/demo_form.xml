@@ -107,7 +107,7 @@
                                 <group col="1">
                                     <field name="transportation_description"
                                            placeholder="Write your transportation notes in here" widget="html"
-                                           colspan="1" nolabel=""/>
+                                           colspan="1" nolabel="1"/>
                                 </group>
                             </group>
                         </page>
