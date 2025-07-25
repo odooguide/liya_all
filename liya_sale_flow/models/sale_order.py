@@ -11,7 +11,7 @@ class SaleOrder(models.Model):
     confirmed_contract = fields.Binary(string="Signed Contract")
     confirmed_contract_name = fields.Char(string="Contract Filename")
     coordinator_ids = fields.Many2many(comodel_name='res.partner', string="Coordinators",
-                                      )
+                                      domain=[('employee_ids', '!=', False)])
     wedding_date = fields.Date(string="Event Date")
     people_count = fields.Integer(string="People Count")
     second_contact = fields.Char(string="Secondary Contact")

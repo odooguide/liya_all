@@ -10,6 +10,7 @@ class CalendarEvent(models.Model):
     meeting_date=fields.Date(string='Meeting Date',compute='_compute_meeting_date',store=True)
 
 
+
     @api.depends('start')
     def _compute_meeting_date(self):
         """
@@ -39,6 +40,12 @@ class CalendarEvent(models.Model):
             partners |= self.env['res.partner'].browse(active_id)
         return partners
 
+    partner_ids = fields.Many2many(
+        'res.partner', 'calendar_event_res_partner_rel',
+        string='Attendees', default=_default_attendees,
+        domain=[('employee_ids', '!=', False)]
+    )
+
     @api.model
     def default_get(self, fields_list):
         """ Adding 24 Hour Reminder every event"""
@@ -49,11 +56,7 @@ class CalendarEvent(models.Model):
                 res['alarm_ids'] = [(6, 0, [alarm.id])]
         return res
 
-    partner_ids = fields.Many2many(
-        'res.partner', 'calendar_event_res_partner_rel',
-        string='Attendees', default=_default_attendees,
-        domain=[('employee_ids', '!=', False)]
-    )
+
 
     @api.model_create_multi
     def create(self, vals_list):

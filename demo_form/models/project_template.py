@@ -109,8 +109,10 @@ class ProjectProject(models.Model):
 
         order = self.reinvoiced_sale_order_id
         if order:
+            inv_name = f'{order.partner_id.name}-{order.opportunity_id.second_contact}'
             vals.update({
-                'invitation_owner': order.partner_id.name,
+                'name':f'{inv_name} Demo Formu',
+                'invitation_owner': inv_name,
                 'invitation_date': order.wedding_date,
                 'guest_count': order.people_count,
                 'sale_template_id': order.sale_order_template_id.id or False,
@@ -150,7 +152,7 @@ class ProjectProject(models.Model):
                     vals['photo_drone'] = True
                 if name == "Photo Print Service":
                     vals['photo_print_service'] = True
-                if name == "Hard Disk 1 TB Delivered":
+                if name == "Hard Disk 1TB Delivered":
                     vals['photo_harddisk_delivered'] = True
                 if name == "Will Deliver Later":
                     vals['photo_harddisk_later'] = True
@@ -169,7 +171,14 @@ class ProjectProject(models.Model):
                     vals['afterparty_fog_laser'] = True
 
                 if name == "Saç & Makyaj":
-                    vals['hair_other'] = True
+                    date_str = vals.get('invitation_date') or vals.get('demo_date')
+                    if date_str:
+                        dt = fields.Date.from_string(date_str)
+                        # Monday=0, Tuesday=1, Wednesday=2
+                        if dt.weekday() in (2,3,4,5):
+                            vals['hair_studio_3435'] = True
+                        else:
+                            vals['hair_garage_caddebostan'] = True
 
                 if "Canlı Müzik" in name:
                     vals['music_live'] = True
@@ -197,15 +206,14 @@ class ProjectProject(models.Model):
             tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
                 'photo_video_plus', 'photo_drone',
-                'photo_print_service', 'photo_harddisk_delivered',
-                'photo_harddisk_later',
+                'photo_print_service',
                 'afterparty_service', 'afterparty_shot_service',
                 'afterparty_sushi', 'bar_alcohol_service',
                 'afterparty_dance_show', 'afterparty_fog_laser',
                 'hair_other',
                 'music_live', 'music_percussion',
-                'music_trio', 'music_other',
-                'prehost_barney', 'prehost_fred',
+                'music_trio',
+
             ]
             if tmpl == 'plus':
                 for f in elite_fields:

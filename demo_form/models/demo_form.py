@@ -15,7 +15,7 @@ class ProjectDemoForm(models.Model):
     invitation_date = fields.Date(string="Invitation Date")
     duration_days = fields.Char(string="Day",compute='_compute_day')
     demo_date = fields.Date(string="Demo Date")
-    special_notes = fields.Text(string="Special Notes")
+    special_notes = fields.Html(string="Special Notes")
 
     # header fields (example)
     wedding_type = fields.Selection([
@@ -152,7 +152,6 @@ class ProjectDemoForm(models.Model):
         string="Shot Service",
         help="Include a Shot Service?"
     )
-
     afterparty_dance_show = fields.Boolean(
         string="Dance Show",
         help="Include a dance performance?"
@@ -212,9 +211,9 @@ class ProjectDemoForm(models.Model):
         string="Hair & Makeup Notes", sanitize=True,
         help="Instructions or options for hair & makeup")
     hair_studio_3435 = fields.Boolean(
-        string="Studio 3435 Nişantaşı")
+        string="Studio 3435 Nişantaşı")
     hair_garage_caddebostan = fields.Boolean(
-        string="Garage Caddebostan")
+        string="Garage Caddebostan")
     hair_other = fields.Boolean(string="Other")
     hair_other_company = fields.Char(string="Company")
     hair_other_responsible = fields.Char(string="Responsible")
@@ -314,6 +313,62 @@ class ProjectDemoForm(models.Model):
     other_social_media_details = fields.Char(
         string="If Yes, details",
         help="Additional info for social media tagging")
+    # ── 1. Significant Songs ────────────────────────────────────────────────
+    entrance_song = fields.Char(string="Entrance Song")
+    first_dance_song = fields.Char(string="First Dance Song")
+    cake_song = fields.Char(string="Wedding Cake Song")
+    bouquet_toss_song = fields.Char(string="Bouquet Toss Song")
+
+    # ── 2A. Language Ratio ─────────────────────────────────────────────────
+    ratio_choice = fields.Selection([
+        ('50_50', "Turkish 50 / Foreign 50"),
+        ('25_75', "Turkish 25 / Foreign 75"),
+        ('75_25', "Turkish 75 / Foreign 25"),
+        ('other', "Other"),
+    ], string="Language Ratio", default='50_50')
+    ratio_turkish = fields.Integer(string="Turkish %")
+    ratio_foreign = fields.Integer(string="Foreign %")
+
+    # ── 2B. Type of Music ── Cocktail ──────────────────────────────────────
+    cocktail_lounge = fields.Boolean(string="Lounge")
+    cocktail_french = fields.Boolean(string="French")
+    cocktail_italian = fields.Boolean(string="Italian")
+    cocktail_greek = fields.Boolean(string="Greek")
+    cocktail_house = fields.Boolean(string="House")
+    cocktail_easy_bossa = fields.Boolean(string="Easy Listening & Bossa")
+
+    # ── Dinner ─────────────────────────────────────────────────────────────
+    dinner_lounge = fields.Boolean(string="Lounge")
+    dinner_turkish_acoustic = fields.Boolean(string="Turkish Acoustic")
+    dinner_turkish_retro = fields.Boolean(string="Turkish Retro")
+    dinner_italian_french_greek = fields.Boolean(string="Italian & French & Greek")
+    dinner_oldies = fields.Boolean(string="Oldies & Goldies")
+
+    # ── Party ──────────────────────────────────────────────────────────────
+    party_turkish = fields.Boolean(string="Turkish")
+    party_turkish_80s_90s = fields.Boolean(string="Turkish 80’s 90’s")
+    party_local = fields.Boolean(string="Yöresel / Local")
+    party_radio_top50 = fields.Boolean(string="Radio Top 50")
+    party_oldies = fields.Boolean(string="Oldies & Goldies")
+    party_latin_salsa = fields.Boolean(string="Latin & Salsa & Reggaeton")
+    party_hiphop_rnb = fields.Boolean(string="Hip Hop & R&B")
+    party_90s_2000s_hits = fields.Boolean(string="90’s 2000’s Hits")
+    party_turkish_rock = fields.Boolean(string="Turkish Rock")
+    party_house_electronic = fields.Boolean(string="House & Electronic")
+
+    # ── After Party ────────────────────────────────────────────────────────
+    after_turkish = fields.Boolean(string="Turkish")
+    after_turkish_80s_90s = fields.Boolean(string="Turkish 80’s 90’s")
+    after_radio_top50 = fields.Boolean(string="Radio Top 50")
+    after_party_hits = fields.Boolean(string="Party Hits")
+    after_oldies = fields.Boolean(string="Oldies & Goldies")
+    after_latin_salsa = fields.Boolean(string="Latin & Salsa & Reggaeton")
+    after_hiphop_rnb = fields.Boolean(string="Hip Hop & R&B")
+    after_90s_2000s_hits = fields.Boolean(string="90’s 2000’s Hits")
+    after_turkish_rock = fields.Boolean(string="Turkish Rock")
+    after_house_electronic = fields.Boolean(string="House & Electronic")
+    seat_plan = fields.Binary(string="Seat Plan")
+    seat_plan_name = fields.Char(string="Seat Plan Name")
 
     @api.model
     def create(self, vals):

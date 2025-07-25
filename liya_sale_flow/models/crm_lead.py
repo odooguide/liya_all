@@ -85,14 +85,14 @@ class CrmLead(models.Model):
     )
     is_stage_lead = fields.Boolean(string='Is Stage Lead', compute='_compute_stage_lead')
     is_event_team = fields.Boolean(string="Is Event Team", compute='_compute_event_team', store=True)
-    seeing_state_date=fields.Date(string='Seeing Date')
-    contract_state_date=fields.Date(string='Contract Date')
+    seeing_state_date=fields.Date(string='Quotation Date')
+    contract_state_date=fields.Date(string='Contract Share Date')
     won_state_date=fields.Date(string='Won Date')
     lost_state_date=fields.Date(string='Lost State Date')
-    seeing_state_month=fields.Char('Seeing Date Month',compute='_compute_month_names')
-    contract_state_month=fields.Char('Contract Date Month',compute='_compute_month_names')
-    won_state_month=fields.Char('Won Date Month',compute='_compute_month_names')
-    lost_state_month=fields.Char('Lost Date Month',compute='_compute_month_names')
+    seeing_state_month=fields.Char('Seeing Date Month',compute='_compute_month_names',store=True)
+    contract_state_month=fields.Char('Contract Date Month',compute='_compute_month_names',store=True)
+    won_state_month=fields.Char('Won Date Month',compute='_compute_month_names',store=True)
+    lost_state_month=fields.Char('Lost Date Month',compute='_compute_month_names',store=True)
 
     #####Compute #####
 
@@ -231,6 +231,23 @@ class CrmLead(models.Model):
 
             if year > 2100:
                 raise ValidationError("Etkinlik yılı 2100'den küçük olmalıdır (maksimum 2100).")
+
+    @api.onchange('seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date')
+    def _onchange_protect_state_dates(self):
+        if not self.env.user.has_group('base.group_system'):
+            for fname in ['seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date']:
+                setattr(self, fname, getattr(self._origin, fname))
+            return {
+                'warning': {
+                    'title': _("Permission Denied"),
+                    'message': _("Only administrators can modify these dates.")
+                },
+                'type': 'ir.actions.client',
+                'tag': 'reload',
+            }
+        return None
+
+
 
     def action_set_lost(self, **additional_values):
         res = super().action_set_lost(**additional_values)

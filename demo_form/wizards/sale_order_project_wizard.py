@@ -212,13 +212,11 @@ class SaleOrderProjectWizardLine(models.TransientModel):
         string='Communication Type',
     )
 
-
-
     @api.onchange('planned_date', 'days', 'date_line', 'event_date')
     def _onchange_deadline_date(self):
         for rec in self:
             today = fields.Date.today()
-            wedding_date=rec.wizard_id.sale_order_id.wedding_date
+            wedding_date = rec.wizard_id.sale_order_id.wedding_date
             if wedding_date:
                 if rec.planned_date == 'before_wedding':
                     if wedding_date and rec.days:
@@ -249,7 +247,7 @@ class SaleOrderProjectWizardLine(models.TransientModel):
                     except ValueError:
                         wedding_date = None
                     if same_year and wedding_date and wedding_date > base_dt and today > base_dt:
-                        target = today + timedelta(days=1)
+                        target = today + timedelta(days=rec.days)
 
                     else:
                         target = base_dt
@@ -257,4 +255,3 @@ class SaleOrderProjectWizardLine(models.TransientModel):
                             target = date(today.year + 1, month, day)
                     rec.deadline_date = target
                     continue
-
