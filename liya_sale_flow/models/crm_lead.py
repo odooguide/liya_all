@@ -235,14 +235,9 @@ class CrmLead(models.Model):
     @api.onchange('seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date')
     def _onchange_protect_state_dates(self):
         if not self.env.user.has_group('base.group_system'):
-            for fname in ['seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date']:
-                new = getattr(self, fname)
-                old = getattr(self._origin, fname)
-                if new != old:
-                    setattr(self, fname, old)
-                    raise UserError(
-                        _('Only admin can edit this field.')
-                    )
+            raise UserError(
+                _('Only admin can edit this field.')
+            )
 
 
     def action_set_lost(self, **additional_values):
