@@ -330,7 +330,6 @@ class ProjectDemoForm(models.Model):
         ]
         for rec in self:
             if rec.invitation_date:
-
                 dt = fields.Date.from_string(rec.invitation_date)
                 rec.duration_days = turkish_days[dt.weekday()]
             else:
