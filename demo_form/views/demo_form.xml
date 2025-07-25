@@ -283,9 +283,9 @@
                                 <group string="Language Ratio" col="4">
                                     <field name="ratio_choice" widget="radio"/>
                                     <field name="ratio_turkish"
-                                           attrs="{'invisible': [('ratio_choice','!=','other')]}"/>
+                                           invisible="ratio_chouce != other"/>
                                     <field name="ratio_foreign"
-                                           attrs="{'invisible': [('ratio_choice','!=','other')]}"/>
+                                           invisible="ratio_chouce != other"/>
                                 </group>
 
                                 <!-- 2B. Type of Music -->
