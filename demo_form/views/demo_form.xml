@@ -255,7 +255,7 @@
                                        widget="html" colspan="2" nolabel="1"/>
                             </group>
                         </page>
-                         <page string="Music" name="music">
+                        <page string="Music" name="music">
 
                                 <group>
                                     <group col="2">
@@ -271,8 +271,7 @@
                                     </group>
                                 </group>
                                 <group>
-                                    <field name="music_description" placeholder="Write your music notes in here"
-                                           widget="html" colspan="2" nolabel="1"/>
+                                    <field name="music_description" placeholder="Write your music notes in here" widget="html" colspan="2" nolabel="1"/>
                                 </group>
 
 
@@ -285,17 +284,17 @@
 
                                 <!-- 2A. Language Ratio -->
                                 <group string="Language Ratio" col="4">
-                                    <field name="ratio_choice" widget="radio"/>
-                                    <field name="ratio_turkish"
-                                           invisible="ratio_choice != 'other'"/>
-                                    <field name="ratio_foreign"
-                                           invisible="ratio_choice != 'other'"/>
+                                    <field name="ratio_choice" widget="radio" options="{'horizontal': true}"/>
+                                    <group col='2'>
+                                    <field name="ratio_turkish" invisible="ratio_choice != 'other'"/>
+                                    <field name="ratio_foreign" invisible="ratio_choice != 'other'"/>
+                                    </group>
                                 </group>
 
                                 <!-- 2B. Type of Music -->
                                 <group string="Type of Music" col="4">
                                     <!-- Cocktail -->
-                                    <group string="Cocktail" col="1">
+                                    <group col="1">
                                         <field name="cocktail_lounge" widget="boolean_toggle"/>
                                         <field name="cocktail_french" widget="boolean_toggle"/>
                                         <field name="cocktail_italian" widget="boolean_toggle"/>
@@ -304,7 +303,7 @@
                                         <field name="cocktail_easy_bossa" widget="boolean_toggle"/>
                                     </group>
                                     <!-- Dinner -->
-                                    <group string="Dinner" col="1">
+                                    <group col="1">
                                         <field name="dinner_lounge" widget="boolean_toggle"/>
                                         <field name="dinner_turkish_acoustic" widget="boolean_toggle"/>
                                         <field name="dinner_turkish_retro" widget="boolean_toggle"/>
@@ -312,7 +311,7 @@
                                         <field name="dinner_oldies" widget="boolean_toggle"/>
                                     </group>
                                     <!-- Party -->
-                                    <group string="Party" col="1">
+                                    <group col="1">
                                         <field name="party_turkish" widget="boolean_toggle"/>
                                         <field name="party_turkish_80s_90s" widget="boolean_toggle"/>
                                         <field name="party_local" widget="boolean_toggle"/>
@@ -325,7 +324,7 @@
                                         <field name="party_house_electronic" widget="boolean_toggle"/>
                                     </group>
                                     <!-- After Party -->
-                                    <group string="After Party" col="1">
+                                    <group  col="1">
                                         <field name="after_turkish" widget="boolean_toggle"/>
                                         <field name="after_turkish_80s_90s" widget="boolean_toggle"/>
                                         <field name="after_radio_top50" widget="boolean_toggle"/>
