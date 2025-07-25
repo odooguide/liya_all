@@ -38,12 +38,21 @@ class ProjectTask(models.Model):
             'context': ctx,
         }
 
-    @api.constrains('state')
+    @api.constrains('state','stage_id')
     def _check_demo_task_event(self):
         for task in self:
             if (
                     task.name == 'Demo Randevu Oluşturma'
                     and task.state == '1_done'
+                    and not task.project_id.event_ids
+            ):
+                raise ValidationError(_(
+                    '“Demo Randevu Oluşturma” görevini "Tamamlandı" durumuna getirebilmek için '
+                    'Demo tarihi belirlenmelidir.'
+                ))
+            if (
+                    task.name == 'Demo Randevu Oluşturma'
+                    and task.stage_id.name == 'Done'
                     and not task.project_id.event_ids
             ):
                 raise ValidationError(_(

@@ -17,7 +17,7 @@
                         type="object"
                         string="Demo Form"
                         class="oe_stat_button"
-                        invisible="demo_form_count==0"
+                        invisible="not next_event_date"
                         icon="fa-files-o"/>
             </xpath>
             <header>
@@ -113,7 +113,7 @@
                                     <field name="menu_hot_appetizer_ultra" widget="radio" invisible="sale_template_id.name!='ULTRA'"/>
                                 </group>
                                 <group col="2">
-                                    <field name="menu_dessert_ids" widget="many2many_tags"/>
+                                    <field name="menu_dessert_ids" widget="many2many_checkbox"/>
                                 </group>
                                 <field name="menu_description" placeholder="Write your menu notes in here"  widget="html" colspan="1" nolabel="1"/>
 
@@ -238,6 +238,7 @@
                         </page>
                         <page string="Music" name="music">
                             <group>
+                            <group>
                                 <group col="2">
                                     <field name="music_live" widget="boolean_toggle"/>
                                     <field name="music_trio" widget="boolean_toggle"/>
@@ -253,22 +254,24 @@
                             <group>
                                 <field name="music_description" placeholder="Write your music notes in here" widget="html" colspan="2" nolabel="1"/>
                             </group>
+                            </group>
+
                         </page>
                         <page string="Table Decoration" name="table_decoration">
                             <group>
                                 <group>
                                     <field name="table_theme_ids"
-                                           widget="many2many_tags"/>
+                                           widget="many2many_checkbox"/>
                                     <field name="table_charger_ids"
-                                           widget="many2many_tags"/>
+                                           widget="many2many_checkbox"/>
                                     <field name="table_runner_design_ids"
-                                           widget="many2many_tags"/>
+                                           widget="many2many_checkbox"/>
                                     <field name="table_color_ids"
-                                           widget="many2many_tags"/>
+                                           widget="many2many_checkbox"/>
                                     <field name="table_tag_ids"
-                                           widget="many2many_tags"/>
+                                           widget="many2many_checkbox"/>
                                     <field name="cake_choice_ids"
-                                           widget="many2many_tags"/>
+                                           widget="many2many_checkbox"/>
                                 </group>
 
                                 <group>
