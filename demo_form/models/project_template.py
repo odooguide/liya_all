@@ -206,15 +206,14 @@ class ProjectProject(models.Model):
             tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
                 'photo_video_plus', 'photo_drone',
-                'photo_print_service', 'photo_harddisk_delivered',
-                'photo_harddisk_later',
+                'photo_print_service',
                 'afterparty_service', 'afterparty_shot_service',
                 'afterparty_sushi', 'bar_alcohol_service',
                 'afterparty_dance_show', 'afterparty_fog_laser',
                 'hair_other',
                 'music_live', 'music_percussion',
-                'music_trio', 'music_other',
-                'prehost_barney', 'prehost_fred',
+                'music_trio',
+
             ]
             if tmpl == 'plus':
                 for f in elite_fields:

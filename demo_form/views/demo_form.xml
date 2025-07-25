@@ -67,6 +67,10 @@
                             <field name="sale_template_id"/>
                             <field name="guest_count"/>
                             <field name="special_notes" widget="html" placeholder="Write your notes in here"/>
+                            <field name="seat_plan" widget="binary"
+                               filename="seat_plan_name"
+                               context="{'bin_size': True}"/>
+                              <field name="seat_plan_name" invisible="1"/>
                         </group>
                     </group>
                     <notebook>
@@ -114,7 +118,7 @@
                                 <group col="2">
                                     <field name="menu_hot_appetizer" widget="radio"/>
                                     <field name="menu_hot_appetizer_ultra" widget="radio"
-                                           invisible="sale_template_id.name!='ULTRA'"/>
+                                           invisible="sale_template_id != 3"/>
                                 </group>
                                 <group col="2">
                                     <field name="menu_dessert_ids" widget="many2many_checkboxes"/>
@@ -251,8 +255,8 @@
                                        widget="html" colspan="2" nolabel="1"/>
                             </group>
                         </page>
-                        <page string="Music" name="music">
-                            <group>
+                         <page string="Music" name="music">
+
                                 <group>
                                     <group col="2">
                                         <field name="music_live" widget="boolean_toggle"/>
@@ -270,8 +274,8 @@
                                     <field name="music_description" placeholder="Write your music notes in here"
                                            widget="html" colspan="2" nolabel="1"/>
                                 </group>
-                            </group>
-                            <group>
+
+
                                 <group string="Significant Songs" col="2">
                                     <field name="entrance_song"/>
                                     <field name="first_dance_song"/>
@@ -334,9 +338,10 @@
                                         <field name="after_house_electronic" widget="boolean_toggle"/>
                                     </group>
                                 </group>
-                            </group>
+
 
                         </page>
+
                         <page string="Table Decoration" name="table_decoration">
                             <group>
                                 <group>
@@ -347,11 +352,11 @@
                                     <field name="table_runner_design_ids"
                                            widget="many2many_checkboxes"/>
                                     <field name="table_color_ids"
-                                           widget="many2many_checkboxes"/>
+                                           widget="many2many_tags"/>
                                     <field name="table_tag_ids"
-                                           widget="many2many_checkboxes"/>
+                                           widget="many2many_tags"/>
                                     <field name="cake_choice_ids"
-                                           widget="many2many_checkboxes"/>
+                                           widget="many2many_tags"/>
                                 </group>
 
                                 <group>

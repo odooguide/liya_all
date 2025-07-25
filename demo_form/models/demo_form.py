@@ -152,7 +152,6 @@ class ProjectDemoForm(models.Model):
         string="Shot Service",
         help="Include a Shot Service?"
     )
-
     afterparty_dance_show = fields.Boolean(
         string="Dance Show",
         help="Include a dance performance?"
@@ -368,6 +367,8 @@ class ProjectDemoForm(models.Model):
     after_90s_2000s_hits = fields.Boolean(string="90’s 2000’s Hits")
     after_turkish_rock = fields.Boolean(string="Turkish Rock")
     after_house_electronic = fields.Boolean(string="House & Electronic")
+    seat_plan = fields.Binary(string="Seat Plan")
+    seat_plan_name = fields.Char(string="Seat Plan Name")
 
     @api.model
     def create(self, vals):
