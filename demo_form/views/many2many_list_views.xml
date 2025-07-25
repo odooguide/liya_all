@@ -1,5 +1,11 @@
 <odoo>
 
+  <menuitem id="menu_demo_form_fields"
+            name="Demo Form"
+            parent="project.menu_project_config"
+            sequence="10"/>
+
+
   <!-- Transport Ports -->
   <record id="action_project_transport_port" model="ir.actions.act_window">
     <field name="name">Transport Ports</field>
@@ -9,7 +15,7 @@
   </record>
   <menuitem id="menu_project_transport_port"
             name="Transport Ports"
-            parent="project.menu_project_config"
+            parent="menu_demo_form_fields"
             action="action_project_transport_port"
             sequence="10"/>
 
@@ -22,7 +28,7 @@
   </record>
   <menuitem id="menu_project_demo_menu_dessert"
             name="Menu Desserts"
-            parent="project.menu_project_config"
+            parent="menu_demo_form_fields"
             action="action_project_demo_menu_dessert"
             sequence="20"/>
 
@@ -35,7 +41,7 @@
   </record>
   <menuitem id="menu_project_demo_menu_meze"
             name="Menu Appetizers"
-            parent="project.menu_project_config"
+            parent="menu_demo_form_fields"
             action="action_project_demo_menu_meze"
             sequence="30"/>
 
@@ -48,7 +54,7 @@
   </record>
   <menuitem id="menu_project_demo_table_theme"
             name="Table Themes"
-            parent="project.menu_project_config"
+            parent="menu_demo_form_fields"
             action="action_project_demo_table_theme"
             sequence="40"/>
 
@@ -61,7 +67,7 @@
   </record>
   <menuitem id="menu_project_demo_table_charger"
             name="Table Chargers"
-            parent="project.menu_project_config"
+            parent="menu_demo_form_fields"
             action="action_project_demo_table_charger"
             sequence="50"/>
 
@@ -74,7 +80,7 @@
   </record>
   <menuitem id="menu_project_demo_runner_design"
             name="Runner Designs"
-            parent="project.menu_project_config"
+            parent="menu_demo_form_fields"
             action="action_project_demo_runner_design"
             sequence="60"/>
 
@@ -87,7 +93,7 @@
   </record>
   <menuitem id="menu_project_demo_table_color"
             name="Table Colors"
-            parent="project.menu_project_config"
+            parent="menu_demo_form_fields"
             action="action_project_demo_table_color"
             sequence="70"/>
 
@@ -100,7 +106,7 @@
   </record>
   <menuitem id="menu_project_demo_ceremony_tag"
             name="Ceremony Tags"
-            parent="project.menu_project_config"
+            parent="menu_demo_form_fields"
             action="action_project_demo_ceremony_tag"
             sequence="80"/>
 
@@ -113,7 +119,7 @@
   </record>
   <menuitem id="menu_project_demo_cake_choice"
             name="Cake Choices"
-            parent="project.menu_project_config"
+            parent="menu_demo_form_fields"
             action="action_project_demo_cake_choice"
             sequence="90"/>
 
