@@ -116,11 +116,6 @@ class SaleOrder(models.Model):
             self.transport_ids = [(5, 0, 0)]
 
 
-    @api.onchange('order_line')
-    def _onchange_order_line_template(self):
-        if not self.sale_order_template_id:
-            raise UserError(_("Lütfen teklif şablonunu seçin!."))
-
     @api.depends('wedding_date', 'partner_id.lang')
     def _compute_wedding_date_display(self):
         for order in self:
