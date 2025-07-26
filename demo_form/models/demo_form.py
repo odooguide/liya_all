@@ -123,14 +123,16 @@ class ProjectDemoForm(models.Model):
         string="After Party Notes",
         sanitize=True,
         help="Notes or special instructions for the After Party."
+
     )
     afterparty_service = fields.Boolean(
         string="After Party",
-        help="Do you want a dedicated After Party?"
+        help="Do you want a dedicated After Party?",store=True,
     )
     afterparty_ultra = fields.Boolean(
         string="After Party Ultra",
-        help="Include the Ultra After Party package?"
+        help="Include the Ultra After Party package?",
+        store=True
     )
     afterparty_more_drinks = fields.Boolean(
         string="Additional Drink Variety",
@@ -154,7 +156,8 @@ class ProjectDemoForm(models.Model):
     )
     afterparty_dance_show = fields.Boolean(
         string="Dance Show",
-        help="Include a dance performance?"
+        help="Include a dance performance?",
+        store=True,
     )
     afterparty_fog_laser = fields.Boolean(
         string="Fog + Laser Show",
@@ -280,10 +283,9 @@ class ProjectDemoForm(models.Model):
         'demo_form_id', 'color_id',
         string="Color Choices")
 
-    table_tag_ids = fields.Many2many(
+    table_tag_ids = fields.Many2one(
         'project.demo.ceremony.tag',
-        'rel_form_ceremony_tag',
-        'demo_form_id', 'tag_id',
+
         string="Ceremony Tags")
 
     cake_choice_ids = fields.Many2many(

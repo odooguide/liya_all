@@ -88,7 +88,7 @@ class CrmLead(models.Model):
     seeing_state_date=fields.Date(string='Quotation Date')
     contract_state_date=fields.Date(string='Contract Share Date')
     won_state_date=fields.Date(string='Won Date')
-    lost_state_date=fields.Date(string='Lost State Date')
+    lost_state_date=fields.Date(string='Lost Date')
     seeing_state_month=fields.Char('Seeing Date Month',compute='_compute_month_names',store=True)
     contract_state_month=fields.Char('Contract Date Month',compute='_compute_month_names',store=True)
     won_state_month=fields.Char('Won Date Month',compute='_compute_month_names',store=True)

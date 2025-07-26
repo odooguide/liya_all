@@ -386,10 +386,9 @@
                                            widget="many2many_checkboxes"/>
                                     <field name="table_color_ids"
                                            widget="many2many_tags"/>
-                                    <field name="table_tag_ids"
-                                           widget="many2many_tags"/>
+                                    <field name="table_tag_ids"/>
                                     <field name="cake_choice_ids"
-                                           widget="many2many_tags"/>
+                                           widget="many2many_checkboxes"/>
                                 </group>
 
                                 <group>

@@ -21,6 +21,7 @@
         "views/res_partner_inherit_requireds.xml",
         "views/mail_activity_type.xml",
         "views/crm_lead_opportunity_menu.xml",
+        "views/banquet_page_menu.xml",
         "security/ir.model.access.csv",
         "reports/report_saleorder_document_inherit.xml",
         "reports/external_layout_light_view_inherit.xml",
