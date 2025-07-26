@@ -4,7 +4,8 @@ from datetime import date, datetime, timedelta
 class ProjectDemoForm(models.Model):
     _name = 'project.demo.form'
     _description = "Project Demo Form"
-    
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
     sale_template_id=fields.Many2one('sale.order.template',string='Event Type')
     project_id = fields.Many2one(
         'project.project', string="Project", ondelete='cascade')
@@ -409,26 +410,90 @@ class ProjectDemoForm(models.Model):
             else:
                 rec.duration_days = False
 
-    @api.onchange('afterparty_service', 'afterparty_ultra', 'afterparty_dance_show')
     def _onchange_start_end_time(self):
         for rec in self:
-            # always start at 19:30
+            to_remove = rec.schedule_line_ids.filtered(
+                lambda l: l.event in ('After Party Ultra', 'After Party', 'Dance Show')
+            )
+            if to_remove:
+                rec.schedule_line_ids = [(3, l.id) for l in to_remove]
+
             start = '19:30'
-            # recalc base end
             if rec.afterparty_ultra:
-                end = '02:00'
+                base_end = '02:00'
             elif rec.afterparty_service:
-                end = '01:30'
+                base_end = '01:30'
             else:
-                end = '23:30'
+                base_end = '23:30'
+
             if rec.afterparty_dance_show:
                 try:
-                    dt = datetime.strptime(end, '%H:%M')
-                    dt += timedelta(minutes=15)
+                    dt = datetime.strptime(base_end, '%H:%M') + timedelta(minutes=15)
                     end = dt.strftime('%H:%M')
                 except ValueError:
-                    pass
+                    end = base_end
+            else:
+                end = base_end
+
             rec.start_end_time = f"{start} - {end}"
+
+            choice = False
+            if rec.afterparty_ultra:
+                choice = 'After Party Ultra'
+            elif rec.afterparty_service:
+                choice = 'After Party'
+            elif rec.afterparty_dance_show:
+                choice = 'Dance Show'
+
+            if choice:
+                lines = rec.schedule_line_ids.sorted('sequence')
+                if lines:
+                    last = lines[-1]
+                    old_seq = last.sequence
+                    # 1) push the existing last_line to old_seq+1
+                    cmds = [(1, last.id, {'sequence': old_seq + 1})]
+                    cmds.append((0, 0, {
+                        'sequence': old_seq,
+                        'event': choice,
+                        'time': end,
+                    }))
+                else:
+                    cmds = [(0, 0, {
+                        'sequence': 1,
+                        'event': choice,
+                        'time': end,
+                    })]
+                rec.schedule_line_ids = cmds
+
+    def _onchange_breakfast(self):
+        for rec in self:
+            # get the first schedule line
+            lines = rec.schedule_line_ids.sorted('sequence')
+            if not lines:
+                continue
+            first = lines[0]
+            try:
+                dt = datetime.strptime(first.time, '%H:%M')
+            except (ValueError, TypeError):
+                continue
+            # subtract or add 30 minutes
+            if rec.prehost_breakfast:
+                dt_new = dt - timedelta(minutes=30)
+            else:
+                dt_new = dt + timedelta(minutes=30)
+            first.time = dt_new.strftime('%H:%M')
+
+
+    def write(self, vals):
+        res = super().write(vals)
+
+        trigger_fields = {'afterparty_service', 'afterparty_ultra', 'afterparty_dance_show'}
+        if trigger_fields.intersection(vals):
+            self._onchange_start_end_time()
+        trigger_breakfast={'prehost_breakfast'}
+        if trigger_breakfast.intersection(vals):
+            self._onchange_breakfast()
+        return res
 
 
 

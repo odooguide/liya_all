@@ -17,7 +17,6 @@
                         type="object"
                         string="Demo Form"
                         class="oe_stat_button"
-                        invisible="not next_event_date"
                         icon="fa-files-o"/>
             </xpath>
             <header>
@@ -80,6 +79,8 @@
                                 <group>
                                     <field name="schedule_line_ids" nolabel="1">
                                         <list editable="bottom">
+                                            <field name="sequence" widget="handle"/>
+                                            <field name="sequence" invisible="1"/>
                                             <field name="event"/>
                                             <field name="time"/>
                                             <field name="location_type"/>
@@ -246,7 +247,7 @@
                                 <group col="2">
                                     <field name="photo_print_service" widget="boolean_toggle"/>
                                     <field name="photo_drone" widget="boolean_toggle"/>
-                                    <field name="photo_harddisk_delivered" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="photo_harddisk_delivered"/>
                                 </group>
                             </group>
                             <group>
@@ -418,6 +419,7 @@
                         </page>
                     </notebook>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>

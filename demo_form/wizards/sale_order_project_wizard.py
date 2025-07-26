@@ -122,8 +122,17 @@ class SaleOrderProjectWizard(models.TransientModel):
             })
             if tmpl.communication_type == 'phone' and tmpl.email_template_id:
                 template = tmpl.email_template_id
+                rendered = template._render_template_qweb(
+                    template.body_html,
+                    template.model,
+                    [new_task.id],
+                )
+                if isinstance(rendered, dict):
+                    body = rendered.get(new_task.id)
+                else:
+                    body = rendered
                 new_task.message_post(
-                    body=template.body_html,
+                    body=body,
                     subtype_xmlid='mail.mt_comment'
                 )
 

@@ -1,4 +1,5 @@
 from odoo import fields, models, _, api
+from odoo.excepitons import UserError
 
 
 class ProjectProject(models.Model):
@@ -23,7 +24,19 @@ class ProjectProject(models.Model):
         'project.demo.form', 'project_id', string="Demo Forms")
     demo_form_count = fields.Integer(
         string="Demo Form Count", compute='_compute_demo_form_count')
+    confirmed_demo_form_plan = fields.Binary(string="Confirmed Demo Form")
+    confirmed_demo_form_plan_name = fields.Char(string="Confirmed Demo Form Name")
 
+    @api.onchange('confirmed_demo_form_plan')
+    def _onchange_confirmed_contract_security(self):
+        for rec in self:
+            origin = rec._origin
+            if origin.confirmed_demo_form_plan and not self.env.user.has_group('base.group_system'):
+                rec.confirmed_demo_form_plan = origin.confirmed_demo_form_plan
+                rec.confirmed_demo_form_plan_name = origin.confirmed_demo_form_plan_name
+                raise UserError(
+                    _('Only administrators can modify or delete the Confirmed Demo Form once uploaded.')
+                )
 
     def action_schedule_meeting(self):
         """Takvim’de yeni bir etkinlik (meeting) açmak için calendar.action_calendar_event action'ını döner."""
