@@ -246,8 +246,7 @@
                                 <group col="2">
                                     <field name="photo_print_service" widget="boolean_toggle"/>
                                     <field name="photo_drone" widget="boolean_toggle"/>
-                                    <field name="photo_harddisk_delivered" widget="boolean_toggle"/>
-                                    <field name="photo_harddisk_later" widget="boolean_toggle"/>
+                                    <field name="photo_harddisk_delivered" widget="radio" options="{'horizontal': true}"/>
                                 </group>
                             </group>
                             <group>

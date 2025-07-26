@@ -239,17 +239,15 @@ class ProjectDemoForm(models.Model):
     photo_homesession_address = fields.Char(string="Address")
     photo_print_service = fields.Boolean(string="Photo Print Service")
     photo_drone = fields.Boolean(string="Drone Camera")
-    photo_harddisk_delivered = fields.Boolean(string="Hard Disk 1 TB Delivered")
-    photo_harddisk_later = fields.Boolean(string="Will Deliver Later")
-
+    photo_harddisk_delivered = fields.Selection([('delivered','Delivered'),('later','Deliver Later')], string="Hard Disk 1TB")
     # Music
     music_description = fields.Html(
         string="Music Notes", sanitize=True)
     music_live = fields.Boolean(string="Live Music")
     music_trio = fields.Boolean(string="Trio")
     music_percussion = fields.Boolean(string="Percussion")
-    music_dj_fatih = fields.Boolean(string="DJ: Fatih Aşçı")
-    music_dj_engin = fields.Boolean(string="DJ: Engin Sadiki")
+    music_dj_fatih = fields.Boolean(string="DJ: Fatih Aşçı")
+    music_dj_engin = fields.Boolean(string="DJ: Engin Sadiki")
     music_other = fields.Boolean(string="Other")
     music_other_details = fields.Char(string="If Other, specify")
 
@@ -274,7 +272,7 @@ class ProjectDemoForm(models.Model):
     table_runner_design_ids = fields.Many2many(
         'project.demo.runner.design',
         'rel_form_runner_design',
-        'demo_form_id', 'runner_id',
+        'demo_form_id', 'runner_id' ,
         string="Cloth & Runner Designs")
 
     table_color_ids = fields.Many2many(
