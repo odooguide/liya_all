@@ -119,7 +119,6 @@ class ProjectProject(models.Model):
                 'demo_date':self.next_event_date
             })
             sched_cmds = []
-            times=[]
             for line in order.sale_order_template_id.schedule_line_ids:
                 sched_cmds.append((0, 0, {
                     'sequence': line.sequence,
@@ -128,11 +127,8 @@ class ProjectProject(models.Model):
                     'location_type': line.location_type,
                     'location_notes': line.location_notes,
                 }))
-                times.append(line.time)
             vals['schedule_line_ids'] = sched_cmds
-            if times:
-                start, end = times[0], times[-1]
-                vals['start_end_time'] = f"{start} - {end}"
+
             trans_cmds = []
             for line in order.sale_order_template_id.transport_line_ids:
                 trans_cmds.append((0, 0, {
@@ -220,10 +216,14 @@ class ProjectProject(models.Model):
                     vals[f] = True
                 if name=='After Party Ultra':
                     vals['afterparty_ultra'] = True
+                vals['start_end_time']='19:30 - 1:30'
+
             elif tmpl == 'ultra':
                 for f in elite_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True
+            else:
+                vals['start_end_time']='19:30 - 2:30'
 
         demo = self.env['project.demo.form'].create(vals)
         return {
