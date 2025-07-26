@@ -409,32 +409,26 @@ class ProjectDemoForm(models.Model):
             else:
                 rec.duration_days = False
 
-    @api.onchange('afterparty_ultra', 'afterparty_dance_show')
-    def _onchange_start_time(self):
+    @api.onchange('afterparty_service', 'afterparty_ultra', 'afterparty_dance_show')
+    def _onchange_start_end_time(self):
         for rec in self:
+            # always start at 19:30
             start = '19:30'
-            end = False
-            tmpl = rec.sale_template_id.name or ''
-
-            if tmpl.lower() == 'elite':
-                end = '23:30'
-            elif tmpl.lower() == 'plus':
-                end = '01:30'
-                if rec.afterparty_ultra:
-                    end = '02:00'
-            elif tmpl.lower() == 'ultra':
+            # recalc base end
+            if rec.afterparty_ultra:
                 end = '02:00'
-
-            if end and rec.afterparty_dance_show:
+            elif rec.afterparty_service:
+                end = '01:30'
+            else:
+                end = '23:30'
+            if rec.afterparty_dance_show:
                 try:
                     dt = datetime.strptime(end, '%H:%M')
                     dt += timedelta(minutes=15)
                     end = dt.strftime('%H:%M')
                 except ValueError:
                     pass
-
-            rec.start_end_time = f"{start} - {end}" if end else False
-
+            rec.start_end_time = f"{start} - {end}"
 
 
 

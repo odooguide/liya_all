@@ -222,8 +222,9 @@ class ProjectProject(models.Model):
                 for f in elite_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True
+                vals['start_end_time'] = '19:30 - 2:00'
             else:
-                vals['start_end_time']='19:30 - 2:30'
+                vals['start_end_time']='19:30 - 23:30'
 
         demo = self.env['project.demo.form'].create(vals)
         return {
