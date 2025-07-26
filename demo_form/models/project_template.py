@@ -1,5 +1,5 @@
 from odoo import fields, models, _, api
-from odoo.excepitons import UserError
+from odoo.exceptions import UserError
 
 
 class ProjectProject(models.Model):
