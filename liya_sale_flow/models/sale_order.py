@@ -163,6 +163,7 @@ class SaleOrder(models.Model):
         if sale.opportunity_id:
             sale_model = self.env['ir.model'].sudo().search(
                 [('model', '=', 'sale.order')], limit=1)
+            self._change_opportunity_stage(sale)
             if sale.team_id.event_team:
 
                 activity_types = self.env['mail.activity.type'].search(
@@ -197,6 +198,13 @@ class SaleOrder(models.Model):
                 return sale
 
         return sale
+
+    def _change_opportunity_stage(self,order_id):
+        for order in order_id:
+            if order.opportunity_id.stage_id.name in ['Meeting Lead','Aday']:
+                stage = self.env['crm.stage'].search([('name', '=', 'Görüşülen')], limit=1)
+                if stage:
+                    order.opportunity_id.write({'stage_id': stage.id})
 
     def action_quotation_sent(self):
         action = super(SaleOrder, self).action_quotation_sent()

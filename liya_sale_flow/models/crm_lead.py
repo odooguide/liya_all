@@ -275,9 +275,9 @@ class CrmLead(models.Model):
                 ('state', 'in', ('sale', 'done'))
             ])
 
-            if new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation':
+            if new_stage.name == 'Görüşülen' or new_stage.name == 'In Contact / Quotation':
                 if lead.quotation_count < 1 and not orders:
-                    raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
+                    raise UserError(_('Teklif oluşturmadan "Görüşülen"ne geçemezsiniz.'))
                 self.seeing_state_date=fields.Date.today()
 
             elif new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting':
