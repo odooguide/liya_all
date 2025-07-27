@@ -88,7 +88,7 @@ class CrmLead(models.Model):
     seeing_state_date=fields.Date(string='Quotation Date')
     contract_state_date=fields.Date(string='Contract Share Date')
     won_state_date=fields.Date(string='Won Date')
-    lost_state_date=fields.Date(string='Lost State Date')
+    lost_state_date=fields.Date(string='Lost Date')
     seeing_state_month=fields.Char('Seeing Date Month',compute='_compute_month_names',store=True)
     contract_state_month=fields.Char('Contract Date Month',compute='_compute_month_names',store=True)
     won_state_month=fields.Char('Won Date Month',compute='_compute_month_names',store=True)
@@ -232,20 +232,20 @@ class CrmLead(models.Model):
             if year > 2100:
                 raise ValidationError("Etkinlik yılı 2100'den küçük olmalıdır (maksimum 2100).")
 
-    @api.onchange('seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date')
-    def _onchange_protect_state_dates(self):
-        if not self.env.user.has_group('base.group_system'):
-            for fname in ['seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date']:
-                setattr(self, fname, getattr(self._origin, fname))
-            return {
-                'warning': {
-                    'title': _("Permission Denied"),
-                    'message': _("Only administrators can modify these dates.")
-                },
-                'type': 'ir.actions.client',
-                'tag': 'reload',
-            }
-        return None
+    # @api.onchange('seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date')
+    # def _onchange_protect_state_dates(self):
+    #     if not self.env.user.has_group('base.group_system'):
+    #         for fname in ['seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date']:
+    #             setattr(self, fname, getattr(self._origin, fname))
+    #         return {
+    #             'warning': {
+    #                 'title': _("Permission Denied"),
+    #                 'message': _("Only administrators can modify these dates.")
+    #             },
+    #             'type': 'ir.actions.client',
+    #             'tag': 'reload',
+    #         }
+    #     return None
 
 
 
@@ -275,9 +275,9 @@ class CrmLead(models.Model):
                 ('state', 'in', ('sale', 'done'))
             ])
 
-            if new_stage.name == 'Görüşülüyor / Teklif Süreci' or new_stage.name == 'In Contact / Quotation':
+            if new_stage.name == 'Görüşülen' or new_stage.name == 'In Contact / Quotation':
                 if lead.quotation_count < 1 and not orders:
-                    raise UserError(_('Teklif oluşturmadan "Teklif Süreci"ne geçemezsiniz.'))
+                    raise UserError(_('Teklif oluşturmadan "Görüşülen"ne geçemezsiniz.'))
                 self.seeing_state_date=fields.Date.today()
 
             elif new_stage.name == 'Sözleşme Süreci' or new_stage.name == 'Contracting':

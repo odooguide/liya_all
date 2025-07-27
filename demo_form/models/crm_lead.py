@@ -49,3 +49,15 @@ class CrmLead(models.Model):
                     )
         return super(CrmLead, self).write(vals)
 
+    def action_open_project(self):
+        self.ensure_one()
+        if not self.project_id:
+            return False
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Project'),
+            'res_model': 'project.project',
+            'view_mode': 'form',
+            'res_id': self.project_id.id,
+            'target': 'current',
+        }

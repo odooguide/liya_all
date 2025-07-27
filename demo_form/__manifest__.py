@@ -16,6 +16,7 @@
         "views/sale_order_template_view.xml",
         "views/crm_lead_view_inherit.xml",
         "views/project_task_view_inherit.xml",
+        "views/many2many_list_views.xml",
         "wizards/sale_order_project_wizard_view.xml",
         "security/ir.model.access.csv",
     ],

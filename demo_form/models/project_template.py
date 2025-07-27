@@ -1,4 +1,5 @@
 from odoo import fields, models, _, api
+from odoo.exceptions import UserError
 
 
 class ProjectProject(models.Model):
@@ -23,7 +24,19 @@ class ProjectProject(models.Model):
         'project.demo.form', 'project_id', string="Demo Forms")
     demo_form_count = fields.Integer(
         string="Demo Form Count", compute='_compute_demo_form_count')
+    confirmed_demo_form_plan = fields.Binary(string="Confirmed Demo Form")
+    confirmed_demo_form_plan_name = fields.Char(string="Confirmed Demo Form Name")
 
+    @api.onchange('confirmed_demo_form_plan')
+    def _onchange_confirmed_contract_security(self):
+        for rec in self:
+            origin = rec._origin
+            if origin.confirmed_demo_form_plan and not self.env.user.has_group('base.group_system'):
+                rec.confirmed_demo_form_plan = origin.confirmed_demo_form_plan
+                rec.confirmed_demo_form_plan_name = origin.confirmed_demo_form_plan_name
+                raise UserError(
+                    _('Only administrators can modify or delete the Confirmed Demo Form once uploaded.')
+                )
 
     def action_schedule_meeting(self):
         """Takvim’de yeni bir etkinlik (meeting) açmak için calendar.action_calendar_event action'ını döner."""
@@ -119,7 +132,6 @@ class ProjectProject(models.Model):
                 'demo_date':self.next_event_date
             })
             sched_cmds = []
-            times=[]
             for line in order.sale_order_template_id.schedule_line_ids:
                 sched_cmds.append((0, 0, {
                     'sequence': line.sequence,
@@ -128,11 +140,8 @@ class ProjectProject(models.Model):
                     'location_type': line.location_type,
                     'location_notes': line.location_notes,
                 }))
-                times.append(line.time)
             vals['schedule_line_ids'] = sched_cmds
-            if times:
-                start, end = times[0], times[-1]
-                vals['start_end_time'] = f"{start} - {end}"
+
             trans_cmds = []
             for line in order.sale_order_template_id.transport_line_ids:
                 trans_cmds.append((0, 0, {
@@ -220,10 +229,15 @@ class ProjectProject(models.Model):
                     vals[f] = True
                 if name=='After Party Ultra':
                     vals['afterparty_ultra'] = True
+                vals['start_end_time']='19:30 - 1:30'
+
             elif tmpl == 'ultra':
                 for f in elite_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True
+                vals['start_end_time'] = '19:30 - 2:00'
+            else:
+                vals['start_end_time']='19:30 - 23:30'
 
         demo = self.env['project.demo.form'].create(vals)
         return {

@@ -4,7 +4,8 @@ from datetime import date, datetime, timedelta
 class ProjectDemoForm(models.Model):
     _name = 'project.demo.form'
     _description = "Project Demo Form"
-    
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
     sale_template_id=fields.Many2one('sale.order.template',string='Event Type')
     project_id = fields.Many2one(
         'project.project', string="Project", ondelete='cascade')
@@ -123,14 +124,16 @@ class ProjectDemoForm(models.Model):
         string="After Party Notes",
         sanitize=True,
         help="Notes or special instructions for the After Party."
+
     )
     afterparty_service = fields.Boolean(
         string="After Party",
-        help="Do you want a dedicated After Party?"
+        help="Do you want a dedicated After Party?",store=True,
     )
     afterparty_ultra = fields.Boolean(
         string="After Party Ultra",
-        help="Include the Ultra After Party package?"
+        help="Include the Ultra After Party package?",
+        store=True
     )
     afterparty_more_drinks = fields.Boolean(
         string="Additional Drink Variety",
@@ -154,7 +157,8 @@ class ProjectDemoForm(models.Model):
     )
     afterparty_dance_show = fields.Boolean(
         string="Dance Show",
-        help="Include a dance performance?"
+        help="Include a dance performance?",
+        store=True,
     )
     afterparty_fog_laser = fields.Boolean(
         string="Fog + Laser Show",
@@ -236,17 +240,15 @@ class ProjectDemoForm(models.Model):
     photo_homesession_address = fields.Char(string="Address")
     photo_print_service = fields.Boolean(string="Photo Print Service")
     photo_drone = fields.Boolean(string="Drone Camera")
-    photo_harddisk_delivered = fields.Boolean(string="Hard Disk 1 TB Delivered")
-    photo_harddisk_later = fields.Boolean(string="Will Deliver Later")
-
+    photo_harddisk_delivered = fields.Selection([('delivered','Delivered'),('later','Deliver Later')], string="Hard Disk 1TB")
     # Music
     music_description = fields.Html(
         string="Music Notes", sanitize=True)
     music_live = fields.Boolean(string="Live Music")
     music_trio = fields.Boolean(string="Trio")
     music_percussion = fields.Boolean(string="Percussion")
-    music_dj_fatih = fields.Boolean(string="DJ: Fatih Aşçı")
-    music_dj_engin = fields.Boolean(string="DJ: Engin Sadiki")
+    music_dj_fatih = fields.Boolean(string="DJ: Fatih Aşçı")
+    music_dj_engin = fields.Boolean(string="DJ: Engin Sadiki")
     music_other = fields.Boolean(string="Other")
     music_other_details = fields.Char(string="If Other, specify")
 
@@ -271,7 +273,7 @@ class ProjectDemoForm(models.Model):
     table_runner_design_ids = fields.Many2many(
         'project.demo.runner.design',
         'rel_form_runner_design',
-        'demo_form_id', 'runner_id',
+        'demo_form_id', 'runner_id' ,
         string="Cloth & Runner Designs")
 
     table_color_ids = fields.Many2many(
@@ -280,10 +282,9 @@ class ProjectDemoForm(models.Model):
         'demo_form_id', 'color_id',
         string="Color Choices")
 
-    table_tag_ids = fields.Many2many(
+    table_tag_ids = fields.Many2one(
         'project.demo.ceremony.tag',
-        'rel_form_ceremony_tag',
-        'demo_form_id', 'tag_id',
+
         string="Ceremony Tags")
 
     cake_choice_ids = fields.Many2many(
@@ -370,6 +371,25 @@ class ProjectDemoForm(models.Model):
     seat_plan = fields.Binary(string="Seat Plan")
     seat_plan_name = fields.Char(string="Seat Plan Name")
 
+
+    local_music = fields.Boolean(
+        string="Local Music during Party")
+    local_music_songs = fields.Html(
+        string="If yes, specify songs")
+
+    cocktail_request = fields.Html(
+        string="Cocktail Request Musics", sanitize=True)
+    dinner_request = fields.Html(
+        string="Dinner Request Musics", sanitize=True)
+    party_request = fields.Html(
+        string="Party Request Musics", sanitize=True)
+    afterparty_request = fields.Html(
+        string="Afterparty Request Musics", sanitize=True)
+    ban_songs = fields.Html(
+        string="Ban any Songs or Artists",sanitize=True)
+    other_music_notes = fields.Html(
+        string="Other Notes about Music",sanitize=True)
+
     @api.model
     def create(self, vals):
         if 'name' in vals and vals.get('name') == _('New Demo Form'):
@@ -390,6 +410,90 @@ class ProjectDemoForm(models.Model):
             else:
                 rec.duration_days = False
 
+    def _onchange_start_end_time(self):
+        for rec in self:
+            to_remove = rec.schedule_line_ids.filtered(
+                lambda l: l.event in ('After Party Ultra', 'After Party', 'Dance Show')
+            )
+            if to_remove:
+                rec.schedule_line_ids = [(3, l.id) for l in to_remove]
+
+            start = '19:30'
+            if rec.afterparty_ultra:
+                base_end = '02:00'
+            elif rec.afterparty_service:
+                base_end = '01:30'
+            else:
+                base_end = '23:30'
+
+            if rec.afterparty_dance_show:
+                try:
+                    dt = datetime.strptime(base_end, '%H:%M') + timedelta(minutes=15)
+                    end = dt.strftime('%H:%M')
+                except ValueError:
+                    end = base_end
+            else:
+                end = base_end
+
+            rec.start_end_time = f"{start} - {end}"
+
+            choice = False
+            if rec.afterparty_ultra:
+                choice = 'After Party Ultra'
+            elif rec.afterparty_service:
+                choice = 'After Party'
+            elif rec.afterparty_dance_show:
+                choice = 'Dance Show'
+
+            if choice:
+                lines = rec.schedule_line_ids.sorted('sequence')
+                if lines:
+                    last = lines[-1]
+                    old_seq = last.sequence
+                    # 1) push the existing last_line to old_seq+1
+                    cmds = [(1, last.id, {'sequence': old_seq + 1})]
+                    cmds.append((0, 0, {
+                        'sequence': old_seq,
+                        'event': choice,
+                        'time': end,
+                    }))
+                else:
+                    cmds = [(0, 0, {
+                        'sequence': 1,
+                        'event': choice,
+                        'time': end,
+                    })]
+                rec.schedule_line_ids = cmds
+
+    def _onchange_breakfast(self):
+        for rec in self:
+            # get the first schedule line
+            lines = rec.schedule_line_ids.sorted('sequence')
+            if not lines:
+                continue
+            first = lines[0]
+            try:
+                dt = datetime.strptime(first.time, '%H:%M')
+            except (ValueError, TypeError):
+                continue
+            # subtract or add 30 minutes
+            if rec.prehost_breakfast:
+                dt_new = dt - timedelta(minutes=30)
+            else:
+                dt_new = dt + timedelta(minutes=30)
+            first.time = dt_new.strftime('%H:%M')
+
+
+    def write(self, vals):
+        res = super().write(vals)
+
+        trigger_fields = {'afterparty_service', 'afterparty_ultra', 'afterparty_dance_show'}
+        if trigger_fields.intersection(vals):
+            self._onchange_start_end_time()
+        trigger_breakfast={'prehost_breakfast'}
+        if trigger_breakfast.intersection(vals):
+            self._onchange_breakfast()
+        return res
 
 
 
