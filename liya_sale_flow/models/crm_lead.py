@@ -232,20 +232,20 @@ class CrmLead(models.Model):
             if year > 2100:
                 raise ValidationError("Etkinlik yılı 2100'den küçük olmalıdır (maksimum 2100).")
 
-    @api.onchange('seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date')
-    def _onchange_protect_state_dates(self):
-        if not self.env.user.has_group('base.group_system'):
-            for fname in ['seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date']:
-                setattr(self, fname, getattr(self._origin, fname))
-            return {
-                'warning': {
-                    'title': _("Permission Denied"),
-                    'message': _("Only administrators can modify these dates.")
-                },
-                'type': 'ir.actions.client',
-                'tag': 'reload',
-            }
-        return None
+    # @api.onchange('seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date')
+    # def _onchange_protect_state_dates(self):
+    #     if not self.env.user.has_group('base.group_system'):
+    #         for fname in ['seeing_state_date', 'contract_state_date', 'won_state_date', 'lost_state_date']:
+    #             setattr(self, fname, getattr(self._origin, fname))
+    #         return {
+    #             'warning': {
+    #                 'title': _("Permission Denied"),
+    #                 'message': _("Only administrators can modify these dates.")
+    #             },
+    #             'type': 'ir.actions.client',
+    #             'tag': 'reload',
+    #         }
+    #     return None
 
 
 
