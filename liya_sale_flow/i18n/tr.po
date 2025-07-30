@@ -1430,7 +1430,7 @@ msgstr "Program Akışı"
 #. module: liya_sale_flow
 #: model:ir.model.fields,field_description:liya_sale_flow.field_crm_lead__seeing_state_date
 msgid "Quotation Date"
-msgstr ""
+msgstr "Görüşülen Tarih"
 
 #. module: liya_sale_flow
 #: model:ir.model,name:liya_sale_flow.model_sale_order_template
