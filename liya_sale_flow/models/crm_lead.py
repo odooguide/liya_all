@@ -147,6 +147,7 @@ class CrmLead(models.Model):
                 rec.lost_state_month = month_names.get(rec.lost_state_date.month, False)
             else:
                 rec.lost_state_month = False
+
     @api.depends('activity_type_id')
     def _compute_type(self):
         for lead in self:
@@ -247,7 +248,24 @@ class CrmLead(models.Model):
     #         }
     #     return None
 
+    def action_new_quotation(self):
+        for lead in self:
+            required_fields = {
+                'Secondary Contact': lead.second_contact,
+                'Secondary Phone': lead.second_phone,
+                'Secondary E-mail': lead.second_mail,
+                'Secondary Job Position': lead.second_job_position,
+                'Secondary Title': lead.second_title,
+                'Secondary Country': lead.second_country,
+                'Y/T': lead.yabanci_turk,
+            }
+            missing = [name for name, value in required_fields.items() if not value]
+            if missing:
+                raise UserError(_(
+                    'Lütfen aşağıdaki alanları doldurun: %s'
+                ) % ', '.join(missing))
 
+        return super(CrmLead, self).action_new_quotation()
 
     def action_set_lost(self, **additional_values):
         res = super().action_set_lost(**additional_values)

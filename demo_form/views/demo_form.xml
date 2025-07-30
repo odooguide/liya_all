@@ -114,6 +114,11 @@
                         </page>
 
                         <page string="Menu and Bar" name="menu">
+                            <div class="o_form_label"
+                 invisible="sale_template_id!=3">
+                Standart mezelere ilave olarak Kayısı Yahnisi,
+                Karides ve Ahtapot soğuk deniz mezeleri de servis edilir.
+            </div>
                             <separator string="Menu" colspan="2"/>
                             <group>
                                 <group col="2">
