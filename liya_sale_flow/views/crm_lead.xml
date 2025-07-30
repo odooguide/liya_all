@@ -20,6 +20,7 @@
                         <field name="option1"/>
                         <field name="option2"/>
                         <field name="option3"/>
+
                     </group>
                 </group>
             </xpath>
@@ -165,8 +166,8 @@
 
         </field>
     </record>
-    <record id="view_crm_lead_" model="ir.ui.view">
-        <field name="name">crm.lead.country.inherit</field>
+    <record id="view_crm_lead_inherit_stage_dates" model="ir.ui.view">
+        <field name="name">crm.lead.inherit.stage.dates</field>
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="arch" type="xml">
@@ -177,6 +178,8 @@
                 <field name="won_state_date" />
                 <field name="lost_state_date"/>
                 <field name="date_conversion" readonly="1"/>
+                <field name="type" groups="base.group_system"/>
+
                 <field name="seeing_state_month" invisible="1"/>
                 <field name="contract_state_month" invisible="1"/>
                 <field name="won_state_month" invisible="1"/>

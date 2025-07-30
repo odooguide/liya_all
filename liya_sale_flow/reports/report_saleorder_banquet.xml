@@ -160,7 +160,7 @@
                     </div>
                 </t>
                 <!-- Page 3 -->
-                <t t-if="'Liya Resim 1' in doc.banquet_pages.mapped('name')">
+                <t t-if="'Liya All Resim' in doc.banquet_pages.mapped('name')">
 
                     <div class="page">
                         <div style="text-align: center;">
@@ -173,7 +173,7 @@
                         </div>
                     </div>
                 </t>
-                <t t-if="'Liya Resim 2' in doc.banquet_pages.mapped('name')">
+                <t t-if="'Liya Coffee Break' in doc.banquet_pages.mapped('name')">
 
                     <div class="page">
                         <div style="text-align: center;">
@@ -353,7 +353,7 @@
                     </div>
                 </t>
                 <!-- Page 6 -->
-                <t t-if="'Liya Resim 3' in doc.banquet_pages.mapped('name')">
+                <t t-if="'Liya Menu Resim' in doc.banquet_pages.mapped('name')">
 
                     <div class="page">
                         <div style="text-align: center;margin-top:10px ">
@@ -640,7 +640,7 @@
                     </div>
                 </t>
                 <!-- Page 8 -->
-                <t t-if="'Liya Etkinlik Süreleri' in doc.banquet_pages.mapped('name')">
+                <t t-if="'Liya Organizasyon Takvimi' in doc.banquet_pages.mapped('name')">
 
                     <div class="page">
                         <!-- Dynamic Services -->
@@ -695,9 +695,10 @@
                             <img t-att-src="image_data_uri(doc.company_id.logo)"/>
                         </div>
                     </div>
-                </t>
+
                 <t t-if="len(doc.service_ids) + len(doc.program_ids) + len(doc.transport_ids) &gt; 15">
                     <div class="page"/>
+                </t>
                 </t>
 
                 <t t-if="'Liya Teklif' in doc.banquet_pages.mapped('name')">
