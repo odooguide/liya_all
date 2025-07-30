@@ -18,7 +18,6 @@ class ProjectDemoForm(models.Model):
     demo_date = fields.Date(string="Demo Date")
     special_notes = fields.Html(string="Special Notes")
 
-    # header fields (example)
     wedding_type = fields.Selection([
         ('mini', "Mini Elite"),
         ('elite', "Elite"),
