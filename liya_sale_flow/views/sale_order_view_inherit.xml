@@ -1,148 +1,165 @@
 <odoo>
     <record id="view_order_form_inherit_tasks" model="ir.ui.view">
-  <field name="name">sale.order.form.tasks</field>
-  <field name="model">sale.order</field>
-  <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
-  <field name="arch" type="xml">
-    <xpath expr="//button[@name='action_unlock']" position="before">
-      <button name="action_lock" type="object" string="Sözleşmeyi Tamamla"  invisible="locked or state != 'sale'" groups="sales_team.group_sale_manager"/>
-    </xpath>
-    <xpath expr="//field[@name='payment_term_id']" position="after">
-      <field name="confirmed_contract" widget="binary"
-       filename="confirmed_contract_name"
-       context="{'bin_size': True}"/>
-      <field name="confirmed_contract_name" invisible="1"/>
-      <field name="contract_date"/>
-      <field name="is_event_selected" invisible="1" force-save="1"/>
-    </xpath>
-    <xpath expr="//field[@name='partner_id']" position="after">
-      <field name="second_contact"/>
-    </xpath>
-  </field>
-</record>
+        <field name="name">sale.order.form.tasks</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_unlock']" position="before">
+                <button name="action_lock" type="object" string="Sözleşmeyi Tamamla"
+                        invisible="locked or state != 'sale'" groups="sales_team.group_sale_manager"/>
+            </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="confirmed_contract" widget="binary"
+                       filename="confirmed_contract_name"
+                       context="{'bin_size': True}"/>
+                <field name="confirmed_contract_name" invisible="1"/>
+                <field name="contract_date"/>
+                <field name="is_event_selected" invisible="1" force-save="1"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="second_contact"/>
+            </xpath>
+        </field>
+    </record>
     <record id="view_order_form_inherit_wedding_info" model="ir.ui.view">
-    <field name="name">sale.order.form.inherit.wedding.info</field>
-    <field name="model">sale.order</field>
-    <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
-    <field name="arch" type="xml">
-      <xpath expr="//field[@name='sale_order_template_id']" position="after">
-        <field name="coordinator_ids" widget="many2many_tags"/>
-        <field name="wedding_date"/>
-        <field name="people_count"/>
-        <field name="wedding_day" invisible="1"/>
-        <field name="wedding_date_display" invisible="1"/>
-      </xpath>
-    </field>
-  </record>
-
-
-  <record id="view_sale_order_form_unlock_admin_only" model="ir.ui.view">
-      <field name="name">sale.order.form.unlock.admin.only</field>
-      <field name="model">sale.order</field>
-      <field name="inherit_id" ref="sale.view_order_form"/>
-      <field name="arch" type="xml">
-        <xpath expr="//button[@name='action_unlock']" position="attributes">
-            <attribute name="groups">base.group_system</attribute>
-        </xpath>
-      </field>
+        <field name="name">sale.order.form.inherit.wedding.info</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                <field name="coordinator_ids" widget="many2many_tags"/>
+                <field name="wedding_date"/>
+                <field name="people_count"/>
+                <field name="wedding_day" invisible="1"/>
+                <field name="wedding_date_display" invisible="1"/>
+            </xpath>
+        </field>
     </record>
 
-      <record id="view_order_form_custom_send" model="ir.ui.view">
-    <field name="name">sale.order.form.custom.send</field>
-    <field name="model">sale.order</field>
-    <field name="inherit_id" ref="sale.view_order_form"/>
-    <field name="arch" type="xml">
-      <header>
-        <button
-          name="action_custom_send_quotation"
-          type="object"
-          string="Email Gönder"
-          class="oe_highlight"
-        />
-      </header>
-    </field>
-  </record>
 
-   <record id="view_order_form_hide_send_buttons" model="ir.ui.view">
-    <field name="name">sale.order.form.hide.send.buttons</field>
-    <field name="model">sale.order</field>
-    <field name="inherit_id" ref="sale.view_order_form"/>
-    <field name="arch" type="xml">
-      <xpath expr="//button[@id='send_by_email_primary']" position="attributes">
-        <attribute name="invisible">1</attribute>
-      </xpath>
-      <xpath expr="//button[@id='send_proforma_primary']" position="attributes">
-        <attribute name="invisible">1</attribute>
-      </xpath>
-      <xpath expr="//button[@id='send_proforma']" position="attributes">
-        <attribute name="invisible">1</attribute>
-      </xpath>
-      <xpath expr="//button[@id='send_by_email']" position="attributes">
-        <attribute name="invisible">1</attribute>
-      </xpath>
-    </field>
-  </record>
-
-  <record id="view_order_form_event" model="ir.ui.view">
-    <field name="name">sale.order.form.event</field>
-    <field name="model">sale.order</field>
-    <field name="inherit_id" ref="sale.view_order_form"/>
-    <field name="arch" type="xml">
-      <xpath expr="//notebook" position="inside">
-        <page string="Event" name="page_event" invisible="is_event_selected != True">
-          <group>
-            <!-- 1) Services -->
-            <group string="Services">
-              <field name="service_ids">
-                <list editable="bottom">
-                  <field name="name"/>
-                  <field name="description"/>
-                </list>
-              </field>
-            </group>
-            <!-- 2) Program Flow -->
-            <group string="Program Flow">
-
-              <field name="duration_display"/>
-              <field name="program_ids">
-                <list editable="bottom">
-                  <field name="name"/>
-                  <field name="start_datetime"/>
-                  <field name="end_datetime"/>
-                  <field name="hours"/>
-
-                </list>
-              </field>
-            </group>
-            <!-- 3) Transportation -->
-            <group string="Transportation">
-              <field name="transport_ids">
-                <list editable="bottom">
-                  <field name="departure_location"/>
-                  <field name="arrival_location"/>
-                  <field name="arrival_datetime"/>
-                </list>
-              </field>
-            </group>
-            <group string="Other Infos">
-                  <field name="event_type"/>
-                  <field name="banquet_pages" widget="many2many_checkboxes"/>
-            </group>
-          </group>
-        </page>
-      </xpath>
-    </field>
-  </record>
-
-   <record id="sale_order_form_require_template" model="ir.ui.view">
-      <field name="name">sale.order.form.require.template</field>
-      <field name="model">sale.order</field>
-      <field name="inherit_id" ref="sale.view_order_form"/>
-      <field name="arch" type="xml">
-        <xpath expr="//field[@name='sale_order_template_id']" position="attributes">
-          <attribute name="required">1</attribute>
-        </xpath>
-      </field>
+    <record id="view_sale_order_form_unlock_admin_only" model="ir.ui.view">
+        <field name="name">sale.order.form.unlock.admin.only</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_unlock']" position="attributes">
+                <attribute name="groups">base.group_system</attribute>
+            </xpath>
+        </field>
     </record>
 
+    <record id="view_order_form_custom_send" model="ir.ui.view">
+        <field name="name">sale.order.form.custom.send</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <header>
+                <button
+                        name="action_custom_send_quotation"
+                        type="object"
+                        string="Email Gönder"
+                        class="oe_highlight"
+                />
+            </header>
+        </field>
+    </record>
+
+    <record id="view_order_form_hide_send_buttons" model="ir.ui.view">
+        <field name="name">sale.order.form.hide.send.buttons</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@id='send_by_email_primary']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@id='send_proforma_primary']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@id='send_proforma']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@id='send_by_email']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_form_event" model="ir.ui.view">
+        <field name="name">sale.order.form.event</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Event" name="page_event" invisible="is_event_selected != True">
+                    <group>
+                        <!-- 1) Services -->
+                        <group string="Services">
+                            <field name="service_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                </list>
+                            </field>
+                        </group>
+                        <!-- 2) Program Flow -->
+                        <group string="Program Flow">
+
+                            <field name="duration_display"/>
+                            <field name="program_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="start_datetime"/>
+                                    <field name="end_datetime"/>
+                                    <field name="hours"/>
+
+                                </list>
+                            </field>
+                        </group>
+                        <!-- 3) Transportation -->
+                        <group string="Transportation">
+                            <field name="transport_ids">
+                                <list editable="bottom">
+                                    <field name="departure_location"/>
+                                    <field name="arrival_location"/>
+                                    <field name="arrival_datetime"/>
+                                </list>
+                            </field>
+                        </group>
+                        <group string="Other Infos">
+                            <field name="event_type"/>
+                            <field name="banquet_pages" widget="many2many_checkboxes"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale_order_form_require_template" model="ir.ui.view">
+        <field name="name">sale.order.form.require.template</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_order_template_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_order_form_quick_cancel" model="ir.ui.view">
+        <field name="name">sale.order.form.quick.cancel</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_cancel']" position="replace"/>
+            <xpath expr="//button[@name='action_preview_sale_order']" position="after">
+                <button name="action_quick_cancel"
+                        string="Cancel"
+                        type="object"
+                        class="btn-danger"
+                        confirm="Are you sure you want to cancel this order?"
+                        invisible="state=='cancel'"
+                />
+            </xpath>
+        </field>
+    </record>
 </odoo>

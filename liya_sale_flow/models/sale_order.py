@@ -282,3 +282,14 @@ class SaleOrder(models.Model):
         for order in self:
             return order.with_context(hide_default_template=True).action_quotation_send()
 
+    def action_quick_cancel(self):
+        """
+        Immediately cancel the order (skipping the wizard),
+        after a final “Are you sure?” popup on the client.
+        """
+        for order in self:
+            if order.locked:
+                raise UserError(_("You cannot cancel a locked order. Please unlock it first."))
+            order._action_cancel()
+        return True
+
