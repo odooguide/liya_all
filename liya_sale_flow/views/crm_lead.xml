@@ -275,5 +275,16 @@
     <!--        </field>-->
     <!--    </record>-->
 
-
+     <record id="view_crm_lead_form_confirm_button" model="ir.ui.view">
+        <field name="name">crm.lead.form.confirm.button</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//button[@name='action_sale_quotations_new']" position="attributes">
+            <attribute name="confirm">
+              Teklifi oluşturunca aday görüşülen aşamasına geçecektir. Onaylıyor musunuz?
+            </attribute>
+          </xpath>
+        </field>
+      </record>
 </odoo>
