@@ -4,14 +4,6 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
         <field name="arch" type="xml">
-            <header>
-                <button name="action_open_project_wizard"
-                        string="Create Project"
-                        type="object"
-                        class="btn btn-primary"
-                        invisible="is_project_true != False or confirmed_contract==False"
-                />
-            </header>
             <xpath expr="//page[@name='optional_products']" position="after">
                 <page string="Project Tasks">
                     <field name="is_project_true" invisible="1"/>
