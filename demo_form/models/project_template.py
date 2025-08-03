@@ -224,9 +224,8 @@ class ProjectProject(models.Model):
                 'afterparty_dance_show', 'afterparty_fog_laser',
             ]
 
-            ultra_fields = elite_fields
-            ultra_fields.append(['music_live', 'music_percussion',
-                                 'music_trio'])
+            ultra_extra = ['music_live', 'music_percussion', 'music_trio']
+            ultra_fields = elite_fields + ultra_extra
             if tmpl == 'plus':
                 for f in elite_fields:
                     vals[f] = True

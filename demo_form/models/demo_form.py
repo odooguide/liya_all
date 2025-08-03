@@ -496,9 +496,11 @@ class ProjectDemoForm(models.Model):
         for rec in self:
             # get the first schedule line
             lines = rec.schedule_line_ids.sorted('sequence')
+            transport_lines=rec.transport_line_ids
             if not lines:
                 continue
             first = lines[0]
+            first_transport=transport_lines[0]
             try:
                 dt = datetime.strptime(first.time, '%H:%M')
             except (ValueError, TypeError):
@@ -509,6 +511,7 @@ class ProjectDemoForm(models.Model):
             else:
                 dt_new = dt + timedelta(minutes=30)
             first.time = dt_new.strftime('%H:%M')
+            first_transport.time = dt_new.strftime('%H:%M')
 
     def write(self, vals):
         res = super().write(vals)
