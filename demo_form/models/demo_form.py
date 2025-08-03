@@ -503,15 +503,18 @@ class ProjectDemoForm(models.Model):
             first_transport=transport_lines[0]
             try:
                 dt = datetime.strptime(first.time, '%H:%M')
+                dt_transport=datetime.strptime(first_transport.time,'%H:%M')
             except (ValueError, TypeError):
                 continue
             # subtract or add 30 minutes
             if rec.prehost_breakfast:
                 dt_new = dt - timedelta(minutes=30)
+                dt_new_transport=dt_transport-timedelta(minutes=30)
             else:
                 dt_new = dt + timedelta(minutes=30)
+                dt_new_transport = dt_transport + timedelta(minutes=30)
             first.time = dt_new.strftime('%H:%M')
-            first_transport.time = dt_new.strftime('%H:%M')
+            first_transport.time = dt_new_transport.strftime('%H:%M')
 
     def write(self, vals):
         res = super().write(vals)

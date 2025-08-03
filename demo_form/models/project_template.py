@@ -220,8 +220,8 @@ class ProjectProject(models.Model):
                 'photo_video_plus', 'photo_drone',
                 'photo_print_service',
                 'afterparty_service', 'afterparty_shot_service',
-                'afterparty_sushi', 'bar_alcohol_service',
-                'afterparty_dance_show', 'afterparty_fog_laser',
+                'afterparty_sushi',
+                 'afterparty_fog_laser',
             ]
 
             ultra_extra = ['music_live', 'music_percussion', 'music_trio']
