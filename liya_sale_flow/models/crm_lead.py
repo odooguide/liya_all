@@ -258,6 +258,7 @@ class CrmLead(models.Model):
                 'İkincil Başlık': lead.second_title,
                 'İkincil Ülke': lead.second_country,
                 'Etkinlik Tipi': lead.wedding_type,
+                'Meslek':lead.function,
                 'Y/T': lead.yabanci_turk,
             }
             missing = [name for name, value in required_fields.items() if not value]
