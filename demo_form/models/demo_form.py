@@ -443,9 +443,21 @@ class ProjectDemoForm(models.Model):
             to_remove = rec.schedule_line_ids.filtered(
                 lambda l: l.event in ('After Party Ultra', 'After Party', 'Dance Show')
             )
+            to_remove_transport = rec.transport_line_ids.filtered(
+                lambda l: l.label in ('After Party Ultra', 'After Party', 'Dance Show')
+            )
+
             if to_remove:
                 rec.schedule_line_ids = [(3, l.id) for l in to_remove]
+            if to_remove_transport:
+                rec.transport_line_ids = [(3, l.id) for l in to_remove_transport]
 
+            # ---- transport_line_ids: önceki varsa sil (label ile eşleşen) ---
+            to_remove_t = rec.transport_line_ids.filtered(
+                lambda l: l.label in ('After Party Ultra', 'After Party', 'Dance Show')
+            )
+
+            # hesaplama: start / end
             start = '19:30'
             if rec.afterparty_ultra:
                 base_end = '02:00'
@@ -488,30 +500,81 @@ class ProjectDemoForm(models.Model):
                     cmds = [(0, 0, {
                         'sequence': 1,
                         'event': choice,
-                        'time': end,
+                        'time': f'23:30 - {end}',
                     })]
                 rec.schedule_line_ids = cmds
+
+                transport_cmds = []
+                if to_remove_t:
+                    transport_cmds.extend([(3, l.id) for l in to_remove_t])
+
+                existing_t = (rec.transport_line_ids - to_remove_t).sorted('sequence')
+
+                try:
+                    after_end_dt = datetime.strptime(end, '%H:%M')
+                except ValueError:
+                    after_end_dt = None
+
+                if existing_t:
+                    last_t = existing_t[-1]
+                    old_t_seq = last_t.sequence
+
+                    if after_end_dt:
+                        new_last_time = (after_end_dt + timedelta(minutes=30)).strftime('%H:%M')
+                    else:
+                        new_last_time = last_t.time
+
+                    transport_cmds.append((1, last_t.id, {'sequence': old_t_seq + 1, 'time': new_last_time}))
+
+                    transport_cmds.append((0, 0, {
+                        'sequence': old_t_seq,
+                        'label': choice,
+                        'time': end,
+
+                    }))
+                else:
+                    transport_cmds.append((0, 0, {
+                        'sequence': 1,
+                        'label': choice,
+                        'time': end,
+                    }))
+                    if after_end_dt:
+                        later_time = (after_end_dt + timedelta(minutes=30)).strftime('%H:%M')
+                    else:
+                        later_time = end
+                    transport_cmds.append((0, 0, {
+                        'sequence': 2,
+                        'label': f"{choice} Follow-up",
+                        'time': later_time,
+                    }))
+
+                rec.transport_line_ids = transport_cmds
 
     def _onchange_breakfast(self):
         for rec in self:
             # get the first schedule line
             lines = rec.schedule_line_ids.sorted('sequence')
+            transport_lines=rec.transport_line_ids
             if not lines:
                 continue
             first = lines[0]
+            first_transport=transport_lines[0]
             try:
                 dt = datetime.strptime(first.time, '%H:%M')
+                dt_transport=datetime.strptime(first_transport.time,'%H:%M')
             except (ValueError, TypeError):
                 continue
             # subtract or add 30 minutes
             if rec.prehost_breakfast:
                 dt_new = dt - timedelta(minutes=30)
+                dt_new_transport=dt_transport-timedelta(minutes=30)
             else:
                 dt_new = dt + timedelta(minutes=30)
+                dt_new_transport = dt_transport + timedelta(minutes=30)
             first.time = dt_new.strftime('%H:%M')
+            first_transport.time = dt_new_transport.strftime('%H:%M')
 
     def write(self, vals):
-        # 1) Önce veriyi yaz
         res = super().write(vals)
 
         for rec in self:

@@ -208,7 +208,7 @@ class ProjectProject(models.Model):
                 if name == "Breakfast Service":
                     vals['prehost_breakfast'] = True
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty)
-                vals['photo_standart'] = True
+                vals['photo_standard'] = True
 
                 # if name == "Pasta Show'da Gerçek Pasta":
                 #     vals['cake_choice'] = 'real'
@@ -220,13 +220,12 @@ class ProjectProject(models.Model):
                 'photo_video_plus', 'photo_drone',
                 'photo_print_service',
                 'afterparty_service', 'afterparty_shot_service',
-                'afterparty_sushi', 'bar_alcohol_service',
-                'afterparty_dance_show', 'afterparty_fog_laser',
+                'afterparty_sushi',
+                 'afterparty_fog_laser',
             ]
 
-            ultra_fields = elite_fields
-            ultra_fields.append(['music_live', 'music_percussion',
-                                 'music_trio'])
+            ultra_extra = ['music_live', 'music_percussion', 'music_trio']
+            ultra_fields = elite_fields + ultra_extra
             if tmpl == 'plus':
                 for f in elite_fields:
                     vals[f] = True

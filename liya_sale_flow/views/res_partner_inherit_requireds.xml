@@ -25,9 +25,6 @@
         <xpath expr="//field[@name='lang']" position="attributes">
           <attribute name="required">True</attribute>
         </xpath>
-        <xpath expr="//field[@name='function']" position="attributes">
-          <attribute name="required">True</attribute>
-        </xpath>
 
       </field>
     </record>
