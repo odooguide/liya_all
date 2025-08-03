@@ -102,6 +102,8 @@
                                 <group>
                                     <field name="transport_line_ids" nolabel="1">
                                         <list editable="bottom">
+                                            <field name="sequence" widget="handle"/>
+                                            <field name="sequence" invisible="1"/>
                                             <field name="label"/>
                                             <field name="time"/>
                                             <field name="port_ids" widget="many2many_tags"/>

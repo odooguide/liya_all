@@ -24,7 +24,10 @@
                     </group>
                 </group>
             </xpath>
+
             <xpath expr="//field[@name='lost_reason_id']" position="before">
+                <field name="function" invisible="type == 'lead'"
+                       required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
                 <field name="second_contact" invisible="type == 'lead'"
                        required="is_stage_lead == False and type=='opportunity' and is_event_team==False"/>
                 <field name="second_title" invisible="type == 'lead'"
