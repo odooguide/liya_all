@@ -1,126 +1,126 @@
 <odoo>
 
-  <menuitem id="menu_demo_form_fields"
-            name="Demo Form"
-            parent="project.menu_project_config"
-            sequence="10"/>
+    <menuitem id="menu_demo_form_fields"
+              name="Demo Form"
+              parent="project.menu_project_config"
+              sequence="10"/>
 
 
-  <!-- Transport Ports -->
-  <record id="action_project_transport_port" model="ir.actions.act_window">
-    <field name="name">Transport Ports</field>
-    <field name="res_model">project.transport.port</field>
-    <field name="view_mode">list,form</field>
-    <field name="target">current</field>
-  </record>
-  <menuitem id="menu_project_transport_port"
-            name="Transport Ports"
-            parent="menu_demo_form_fields"
-            action="action_project_transport_port"
-            sequence="10"/>
+    <!-- Transport Ports -->
+    <record id="action_project_transport_port" model="ir.actions.act_window">
+        <field name="name">Transport Ports</field>
+        <field name="res_model">project.transport.port</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_project_transport_port"
+              name="Transport Ports"
+              parent="menu_demo_form_fields"
+              action="action_project_transport_port"
+              sequence="10"/>
 
-  <!-- Demo Menu Desserts -->
-  <record id="action_project_demo_menu_dessert" model="ir.actions.act_window">
-    <field name="name">Demo Menu Desserts</field>
-    <field name="res_model">project.demo.menu.dessert</field>
-    <field name="view_mode">list,form</field>
-    <field name="target">current</field>
-  </record>
-  <menuitem id="menu_project_demo_menu_dessert"
-            name="Menu Desserts"
-            parent="menu_demo_form_fields"
-            action="action_project_demo_menu_dessert"
-            sequence="20"/>
+    <!-- Demo Menu Desserts -->
+    <record id="action_project_demo_menu_dessert" model="ir.actions.act_window">
+        <field name="name">Demo Menu Desserts</field>
+        <field name="res_model">project.demo.menu.dessert</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_project_demo_menu_dessert"
+              name="Menu Desserts"
+              parent="menu_demo_form_fields"
+              action="action_project_demo_menu_dessert"
+              sequence="20"/>
 
-  <!-- Demo Menu Meze -->
-  <record id="action_project_demo_menu_meze" model="ir.actions.act_window">
-    <field name="name">Demo Menu Appetizers</field>
-    <field name="res_model">project.demo.menu.meze</field>
-    <field name="view_mode">list,form</field>
-    <field name="target">current</field>
-  </record>
-  <menuitem id="menu_project_demo_menu_meze"
-            name="Menu Appetizers"
-            parent="menu_demo_form_fields"
-            action="action_project_demo_menu_meze"
-            sequence="30"/>
+    <!-- Demo Menu Meze -->
+    <record id="action_project_demo_menu_meze" model="ir.actions.act_window">
+        <field name="name">Demo Menu Appetizers</field>
+        <field name="res_model">project.demo.menu.meze</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_project_demo_menu_meze"
+              name="Menu Appetizers"
+              parent="menu_demo_form_fields"
+              action="action_project_demo_menu_meze"
+              sequence="30"/>
 
-  <!-- Table Themes -->
-  <record id="action_project_demo_table_theme" model="ir.actions.act_window">
-    <field name="name">Table Themes</field>
-    <field name="res_model">project.demo.table.theme</field>
-    <field name="view_mode">list,form</field>
-    <field name="target">current</field>
-  </record>
-  <menuitem id="menu_project_demo_table_theme"
-            name="Table Themes"
-            parent="menu_demo_form_fields"
-            action="action_project_demo_table_theme"
-            sequence="40"/>
+    <!-- Table Themes -->
+    <record id="action_project_demo_table_theme" model="ir.actions.act_window">
+        <field name="name">Table Themes</field>
+        <field name="res_model">project.demo.table.theme</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_project_demo_table_theme"
+              name="Table Themes"
+              parent="menu_demo_form_fields"
+              action="action_project_demo_table_theme"
+              sequence="40"/>
 
-  <!-- Table Chargers -->
-  <record id="action_project_demo_table_charger" model="ir.actions.act_window">
-    <field name="name">Table Chargers</field>
-    <field name="res_model">project.demo.table.charger</field>
-    <field name="view_mode">list,form</field>
-    <field name="target">current</field>
-  </record>
-  <menuitem id="menu_project_demo_table_charger"
-            name="Table Chargers"
-            parent="menu_demo_form_fields"
-            action="action_project_demo_table_charger"
-            sequence="50"/>
+    <!-- Table Chargers -->
+    <record id="action_project_demo_table_charger" model="ir.actions.act_window">
+        <field name="name">Table Chargers</field>
+        <field name="res_model">project.demo.table.charger</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_project_demo_table_charger"
+              name="Table Chargers"
+              parent="menu_demo_form_fields"
+              action="action_project_demo_table_charger"
+              sequence="50"/>
 
-  <!-- Runner Designs -->
-  <record id="action_project_demo_runner_design" model="ir.actions.act_window">
-    <field name="name">Runner Designs</field>
-    <field name="res_model">project.demo.runner.design</field>
-    <field name="view_mode">list,form</field>
-    <field name="target">current</field>
-  </record>
-  <menuitem id="menu_project_demo_runner_design"
-            name="Runner Designs"
-            parent="menu_demo_form_fields"
-            action="action_project_demo_runner_design"
-            sequence="60"/>
+    <!-- Runner Designs -->
+    <record id="action_project_demo_runner_design" model="ir.actions.act_window">
+        <field name="name">Runner Designs</field>
+        <field name="res_model">project.demo.runner.design</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_project_demo_runner_design"
+              name="Runner Designs"
+              parent="menu_demo_form_fields"
+              action="action_project_demo_runner_design"
+              sequence="60"/>
 
-  <!-- Table Colors -->
-  <record id="action_project_demo_table_color" model="ir.actions.act_window">
-    <field name="name">Table Colors</field>
-    <field name="res_model">project.demo.table.color</field>
-    <field name="view_mode">list,form</field>
-    <field name="target">current</field>
-  </record>
-  <menuitem id="menu_project_demo_table_color"
-            name="Table Colors"
-            parent="menu_demo_form_fields"
-            action="action_project_demo_table_color"
-            sequence="70"/>
+    <!-- Table Colors -->
+    <record id="action_project_demo_table_color" model="ir.actions.act_window">
+        <field name="name">Table Colors</field>
+        <field name="res_model">project.demo.table.color</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_project_demo_table_color"
+              name="Table Colors"
+              parent="menu_demo_form_fields"
+              action="action_project_demo_table_color"
+              sequence="70"/>
 
-  <!-- Ceremony Tags -->
-  <record id="action_project_demo_ceremony_tag" model="ir.actions.act_window">
-    <field name="name">Ceremony Tags</field>
-    <field name="res_model">project.demo.ceremony.tag</field>
-    <field name="view_mode">list,form</field>
-    <field name="target">current</field>
-  </record>
-  <menuitem id="menu_project_demo_ceremony_tag"
-            name="Ceremony Tags"
-            parent="menu_demo_form_fields"
-            action="action_project_demo_ceremony_tag"
-            sequence="80"/>
+    <!-- Ceremony Tags -->
+    <record id="action_project_demo_ceremony_tag" model="ir.actions.act_window">
+        <field name="name">Ceremony Tags</field>
+        <field name="res_model">project.demo.ceremony.tag</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_project_demo_ceremony_tag"
+              name="Ceremony Tags"
+              parent="menu_demo_form_fields"
+              action="action_project_demo_ceremony_tag"
+              sequence="80"/>
 
-  <!-- Cake Choices -->
-  <record id="action_project_demo_cake_choice" model="ir.actions.act_window">
-    <field name="name">Cake Choices</field>
-    <field name="res_model">project.demo.cake.choice</field>
-    <field name="view_mode">list,form</field>
-    <field name="target">current</field>
-  </record>
-  <menuitem id="menu_project_demo_cake_choice"
-            name="Cake Choices"
-            parent="menu_demo_form_fields"
-            action="action_project_demo_cake_choice"
-            sequence="90"/>
+    <!-- Cake Choices -->
+    <record id="action_project_demo_cake_choice" model="ir.actions.act_window">
+        <field name="name">Cake Choices</field>
+        <field name="res_model">project.demo.cake.choice</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_project_demo_cake_choice"
+              name="Cake Choices"
+              parent="menu_demo_form_fields"
+              action="action_project_demo_cake_choice"
+              sequence="90"/>
 
 </odoo>

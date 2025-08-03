@@ -9,7 +9,7 @@
                     <group>
                         <field name="sale_order_id" invisible="1"/>
                         <field name="project_task_line_ids" nolabel="1">
-                            <list editable="bottom" create="true" >
+                            <list editable="bottom" create="true">
 
                                 <field name="task_id" column_invisible="1"/>
                                 <field name="sale_order_id" column_invisible="1"/>

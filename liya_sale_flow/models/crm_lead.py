@@ -251,12 +251,13 @@ class CrmLead(models.Model):
     def action_new_quotation(self):
         for lead in self:
             required_fields = {
-                'Secondary Contact': lead.second_contact,
-                'Secondary Phone': lead.second_phone,
-                'Secondary E-mail': lead.second_mail,
-                'Secondary Job Position': lead.second_job_position,
-                'Secondary Title': lead.second_title,
-                'Secondary Country': lead.second_country,
+                'İkincil Kontak': lead.second_contact,
+                'İkincil Telefon': lead.second_phone,
+                'İkincil E-Posta': lead.second_mail,
+                'İkincil Meslek': lead.second_job_position,
+                'İkincil Başlık': lead.second_title,
+                'İkincil Ülke': lead.second_country,
+                'Etkinlik Tipi': lead.wedding,
                 'Y/T': lead.yabanci_turk,
             }
             missing = [name for name, value in required_fields.items() if not value]

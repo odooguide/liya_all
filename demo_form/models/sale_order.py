@@ -12,7 +12,6 @@ class SaleOrder(models.Model):
         string='Project Tasks',
     )
 
-
     @api.onchange('sale_order_template_id')
     def _onchange_sale_template_task(self):
         if not self.sale_order_template_id:
@@ -41,7 +40,7 @@ class SaleOrder(models.Model):
 
         self.project_task_ids = [(5, 0, 0)] + new_tasks
         self.is_project_true = bool(new_tasks)
-    
+
     @api.onchange('order_line')
     def _onchange_order_line_task(self):
         for order in self:
@@ -70,23 +69,23 @@ class SaleOrder(models.Model):
             add_cmds = []
             for tmpl in to_add:
                 add_cmds.append((0, 0, {
-                    'name':                tmpl.name,
-                    'description':         tmpl.description,
-                    'stage_id':            tmpl.stage_id.id,
-                    'planned_date':        tmpl.planned_date,
-                    'deadline_date':       tmpl.deadline_date,
-                    'date_line':           tmpl.date_line,
-                    'days':                tmpl.days,
-                    'user_ids':            [(6, 0, tmpl.user_ids.ids)],
-                    'email_template_id':   tmpl.email_template_id.id,
+                    'name': tmpl.name,
+                    'description': tmpl.description,
+                    'stage_id': tmpl.stage_id.id,
+                    'planned_date': tmpl.planned_date,
+                    'deadline_date': tmpl.deadline_date,
+                    'date_line': tmpl.date_line,
+                    'days': tmpl.days,
+                    'user_ids': [(6, 0, tmpl.user_ids.ids)],
+                    'email_template_id': tmpl.email_template_id.id,
                     'optional_product_id': tmpl.optional_product_id.id,
-                    'communication_type':  tmpl.communication_type,
-                    'event_date':          tmpl.event_date,
+                    'communication_type': tmpl.communication_type,
+                    'event_date': tmpl.event_date,
                 }))
 
             order.project_task_ids = remove_cmds + preserve_cmds + add_cmds
             order.project_task_ids._onchange_deadline_date()
-            
+
     def action_open_project_wizard(self):
         self.ensure_one()
         if self.opportunity_id.stage_id.name not in ('Won', 'Kazanıldı'):
@@ -111,7 +110,8 @@ class SaleOrder(models.Model):
         for rec in self:
             if rec.project_task_ids:
                 rec.project_task_ids._onchange_deadline_date()
-    
+
+
 class SaleOrderOption(models.Model):
     _inherit = 'sale.order.option'
 

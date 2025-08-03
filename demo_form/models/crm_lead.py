@@ -1,13 +1,14 @@
-from odoo import models,api,fields,_
+from odoo import models, api, fields, _
 from odoo.exceptions import UserError
+
 
 class CrmLead(models.Model):
     _inherit = "crm.lead"
 
-    project_id=fields.Many2one('project.project',string="Project")
-    has_contract=fields.Boolean(string="Has Contract?",compute='_compute_contract')
+    project_id = fields.Many2one('project.project', string="Project")
+    has_contract = fields.Boolean(string="Has Contract?", compute='_compute_contract')
 
-    @api.depends('order_ids.confirmed_contract', 'order_ids.state','project_id')
+    @api.depends('order_ids.confirmed_contract', 'order_ids.state', 'project_id')
     def _compute_contract(self):
         for lead in self:
             valid_orders = lead.order_ids.filtered(
@@ -15,7 +16,7 @@ class CrmLead(models.Model):
             )
             lead.has_contract = bool(valid_orders)
             if lead.project_id:
-                lead.has_contract=False
+                lead.has_contract = False
 
     def action_open_project_wizard(self):
         sale_order = self.env['sale.order'].search([
