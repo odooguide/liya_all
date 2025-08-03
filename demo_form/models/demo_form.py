@@ -488,7 +488,7 @@ class ProjectDemoForm(models.Model):
                     cmds = [(0, 0, {
                         'sequence': 1,
                         'event': choice,
-                        'time': end,
+                        'time': f'23:30 - {end}',
                     })]
                 rec.schedule_line_ids = cmds
 
@@ -511,7 +511,6 @@ class ProjectDemoForm(models.Model):
             first.time = dt_new.strftime('%H:%M')
 
     def write(self, vals):
-        # 1) Önce veriyi yaz
         res = super().write(vals)
 
         for rec in self:
