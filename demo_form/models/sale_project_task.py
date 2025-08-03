@@ -1,5 +1,6 @@
 from odoo import api, fields, models
-from datetime import timedelta, date,datetime
+from datetime import timedelta, date, datetime
+
 
 class SaleProjectTask(models.Model):
     _name = 'sale.project.task'
@@ -49,14 +50,14 @@ class SaleProjectTask(models.Model):
     ],
         string='Communication Type',
         default='phone', )
-    event_date=fields.Date(string='Event Date')
+    event_date = fields.Date(string='Event Date')
 
-    @api.onchange('planned_date', 'days', 'date_line','event_date')
+    @api.onchange('planned_date', 'days', 'date_line', 'event_date')
     def _onchange_deadline_date(self):
         for rec in self:
             today = fields.Date.today()
             if rec.sale_order_id.wedding_date:
-                wedd=rec.sale_order_id.wedding_date
+                wedd = rec.sale_order_id.wedding_date
                 if rec.planned_date == 'before_wedding':
                     if wedd and rec.days:
                         rec.deadline_date = wedd - timedelta(days=rec.days)

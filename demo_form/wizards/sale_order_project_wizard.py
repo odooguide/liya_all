@@ -12,14 +12,12 @@ class SaleOrderProjectWizard(models.TransientModel):
         required=True,
         ondelete='cascade',
     )
-    lead_id=fields.Many2one('crm.lead',string='CRM Lead ID')
+    lead_id = fields.Many2one('crm.lead', string='CRM Lead ID')
     project_task_line_ids = fields.One2many(
         comodel_name='sale.order.project.wizard.line',
         inverse_name='wizard_id',
         string='Tasks Which Will Be Add to Project',
     )
-
-
 
     @api.model
     def default_get(self, fields_list):
@@ -31,17 +29,17 @@ class SaleOrderProjectWizard(models.TransientModel):
                 (0, 0, {
                     'task_id': task.id,
                     'name': task.name,
-                    'description':task.description,
-                    'stage_id':task.stage_id.id,
-                    'planned_date':task.planned_date,
-                    'date_line':task.date_line,
-                    'days':task.days,
-                    'deadline_date':task.deadline_date,
-                    'user_ids':task.user_ids.ids,
-                    'email_template_id':task.email_template_id.id,
-                    'optional_product_id':task.optional_product_id.id,
-                    'communication_type':task.communication_type,
-                    
+                    'description': task.description,
+                    'stage_id': task.stage_id.id,
+                    'planned_date': task.planned_date,
+                    'date_line': task.date_line,
+                    'days': task.days,
+                    'deadline_date': task.deadline_date,
+                    'user_ids': task.user_ids.ids,
+                    'email_template_id': task.email_template_id.id,
+                    'optional_product_id': task.optional_product_id.id,
+                    'communication_type': task.communication_type,
+
                 })
                 for task in order.project_task_ids
             ]
@@ -72,7 +70,6 @@ class SaleOrderProjectWizard(models.TransientModel):
             'sale_line_id': order.order_line and order.order_line[0].id or False
         }
 
-
         project = self.env['project.project'].create(vals)
         done_stage = self.env['project.task.type'].search([
             ('project_ids', 'in', project.id),
@@ -81,7 +78,7 @@ class SaleOrderProjectWizard(models.TransientModel):
         if not done_stage:
             done_stage = self.env['project.task.type'].create({
                 'name': 'Done',
-                'sequence':10,
+                'sequence': 10,
                 'project_ids': [(4, project.id)],
             })
         order.project_id = project.id
@@ -118,7 +115,7 @@ class SaleOrderProjectWizard(models.TransientModel):
                 'email_template_id': tmpl.email_template_id.id,
                 'communication_type': tmpl.communication_type,
                 'sale_line_id': sale_line_id,
-                'task_tags':tmpl.name,
+                'task_tags': tmpl.name,
             })
             if tmpl.communication_type == 'phone' and tmpl.email_template_id:
                 template = tmpl.email_template_id
@@ -147,7 +144,7 @@ class SaleOrderProjectWizard(models.TransientModel):
                     })
 
         order.is_project_true = True
-        order.opportunity_id.project_id=project.id
+        order.opportunity_id.project_id = project.id
         order.opportunity_id.action_set_won()
 
         return {'type': 'ir.actions.act_window_close'}
@@ -168,7 +165,7 @@ class SaleOrderProjectWizardLine(models.TransientModel):
         string='Project Template',
         required=False,
     )
-    sale_order_id=fields.Many2one(
+    sale_order_id = fields.Many2one(
         comodel_name='sale.order',
         string='Sale Order Id',
         required=False,

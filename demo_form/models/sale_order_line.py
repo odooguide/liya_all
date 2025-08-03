@@ -1,6 +1,7 @@
 from odoo import models, api, _
 from odoo.exceptions import UserError
 
+
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 

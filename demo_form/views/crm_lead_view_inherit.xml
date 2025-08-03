@@ -20,20 +20,20 @@
         </field>
     </record>
 
-     <record id="view_crm_lead_form_inherit_project_button" model="ir.ui.view">
+    <record id="view_crm_lead_form_inherit_project_button" model="ir.ui.view">
         <field name="name">crm.lead.form.inherit.project.button</field>
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="arch" type="xml">
-          <xpath expr="//button[@name='action_schedule_meeting']" position="before">
-            <button name="action_open_project"
-                    type="object"
-                    string="Project"
-                    icon="fa-briefcase"
-                    class="oe_stat_button"
-                    invisible="project_id==False"
-            />
-          </xpath>
+            <xpath expr="//button[@name='action_schedule_meeting']" position="before">
+                <button name="action_open_project"
+                        type="object"
+                        string="Project"
+                        icon="fa-briefcase"
+                        class="oe_stat_button"
+                        invisible="project_id==False"
+                />
+            </xpath>
         </field>
-      </record>
+    </record>
 </odoo>

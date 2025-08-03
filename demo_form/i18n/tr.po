@@ -721,7 +721,7 @@ msgstr ""
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__table_fresh_flowers
 msgid "Fresh Flowers"
-msgstr "Taze Çiçekler"
+msgstr "Canlı Çiçekler"
 
 #. module: demo_form
 #. odoo-python

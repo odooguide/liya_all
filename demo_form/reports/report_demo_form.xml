@@ -1,0 +1,596 @@
+<odoo>
+    <!-- Report definition -->
+    <record id="action_demo_form_report" model="ir.actions.report">
+        <field name="name">Demo Form</field>
+        <field name="model">project.demo.form</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">demo_form.demo_form_report_layout</field>
+        <field name="report_file">demo_form.demo_form_report_layout</field>
+        <field name="print_report_name">'Demo Form - %s' % (object.name,)</field>
+
+    </record>
+
+    <!-- Print button in the form header -->
+    <record id="view_demo_form_form_inherit_report_button" model="ir.ui.view">
+        <field name="name">project.demo.form.form.report.button</field>
+        <field name="model">project.demo.form</field>
+        <field name="inherit_id" ref="demo_form.view_demo_form_form"/>
+        <field name="arch" type="xml">
+            <header>
+                <button name="%(action_demo_form_report)d"
+                        string="Demo Form Print"
+                        type="action"
+                        class="btn-primary"
+                        context="{'default_type':'pdf'}"
+                        icon="fa-print"/>
+            </header>
+        </field>
+    </record>
+
+    <template id="demo_form_report_layout">
+        <t t-call="web.external_layout">
+            <main>
+                <t t-foreach="docs" t-as="o">
+                    <div class="page" style="font-family: 'Helvetica', Arial, sans-serif; position:relative;">
+                        <div style="text-align:center; margin-bottom:10px;">
+                            <h1 style="margin:0; font-family:Helvetica, Arial, sans-serif;">LIYA ALL-WEDDING PLAN 2025
+                            </h1>
+                        </div>
+                        <table class="table table-borderless"
+                               style="width:100%; border-collapse:collapse; margin-bottom:15px;">
+                            <tr>
+                                <!-- Event Summary -->
+                                <td style="width:50%; padding-right:5px; vertical-align:top;">
+                                    <div style="border:1px solid #4a8599; padding:12px; box-sizing:border-box; font-size:11pt; line-height:1.3; height:100%;">
+                                        <table style="width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif;">
+                                            <tr>
+                                                <td style="padding:4px 6px; font-weight:600; width:140px;">Invitation
+                                                    Owner:
+                                                </td>
+                                                <td style="padding:4px 6px;">
+                                                    <span t-esc="o.invitation_owner or ''"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:4px 6px; font-weight:600;">Invitation Date:</td>
+                                                <td style="padding:4px 6px;">
+                                                    <span t-esc="o.invitation_date or ''"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:4px 6px; font-weight:600;">Wedding Type:</td>
+                                                <td style="padding:4px 6px;">
+                                                    <span t-esc="o.sale_template_id.name or ''"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:4px 6px; font-weight:600;">Guest Count:</td>
+                                                <td style="padding:4px 6px;">
+                                                    <span t-esc="o.guest_count or ''"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:4px 6px; font-weight:600;">Ceremony Type:</td>
+                                                <td style="padding:4px 6px;">
+                                                    <span t-esc="o.ceremony or ''"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:4px 6px; font-weight:600;">Day:</td>
+                                                <td style="padding:4px 6px;">
+                                                    <span t-esc="o.duration_days or ''"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:4px 6px; font-weight:600;">Start - End Time:</td>
+                                                <td style="padding:4px 6px;">
+                                                    <span t-esc="o.start_end_time or ''"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+
+                                <!-- Details -->
+                                <td style="width:50%; padding-left:5px; vertical-align:top;">
+                                    <div style="border:1px solid #4a8599; padding:12px; box-sizing:border-box; font-size:11pt; line-height:1.3; height:100%;">
+                                        <table style="width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif;">
+                                            <tr>
+                                                <td style="padding:4px 6px; font-weight:600; width:140px;">Demo Date:
+                                                </td>
+                                                <td style="padding:4px 6px;">
+                                                    <span t-esc="o.demo_date or ''"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"
+                                                    style="padding:4px 6px; font-weight:600; vertical-align:top;">
+                                                    Special Notes:
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"
+                                                    style="padding:4px 6px; vertical-align:top;text-align:top;width:100%">
+                                                    <t t-if="o.special_notes_preview">
+                                                        <div style="white-space:pre-wrap;word-break: break-all;">
+                                                            <span t-field="o.special_notes_preview"/>
+                                                        </div>
+                                                    </t>
+                                                    <t t-if="not o.special_notes_preview">-</t>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <t t-if="o.special_notes_remaining">
+                            <div style="margin-top:8px; font-size:10pt; font-family:Helvetica, Arial, sans-serif;">
+                                <div style="border:1px solid #4a8599; padding:10px; box-sizing:border-box;">
+                                    <strong>Special Notes (continued):</strong>
+                                    <div style=";white-space:pre-wrap;word-break: break-all;text-align:top;">
+                                        <span t-esc="o.special_notes_remaining"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                        <div style="display:block; margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
+                            <h3 style="margin-bottom:8px;">A) SAAT AKIŞI</h3>
+                            <table class='table table-borderless'
+                                   style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left; padding:4px 8px; width:30px;"></th>
+                                        <th style="text-align:left; padding:4px 8px; width:150px;"></th>
+                                        <th style="text-align:left; padding:4px 8px; width:80px;"></th>
+                                        <th style="text-align:center; padding:4px 8px; width:200px;"></th>
+                                        <th style="text-align:left; padding:4px 8px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.schedule_line_ids" t-as="line">
+                                        <tr>
+                                            <td style="padding:6px 8px; vertical-align:top;">.</td>
+                                            <td style="padding:6px 8px; vertical-align:top;">
+                                                <strong>
+                                                    <span t-esc="line.event or ''"/>
+                                                </strong>
+                                            </td>
+                                            <td style="padding:6px 8px; vertical-align:top; white-space:nowrap;">
+                                                <t t-if="line.time">
+                                                    <span t-esc="line.time"/>
+                                                </t>
+                                                <t t-if="not line.time">__ : __</t>
+                                            </td>
+                                            <td style="padding:6px 8px; text-align:center; vertical-align:top;">
+                                                <t t-if="line.location_type == 'restaurant'">Restaurant (<strong>
+                                                    x</strong>) -
+                                                </t>
+                                                <t t-if="line.location_type != 'restaurant'">Restaurant
+                                                    (<strong></strong>) -
+                                                </t>
+                                                <t t-if="line.location_type == 'beach'">Beach (<strong>x</strong>)
+                                                </t>
+                                                <t t-if="line.location_type != 'beach'">Beach (<strong></strong>)
+                                                </t>
+                                            </td>
+                                            <td style="padding:6px 8px; vertical-align:top;">
+                                                <t t-if="line.location_notes">
+                                                    <span t-esc="line.location_notes"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="display:block; margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
+                            <h3 style="margin-bottom:8px;">A) TRANSPORT</h3>
+                            <table class='table table-borderless'
+                                   style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left; padding:6px 8px; width:10px;"></th>
+                                        <th style="text-align:left; padding:6px 8px; width:160px;"></th>
+                                        <th style="text-align:left; padding:6px 8px; width:50px;"></th>
+                                        <th style="text-align:left; padding:6px 8px; width:160px;"></th>
+                                        <th style="text-align:left; padding:6px 8px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.transport_line_ids.sorted('sequence')" t-as="line">
+                                        <tr>
+                                            <td style="padding:6px 8px; vertical-align:top;"><t
+                                                    t-esc="line.sequence or ''"/>.
+                                            </td>
+                                            <td style="padding:6px 8px; vertical-align:top;">
+                                                <strong>
+                                                    <span t-esc="line.label or ''"/>
+                                                </strong>
+                                            </td>
+                                            <td style="padding:6px 8px; vertical-align:top; white-space:nowrap;">
+                                                <t t-if="line.time">
+                                                    <span t-esc="line.time"/>
+                                                </t>
+                                                <t t-if="not line.time">__ : __</t>
+                                            </td>
+                                            <td style="padding:6px 8px; vertical-align:top;">
+                                                <t t-if="line.port_ids">
+                                                    <t t-foreach="line.port_ids" t-as="p">
+                                                        <span t-esc="p.name"/>,
+                                                    </t>
+                                                </t>
+                                                <t t-if="not line.port_ids">-</t>
+                                            </td>
+                                            <td style="padding:6px 8px; vertical-align:top;">
+                                                <t t-if="line.other_port">
+                                                    <span t-esc="line.other_port"/>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- C) MENÜ NOTLARI -->
+                        <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
+                            <h3 style="margin-bottom:6px;">C) MENÜ NOTLARI</h3>
+                            <div style="margin-bottom:8px; font-style:italic;">
+                                <span t-field="o.menu_description"/>
+                            </div>
+                            <table style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600; width:180px;">Ana Sıcak Seçimi:
+                                        </td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Lasagna Meat (
+                                                <t t-if="o.menu_hot_appetizer=='lasagna_meat'">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.menu_hot_appetizer!='lasagna_meat'"></t>
+                                                )
+                                            </span>
+                                            <span style="margin-right:6px;">|</span>
+                                            <span>Lasagna Vegan (
+                                                <t t-if="o.menu_hot_appetizer=='lasagna_vegan'">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.menu_hot_appetizer!='lasagna_vegan'"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">Ana Sıcak Ultra:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Shrimp (
+                                                <t t-if="o.menu_hot_appetizer_ultra=='shrimpt'">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.menu_hot_appetizer_ultra!='shrimpt'"></t>
+                                                )
+                                            </span>
+                                            <span style="margin-right:6px;">|</span>
+                                            <span>Lasagna Vegan (
+                                                <t t-if="o.menu_hot_appetizer_ultra=='lasagna_vegan'">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.menu_hot_appetizer_ultra!='lasagna_vegan'"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">Tatlı Seçimi:</td>
+                                        <td style="padding:4px 8px;">
+                                            <t t-if="o.menu_dessert_ids">
+                                                <t t-foreach="o.menu_dessert_ids" t-as="d">
+                                                    <span t-esc="d.name"/>
+                                                    <t t-if="not loop.last">,</t>
+                                                </t>
+                                            </t>
+                                            <t t-if="not o.menu_dessert_ids">-</t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">Meze Seçimi:</td>
+                                        <td style="padding:4px 8px;">
+                                            <t t-if="o.menu_meze_ids">
+                                                <t t-foreach="o.menu_meze_ids" t-as="m">
+                                                    <span t-esc="m.name"/>
+                                                    <t t-if="not loop.last">,</t>
+                                                </t>
+                                            </t>
+                                            <t t-if="not o.menu_meze_ids">-</t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="o.menu_meze_notes">
+                                        <td style="padding:4px 8px; font-weight:600; vertical-align:top;">Meze
+                                            Notları:
+                                        </td>
+                                        <td style="padding:4px 8px;">
+                                            <span t-field="o.menu_meze_notes"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- D) BAR NOTLARI -->
+                        <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
+                            <h3 style="margin-bottom:6px;">D) BAR NOTLARI</h3>
+                            <div style="margin-bottom:8px;">
+                                <span t-field="o.bar_description"/>
+                            </div>
+                            <table style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600; width:200px;">Alkollü İçecek
+                                            Servisi:
+                                        </td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:8px;">Var (
+                                                <t t-if="o.bar_alcohol_service">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.bar_alcohol_service"></t>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:8px;">Yok (
+                                                <t t-if="not o.bar_alcohol_service">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.bar_alcohol_service"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="not o.bar_alcohol_service">
+                                        <td style="padding:4px 8px; font-weight:600;">Satın Alım Tavsiyesi:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span t-esc="o.bar_purchase_advice or '-'"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">Rakı Markası:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Mercan (
+                                                <t t-if="o.bar_raki_brand=='mercan'">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.bar_raki_brand!='mercan'"></t>
+                                                )
+                                            </span>
+                                            <span style="margin-right:6px;">|</span>
+                                            <span style="margin-right:6px;">Beylerbeyi Göbek (
+                                                <t t-if="o.bar_raki_brand=='beylerbeyi_gobek'">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.bar_raki_brand!='beylerbeyi_gobek'"></t>
+                                                )
+                                            </span>
+                                            <span style="margin-right:6px;">|</span>
+                                            <span>Tekirdağ Altın Seri (
+                                                <t t-if="o.bar_raki_brand=='tekirdag_altin_seri'">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.bar_raki_brand!='tekirdag_altin_seri'"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- E) AFTER PARTY -->
+                        <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
+                            <h3 style="margin-bottom:6px;">E) AFTER PARTY</h3>
+                            <div style="margin-bottom:8px;">
+                                <span t-field="o.afterparty_description"/>
+                            </div>
+                            <table style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600; width:170px;">After Party:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Var (
+                                                <t t-if="o.afterparty_service">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_service"></t>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">Yok (
+                                                <t t-if="not o.afterparty_service">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_service"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                        <td style="padding:4px 8px; font-weight:600; width:150px;">Ultra Paket:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Var (
+                                                <t t-if="o.afterparty_ultra">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_ultra"></t>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">Yok (
+                                                <t t-if="not o.afterparty_ultra">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_ultra"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">Ek İçecek:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Var (
+                                                <t t-if="o.afterparty_more_drinks">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_more_drinks"></t>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">Yok (
+                                                <t t-if="not o.afterparty_more_drinks">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_more_drinks"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                        <td style="padding:4px 8px; font-weight:600;">Street Food:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Var (
+                                                <t t-if="o.afterparty_street_food">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_street_food"></t>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">Yok (
+                                                <t t-if="not o.afterparty_street_food">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_street_food"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">BBQ Wraps:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Var (
+                                                <t t-if="o.afterparty_bbq_wraps">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_bbq_wraps"></t>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">Yok (
+                                                <t t-if="not o.afterparty_bbq_wraps">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_bbq_wraps"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                        <td style="padding:4px 8px; font-weight:600;">Sushi:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Var (
+                                                <t t-if="o.afterparty_sushi">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_sushi"></t>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">Yok (
+                                                <t t-if="not o.afterparty_sushi">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_sushi"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">Shot Servisi:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Var (
+                                                <t t-if="o.afterparty_shot_service">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_shot_service"></t>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">Yok (
+                                                <t t-if="not o.afterparty_shot_service">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_shot_service"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                        <td style="padding:4px 8px; font-weight:600;">Dans Gösterisi:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Var (
+                                                <t t-if="o.afterparty_dance_show">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_dance_show"></t>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">Yok (
+                                                <t t-if="not o.afterparty_dance_show">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_dance_show"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">Fog + Laser:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Var (
+                                                <t t-if="o.afterparty_fog_laser">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_fog_laser"></t>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">Yok (
+                                                <t t-if="not o.afterparty_fog_laser">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_fog_laser"></t>
+                                                )
+                                            </span>
+                                        </td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <t t-if="o.additional_services_description">
+                                <div style="margin-top:8px;">
+                                    <span t-field="o.additional_services_description"/>
+                                </div>
+                            </t>
+                        </div>
+
+
+                        <!-- Footer -->
+                        <div class="footer"
+                             style="position: absolute; bottom: 18px; width: 100%; font-size:10px; text-align:center; color:#888;">
+                            <span>Generated on
+                                <t t-esc="time.strftime('%Y-%m-%d %H:%M')"/>
+                            </span>
+                        </div>
+                    </div>
+                </t>
+            </main>
+        </t>
+
+    </template>
+
+    <!-- report entry point -->
+
+</odoo>

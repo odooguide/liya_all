@@ -24,8 +24,9 @@ class ProjectProject(models.Model):
         'project.demo.form', 'project_id', string="Demo Forms")
     demo_form_count = fields.Integer(
         string="Demo Form Count", compute='_compute_demo_form_count')
-    confirmed_demo_form_plan = fields.Binary(string="Confirmed Demo Form")
-    confirmed_demo_form_plan_name = fields.Char(string="Confirmed Demo Form Name")
+
+    seat_plan = fields.Binary(string="Seat Plan")
+    seat_plan_name = fields.Char(string="Seat Plan Name")
 
     @api.onchange('confirmed_demo_form_plan')
     def _onchange_confirmed_contract_security(self):
@@ -90,7 +91,6 @@ class ProjectProject(models.Model):
         })
         return action
 
-
     @api.depends('demo_form_ids')
     def _compute_demo_form_count(self):
         for proj in self:
@@ -124,12 +124,12 @@ class ProjectProject(models.Model):
         if order:
             inv_name = f'{order.partner_id.name}-{order.opportunity_id.second_contact}'
             vals.update({
-                'name':f'{inv_name} Demo Formu',
+                'name': f'{inv_name} Demo Formu',
                 'invitation_owner': inv_name,
                 'invitation_date': order.wedding_date,
                 'guest_count': order.people_count,
                 'sale_template_id': order.sale_order_template_id.id or False,
-                'demo_date':self.next_event_date
+                'demo_date': self.next_event_date
             })
             sched_cmds = []
             for line in order.sale_order_template_id.schedule_line_ids:
@@ -178,26 +178,28 @@ class ProjectProject(models.Model):
                     vals['afterparty_dance_show'] = True
                 if name == "Fog + Laser Show":
                     vals['afterparty_fog_laser'] = True
+                if name == "After Party Ultra":
+                    vals['afterparty_ultra'] = True
 
                 if name == "Saç & Makyaj":
                     date_str = vals.get('invitation_date') or vals.get('demo_date')
                     if date_str:
                         dt = fields.Date.from_string(date_str)
                         # Monday=0, Tuesday=1, Wednesday=2
-                        if dt.weekday() in (2,3,4,5):
+                        if dt.weekday() in (2, 3, 4, 5):
                             vals['hair_studio_3435'] = True
                         else:
                             vals['hair_garage_caddebostan'] = True
 
                 if "Canlı Müzik" in name:
                     vals['music_live'] = True
-                    if "PERKÜSYON" in name.upper():
-                        vals['music_percussion'] = True
-                    if "TRIO" in name.upper():
-                        vals['music_trio'] = True
-                    if "Özel" in name:
-                        vals['music_other'] = True
-                        vals['music_other_details'] = "Custom Live Music package"
+                if "PERKÜSYON" in name.upper():
+                    vals['music_percussion'] = True
+                if "TRIO" in name.upper():
+                    vals['music_trio'] = True
+                if "Özel" in name:
+                    vals['music_other'] = True
+                    vals['music_other_details'] = "Custom Live Music package"
 
                 if name.upper() == "BARNEY":
                     vals['prehost_barney'] = True
@@ -206,11 +208,12 @@ class ProjectProject(models.Model):
                 if name == "Breakfast Service":
                     vals['prehost_breakfast'] = True
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty)
+                vals['photo_standart'] = True
 
-                if name == "Pasta Show'da Gerçek Pasta":
-                    vals['cake_choice'] = 'real'
-                if name == "Pasta Show'da Şampanya Kulesi":
-                    vals['cake_choice'] = 'champagne'
+                # if name == "Pasta Show'da Gerçek Pasta":
+                #     vals['cake_choice'] = 'real'
+                # if name == "Pasta Show'da Şampanya Kulesi":
+                #     vals['cake_choice'] = 'champagne'
 
             tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
@@ -219,25 +222,25 @@ class ProjectProject(models.Model):
                 'afterparty_service', 'afterparty_shot_service',
                 'afterparty_sushi', 'bar_alcohol_service',
                 'afterparty_dance_show', 'afterparty_fog_laser',
-                'hair_other',
-                'music_live', 'music_percussion',
-                'music_trio',
-
             ]
+
+            ultra_fields = elite_fields
+            ultra_fields.append(['music_live', 'music_percussion',
+                                 'music_trio'])
             if tmpl == 'plus':
                 for f in elite_fields:
                     vals[f] = True
-                if name=='After Party Ultra':
+                if name == 'After Party Ultra':
                     vals['afterparty_ultra'] = True
-                vals['start_end_time']='19:30 - 1:30'
+                vals['start_end_time'] = '19:30 - 1:30'
 
             elif tmpl == 'ultra':
-                for f in elite_fields:
+                for f in ultra_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True
                 vals['start_end_time'] = '19:30 - 2:00'
             else:
-                vals['start_end_time']='19:30 - 23:30'
+                vals['start_end_time'] = '19:30 - 23:30'
 
         demo = self.env['project.demo.form'].create(vals)
         return {

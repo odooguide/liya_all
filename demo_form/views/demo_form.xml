@@ -47,6 +47,7 @@
         <field name="model">project.demo.form</field>
         <field name="arch" type="xml">
             <form string="Demo Form">
+                <header/>
                 <sheet>
                     <h1>
                         <field name="name"/>
@@ -66,10 +67,12 @@
                             <field name="sale_template_id"/>
                             <field name="guest_count"/>
                             <field name="special_notes" widget="html" placeholder="Write your notes in here"/>
-                            <field name="seat_plan" widget="binary"
-                                   filename="seat_plan_name"
+                            <field name="special_notes_preview" widget="html" invisible="1"/>
+                            <field name="special_notes_remaining" widget="html" invisible="1"/>
+                            <field name="confirmed_demo_form_plan" widget="binary"
+                                   filename="confirmed_demo_form_plan_name"
                                    context="{'bin_size': True}"/>
-                            <field name="seat_plan_name" invisible="1"/>
+                            <field name="confirmed_demo_form_plan_name" invisible="1"/>
                         </group>
                     </group>
                     <notebook>
@@ -115,10 +118,10 @@
 
                         <page string="Menu and Bar" name="menu">
                             <div class="o_form_label"
-                 invisible="sale_template_id!=3">
-                Standart mezelere ilave olarak Kayısı Yahnisi,
-                Karides ve Ahtapot soğuk deniz mezeleri de servis edilir.
-            </div>
+                                 invisible="sale_template_id!=3">
+                                Standart mezelere ilave olarak Kayısı Yahnisi,
+                                Karides ve Ahtapot soğuk deniz mezeleri de servis edilir.
+                            </div>
                             <separator string="Menu" colspan="2"/>
                             <group>
                                 <group col="2">
@@ -159,7 +162,7 @@
                                 <group col="2">
                                     <field name="afterparty_service" widget="boolean_toggle"/>
                                     <field name="afterparty_ultra" widget="boolean_toggle"/>
-                                    <field name="afterparty_more_drinks" widget="boolean_toggle"/>
+                                    <!--                                    <field name="afterparty_more_drinks" widget="boolean_toggle"/>-->
                                     <field name="afterparty_shot_service" widget="boolean_toggle"/>
                                     <field name="afterparty_dance_show" widget="boolean_toggle"/>
                                 </group>
@@ -168,11 +171,12 @@
                                     <field name="afterparty_fog_laser" widget="boolean_toggle"/>
 
                                     <field name="afterparty_street_food" widget="boolean_toggle"/>
-                                    <field name="afterparty_bbq_wraps" widget="boolean_toggle"/>
+                                    <field name="afterparty_bbq_wraps" widget="boolean_toggle"
+                                           invisible="afterparty_ultra==False"/>
                                     <field name="afterparty_sushi" widget="boolean_toggle"/>
                                 </group>
 
-                                <field name="afterparty_description" placeholder="Write your bar notes in here"
+                                <field name="afterparty_description" placeholder="Write your after party notes in here"
                                        widget="html" colspan="2" nolabel="1"/>
 
                             </group>
@@ -193,7 +197,7 @@
                                            widget="html" colspan="2" nolabel="1"/>
                                     <separator string="Accommodation" colspan="2"/>
                                     <group col="2">
-                                        <field name="accommodation_hotel"/>
+                                        <field name="accommodation_hotel" invisible="accommodation_service==False"/>
                                         <field name="accommodation_service" widget="boolean_toggle"/>
                                         <field name="accomodation_notes"
                                                placeholder="Write your accommodation notes in here" widget="html"
@@ -231,7 +235,7 @@
                                 <field name="witness_line_ids" nolabel="1">
                                     <list editable="bottom">
                                         <field name="name"/>
-                                        <field name="phone"/>
+                                        <!--                                        <field name="phone"/>-->
                                     </list>
                                 </field>
                             </group>
@@ -252,6 +256,7 @@
                                 <group col="2">
                                     <field name="photo_print_service" widget="boolean_toggle"/>
                                     <field name="photo_drone" widget="boolean_toggle"/>
+                                    <field name="photo_yacht_shoot" widget="boolean_toggle" invisible="sale_template_id.id!=3"/>
                                     <field name="photo_harddisk_delivered"/>
                                 </group>
                             </group>

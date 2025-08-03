@@ -76,7 +76,8 @@ class SaleOrderTemplateTask(models.Model):
     ],
         string='Communication Type',
         default='phone', )
-    event_date=fields.Date(string='Event Date')
+    event_date = fields.Date(string='Event Date')
+
 
 class SaleOrderTemplateScheduleLine(models.Model):
     _name = 'sale.order.template.schedule.line'
@@ -91,6 +92,7 @@ class SaleOrderTemplateScheduleLine(models.Model):
         [('restaurant', 'Restaurant'), ('beach', 'Beach')],
         string="Location Type")
     location_notes = fields.Char(string="Details")
+
 
 class SaleOrderTemplateTransportLine(models.Model):
     _name = 'sale.order.template.transport.line'
@@ -110,5 +112,3 @@ class SaleOrderTemplateTransportLine(models.Model):
         help="Select one or more ports"
     )
     other_port = fields.Char(string="If Other, specify")
-
-

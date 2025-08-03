@@ -1,20 +1,25 @@
 from odoo import api, fields, models, _
 from datetime import date, datetime, timedelta
+from odoo.exceptions import ValidationError
+from lxml import html as lhtml
+from markupsafe import escape as html_escape
+import re
+
 
 class ProjectDemoForm(models.Model):
     _name = 'project.demo.form'
     _description = "Project Demo Form"
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    sale_template_id=fields.Many2one('sale.order.template',string='Event Type')
+    sale_template_id = fields.Many2one('sale.order.template', string='Event Type')
     project_id = fields.Many2one(
         'project.project', string="Project", ondelete='cascade')
     name = fields.Char(
-        string="Reference" ,
+        string="Reference",
         default=lambda self: _('New Demo Form'))
     invitation_owner = fields.Char(string="Invitation Owner")
     invitation_date = fields.Date(string="Invitation Date")
-    duration_days = fields.Char(string="Day",compute='_compute_day')
+    duration_days = fields.Char(string="Day", compute='_compute_day')
     demo_date = fields.Date(string="Demo Date")
     special_notes = fields.Html(string="Special Notes")
 
@@ -90,12 +95,11 @@ class ProjectDemoForm(models.Model):
         string="Appetizers (Meze)",
         help="Select one or more mezzes/appetizers",
     )
-    menu_meze_notes=fields.Html(
+    menu_meze_notes = fields.Html(
         string="Menu Meze Notes",
         sanitize=True,
         help="Provide notes or instructions for the Menu page."
     )
-
 
     # ── Bar page ─────────────────────────────────────────────────────────────
     bar_description = fields.Html(
@@ -112,11 +116,11 @@ class ProjectDemoForm(models.Model):
         help="If no service, should guests purchase their own?"
     )
     bar_raki_brand = fields.Selection([
-        ('mercan',             "Mercan"),
-        ('beylerbeyi_gobek',   "Beylerbeyi Göbek"),
-        ('tekirdag_altin_seri',"Tekirdağ Altın Seri"),
+        ('mercan', "Mercan"),
+        ('beylerbeyi_gobek', "Beylerbeyi Göbek"),
+        ('tekirdag_altin_seri', "Tekirdağ Altın Seri"),
     ], string="Rakı Brand",
-       help="Which brand of rakı will be served?")
+        help="Which brand of rakı will be served?")
 
     # ── After Party page ────────────────────────────────────────────────────
     afterparty_description = fields.Html(
@@ -127,7 +131,7 @@ class ProjectDemoForm(models.Model):
     )
     afterparty_service = fields.Boolean(
         string="After Party",
-        help="Do you want a dedicated After Party?",store=True,
+        help="Do you want a dedicated After Party?", store=True,
     )
     afterparty_ultra = fields.Boolean(
         string="After Party Ultra",
@@ -171,17 +175,17 @@ class ProjectDemoForm(models.Model):
 
     prehost_barney = fields.Boolean(
         string="Barney",
-        help="Include Pre‑Hosting by Barney?" )
+        help="Include Pre‑Hosting by Barney?")
     prehost_fred = fields.Boolean(
         string="Fred",
-        help="Include Pre‑Hosting by Fred?" )
+        help="Include Pre‑Hosting by Fred?")
     prehost_breakfast = fields.Boolean(
         string="Breakfast Service",
-        help="Include breakfast service?" )
+        help="Include breakfast service?")
     prehost_breakfast_count = fields.Integer(
         string="Breakfast Pax",
-        help="If breakfast, how many people?" )
-    prehost_notes=fields.Html(
+        help="If breakfast, how many people?")
+    prehost_notes = fields.Html(
         string="Prehost Notes",
         sanitize=True,
         help="Provide notes or instructions for the Menu page."
@@ -189,10 +193,10 @@ class ProjectDemoForm(models.Model):
 
     accommodation_hotel = fields.Char(
         string="Hotel",
-        help="Name of the hotel for accommodation" )
+        help="Name of the hotel for accommodation")
     accommodation_service = fields.Boolean(
         string="Accommodation Provided",
-        help="Is accommodation provided?" )
+        help="Is accommodation provided?")
 
     accomodation_notes = fields.Html(
         string="Accomodation Notes",
@@ -202,7 +206,7 @@ class ProjectDemoForm(models.Model):
 
     dance_lesson = fields.Boolean(
         string="Dance Lesson",
-        help="Include a dance lesson?" )
+        help="Include a dance lesson?")
 
     dance_lesson_notes = fields.Html(
         string="Dance Lesson Notes",
@@ -213,10 +217,8 @@ class ProjectDemoForm(models.Model):
     hair_description = fields.Html(
         string="Hair & Makeup Notes", sanitize=True,
         help="Instructions or options for hair & makeup")
-    hair_studio_3435 = fields.Boolean(
-        string="Studio 3435 Nişantaşı")
-    hair_garage_caddebostan = fields.Boolean(
-        string="Garage Caddebostan")
+    hair_studio_3435 = fields.Boolean(string="Studio 3435 Nişantaşı")
+    hair_garage_caddebostan = fields.Boolean(string="Garage Caddebostan")
     hair_other = fields.Boolean(string="Other")
     hair_other_company = fields.Char(string="Company")
     hair_other_responsible = fields.Char(string="Responsible")
@@ -231,15 +233,18 @@ class ProjectDemoForm(models.Model):
         string="Wedding Witnesses")
 
     # Photography
-    photo_description = fields.Html(
-        string="Photography Notes", sanitize=True)
+    photo_description = fields.Html(string="Photography Notes", sanitize=True)
     photo_standard = fields.Boolean(string="Standard Photo Service")
     photo_video_plus = fields.Boolean(string="Photo & Video Plus")
     photo_homesession = fields.Boolean(string="Home Session")
     photo_homesession_address = fields.Char(string="Address")
     photo_print_service = fields.Boolean(string="Photo Print Service")
     photo_drone = fields.Boolean(string="Drone Camera")
-    photo_harddisk_delivered = fields.Selection([('delivered','Delivered'),('later','Deliver Later')], string="Hard Disk 1TB")
+    photo_harddisk_delivered = fields.Selection(
+        [('delivered', 'Delivered'),
+        ('later', 'Deliver Later')],
+        string="Hard Disk 1TB")
+    photo_yacht_shoot = fields.Boolean(string='Yacht Photo Shoot')
     # Music
     music_description = fields.Html(
         string="Music Notes", sanitize=True)
@@ -272,7 +277,7 @@ class ProjectDemoForm(models.Model):
     table_runner_design_ids = fields.Many2many(
         'project.demo.runner.design',
         'rel_form_runner_design',
-        'demo_form_id', 'runner_id' ,
+        'demo_form_id', 'runner_id',
         string="Cloth & Runner Designs")
 
     table_color_ids = fields.Many2many(
@@ -367,27 +372,51 @@ class ProjectDemoForm(models.Model):
     after_90s_2000s_hits = fields.Boolean(string="90’s 2000’s Hits")
     after_turkish_rock = fields.Boolean(string="Turkish Rock")
     after_house_electronic = fields.Boolean(string="House & Electronic")
-    seat_plan = fields.Binary(string="Seat Plan")
-    seat_plan_name = fields.Char(string="Seat Plan Name")
+    confirmed_demo_form_plan = fields.Binary(string="Confirmed Demo Form")
+    confirmed_demo_form_plan_name = fields.Char(string="Confirmed Demo Form Name")
+    local_music = fields.Boolean(string="Local Music during Party")
+    local_music_songs = fields.Html(string="If yes, specify songs")
+    cocktail_request = fields.Html(string="Cocktail Request Musics", sanitize=True)
+    dinner_request = fields.Html(string="Dinner Request Musics", sanitize=True)
+    party_request = fields.Html(string="Party Request Musics", sanitize=True)
+    afterparty_request = fields.Html(string="Afterparty Request Musics", sanitize=True)
+    ban_songs = fields.Html(string="Ban any Songs or Artists", sanitize=True)
+    other_music_notes = fields.Html(string="Other Notes about Music", sanitize=True)
+    special_notes_preview = fields.Html(string="Special Notes Preview", compute='_compute_split_notes')
+    special_notes_remaining = fields.Html(string="Special Notes Remaining", compute='_compute_split_notes')
 
+    @api.depends('special_notes')
+    def _compute_split_notes(self):
+        limit = 150
+        for rec in self:
+            raw_html = rec.special_notes or ''
+            # HTML içinden düz metin çıkar
+            try:
+                doc = lhtml.fromstring(raw_html or "<div/>")
+                notes = doc.text_content().strip()
+            except Exception:
+                # fallback: basit regex ile tag kaldır
+                notes = re.sub(r'<[^>]+>', '', raw_html).strip()
 
-    local_music = fields.Boolean(
-        string="Local Music during Party")
-    local_music_songs = fields.Html(
-        string="If yes, specify songs")
+            if len(notes) <= limit:
+                preview = notes
+                remaining = ''
+            else:
+                preview_candidate = notes[:limit]
+                last_space = preview_candidate.rfind(' ')
+                if last_space > 0:
+                    preview = preview_candidate[:last_space]
+                    remaining = notes[last_space + 1:].lstrip()
+                else:
+                    preview = preview_candidate
+                    remaining = notes[limit:].lstrip()
 
-    cocktail_request = fields.Html(
-        string="Cocktail Request Musics", sanitize=True)
-    dinner_request = fields.Html(
-        string="Dinner Request Musics", sanitize=True)
-    party_request = fields.Html(
-        string="Party Request Musics", sanitize=True)
-    afterparty_request = fields.Html(
-        string="Afterparty Request Musics", sanitize=True)
-    ban_songs = fields.Html(
-        string="Ban any Songs or Artists",sanitize=True)
-    other_music_notes = fields.Html(
-        string="Other Notes about Music",sanitize=True)
+            # HTML alanlara güvenli şekilde ver; satır sonlarını koru
+            preview_html = f"<div>{html_escape(preview).replace(chr(10), '<br/>')}</div>"
+            remaining_html = f"<div>{html_escape(remaining).replace(chr(10), '<br/>')}</div>" if remaining else ''
+
+            rec.special_notes_preview = preview_html
+            rec.special_notes_remaining = remaining_html
 
     @api.model
     def create(self, vals):
@@ -449,7 +478,6 @@ class ProjectDemoForm(models.Model):
                 if lines:
                     last = lines[-1]
                     old_seq = last.sequence
-                    # 1) push the existing last_line to old_seq+1
                     cmds = [(1, last.id, {'sequence': old_seq + 1})]
                     cmds.append((0, 0, {
                         'sequence': old_seq,
@@ -482,18 +510,81 @@ class ProjectDemoForm(models.Model):
                 dt_new = dt + timedelta(minutes=30)
             first.time = dt_new.strftime('%H:%M')
 
-
     def write(self, vals):
+        # 1) Önce veriyi yaz
         res = super().write(vals)
 
-        trigger_fields = {'afterparty_service', 'afterparty_ultra', 'afterparty_dance_show'}
-        if trigger_fields.intersection(vals):
-            self._onchange_start_end_time()
-        trigger_breakfast={'prehost_breakfast'}
-        if trigger_breakfast.intersection(vals):
-            self._onchange_breakfast()
+        for rec in self:
+            if any(f in vals for f in ('afterparty_service', 'afterparty_ultra', 'afterparty_dance_show')):
+                rec._onchange_start_end_time()
+
+            if 'prehost_breakfast' in vals:
+                rec._onchange_breakfast()
+
+            if 'afterparty_ultra' in vals:
+                rec._onchange_afterparty_ultra()
+            if 'afterparty_street_food' in vals:
+                rec._onchange_street_food()
+            if 'afterparty_fog_laser' in vals:
+                rec._onchange_fog_laser()
+            if 'afterparty_bbq_wraps' in vals:
+                rec._onchange_bbq_wraps()
+
         return res
 
+    @api.onchange('afterparty_ultra')
+    def _onchange_afterparty_ultra(self):
+        if self.afterparty_ultra and not self.afterparty_service:
+            self.afterparty_ultra = False
+            return {
+                'warning': {
+                    'title': _("Eksik Paket!"),
+                    'message': _("Önce 'After Party' paketini seçmelisiniz."),
+                }
+            }
 
+    @api.onchange('afterparty_street_food')
+    def _onchange_street_food(self):
+        if self.afterparty_street_food and not self.afterparty_service:
+            self.afterparty_street_food = False
+            return {
+                'warning': {
+                    'title': _("Eksik Paket!"),
+                    'message': _("Sokak lezzetleri için önce 'After Party' paketi seçilmeli."),
+                }
+            }
 
+    @api.onchange('afterparty_fog_laser')
+    def _onchange_fog_laser(self):
+        if self.afterparty_fog_laser and not self.afterparty_service:
+            self.afterparty_fog_laser = False
+            return {
+                'warning': {
+                    'title': _("Eksik Paket!"),
+                    'message': _("Sis + Lazer gösterisi için önce 'After Party' paketi seçilmeli."),
+                }
+            }
 
+    @api.onchange('afterparty_bbq_wraps')
+    def _onchange_bbq_wraps(self):
+        if self.afterparty_bbq_wraps and not (self.afterparty_service and self.afterparty_ultra):
+            self.afterparty_bbq_wraps = False
+            return {
+                'warning': {
+                    'title': _("Eksik Paket!"),
+                    'message': _("Barbekü wraps için hem 'After Party' hem de 'Ultra' paketleri seçilmeli."),
+                }
+            }
+
+    @api.constrains('afterparty_ultra', 'afterparty_street_food', 'afterparty_fog_laser', 'afterparty_bbq_wraps')
+    def _check_afterparty_combinations(self):
+        for rec in self:
+            if rec.afterparty_ultra and not rec.afterparty_service:
+                raise ValidationError(_("Ultra After Party, yalnızca After Party alındığında açılabilir."))
+            if rec.afterparty_street_food and not rec.afterparty_service:
+                raise ValidationError(_("Sokak lezzetleri için önce After Party seçilmelidir."))
+            if rec.afterparty_fog_laser and not rec.afterparty_service:
+                raise ValidationError(_("Sis + Lazer şovu için önce After Party seçilmelidir."))
+            if rec.afterparty_bbq_wraps and not (rec.afterparty_service and rec.afterparty_ultra):
+                raise ValidationError(
+                    _("Barbekü wraps yalnızca After Party ve Ultra birlikte seçildiğinde aktif olabilir."))

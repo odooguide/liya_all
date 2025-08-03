@@ -2,7 +2,7 @@
     "name": "Liya Demo Form",
     "version": "18.0.0.0",
     "category": "Sale",
-    "depends": ['project', 'sale', 'sale_management', 'liya_sale_flow','crm','sale_project'],
+    "depends": ['project', 'sale', 'sale_management', 'liya_sale_flow', 'crm', 'sale_project'],
     "author": "Broadmax",
     'summary': 'Liya Demo Form',
     "description": """
@@ -18,6 +18,7 @@
         "views/project_task_view_inherit.xml",
         "views/many2many_list_views.xml",
         "wizards/sale_order_project_wizard_view.xml",
+        "reports/report_demo_form.xml",
         "security/ir.model.access.csv",
     ],
     "auto_install": False,
