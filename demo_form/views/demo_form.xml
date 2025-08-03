@@ -17,7 +17,8 @@
                         type="object"
                         string="Demo Form"
                         class="oe_stat_button"
-                        icon="fa-files-o"/>
+                        icon="fa-files-o"
+                        invisible="demo_form_count==0"/>
             </xpath>
             <header>
                 <button name="action_create_demo_form"
