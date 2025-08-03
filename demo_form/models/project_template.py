@@ -208,7 +208,7 @@ class ProjectProject(models.Model):
                 if name == "Breakfast Service":
                     vals['prehost_breakfast'] = True
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty)
-                vals['photo_standart'] = True
+                vals['photo_standard'] = True
 
                 # if name == "Pasta Show'da Gerçek Pasta":
                 #     vals['cake_choice'] = 'real'
