@@ -14,6 +14,12 @@ class DemoMenuDessert(models.Model):
 
     name = fields.Char(string="Dessert Name", required=True)
 
+class DemoMenuDessert(models.Model):
+    _name = 'project.demo.menu.dessert.ultra'
+    _description = "Demo Menu Dessert Ultra"
+
+    name = fields.Char(string="Dessert Name", required=True)
+
 
 class DemoMenuMeze(models.Model):
     _name = 'project.demo.menu.meze'

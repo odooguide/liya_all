@@ -120,28 +120,30 @@
                         </page>
 
                         <page string="Menu and Bar" name="menu">
-                            <div class="o_form_label"
-                                 invisible="sale_template_id!=3">
-                                Standart mezelere ilave olarak Kayısı Yahnisi,
-                                Karides ve Ahtapot soğuk deniz mezeleri de servis edilir.
-                            </div>
+
                             <separator string="Menu" colspan="2"/>
                             <group>
                                 <group col="2">
                                     <field name="menu_hot_appetizer" widget="radio"/>
-                                    <field name="menu_hot_appetizer_ultra" widget="radio"
-                                           invisible="sale_template_id != 3"/>
+                                    <field name="menu_hot_appetizer_ultra" widget="boolean_toggle" invisible="sale_template_id != 3"/>
                                 </group>
                                 <group col="2">
                                     <field name="menu_dessert_ids" widget="many2many_checkboxes"/>
+                                    <field name="menu_dessert_ultra_ids" widget="many2many_checkboxes" invisible="sale_template_id!=3"/>
+
                                 </group>
                                 <field name="menu_description" placeholder="Write your menu notes in here" widget="html"
                                        colspan="1" nolabel="1"/>
 
                             </group>
                             <group>
+                                 <div class="o_form_label"
+                                 invisible="sale_template_id!=3">
+                                Standart mezelere ilave olarak Kayısı Yahnisi,
+                                Karides ve Ahtapot soğuk deniz mezeleri de servis edilir.
+                            </div>
                                 <group col="2">
-                                    <field name="menu_meze_ids" widget="many2many_tags"/>
+                                    <field name="menu_meze_ids" widget="many2many_checkboxes"/>
                                 </group>
                                 <field name="menu_meze_notes" placeholder="Write your meze notes in here" widget="html"
                                        colspan="1" nolabel="1"/>

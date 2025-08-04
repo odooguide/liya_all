@@ -39,4 +39,17 @@
             <xpath expr="//button[@name='action_open_share_project_wizard']" position="replace"/>
         </field>
     </record>
+
+    <record id="project_project_form_inherit_so_summary" model="ir.ui.view">
+  <field name="name">project.project.so.summary</field>
+  <field name="model">project.project</field>
+  <field name="inherit_id" ref="project.edit_project"/>
+  <field name="arch" type="xml">
+    <notebook position="inside">
+      <page string="Sale Order Infos">
+        <field name="sale_order_summary" widget="html" readonly="1" colspan="2"/>
+      </page>
+    </notebook>
+  </field>
+</record>
 </odoo>

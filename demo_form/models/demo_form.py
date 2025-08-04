@@ -75,16 +75,21 @@ class ProjectDemoForm(models.Model):
         ('lasagna_meat', "Lasagna (Meat)"),
         ('lasagna_vegan', "Lasagna (Vegan)"),
     ], string="Hot Appetizer")
-    menu_hot_appetizer_ultra = fields.Selection([
-        ('shrimpt', "Shrimp"),
-        ('lasagna_vegan', "Lasagna (Vegan)"),
-    ], string="Hot Appetizer Ultra")
+    menu_hot_appetizer_ultra = fields.Boolean(string='Rocket Shrimp')
     menu_dessert_ids = fields.Many2many(
         'project.demo.menu.dessert',
         'demo_form_dessert_rel',
         'form_id',
         'dessert_id',
         string="Dessert Choices",
+        help="Select one or more dessert options",
+    )
+    menu_dessert_ultra_ids = fields.Many2many(
+        'project.demo.menu.dessert.ultra',
+        'demo_form_dessert_utlra_rel',
+        'form_id',
+        'dessert_id',
+        string="Ultra Dessert Choices",
         help="Select one or more dessert options",
     )
     menu_meze_ids = fields.Many2many(
@@ -440,6 +445,7 @@ class ProjectDemoForm(models.Model):
 
     def _onchange_start_end_time(self):
         for rec in self:
+            # remove existing related lines
             to_remove = rec.schedule_line_ids.filtered(
                 lambda l: l.event in ('After Party Ultra', 'After Party', 'Dance Show')
             )
@@ -452,12 +458,7 @@ class ProjectDemoForm(models.Model):
             if to_remove_transport:
                 rec.transport_line_ids = [(3, l.id) for l in to_remove_transport]
 
-            # ---- transport_line_ids: önceki varsa sil (label ile eşleşen) ---
-            to_remove_t = rec.transport_line_ids.filtered(
-                lambda l: l.label in ('After Party Ultra', 'After Party', 'Dance Show')
-            )
-
-            # hesaplama: start / end
+            # compute start / end
             start = '19:30'
             if rec.afterparty_ultra:
                 base_end = '02:00'
@@ -485,52 +486,58 @@ class ProjectDemoForm(models.Model):
             elif rec.afterparty_dance_show:
                 choice = 'Dance Show'
 
+            try:
+                after_end_dt = datetime.strptime(end, '%H:%M')
+            except ValueError:
+                after_end_dt = None
+
             if choice:
-                lines = rec.schedule_line_ids.sorted('sequence')
-                if lines:
-                    last = lines[-1]
-                    old_seq = last.sequence
-                    cmds = [(1, last.id, {'sequence': old_seq + 1})]
-                    cmds.append((0, 0, {
+                schedule_cmds = []
+                existing_s = rec.schedule_line_ids.sorted('sequence')
+                if existing_s:
+                    last_s = existing_s[-1]
+                    old_seq = last_s.sequence
+                    if after_end_dt:
+                        new_last_time = (after_end_dt + timedelta(minutes=30)).strftime('%H:%M')
+                    else:
+                        new_last_time = last_s.time
+                    schedule_cmds.append((1, last_s.id, {'sequence': old_seq + 1, 'time': new_last_time}))
+                    schedule_cmds.append((0, 0, {
                         'sequence': old_seq,
                         'event': choice,
                         'time': end,
                     }))
                 else:
-                    cmds = [(0, 0, {
+                    schedule_cmds.append((0, 0, {
                         'sequence': 1,
                         'event': choice,
-                        'time': f'23:30 - {end}',
-                    })]
-                rec.schedule_line_ids = cmds
+                        'time': end,
+                    }))
+                    if after_end_dt:
+                        later_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
+                    else:
+                        later_time = end
+                    schedule_cmds.append((0, 0, {
+                        'sequence': 2,
+                        'event': f"{choice} Follow-up",
+                        'time': later_time,
+                    }))
+                rec.schedule_line_ids = schedule_cmds
 
                 transport_cmds = []
-                if to_remove_t:
-                    transport_cmds.extend([(3, l.id) for l in to_remove_t])
-
-                existing_t = (rec.transport_line_ids - to_remove_t).sorted('sequence')
-
-                try:
-                    after_end_dt = datetime.strptime(end, '%H:%M')
-                except ValueError:
-                    after_end_dt = None
-
+                existing_t = rec.transport_line_ids.sorted('sequence')
                 if existing_t:
                     last_t = existing_t[-1]
                     old_t_seq = last_t.sequence
-
                     if after_end_dt:
                         new_last_time = (after_end_dt + timedelta(minutes=30)).strftime('%H:%M')
                     else:
                         new_last_time = last_t.time
-
                     transport_cmds.append((1, last_t.id, {'sequence': old_t_seq + 1, 'time': new_last_time}))
-
                     transport_cmds.append((0, 0, {
                         'sequence': old_t_seq,
                         'label': choice,
                         'time': end,
-
                     }))
                 else:
                     transport_cmds.append((0, 0, {
@@ -539,7 +546,7 @@ class ProjectDemoForm(models.Model):
                         'time': end,
                     }))
                     if after_end_dt:
-                        later_time = (after_end_dt + timedelta(minutes=30)).strftime('%H:%M')
+                        later_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
                     else:
                         later_time = end
                     transport_cmds.append((0, 0, {
@@ -547,7 +554,6 @@ class ProjectDemoForm(models.Model):
                         'label': f"{choice} Follow-up",
                         'time': later_time,
                     }))
-
                 rec.transport_line_ids = transport_cmds
 
     def _onchange_breakfast(self):

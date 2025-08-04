@@ -27,6 +27,64 @@ class ProjectProject(models.Model):
 
     seat_plan = fields.Binary(string="Seat Plan")
     seat_plan_name = fields.Char(string="Seat Plan Name")
+    sale_order_summary = fields.Html(
+        string="Sale Order Summary",
+        compute='_compute_sale_order_summary',
+        sanitize=False,
+        readonly=True,
+        help="Sale Order'dan (indirim satırları hariç) çekilen özet bilgi."
+    )
+
+    def _is_discount_line(self, line):
+        name = (line.name or '').lower()
+        if line.price_unit and line.price_unit < 0:
+            return True
+        if 'discount' in name or 'indirim' in name:
+            return True
+        return False
+
+    @api.depends('reinvoiced_sale_order_id')
+    def _compute_sale_order_summary(self):
+        for rec in self:
+            so = rec.reinvoiced_sale_order_id
+            if not so:
+                rec.sale_order_summary = False
+                continue
+
+            lines = so.order_line.filtered(lambda l: not rec._is_discount_line(l))
+            html = f"""
+                   <h4>Sale Order: {so.name or ''}</h4>
+                   <p><strong>Customer:</strong> {so.partner_id.display_name or ''}</p>
+                   <p><strong>Salesperson:</strong> {so.user_id.display_name or ''}</p>
+                   <p><strong>Order Date:</strong> {fields.Date.to_string(so.date_order)}</p>
+                   <hr/>
+                   <table style="width:100%; border-collapse:collapse;">
+                     <thead>
+                       <tr>
+                         <th style="border:1px solid #ccc;padding:4px;">Ürün</th>
+                         <th style="border:1px solid #ccc;padding:4px;">Açıklama</th>
+                         <th style="border:1px solid #ccc;padding:4px;">Adet</th>
+                         <th style="border:1px solid #ccc;padding:4px;">Birim</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+               """
+            for l in lines:
+                prod = l.product_id.display_name or ''
+                desc = l.name if l.name != prod else ''
+                qty = l.product_uom_qty or 0
+                uom = l.product_uom.display_name or ''
+                html += f"""
+                     <tr>
+                       <td style="border:1px solid #ccc;padding:4px;">{prod}</td>
+                       <td style="border:1px solid #ccc;padding:4px;">{desc}</td>
+                       <td style="border:1px solid #ccc;padding:4px;text-align:center;">{qty}</td>
+                       <td style="border:1px solid #ccc;padding:4px;">{uom}</td>
+                     </tr>
+                   """
+            html += "</tbody></table>"
+
+            rec.sale_order_summary = html
 
     @api.onchange('confirmed_demo_form_plan')
     def _onchange_confirmed_contract_security(self):

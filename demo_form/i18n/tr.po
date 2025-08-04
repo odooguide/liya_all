@@ -125,7 +125,7 @@ msgstr "Afterparty İstenen Müzikler"
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__bar_alcohol_service
 msgid "Alcoholic Beverage Service"
-msgstr "Daha Fazla İçki Servisi"
+msgstr "Yabancı İçki Servisi"
 
 #. module: demo_form
 #: model:ir.model.fields,help:demo_form.field_project_demo_form__other_description
@@ -1637,11 +1637,6 @@ msgstr "E-Posta Gönder"
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__afterparty_shot_service
 msgid "Shot Service"
 msgstr "Shot Servisi"
-
-#. module: demo_form
-#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__menu_hot_appetizer_ultra__shrimpt
-msgid "Shrimp"
-msgstr "Karides"
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
