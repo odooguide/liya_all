@@ -533,6 +533,7 @@ class ProjectDemoForm(models.Model):
                         new_last_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
                     else:
                         new_last_time = last_t.time
+                    transport_cmds.append((1, last_t.id, {'sequence': old_t_seq + 1, 'time': new_last_time}))
                     transport_cmds.append((0, 0, {
                         'sequence': old_t_seq,
                         'label': choice,
