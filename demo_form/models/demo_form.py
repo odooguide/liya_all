@@ -498,7 +498,7 @@ class ProjectDemoForm(models.Model):
                     last_s = existing_s[-1]
                     old_seq = last_s.sequence
                     if after_end_dt:
-                        new_last_time = (after_end_dt + timedelta(minutes=30)).strftime('%H:%M')
+                        new_last_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
                     else:
                         new_last_time = last_s.time
                     schedule_cmds.append((1, last_s.id, {'sequence': old_seq + 1, 'time': new_last_time}))
@@ -530,7 +530,7 @@ class ProjectDemoForm(models.Model):
                     last_t = existing_t[-1]
                     old_t_seq = last_t.sequence
                     if after_end_dt:
-                        new_last_time = (after_end_dt + timedelta(minutes=30)).strftime('%H:%M')
+                        new_last_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
                     else:
                         new_last_time = last_t.time
                     transport_cmds.append((1, last_t.id, {'sequence': old_t_seq + 1, 'time': new_last_time}))

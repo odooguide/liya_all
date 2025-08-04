@@ -53,7 +53,7 @@ class ProjectProject(models.Model):
 
             lines = so.order_line.filtered(lambda l: not rec._is_discount_line(l))
             html = f"""
-                   <h4>Sale Order: {so.name or ''}</h4>
+                   
                    <p><strong>Customer:</strong> {so.partner_id.display_name or ''}</p>
                    <p><strong>Salesperson:</strong> {so.user_id.display_name or ''}</p>
                    <p><strong>Order Date:</strong> {fields.Date.to_string(so.date_order)}</p>
@@ -285,6 +285,15 @@ class ProjectProject(models.Model):
             ultra_extra = ['music_live', 'music_percussion', 'music_trio']
             ultra_fields = elite_fields + ultra_extra
             if tmpl == 'plus':
+                date_str = vals.get('invitation_date') or vals.get('demo_date')
+                if date_str:
+                    dt = fields.Date.from_string(date_str)
+                    # Monday=0, Tuesday=1, Wednesday=2
+                    if dt.weekday() in (2, 3, 4, 5):
+                        vals['hair_studio_3435'] = True
+                    else:
+                        vals['hair_garage_caddebostan'] = True
+
                 for f in elite_fields:
                     vals[f] = True
                 if name == 'After Party Ultra':
@@ -292,6 +301,14 @@ class ProjectProject(models.Model):
                 vals['start_end_time'] = '19:30 - 1:30'
 
             elif tmpl == 'ultra':
+                date_str = vals.get('invitation_date') or vals.get('demo_date')
+                if date_str:
+                    dt = fields.Date.from_string(date_str)
+                    # Monday=0, Tuesday=1, Wednesday=2
+                    if dt.weekday() in (2, 3, 4, 5):
+                        vals['hair_studio_3435'] = True
+                    else:
+                        vals['hair_garage_caddebostan'] = True
                 for f in ultra_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True
