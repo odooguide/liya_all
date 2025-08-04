@@ -42,7 +42,7 @@
               name="Menu Desserts Ultra"
               parent="menu_demo_form_fields"
               action="action_project_demo_menu_dessert_ultra"
-              sequence="20"/>
+              sequence="25"/>
 
     <!-- Demo Menu Meze -->
     <record id="action_project_demo_menu_meze" model="ir.actions.act_window">
