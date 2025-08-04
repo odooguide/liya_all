@@ -24,7 +24,7 @@
                 <button name="action_create_demo_form"
                         type="object"
                         string="Create Demo Form"
-                        invisible="demo_form_count>0"/>
+                        invisible="demo_form_count>0 or next_event_id==False"/>
             </header>
         </field>
     </record>
