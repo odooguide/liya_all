@@ -505,13 +505,13 @@ class ProjectDemoForm(models.Model):
                     schedule_cmds.append((0, 0, {
                         'sequence': old_seq,
                         'event': choice,
-                        'time': end,
+                        'time': f'23:30 - {end}',
                     }))
                 else:
                     schedule_cmds.append((0, 0, {
                         'sequence': 1,
                         'event': choice,
-                        'time': end,
+                        'time': f'23:30 - {end}',
                     }))
                     if after_end_dt:
                         later_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
@@ -520,41 +520,14 @@ class ProjectDemoForm(models.Model):
                     schedule_cmds.append((0, 0, {
                         'sequence': 2,
                         'event': f"{choice} Follow-up",
-                        'time': later_time,
+                        'time': f'23:30 - {later_time}',
                     }))
                 rec.schedule_line_ids = schedule_cmds
 
-                transport_cmds = []
                 existing_t = rec.transport_line_ids.sorted('sequence')
                 if existing_t:
                     last_t = existing_t[-1]
-                    old_t_seq = last_t.sequence
-                    if after_end_dt:
-                        new_last_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
-                    else:
-                        new_last_time = last_t.time
-                    transport_cmds.append((1, last_t.id, {'sequence': old_t_seq + 1, 'time': new_last_time}))
-                    transport_cmds.append((0, 0, {
-                        'sequence': old_t_seq,
-                        'label': choice,
-                        'time': end,
-                    }))
-                else:
-                    transport_cmds.append((0, 0, {
-                        'sequence': 1,
-                        'label': choice,
-                        'time': end,
-                    }))
-                    if after_end_dt:
-                        later_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
-                    else:
-                        later_time = end
-                    transport_cmds.append((0, 0, {
-                        'sequence': 2,
-                        'label': f"{choice} Follow-up",
-                        'time': later_time,
-                    }))
-                rec.transport_line_ids = transport_cmds
+                    rec.transport_line_ids = [(1, last_t.id, {'time': end})]
 
     def _onchange_breakfast(self):
         for rec in self:
