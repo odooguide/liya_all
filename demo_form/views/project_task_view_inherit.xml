@@ -24,4 +24,19 @@
 
         </field>
     </record>
+
+   <record id="action_project_task_pivot" model="ir.actions.act_window">
+    <field name="name">Görevler Pivot</field>
+    <field name="res_model">project.task</field>
+    <field name="view_mode">pivot</field>
+    <field name="target">current</field>
+</record>
+
+<menuitem id="menu_project_task_pivot"
+          name="Görevler Pivot"
+          parent="project.menu_project_report"
+          action="action_project_task_pivot"
+          sequence="20"
+          groups="base.group_system"/>
+
 </odoo>

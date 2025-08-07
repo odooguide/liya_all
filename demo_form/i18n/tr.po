@@ -34,7 +34,7 @@ msgstr ""
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__accommodation_service
 msgid "Accommodation Provided"
-msgstr "Konaklama Sağlandı mı?"
+msgstr "Konaklama"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__accomodation_notes
@@ -69,7 +69,7 @@ msgstr ""
 #. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__ceremony__actual
 msgid "Actual"
-msgstr ""
+msgstr "Nikah"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__afterparty_more_drinks
@@ -279,12 +279,12 @@ msgstr "Nikah Tagi"
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__table_tag_ids
 #: model:ir.ui.menu,name:demo_form.menu_project_demo_ceremony_tag
 msgid "Ceremony Tags"
-msgstr "Seramoni Etkieti"
+msgstr "Nikah Tagi"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__ceremony
 msgid "Ceremony Type"
-msgstr "Seramoni Türü"
+msgstr "Nikah Türü"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_table_charger__name
@@ -319,12 +319,12 @@ msgstr "Kokteyl İstek Şarkılar"
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_table_color__name
 msgid "Color Choice"
-msgstr "Renk Tercihi"
+msgstr "Masa Örtüsü Renk Tercihi"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__table_color_ids
 msgid "Color Choices"
-msgstr "Renk Tercihleri"
+msgstr "Masa Örtüsü Renk Tercihleri"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_task__communication_type
@@ -506,7 +506,7 @@ msgstr "Mezeler"
 #. module: demo_form
 #: model:ir.actions.act_window,name:demo_form.action_project_demo_menu_meze
 msgid "Demo Menu Appetizers"
-msgstr "Sıcak Yemekler"
+msgstr "Mezeler"
 
 #. module: demo_form
 #: model:ir.model,name:demo_form.model_project_demo_menu_dessert
@@ -1670,7 +1670,7 @@ msgstr "Aşama"
 #. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__ceremony__staged
 msgid "Staged"
-msgstr ""
+msgstr "Mizansen"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__photo_standard
@@ -1735,13 +1735,13 @@ msgstr "Supla"
 #. module: demo_form
 #: model:ir.model,name:demo_form.model_project_demo_table_color
 msgid "Table Color Option"
-msgstr "Renk"
+msgstr "Masa Rengi"
 
 #. module: demo_form
 #: model:ir.actions.act_window,name:demo_form.action_project_demo_table_color
 #: model:ir.ui.menu,name:demo_form.menu_project_demo_table_color
 msgid "Table Colors"
-msgstr "Renk"
+msgstr "Masa Renkleri"
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form

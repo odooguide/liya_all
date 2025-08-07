@@ -34,6 +34,105 @@ class ProjectProject(models.Model):
         readonly=True,
         help="Sale Order'dan (indirim satırları hariç) çekilen özet bilgi."
     )
+    dj_person=fields.Selection([('engin','DJ: Engin Sadiki'),('fatih','DJ: Fatih Aşçı'),('other','Diğer')], string='DJ')
+    crm_partner_id = fields.Many2one(
+        'res.partner',
+        string='Müşteri',
+        compute='_compute_crm_sale_fields',
+        store=True,
+        readonly=True
+    )
+    crm_second_contact = fields.Char(
+        string='İkincil Kontak',
+        compute='_compute_crm_sale_fields',
+        store=True,
+        readonly=True
+    )
+    crm_request_date = fields.Date(
+        string='Talep Tarihi',
+        compute='_compute_crm_sale_fields',
+        store=True,
+        readonly=True
+    )
+    crm_yabanci_turk = fields.Many2one(
+        'foreign.local',
+        string='Yabancı/Türk',
+        compute='_compute_crm_sale_fields',
+        store=True,
+        readonly=True
+    )
+
+    so_people_count = fields.Integer(
+        string='Kişi Sayısı',
+        compute='_compute_crm_sale_fields',
+        store=True,
+        readonly=True
+    )
+    so_sale_template_id = fields.Many2one(
+        'sale.order.template',
+        string='Satış Şablonu',
+        compute='_compute_crm_sale_fields',
+        store=True,
+        readonly=True
+    )
+    so_coordinator_ids = fields.Many2many(
+        'res.partner',
+        string='Koordinatörler',
+        compute='_compute_crm_sale_fields',
+        store=True,
+        readonly=True
+    )
+    demo_state = fields.Selection([
+        ('no_date', 'Demo Tarihi Atanmamış'),
+        ('completed', 'Demo Tamamlandı'),
+        ('planned', 'Demo Planlandı'),
+    ], string='Demo Durumu', compute='_compute_demo_state', store=True)
+
+    @api.depends('reinvoiced_sale_order_id',
+                 'reinvoiced_sale_order_id.opportunity_id',
+                 'reinvoiced_sale_order_id.opportunity_id.partner_id',
+                 'reinvoiced_sale_order_id.opportunity_id.second_contact',
+                 'reinvoiced_sale_order_id.opportunity_id.request_date',
+                 'reinvoiced_sale_order_id.opportunity_id.yabanci_turk',
+                 'reinvoiced_sale_order_id.people_count',
+                 'reinvoiced_sale_order_id.sale_order_template_id',
+                 'reinvoiced_sale_order_id.coordinator_ids')
+    def _compute_crm_sale_fields(self):
+        for rec in self:
+            so = rec.reinvoiced_sale_order_id
+            if so:
+                opp = so.opportunity_id
+                rec.crm_partner_id = opp.partner_id.id or False
+                rec.crm_second_contact = opp.second_contact or False
+                rec.crm_request_date = opp.request_date or False
+                rec.crm_yabanci_turk = opp.yabanci_turk.id or False
+                rec.so_people_count = so.people_count or 0
+                rec.so_sale_template_id = so.sale_order_template_id.id or False
+                rec.so_coordinator_ids = [(6, 0, so.coordinator_ids.ids)]
+            else:
+                rec.crm_partner_id = False
+                rec.crm_second_contact = False
+                rec.crm_request_date = False
+                rec.crm_yabanci_turk = False
+                rec.so_people_count = 0
+                rec.so_sale_template_id = False
+                rec.so_coordinator_ids = [(6, 0, [])]
+
+    @api.depends('event_ids.start')
+    def _compute_demo_state(self):
+        today = fields.Date.today()
+        for rec in self:
+            dates = rec.event_ids.mapped('start')
+            if not dates:
+                rec.demo_state = 'no_date'
+            else:
+                earliest = min(dates)
+                dt_obj = fields.Datetime.from_string(earliest)
+                date_val = dt_obj.date() if dt_obj else None
+                if date_val and date_val <= today:
+                    rec.demo_state = 'completed'
+                else:
+                    rec.demo_state = 'planned'
 
     def _is_discount_line(self, line):
         name = (line.name or '').lower()
@@ -50,38 +149,80 @@ class ProjectProject(models.Model):
             if not so:
                 rec.sale_order_summary = False
                 continue
+            opportunity = so.opportunity_id
+
+            summary_pairs = [
+                ('Müşteri', opportunity.name or ''),
+                ('Koordinator', so.coordinator_ids.display_name or ''),
+                ('Etkinlik Tarihi', so.user_id.display_name or ''),
+                ('Kişi Sayısı', so.people_count or ''),
+                ('Sözleşme Tarihi', so.contract_date or ''),
+                ('Birincil Kontak', opportunity.partner_id.name or ''),
+                ('Birincil Mail', opportunity.email_from or ''),
+                ('Birincil Telefon', opportunity.phone or ''),
+                ('Birincil Meslek', opportunity.function or ''),
+                ('İkincil Mail', opportunity.second_mail or ''),
+                ('İkincil Telefon', opportunity.second_phone or ''),
+                ('İkincil Meslek', opportunity.second_job_position or ''),
+                ('İkincil Ülke', opportunity.second_country.name or ''),
+                ('Yabancı/Türk', opportunity.yabanci_turk.name or ''),
+                ('Kaynak', opportunity.source_id.name or ''),
+                ('Kaynak Kategorisi', opportunity.wedding_place.name or ''),
+            ]
+
+            # Başlangıçta tabloyu açıyoruz
+            html = """
+            <table style="width:100%; border-collapse:collapse; margin-bottom:10px;">
+              <tbody>
+            """
+            for i in range(0, len(summary_pairs), 2):
+                key1, val1 = summary_pairs[i]
+                if i + 1 < len(summary_pairs):
+                    key2, val2 = summary_pairs[i + 1]
+                else:
+                    key2, val2 = '', ''
+                html += f"""
+                <tr>
+                  <td style="padding:4px; vertical-align:top;">
+                    <strong>{key1}:</strong> {val1}
+                  </td>
+                  <td style="padding:4px; vertical-align:top;">
+                    {'<strong>%s:</strong> %s' % (key2, val2) if key2 else ''}
+                  </td>
+                </tr>
+                """
+            html += """
+              </tbody>
+            </table>
+            <hr style="margin:10px 0;"/>
+            """
 
             lines = so.order_line.filtered(lambda l: not rec._is_discount_line(l))
-            html = f"""
-                   
-                   <p><strong>Customer:</strong> {so.partner_id.display_name or ''}</p>
-                   <p><strong>Salesperson:</strong> {so.user_id.display_name or ''}</p>
-                   <p><strong>Order Date:</strong> {fields.Date.to_string(so.date_order)}</p>
-                   <hr/>
-                   <table style="width:100%; border-collapse:collapse;">
-                     <thead>
-                       <tr>
-                         <th style="border:1px solid #ccc;padding:4px;">Ürün</th>
-                         <th style="border:1px solid #ccc;padding:4px;">Açıklama</th>
-                         <th style="border:1px solid #ccc;padding:4px;">Adet</th>
-                         <th style="border:1px solid #ccc;padding:4px;">Birim</th>
-                       </tr>
-                     </thead>
-                     <tbody>
-               """
+            html += """
+            <table style="width:100%; border-collapse:collapse;">
+              <thead>
+                <tr>
+                  <th style="border:1px solid #ccc;padding:4px;">Ürün</th>
+                  <th style="border:1px solid #ccc;padding:4px;">Açıklama</th>
+                  <th style="border:1px solid #ccc;padding:4px;">Adet</th>
+                  <th style="border:1px solid #ccc;padding:4px;">Birim</th>
+                </tr>
+              </thead>
+              <tbody>
+            """
             for l in lines:
                 prod = l.product_id.display_name or ''
                 desc = l.name if l.name != prod else ''
                 qty = l.product_uom_qty or 0
                 uom = l.product_uom.display_name or ''
                 html += f"""
-                     <tr>
-                       <td style="border:1px solid #ccc;padding:4px;">{prod}</td>
-                       <td style="border:1px solid #ccc;padding:4px;">{desc}</td>
-                       <td style="border:1px solid #ccc;padding:4px;text-align:center;">{qty}</td>
-                       <td style="border:1px solid #ccc;padding:4px;">{uom}</td>
-                     </tr>
-                   """
+                <tr>
+                  <td style="border:1px solid #ccc;padding:4px;">{prod}</td>
+                  <td style="border:1px solid #ccc;padding:4px;">{desc}</td>
+                  <td style="border:1px solid #ccc;padding:4px;text-align:center;">{qty}</td>
+                  <td style="border:1px solid #ccc;padding:4px;">{uom}</td>
+                </tr>
+                """
             html += "</tbody></table>"
 
             rec.sale_order_summary = html
@@ -91,8 +232,7 @@ class ProjectProject(models.Model):
         for rec in self:
             origin = rec._origin
             if origin.confirmed_demo_form_plan and not self.env.user.has_group('base.group_system'):
-                rec.confirmed_demo_form_plan = origin.confirmed_demo_form_plan
-                rec.confirmed_demo_form_plan_name = origin.confirmed_demo_form_plan_name
+                rec.seat_plan = origin.seat_plan
                 raise UserError(
                     _('Only administrators can modify or delete the Confirmed Demo Form once uploaded.')
                 )
@@ -123,7 +263,6 @@ class ProjectProject(models.Model):
     def _compute_next_event(self):
         now = fields.Datetime.now()
         for rec in self:
-            # Gelecekteki etkinlikleri filtrele ve sıralı al
             future = rec.event_ids.filtered(lambda e: e.start and e.start >= now)
             future = future.sorted(key='start')
             if future:
@@ -217,8 +356,7 @@ class ProjectProject(models.Model):
                     vals['photo_video_plus'] = True
                 if name == "Drone Kamera":
                     vals['photo_drone'] = True
-                if name == "Photo Print Service":
-                    vals['photo_print_service'] = True
+
                 if name == "Hard Disk 1TB Delivered":
                     vals['photo_harddisk_delivered'] = True
                 if name == "Will Deliver Later":
@@ -251,6 +389,10 @@ class ProjectProject(models.Model):
 
                 if "Canlı Müzik" in name:
                     vals['music_live'] = True
+                if "Pasta Show'da Gerçek Pasta" in name:
+                    vals['cake_real'] = True
+                if "Pasta Show'da Şampanya Kulesi" in name:
+                    vals['cake_champagne_tower'] = True
                 if "PERKÜSYON" in name.upper():
                     vals['music_percussion'] = True
                 if "TRIO" in name.upper():
@@ -263,6 +405,7 @@ class ProjectProject(models.Model):
                     vals['prehost_barney'] = True
                 if name.upper() == "FRED":
                     vals['prehost_fred'] = True
+
                 if name == "Breakfast Service":
                     vals['prehost_breakfast'] = True
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty)
@@ -276,7 +419,6 @@ class ProjectProject(models.Model):
             tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
                 'photo_video_plus', 'photo_drone',
-                'photo_print_service',
                 'afterparty_service', 'afterparty_shot_service',
                 'afterparty_sushi',
                  'afterparty_fog_laser',

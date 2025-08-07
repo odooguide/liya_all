@@ -1,5 +1,5 @@
 from odoo import fields, api, models, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError,UserError
 
 
 class ProjectTask(models.Model):
@@ -59,3 +59,26 @@ class ProjectTask(models.Model):
                     '“Demo Randevu Oluşturma” görevini "Tamamlandı" durumuna getirebilmek için '
                     'Demo tarihi belirlenmelidir.'
                 ))
+
+    def write(self, vals):
+        if 'stage_id' in vals:
+            special_users = self.env['res.users'].sudo().search([
+                ('name', 'in', ['Gizem Coşkuner', 'Metin Can Çil'])
+            ]).ids
+            for rec in self:
+                uid = self.env.uid
+                if uid != rec.user_id.id and uid not in special_users:
+                    raise UserError("Bu aşamayı değiştirmeye yetkiniz yok.")
+
+        res = super(ProjectTask, self).write(vals)
+
+        if 'stage_id' in vals:
+            done_names = ['done', 'tamamlandı']
+            canceled_names = ['cancel', 'canceled', 'iptal']
+            for rec in self:
+                name = (rec.stage_id.name or '').strip().lower()
+                if name in done_names:
+                    rec.state = '1_done'
+                elif name in canceled_names:
+                    rec.state = '1_canceled'
+        return res

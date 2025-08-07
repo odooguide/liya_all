@@ -467,6 +467,13 @@ class CrmLead(models.Model):
 
         return True
 
+    def action_view_quotations(self):
+        self.ensure_one()
+        return self.env.ref('liya_sale_flow.action_sale_order_quotations_by_lead').read()[0]
+
+    def action_view_orders(self):
+        self.ensure_one()
+        return self.env.ref('liya_sale_flow.action_sale_order_orders_by_lead').read()[0]
 class ForeignLocal(models.Model):
     _name = 'foreign.local'
 

@@ -36,13 +36,6 @@ class ProjectDemoForm(models.Model):
         string="Ceremony Type")
     start_end_time = fields.Char(string="Start-End Time")
 
-    schedule_line_ids = fields.One2many(
-        'project.demo.schedule.line', 'demo_form_id',
-        string="Schedule")
-    transport_line_ids = fields.One2many(
-        'project.demo.transport.line', 'demo_form_id',
-        string="Transportation")
-
     # ── Schedule page ─────────────────────────────────────────────────────────
     schedule_description = fields.Html(
         string="Schedule Notes",
@@ -259,6 +252,7 @@ class ProjectDemoForm(models.Model):
     music_dj_fatih = fields.Boolean(string="DJ: Fatih Aşçı")
     music_dj_engin = fields.Boolean(string="DJ: Engin Sadiki")
     music_other = fields.Boolean(string="Other")
+    dj_person = fields.Selection([('engin', 'DJ: Engin Sadiki'), ('fatih', 'DJ: Fatih Aşçı'), ('other', 'Diğer')],string='DJ')
     music_other_details = fields.Char(string="If Other, specify")
 
     # ── Table Decoration page ────────────────────────────────────────────────
@@ -301,6 +295,8 @@ class ProjectDemoForm(models.Model):
         'rel_form_cake_choice',
         'demo_form_id', 'cake_id',
         string="Cake Choices")
+    cake_real=fields.Boolean(string='Real Cake')
+    cake_champagne_tower=fields.Boolean(string='Champagne Tower')
     table_fresh_flowers = fields.Boolean(
         string="Fresh Flowers",
         help="Include fresh flowers?")
@@ -428,6 +424,9 @@ class ProjectDemoForm(models.Model):
         if 'name' in vals and vals.get('name') == _('New Demo Form'):
             vals['name'] = self.env['ir.sequence'].next_by_code(
                 'project.demo.form') or vals['name']
+
+        self._onchange_start_end_time()
+        self._onchange_breakfast()
         return super().create(vals)
 
     @api.depends('invitation_date')
@@ -445,139 +444,65 @@ class ProjectDemoForm(models.Model):
 
     def _onchange_start_end_time(self):
         for rec in self:
-            # remove existing related lines
-            to_remove = rec.schedule_line_ids.filtered(
-                lambda l: l.event in ('After Party Ultra', 'After Party', 'Dance Show')
-            )
-            to_remove_transport = rec.transport_line_ids.filtered(
-                lambda l: l.label in ('After Party Ultra', 'After Party', 'Dance Show')
-            )
-
-            if to_remove:
-                rec.schedule_line_ids = [(3, l.id) for l in to_remove]
-            if to_remove_transport:
-                rec.transport_line_ids = [(3, l.id) for l in to_remove_transport]
-
-            # compute start / end
-            start = '19:30'
             if rec.afterparty_ultra:
-                base_end = '02:00'
+                base_end_dt = datetime.strptime('02:00', '%H:%M')
             elif rec.afterparty_service:
-                base_end = '01:30'
+                base_end_dt = datetime.strptime('01:30', '%H:%M')
             else:
-                base_end = '23:30'
+                base_end_dt = datetime.strptime('23:30', '%H:%M')
 
-            if rec.afterparty_dance_show:
-                try:
-                    dt = datetime.strptime(base_end, '%H:%M') + timedelta(minutes=15)
-                    end = dt.strftime('%H:%M')
-                except ValueError:
-                    end = base_end
+            end_str = base_end_dt.strftime('%H:%M')
+            rec.start_end_time = f'19:30-{end_str}'
+
+
+            after_lines = rec.schedule_line_ids.filtered(lambda l: l.event == 'After Party')
+            if rec.afterparty_ultra or rec.afterparty_service:
+                for line in after_lines:
+                    line.time = f"23:30 - {end_str}"
             else:
-                end = base_end
+                for line in after_lines:
+                    line.time = ''
 
-            rec.start_end_time = f"{start} - {end}"
+            party_lines = rec.schedule_line_ids.filtered(lambda l: l.event == 'Party')
+            if rec.afterparty_ultra or rec.afterparty_service:
+                for line in party_lines:
+                    line.time = '22:30'
+            else:
+                for line in party_lines:
+                    line.time = '22:30 - 23:30'
 
-            choice = False
-            if rec.afterparty_ultra:
-                choice = 'After Party Ultra'
-            elif rec.afterparty_service:
-                choice = 'After Party'
-            elif rec.afterparty_dance_show:
-                choice = 'Dance Show'
+            return_lines = rec.transport_line_ids.filtered(lambda l: l.label == 'After Party Dönüş')
+            if rec.afterparty_ultra or rec.afterparty_service:
+                for t in return_lines:
+                    t.time = end_str
+            else:
+                for t in return_lines:
+                    t.time = ''
 
-            try:
-                after_end_dt = datetime.strptime(end, '%H:%M')
-            except ValueError:
-                after_end_dt = None
-
-            if choice:
-                schedule_cmds = []
-                existing_s = rec.schedule_line_ids.sorted('sequence')
-                if existing_s:
-                    last_s = existing_s[-1]
-                    old_seq = last_s.sequence
-                    if after_end_dt:
-                        new_last_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
-                    else:
-                        new_last_time = last_s.time
-                    schedule_cmds.append((1, last_s.id, {'sequence': old_seq + 1, 'time': new_last_time}))
-                    schedule_cmds.append((0, 0, {
-                        'sequence': old_seq,
-                        'event': choice,
-                        'time': f'23:30 - {end}',
-                    }))
-                else:
-                    schedule_cmds.append((0, 0, {
-                        'sequence': 1,
-                        'event': choice,
-                        'time': f'23:30 - {end}',
-                    }))
-                    if after_end_dt:
-                        later_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
-                    else:
-                        later_time = end
-                    schedule_cmds.append((0, 0, {
-                        'sequence': 2,
-                        'event': f"{choice} Follow-up",
-                        'time': f'23:30 - {later_time}',
-                    }))
-                rec.schedule_line_ids = schedule_cmds
-
-                transport_cmds = []
-                existing_t = rec.transport_line_ids.sorted('sequence')
-                if existing_t:
-                    last_t = existing_t[-1]
-                    old_t_seq = last_t.sequence
-                    if after_end_dt:
-                        new_last_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
-                    else:
-                        new_last_time = last_t.time
-                    transport_cmds.append((1, last_t.id, {'sequence': old_t_seq + 1, 'time': new_last_time}))
-                    transport_cmds.append((0, 0, {
-                        'sequence': old_t_seq,
-                        'label': choice,
-                        'time': end,
-                    }))
-                else:
-                    transport_cmds.append((0, 0, {
-                        'sequence': 1,
-                        'label': choice,
-                        'time': end,
-                    }))
-                    if after_end_dt:
-                        later_time = (after_end_dt + timedelta(minutes=15)).strftime('%H:%M')
-                    else:
-                        later_time = end
-                    transport_cmds.append((0, 0, {
-                        'sequence': 2,
-                        'label': f"{choice} Follow-up",
-                        'time': later_time,
-                    }))
-                rec.transport_line_ids = transport_cmds
-
+            double_lines = rec.transport_line_ids.filtered(lambda l: l.label == 'Çift Dönüş')
+            if rec.afterparty_ultra or rec.afterparty_service:
+                later_str = (base_end_dt + timedelta(minutes=15)).strftime('%H:%M')
+                for t in double_lines:
+                    t.time = later_str
+            else:
+                for t in double_lines:
+                    t.time = '23:45'
     def _onchange_breakfast(self):
         for rec in self:
-            # get the first schedule line
             lines = rec.schedule_line_ids.sorted('sequence')
             transport_lines=rec.transport_line_ids
             if not lines:
                 continue
-            first = lines[0]
             first_transport=transport_lines[0]
             try:
-                dt = datetime.strptime(first.time, '%H:%M')
                 dt_transport=datetime.strptime(first_transport.time,'%H:%M')
             except (ValueError, TypeError):
                 continue
             # subtract or add 30 minutes
             if rec.prehost_breakfast:
-                dt_new = dt - timedelta(minutes=30)
                 dt_new_transport=dt_transport-timedelta(minutes=30)
             else:
-                dt_new = dt + timedelta(minutes=30)
                 dt_new_transport = dt_transport + timedelta(minutes=30)
-            first.time = dt_new.strftime('%H:%M')
             first_transport.time = dt_new_transport.strftime('%H:%M')
 
     def write(self, vals):

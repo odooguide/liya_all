@@ -160,10 +160,34 @@ class SaleOrder(models.Model):
     @api.model_create_multi
     def create(self, vals):
         sale = super().create(vals)
+
+        sinem_user = self.env['res.users'].sudo().search([('name', '=', 'Sinem Kösem Uzun')], limit=1)
+        parisa_user = self.env['res.users'].sudo().search([('name', '=', 'Parisa Mirabi')], limit=1)
+        sinem_tag = self.env['crm.tag'].sudo().search([('name', '=', 'Sinem Kösem Uzun')], limit=1)
+        parisa_tag = self.env['crm.tag'].sudo().search([('name', '=', 'Parisa Mirabi')], limit=1)
+
         if sale.opportunity_id:
             sale_model = self.env['ir.model'].sudo().search(
                 [('model', '=', 'sale.order')], limit=1)
             self._change_opportunity_stage(sale)
+
+            if sale.user_id == sinem_user and parisa_tag in sale.tag_ids:
+                sale.write({
+                    'user_id': parisa_user.id,
+                    'tag_ids': [
+                        (3, parisa_tag.id),
+                        (4, sinem_tag.id),
+                    ],
+                })
+            elif sale.user_id == parisa_user and sinem_tag in sale.tag_ids:
+                sale.write({
+                    'user_id': sinem_user.id,
+                    'tag_ids': [
+                        (3, sinem_tag.id),
+                        (4, parisa_tag.id),
+                    ],
+                })
+
             if sale.team_id.event_team:
 
                 activity_types = self.env['mail.activity.type'].search(

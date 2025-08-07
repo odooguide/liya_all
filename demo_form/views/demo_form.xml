@@ -80,71 +80,75 @@
                         <page string="Schedule and Transportation" name="schedule">
                             <separator string="Schedule Infos" colspan="2"/>
                             <group>
-                                <group>
-                                    <field name="schedule_line_ids" nolabel="1">
-                                        <list editable="bottom">
-                                            <field name="sequence" widget="handle"/>
-                                            <field name="sequence" invisible="1"/>
-                                            <field name="event"/>
-                                            <field name="time"/>
-                                            <field name="location_type"/>
-                                            <field name="location_notes" placeholder="Write your notes in here"/>
-                                        </list>
-                                    </field>
-                                </group>
-                                <group col="1">
-                                    <field name="schedule_description" placeholder="Write your schedule notes in here"
-                                           widget="html" colspan="1" nolabel="1"/>
-                                </group>
+                                <field name="schedule_line_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="sequence" invisible="1"/>
+                                        <field name="event"/>
+                                        <field name="time"/>
+                                        <field name="location_type"/>
+                                        <field name="location_notes" placeholder="Write your notes in here"/>
+                                    </list>
+                                </field>
                             </group>
+                            <group>
+                                <field name="schedule_description"
+                                       widget="html"
+                                       placeholder="Write your schedule notes in here"
+                                       nolabel="1"
+                                       colspan="2"/>
+                            </group>
+
                             <separator string="Transportation Infos" colspan="2"/>
                             <group>
-                                <group>
-                                    <field name="transport_line_ids" nolabel="1">
-                                        <list editable="bottom">
-                                            <field name="sequence" widget="handle"/>
-                                            <field name="sequence" invisible="1"/>
-                                            <field name="label"/>
-                                            <field name="time"/>
-                                            <field name="port_ids" widget="many2many_tags"/>
-                                            <field name="other_port"/>
-                                        </list>
-                                    </field>
-                                </group>
-                                <group col="1">
-                                    <field name="transportation_description"
-                                           placeholder="Write your transportation notes in here" widget="html"
-                                           colspan="1" nolabel="1"/>
-                                </group>
+                                <field name="transport_line_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="sequence" invisible="1"/>
+                                        <field name="label"/>
+                                        <field name="time"/>
+                                        <field name="port_ids" widget="many2many_tags"/>
+                                        <field name="other_port"/>
+                                    </list>
+                                </field>
+                            </group>
+                            <group>
+                                <field name="transportation_description"
+                                       widget="html"
+                                       placeholder="Write your transportation notes in here"
+                                       nolabel="1"
+                                       colspan="2"/>
                             </group>
                         </page>
 
                         <page string="Menu and Bar" name="menu">
-
                             <separator string="Menu" colspan="2"/>
                             <group>
                                 <group col="2">
                                     <field name="menu_hot_appetizer" widget="radio"/>
-                                    <field name="menu_hot_appetizer_ultra" widget="boolean_toggle" invisible="sale_template_id != 3"/>
+                                    <field name="menu_hot_appetizer_ultra" widget="boolean_toggle"
+                                           invisible="sale_template_id != 3"/>
                                 </group>
                                 <group col="2">
                                     <field name="menu_dessert_ids" widget="many2many_checkboxes"/>
-                                    <field name="menu_dessert_ultra_ids" widget="many2many_checkboxes" invisible="sale_template_id!=3"/>
+                                    <field name="menu_dessert_ultra_ids" widget="many2many_checkboxes"
+                                           invisible="sale_template_id!=3"/>
 
                                 </group>
                                 <field name="menu_description" placeholder="Write your menu notes in here" widget="html"
                                        colspan="1" nolabel="1"/>
 
                             </group>
-                            <group>
-                                 <div class="o_form_label"
-                                 invisible="sale_template_id!=3">
-                                Standart mezelere ilave olarak Kayısı Yahnisi,
-                                Karides ve Ahtapot soğuk deniz mezeleri de servis edilir.
-                            </div>
+                            <group string="Mezeler">
+
                                 <group col="2">
                                     <field name="menu_meze_ids" widget="many2many_checkboxes"/>
                                 </group>
+                                <div class="o_form_label"
+                                     invisible="sale_template_id!=3">
+                                    Standart mezelere ilave olarak Kayısı Yahnisi,
+                                    Karides ve Ahtapot soğuk deniz mezeleri de servis edilir.
+                                </div>
                                 <field name="menu_meze_notes" placeholder="Write your meze notes in here" widget="html"
                                        colspan="1" nolabel="1"/>
                             </group>
@@ -252,16 +256,19 @@
                         <page string="Photography" name="photography">
                             <group>
                                 <group col="2">
-                                    <field name="photo_standard" widget="boolean_toggle"/>
+                                    <field name="photo_standard" widget="boolean_toggle"
+                                           invisible="sale_template_id!=3"/>
                                     <field name="photo_video_plus" widget="boolean_toggle"/>
-                                    <field name="photo_homesession" widget="boolean_toggle"/>
-                                    <field name="photo_homesession_address"
-                                           invisible="photo_homesession==False"/>
+                                    <field name="photo_drone" widget="boolean_toggle"/>
+
                                 </group>
                                 <group col="2">
                                     <field name="photo_print_service" widget="boolean_toggle"/>
-                                    <field name="photo_drone" widget="boolean_toggle"/>
-                                    <field name="photo_yacht_shoot" widget="boolean_toggle" invisible="sale_template_id.id!=3"/>
+                                    <field name="photo_homesession" widget="boolean_toggle"/>
+                                    <field name="photo_homesession_address"
+                                           invisible="photo_homesession==False"/>
+                                    <field name="photo_yacht_shoot" widget="boolean_toggle"
+                                           invisible="sale_template_id!=3"/>
                                     <field name="photo_harddisk_delivered"/>
                                 </group>
                             </group>
@@ -271,18 +278,16 @@
                             </group>
                         </page>
                         <page string="Music" name="music">
-
                             <group>
                                 <group col="2">
                                     <field name="music_live" widget="boolean_toggle"/>
                                     <field name="music_trio" widget="boolean_toggle"/>
                                     <field name="music_percussion" widget="boolean_toggle"/>
-                                    <field name="music_dj_fatih" widget="boolean_toggle"/>
+
                                 </group>
                                 <group col="2">
-                                    <field name="music_dj_engin" widget="boolean_toggle"/>
-                                    <field name="music_other" widget="boolean_toggle"/>
-                                    <field name="music_other_details" invisible="music_other==False"/>
+                                    <field name="dj_person"/>
+                                    <field name="music_other_details" invisible="dj_person!='other'"/>
                                 </group>
                             </group>
                             <group>
@@ -290,6 +295,10 @@
                                        widget="html" colspan="2" nolabel="1"/>
                             </group>
 
+
+                        </page>
+
+                        <page string="DJ" name="dj">
 
                             <group string="Significant Songs" col="2">
                                 <field name="entrance_song"/>
@@ -404,6 +413,8 @@
                                     <field name="table_tag_ids"/>
                                     <field name="cake_choice_ids"
                                            widget="many2many_checkboxes"/>
+                                    <field name="cake_real" widget="boolean_toggle"/>
+                                    <field name="cake_champagne_tower" widget="boolean_toggle"/>
                                 </group>
 
                                 <group>
@@ -432,6 +443,7 @@
                                        widget="html" colspan="2" nolabel="1"/>
                             </group>
                         </page>
+
                     </notebook>
                 </sheet>
                 <chatter/>

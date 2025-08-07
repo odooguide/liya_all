@@ -59,15 +59,22 @@ class SaleOrderProjectWizard(models.TransientModel):
         partner_slug = (order.opportunity_id and order.opportunity_id.name or '').replace(' ', '-')
         project_name = f"D{seq_num}-{date_str}-{partner_slug}"
 
+        user_recs = order.coordinator_ids.mapped('employee_ids.user_id')
+
+        users = self.env['res.users'].search([
+            ('id', 'in', user_recs.ids)
+        ])
+
         vals = {
             'name': project_name,
             'partner_id': order.partner_id.id,
             'company_id': order.company_id.id,
-            'user_id': order.user_id.id or self.env.uid,
+            'user_id':  users[0].id,
             'allow_billable': True,
             'privacy_visibility': 'portal',
             'reinvoiced_sale_order_id': order.id,
             'sale_line_id': order.order_line and order.order_line[0].id or False
+
         }
 
         project = self.env['project.project'].create(vals)
