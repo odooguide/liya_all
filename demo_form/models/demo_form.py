@@ -444,6 +444,7 @@ class ProjectDemoForm(models.Model):
 
     def _onchange_start_end_time(self):
         for rec in self:
+            # 1) Orijinal base end time
             if rec.afterparty_ultra:
                 base_end_dt = datetime.strptime('02:00', '%H:%M')
             elif rec.afterparty_service:
@@ -451,42 +452,48 @@ class ProjectDemoForm(models.Model):
             else:
                 base_end_dt = datetime.strptime('23:30', '%H:%M')
 
-            end_str = base_end_dt.strftime('%H:%M')
+            # 2) Eğer dance show varsa +15 dk
+            end_dt = base_end_dt + (timedelta(minutes=15) if rec.afterparty_dance_show else timedelta())
+            end_str = end_dt.strftime('%H:%M')
+
+            # 3) start_end_time her zaman bu end_str ile
             rec.start_end_time = f'19:30-{end_str}'
 
-
-            after_lines = rec.schedule_line_ids.filtered(lambda l: l.event == 'After Party')
-            if rec.afterparty_ultra or rec.afterparty_service:
-                for line in after_lines:
-                    line.time = f"23:30 - {end_str}"
-            else:
-                for line in after_lines:
+            # 4) After Party schedule lines
+            for line in rec.schedule_line_ids.filtered(lambda l: l.event == 'After Party'):
+                if rec.afterparty_ultra or rec.afterparty_service:
+                    line.time = f'23:30 - {end_str}'
+                else:
                     line.time = ''
 
-            party_lines = rec.schedule_line_ids.filtered(lambda l: l.event == 'Party')
-            if rec.afterparty_ultra or rec.afterparty_service:
-                for line in party_lines:
+            # 5) Party schedule lines
+            #    Başlangıç hep 22:30, bitiş 23:30 + (dance_show ? 15 dk : 0)
+            party_end_dt = datetime.strptime('23:30', '%H:%M') + (
+                timedelta(minutes=15) if rec.afterparty_dance_show else timedelta())
+            party_end_str = party_end_dt.strftime('%H:%M')
+            for line in rec.schedule_line_ids.filtered(lambda l: l.event == 'Party'):
+                if rec.afterparty_ultra or rec.afterparty_service:
                     line.time = '22:30'
-            else:
-                for line in party_lines:
-                    line.time = '22:30 - 23:30'
+                else:
+                    line.time = f'22:30 - {party_end_str}'
 
-            return_lines = rec.transport_line_ids.filtered(lambda l: l.label == 'After Party Dönüş')
-            if rec.afterparty_ultra or rec.afterparty_service:
-                for t in return_lines:
+            # 6) After Party Dönüş transport lines
+            for t in rec.transport_line_ids.filtered(lambda l: l.label == 'After Party Dönüş'):
+                if rec.afterparty_ultra or rec.afterparty_service:
                     t.time = end_str
-            else:
-                for t in return_lines:
+                else:
                     t.time = ''
 
-            double_lines = rec.transport_line_ids.filtered(lambda l: l.label == 'Çift Dönüş')
-            if rec.afterparty_ultra or rec.afterparty_service:
-                later_str = (base_end_dt + timedelta(minutes=15)).strftime('%H:%M')
-                for t in double_lines:
-                    t.time = later_str
-            else:
-                for t in double_lines:
+            # 7) Çift Dönüş transport lines
+            for t in rec.transport_line_ids.filtered(lambda l: l.label == 'Çift Dönüş'):
+                if rec.afterparty_ultra or rec.afterparty_service:
+                    later_dt = base_end_dt + timedelta(minutes=15)
+                    if rec.afterparty_dance_show:
+                        later_dt += timedelta(minutes=15)
+                    t.time = later_dt.strftime('%H:%M')
+                else:
                     t.time = '23:45'
+
     def _onchange_breakfast(self):
         for rec in self:
             lines = rec.schedule_line_ids.sorted('sequence')
