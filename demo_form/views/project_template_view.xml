@@ -12,7 +12,8 @@
                 groups="__export__.res_groups_94_d19ac274,
                         __export__.res_groups_101_9be46a0a,
                         __export__.res_groups_91_93ed2696,
-                        __export__.res_groups_102_8eb2392b"/>
+                        __export__.res_groups_102_8eb2392b,
+                        base.group_system"/>
             </header>
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="next_event_date" invisible="1"/>
