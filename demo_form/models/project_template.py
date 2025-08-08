@@ -422,9 +422,10 @@ class ProjectProject(models.Model):
                 'afterparty_service', 'afterparty_shot_service',
                 'afterparty_sushi',
                  'afterparty_fog_laser',
+                'accommodation_service'
             ]
 
-            ultra_extra = ['music_live', 'music_percussion', 'music_trio']
+            ultra_extra = ['music_live', 'music_percussion', 'music_trio','photo_yacht_shoot','table_fresh_flowers','bar_alcohol_service','dance_lesson',]
             ultra_fields = elite_fields + ultra_extra
             if tmpl == 'plus':
                 date_str = vals.get('invitation_date') or vals.get('demo_date')

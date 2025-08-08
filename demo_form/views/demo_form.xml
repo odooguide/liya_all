@@ -317,9 +317,9 @@
                             </group>
 
                             <!-- 2B. Type of Music -->
-                            <group string="Type of Music" col="4">
+                            <group string="Type of Music" col="2">
                                 <!-- Cocktail -->
-                                <group col="1">
+                                <group col="2" string="Type Of Music at the Cocktail">
                                     <field name="cocktail_lounge" widget="boolean_toggle"/>
                                     <field name="cocktail_french" widget="boolean_toggle"/>
                                     <field name="cocktail_italian" widget="boolean_toggle"/>
@@ -328,7 +328,7 @@
                                     <field name="cocktail_easy_bossa" widget="boolean_toggle"/>
                                 </group>
                                 <!-- Dinner -->
-                                <group col="1">
+                                <group col="2" string="Type Of Music at the Dinner">
                                     <field name="dinner_lounge" widget="boolean_toggle"/>
                                     <field name="dinner_turkish_acoustic" widget="boolean_toggle"/>
                                     <field name="dinner_turkish_retro" widget="boolean_toggle"/>
@@ -336,7 +336,7 @@
                                     <field name="dinner_oldies" widget="boolean_toggle"/>
                                 </group>
                                 <!-- Party -->
-                                <group col="1">
+                                <group col="2" string="Type Of Music at the Party">
                                     <field name="party_turkish" widget="boolean_toggle"/>
                                     <field name="party_turkish_80s_90s" widget="boolean_toggle"/>
                                     <field name="party_local" widget="boolean_toggle"/>
@@ -349,7 +349,7 @@
                                     <field name="party_house_electronic" widget="boolean_toggle"/>
                                 </group>
                                 <!-- After Party -->
-                                <group col="1">
+                                <group col="2" string="Type Of Music at the After Party">
                                     <field name="after_turkish" widget="boolean_toggle"/>
                                     <field name="after_turkish_80s_90s" widget="boolean_toggle"/>
                                     <field name="after_radio_top50" widget="boolean_toggle"/>
