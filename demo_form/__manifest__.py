@@ -18,6 +18,7 @@
         "views/project_task_view_inherit.xml",
         "views/many2many_list_views.xml",
         "data/project_task_menu_views.xml",
+        "data/check_project_stage_cron.xml",
         "wizards/sale_order_project_wizard_view.xml",
         "reports/report_demo_form.xml",
         "security/ir.model.access.csv",

@@ -88,6 +88,16 @@ class SaleOrderProjectWizard(models.TransientModel):
                 'sequence': 10,
                 'project_ids': [(4, project.id)],
             })
+        cancel_stage = self.env['project.task.type'].search([
+            ('project_ids', 'in', project.id),
+            ('name', '=', 'Cancel')
+        ], limit=1)
+        if not cancel_stage:
+            cancel_stage = self.env['project.task.type'].create({
+                'name': 'Cancel',
+                'sequence': 0,
+                'project_ids': [(4, project.id)],
+            })
         order.project_id = project.id
 
         lcv_subtasks = [

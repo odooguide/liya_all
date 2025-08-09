@@ -164,7 +164,7 @@
                                 </tbody>
                             </table>
                             <p style="margin:0 0 .5rem 0; font-size:8pt;margin-top:5pt;">
-                                <em>*The prices indicated are in Euro and are exclusive of VAT.</em>
+                                <em>*The prices indicated are in <span t-esc="doc.currency_id.full_name"/> and are exclusive of VAT.</em>
                             </p>
                         </div>
 

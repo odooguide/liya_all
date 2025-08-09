@@ -425,9 +425,12 @@ class ProjectDemoForm(models.Model):
             vals['name'] = self.env['ir.sequence'].next_by_code(
                 'project.demo.form') or vals['name']
 
-        self._onchange_start_end_time()
-        self._onchange_breakfast()
-        return super().create(vals)
+        rec = super(ProjectDemoForm, self).create(vals)
+
+        rec._onchange_start_end_time()
+        rec._onchange_breakfast()
+
+        return rec
 
     @api.depends('invitation_date')
     def _compute_day(self):
@@ -456,29 +459,25 @@ class ProjectDemoForm(models.Model):
             end_dt = base_end_dt + (timedelta(minutes=15) if rec.afterparty_dance_show else timedelta())
             end_str = end_dt.strftime('%H:%M')
 
-            # 3) start_end_time her zaman bu end_str ile
             rec.start_end_time = f'19:30-{end_str}'
 
-            # 4) After Party schedule lines
-            for line in rec.schedule_line_ids.filtered(lambda l: l.event == 'After Party'):
+            for line in rec.schedule_line_ids.filtered(lambda l: l.event in ['After Party','After Parti']):
                 if rec.afterparty_ultra or rec.afterparty_service:
                     line.time = f'23:30 - {end_str}'
                 else:
                     line.time = ''
 
-            # 5) Party schedule lines
-            #    Başlangıç hep 22:30, bitiş 23:30 + (dance_show ? 15 dk : 0)
+
             party_end_dt = datetime.strptime('23:30', '%H:%M') + (
                 timedelta(minutes=15) if rec.afterparty_dance_show else timedelta())
             party_end_str = party_end_dt.strftime('%H:%M')
-            for line in rec.schedule_line_ids.filtered(lambda l: l.event == 'Party'):
+            for line in rec.schedule_line_ids.filtered(lambda l: l.event in ['Party','Parti']):
                 if rec.afterparty_ultra or rec.afterparty_service:
                     line.time = '22:30'
                 else:
                     line.time = f'22:30 - {party_end_str}'
 
-            # 6) After Party Dönüş transport lines
-            for t in rec.transport_line_ids.filtered(lambda l: l.label == 'After Party Dönüş'):
+            for t in rec.transport_line_ids.filtered(lambda l: l.label in ['After Party Dönüş','After Parti Dönüş']):
                 if rec.afterparty_ultra or rec.afterparty_service:
                     t.time = end_str
                 else:
@@ -589,3 +588,10 @@ class ProjectDemoForm(models.Model):
             if rec.afterparty_bbq_wraps and not (rec.afterparty_service and rec.afterparty_ultra):
                 raise ValidationError(
                     _("Barbekü wraps yalnızca After Party ve Ultra birlikte seçildiğinde aktif olabilir."))
+
+    @api.onchange('dj_person')
+    def onchange_dj_person(self):
+        for rec in self:
+            if rec.dj_person:
+                rec.dj_person=self.project_id.dj_person
+

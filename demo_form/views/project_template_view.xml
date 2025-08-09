@@ -9,11 +9,7 @@
                         string="Assing Demo Date"
                         type="object"
                         class="btn-secondary"
-                groups="__export__.res_groups_94_d19ac274,
-                        __export__.res_groups_101_9be46a0a,
-                        __export__.res_groups_91_93ed2696,
-                        __export__.res_groups_102_8eb2392b,
-                        base.group_system"/>
+               />
             </header>
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="next_event_date" invisible="1"/>
@@ -67,7 +63,8 @@
       <field name="inherit_id" ref="project.project_list_view_group_stage"/>
       <field name="arch" type="xml">
         <xpath expr="//field[@name='partner_id']" position="after">
-          <field name="crm_partner_id"/>
+          <field name="so_opportunity_id"/>
+          <field name="dj_person"/>
           <field name="crm_second_contact"/>
           <field name="crm_request_date"/>
           <field name="crm_yabanci_turk"/>

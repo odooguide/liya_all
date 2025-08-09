@@ -257,7 +257,7 @@
                             <group>
                                 <group col="2">
                                     <field name="photo_standard" widget="boolean_toggle"
-                                           invisible="sale_template_id!=3"/>
+                                           invisible="sale_template_id==3"/>
                                     <field name="photo_video_plus" widget="boolean_toggle"/>
                                     <field name="photo_drone" widget="boolean_toggle"/>
 

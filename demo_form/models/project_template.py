@@ -87,6 +87,12 @@ class ProjectProject(models.Model):
         ('completed', 'Demo Tamamlandı'),
         ('planned', 'Demo Planlandı'),
     ], string='Demo Durumu', compute='_compute_demo_state', store=True)
+    so_opportunity_id=fields.Many2one(
+        'crm.lead',
+        string='Fırsat',
+        compute='_compute_crm_sale_fields',
+        store=True,
+        readonly=True)
 
     @api.depends('reinvoiced_sale_order_id',
                  'reinvoiced_sale_order_id.opportunity_id',
@@ -96,7 +102,8 @@ class ProjectProject(models.Model):
                  'reinvoiced_sale_order_id.opportunity_id.yabanci_turk',
                  'reinvoiced_sale_order_id.people_count',
                  'reinvoiced_sale_order_id.sale_order_template_id',
-                 'reinvoiced_sale_order_id.coordinator_ids')
+                 'reinvoiced_sale_order_id.coordinator_ids',
+                 'reinvoiced_sale_order_id.opportunity_id')
     def _compute_crm_sale_fields(self):
         for rec in self:
             so = rec.reinvoiced_sale_order_id
@@ -109,6 +116,7 @@ class ProjectProject(models.Model):
                 rec.so_people_count = so.people_count or 0
                 rec.so_sale_template_id = so.sale_order_template_id.id or False
                 rec.so_coordinator_ids = [(6, 0, so.coordinator_ids.ids)]
+                rec.so_opportunity_id=opp
             else:
                 rec.crm_partner_id = False
                 rec.crm_second_contact = False
@@ -116,7 +124,9 @@ class ProjectProject(models.Model):
                 rec.crm_yabanci_turk = False
                 rec.so_people_count = 0
                 rec.so_sale_template_id = False
-                rec.so_coordinator_ids = [(6, 0, [])]
+                rec.so_coordinator_ids  = [(5, 0, 0)]
+                rec.so_opportunity_id=False,
+
 
     @api.depends('event_ids.start')
     def _compute_demo_state(self):
@@ -129,7 +139,7 @@ class ProjectProject(models.Model):
                 earliest = min(dates)
                 dt_obj = fields.Datetime.from_string(earliest)
                 date_val = dt_obj.date() if dt_obj else None
-                if date_val and date_val <= today:
+                if date_val and self.demo_form_ids[0].confirmed_demo_form_plan:
                     rec.demo_state = 'completed'
                 else:
                     rec.demo_state = 'planned'
@@ -154,13 +164,15 @@ class ProjectProject(models.Model):
             summary_pairs = [
                 ('Müşteri', opportunity.name or ''),
                 ('Koordinator', so.coordinator_ids.display_name or ''),
-                ('Etkinlik Tarihi', so.user_id.display_name or ''),
+                ('Satış Temsilcisi', so.user_id.display_name or ''),
                 ('Kişi Sayısı', so.people_count or ''),
                 ('Sözleşme Tarihi', so.contract_date or ''),
+                ('Demo Tarihi', self.next_event_date or ''),
                 ('Birincil Kontak', opportunity.partner_id.name or ''),
                 ('Birincil Mail', opportunity.email_from or ''),
                 ('Birincil Telefon', opportunity.phone or ''),
                 ('Birincil Meslek', opportunity.function or ''),
+                ('İkincil Kontak', opportunity.second_contact or ''),
                 ('İkincil Mail', opportunity.second_mail or ''),
                 ('İkincil Telefon', opportunity.second_phone or ''),
                 ('İkincil Meslek', opportunity.second_job_position or ''),
@@ -237,28 +249,52 @@ class ProjectProject(models.Model):
                     _('Only administrators can modify or delete the Confirmed Demo Form once uploaded.')
                 )
 
-    def action_schedule_meeting(self):
-        """Takvim’de yeni bir etkinlik (meeting) açmak için calendar.action_calendar_event action'ını döner."""
+    def _get_demo_task(self):
         self.ensure_one()
-        action = self.env.ref('calendar.action_calendar_event').read()[0]
+        Task = self.env['project.task']
+        demo_task = Task.search([
+            ('project_id', '=', self.id),
+            ('name', 'ilike', 'Demo Randevu Oluşturma'),
+        ], limit=1)
+        return demo_task
 
-        demo_cat = self.env['calendar.event.type'].search(
-            [('name', 'ilike', 'demo')], limit=1
-        )
+    def _check_schedule_demo_rights(self):
+        self.ensure_one()
+        user = self.env.user
+
+        is_project_manager = user.has_group('__export__.res_groups_101_9be46a0ar')
+        is_org_manager = user.has_group('__export__.res_groups_102_8eb2392b')
+        is_admin = user.has_group('base.group_system')
+
+        if is_admin or is_project_manager or is_org_manager:
+            return True
+
+        demo_task = self._get_demo_task()
+        if demo_task:
+            if (user in demo_task.user_ids) or getattr(demo_task, 'user_id', False) == user:
+                return True
+
+        raise UserError(_("Bu işlemi yalnızca Proje Yöneticisi, Organizasyon Müdürü "
+                          "veya 'Demo Randevu Oluşturma' görevinin atanan kullanıcısı yapabilir."))
+
+    def action_schedule_meeting(self):
+        self.ensure_one()
+        self._check_schedule_demo_rights()
+
+        action = self.env.ref('calendar.action_calendar_event').read()[0]
+        demo_cat = self.env['calendar.event.type'].search([('name', 'ilike', 'demo')], limit=1)
         default_cats = [(6, 0, [demo_cat.id])] if demo_cat else []
         ctx = dict(self.env.context or {},
                    default_res_model='project.project',
                    default_res_id=self.id,
                    default_name=self.name,
                    default_start=fields.Datetime.now(),
-                   default_categ_ids=default_cats,
-                   )
+                   default_categ_ids=default_cats)
         action.update({
             'context': ctx,
             'domain': [('res_model', '=', 'project.project'), ('res_id', '=', self.id)],
         })
         return action
-
     @api.depends('event_ids.start')
     def _compute_next_event(self):
         now = fields.Datetime.now()
@@ -418,14 +454,15 @@ class ProjectProject(models.Model):
 
             tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
-                'photo_video_plus', 'photo_drone',
+                'photo_video_plus',
                 'afterparty_service', 'afterparty_shot_service',
                 'afterparty_sushi',
                  'afterparty_fog_laser',
-                'accommodation_service'
+                'accommodation_service','dance_lesson',
             ]
 
-            ultra_extra = ['music_live', 'music_percussion', 'music_trio','photo_yacht_shoot','table_fresh_flowers','bar_alcohol_service','dance_lesson',]
+            ultra_extra = ['music_live', 'music_percussion', 'music_trio','photo_yacht_shoot','table_fresh_flowers','bar_alcohol_service',
+                           'photo_drone',]
             ultra_fields = elite_fields + ultra_extra
             if tmpl == 'plus':
                 date_str = vals.get('invitation_date') or vals.get('demo_date')
@@ -467,3 +504,39 @@ class ProjectProject(models.Model):
             'res_id': demo.id,
             'target': 'current',
         }
+    @api.onchange('dj_person')
+    def onchange_dj_person(self):
+        for rec in self:
+            if rec.dj_person:
+                self.demo_form_ids[0].dj_person=rec.dj_person
+
+    def _get_done_stage(self):
+        """stage_id'nin comodel'ini dinamik bul ve 'Tamamlanan/Done/Completed/Bitti' benzeri bir stage getir."""
+        field = self._fields.get('stage_id')
+        if not field or field.type != 'many2one':
+            return False
+        Stage = self.env[field.comodel_name].sudo()
+        stage = Stage.search([
+            '|', '|', '|',
+            ('name', 'ilike', 'catamaran'),  # Tamamlanan / Tamamlandi
+            ('name', 'ilike', 'bitti'),
+            ('name', 'ilike', 'done'),
+            ('name', 'ilike', 'complet'),  # complete/completed
+        ], limit=1)
+        return stage
+
+
+    @api.model
+    def cron_update_stage_by_wedding_date(self):
+        today = fields.Date.context_today(self)
+        records = self.search([
+            ('reinvoiced_sale_order_id.wedding_date', '<', today),
+        ])
+        if not records:
+            return
+        done_stage = records[:1]._get_done_stage()
+        if not done_stage:
+            return
+        for rec in records.filtered(lambda r: r.stage_id != done_stage):
+            rec.stage_id = done_stage.id
+

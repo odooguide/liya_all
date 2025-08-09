@@ -73,8 +73,14 @@ class ProjectTask(models.Model):
         res = super(ProjectTask, self).write(vals)
 
         if 'stage_id' in vals:
-            done_names = ['done', 'tamamlandı']
-            canceled_names = ['cancel', 'canceled', 'iptal']
+            done_names = [
+                'done', 'completed', 'complete', 'finished', 'closed',
+                'tamamlandı', 'tamamlandi', 'bitti', 'bitirildi', 'sonlandı', 'kapalı',
+            ]
+            canceled_names = [
+                'cancel', 'canceled', 'cancelled',
+                'iptal', 'iptal edildi', 'iptaledildi', 'vazgeçildi',
+            ]
             for rec in self:
                 name = (rec.stage_id.name or '').strip().lower()
                 if name in done_names:
