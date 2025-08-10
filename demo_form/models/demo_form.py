@@ -32,8 +32,9 @@ class ProjectDemoForm(models.Model):
     guest_count = fields.Integer(string="Guest Count")
     ceremony = fields.Selection([
         ('actual', "Actual"),
+        ('def', "Seçiniz"),
         ('staged', "Staged")],
-        string="Ceremony Type")
+       default='def', string="Ceremony Type")
     start_end_time = fields.Char(string="Start-End Time")
 
     # ── Schedule page ─────────────────────────────────────────────────────────
@@ -240,8 +241,9 @@ class ProjectDemoForm(models.Model):
     photo_drone = fields.Boolean(string="Drone Camera")
     photo_harddisk_delivered = fields.Selection(
         [('delivered', 'Delivered'),
+         ('def', "Seçiniz"),
         ('later', 'Deliver Later')],
-        string="Hard Disk 1TB")
+        defautl='def',string="Hard Disk 1TB")
     photo_yacht_shoot = fields.Boolean(string='Yacht Photo Shoot')
     # Music
     music_description = fields.Html(
@@ -252,7 +254,7 @@ class ProjectDemoForm(models.Model):
     music_dj_fatih = fields.Boolean(string="DJ: Fatih Aşçı")
     music_dj_engin = fields.Boolean(string="DJ: Engin Sadiki")
     music_other = fields.Boolean(string="Other")
-    dj_person = fields.Selection([('engin', 'DJ: Engin Sadiki'), ('fatih', 'DJ: Fatih Aşçı'), ('other', 'Diğer')],string='DJ')
+    dj_person = fields.Selection([ ('', "Seçiniz"),('engin', 'DJ: Engin Sadiki'), ('fatih', 'DJ: Fatih Aşçı'), ('other', 'Diğer')],string='DJ')
     music_other_details = fields.Char(string="If Other, specify")
 
     # ── Table Decoration page ────────────────────────────────────────────────

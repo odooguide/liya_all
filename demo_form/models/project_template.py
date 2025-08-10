@@ -139,10 +139,11 @@ class ProjectProject(models.Model):
                 earliest = min(dates)
                 dt_obj = fields.Datetime.from_string(earliest)
                 date_val = dt_obj.date() if dt_obj else None
-                if date_val and self.demo_form_ids[0].confirmed_demo_form_plan:
-                    rec.demo_state = 'completed'
-                else:
-                    rec.demo_state = 'planned'
+                if self.demo_form_ids:
+                    if date_val and self.demo_form_ids[0].confirmed_demo_form_plan:
+                        rec.demo_state = 'completed'
+                    else:
+                        rec.demo_state = 'planned'
 
     def _is_discount_line(self, line):
         name = (line.name or '').lower()
