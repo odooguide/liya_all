@@ -30,6 +30,7 @@ class ProjectProject(models.Model):
     sale_order_summary = fields.Html(
         string="Sale Order Summary",
         compute='_compute_sale_order_summary',
+        compute_sudo=True,
         sanitize=False,
         readonly=True,
         help="Sale Order'dan (indirim satırları hariç) çekilen özet bilgi."
