@@ -19,7 +19,7 @@
                        filename="seat_plan_name"
                        context="{'bin_size': True}"/>
                 <field name="seat_plan_name" invisible="1"/>
-                <field name="dj_person"/>
+                <field name="dj_person" placeholder="Seçiniz..."/>
             </xpath>
             <xpath expr="//button[@name='action_view_tasks']" position="after">
                 <button name="action_view_next_event" string="Demo Meeting" type="object" class="oe_stat_button"
