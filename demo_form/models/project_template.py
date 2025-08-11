@@ -276,13 +276,12 @@ class ProjectProject(models.Model):
         is_org_manager = user.has_group('__export__.res_groups_102_8eb2392b')
         is_admin = user.has_group('base.group_system')
 
-        if is_admin or is_project_manager or is_org_manager or self.user_id.id==user.id:
+        if is_admin or is_project_manager or is_org_manager or self.user_id.id == user.id:
             return True
 
         demo_task = self._get_demo_task()
-        if demo_task:
-            if (user in demo_task.user_ids) or getattr(demo_task, 'user_id', False) == user:
-                return True
+        if demo_task and (user in demo_task.user_ids or getattr(demo_task, 'user_id', False) == user):
+            return True
 
         raise UserError(_("Bu işlemi yalnızca Proje Yöneticisi, Organizasyon Müdürü "
                           "veya 'Demo Randevu Oluşturma' görevinin atanan kullanıcısı yapabilir."))
@@ -291,20 +290,25 @@ class ProjectProject(models.Model):
         self.ensure_one()
         self._check_schedule_demo_rights()
 
-        action = self.env.ref('calendar.action_calendar_event').read()[0]
-        demo_cat = self.env['calendar.event.type'].search([('name', 'ilike', 'demo')], limit=1)
+        action = self.env.ref('calendar.action_calendar_event').sudo().read()[0]
+        demo_cat = self.env['calendar.event.type'].sudo().search([('name', 'ilike', 'demo')], limit=1)
         default_cats = [(6, 0, [demo_cat.id])] if demo_cat else []
-        ctx = dict(self.env.context or {},
-                   default_res_model='project.project',
-                   default_res_id=self.id,
-                   default_name=self.name,
-                   default_start=fields.Datetime.now(),
-                   default_categ_ids=default_cats)
+
+        ctx = dict(
+            self.env.context,
+            default_res_model='project.project',
+            default_res_id=self.id,
+            default_name=self.name,
+            default_start=fields.Datetime.now(),
+            default_categ_ids=default_cats,
+        )
+
         action.update({
             'context': ctx,
             'domain': [('res_model', '=', 'project.project'), ('res_id', '=', self.id)],
         })
         return action
+
     @api.depends('event_ids.start')
     def _compute_next_event(self):
         now = fields.Datetime.now()
