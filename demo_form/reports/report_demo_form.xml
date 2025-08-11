@@ -247,7 +247,7 @@
                                 <div style="margin-bottom:8px; font-style:italic;">
                                     <span t-field="o.menu_description"/>
                                 </div>
-                                <table style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tbody>
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600; width:180px;">Hot Appetizer:
@@ -332,7 +332,7 @@
                                 <div style="margin-bottom:8px;">
                                     <span t-field="o.bar_description"/>
                                 </div>
-                                <table style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tbody>
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600; width:200px;">Alcohol Service:
@@ -399,7 +399,7 @@
                                 <div style="margin-bottom:8px;">
                                     <span t-field="o.afterparty_description"/>
                                 </div>
-                                <table style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tbody>
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600; width:170px;">After Party:</td>
@@ -899,7 +899,7 @@
                                 <div style="margin-bottom:6px; font-style:italic;">
                                     <span t-field="o.music_description"/>
                                 </div>
-                                <table style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">Live Music:</td>
                                         <td style="padding:4px 8px;">
@@ -1203,6 +1203,396 @@
                                     </tr>
                                 </table>
                             </div>
+                            <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
+                                <div style="font-weight:700; font-size:16pt; margin-bottom:8px;">M) MUSIC CHOICES</div>
+
+                                <!-- 1) Significant Songs -->
+                                <div style="font-weight:700; font-size:12pt; margin-bottom:4px;">1) SIGNIFICANT SONGS
+                                </div>
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px;">
+                                    <tr>
+                                        <td style="padding:4px 8px; width:220px; font-weight:600;">A — Entrance Song:
+                                        </td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="display:inline-block; min-width:300px; border-bottom:1px solid #000; padding-bottom:2px;">
+                                                <span t-esc="o.entrance_song or ''"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">B — First Dance Song:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="display:inline-block; min-width:300px; border-bottom:1px solid #000; padding-bottom:2px;">
+                                                <span t-esc="o.first_dance_song or ''"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">C — Wedding Cake Song:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="display:inline-block; min-width:300px; border-bottom:1px solid #000; padding-bottom:2px;">
+                                                <span t-esc="o.cake_song or ''"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:4px 8px; font-weight:600;">D — Bouquet Toss Song:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="display:inline-block; min-width:300px; border-bottom:1px solid #000; padding-bottom:2px;">
+                                                <span t-esc="o.bouquet_toss_song or ''"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <!-- 2) Language Ratio -->
+                                <div style="font-weight:700; font-size:12pt; margin-bottom:4px;">2) LANGUAGE RATIO</div>
+                                <div style="font-size:10pt; color:#444; margin-bottom:6px;">
+                                    You may choose the ratio of the language of songs throughout your wedding.
+                                </div>
+
+                                <div style="font-size:11pt;">
+                                    <span style="margin-right:14px;">
+                                        Turkish 50 / Foreign 50 (
+                                        <t t-if="o.ratio_choice == '50_50'">
+                                            <strong>x</strong>
+                                        </t>
+                                        <t t-else=""></t>
+                                        )
+                                    </span>
+                                    <span style="margin-right:14px;">//</span>
+
+                                    <span style="margin-right:14px;">
+                                        Turkish 25 / Foreign 75 (
+                                        <t t-if="o.ratio_choice == '25_75'">
+                                            <strong>x</strong>
+                                        </t>
+                                        <t t-else=""></t>
+                                        )
+                                    </span>
+                                    <span style="margin-right:14px;">//</span>
+
+                                    <span style="margin-right:14px;">
+                                        Turkish 75 / Foreign 25 (
+                                        <t t-if="o.ratio_choice == '75_25'">
+                                            <strong>x</strong>
+                                        </t>
+                                        <t t-else=""></t>
+                                        )
+                                    </span>
+                                    <span style="margin-right:14px;">//</span>
+
+                                    <span>
+                                        Other (
+                                        <t t-if="o.ratio_choice == 'other'">
+                                            <strong>x</strong>
+                                        </t>
+                                        <t t-else=""></t>
+                                        ):
+                                        Turkish %
+                                        <span t-esc="o.ratio_turkish or '____'"/>
+                                        Foreign %
+                                        <span t-esc="o.ratio_foreign or '____'"/>
+                                    </span>
+                                </div>
+                            </div><!-- 2B) TYPE OF MUSIC BY PART -->
+                            <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
+                                <div style="font-weight:700; font-size:12pt; margin-bottom:6px;">2B) TYPE OF MUSIC — BY
+                                    PART
+                                </div>
+                                <div style="font-size:10pt; color:#444; margin-bottom:8px;">
+                                    You may choose the type of music for the four different parts of your wedding.
+                                </div>
+
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                    <tr>
+                                        <!-- Cocktail -->
+                                        <td style="vertical-align:top; width:25%; padding:6px 10px; border-right:1px solid #cfd8dc;">
+                                            <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
+                                                Cocktail
+                                            </div>
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
+                                                <tr>
+                                                    <td style="padding:2px 0;">Lounge (
+                                                        <t t-if="o.cocktail_lounge">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">French (
+                                                        <t t-if="o.cocktail_french">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Italian (
+                                                        <t t-if="o.cocktail_italian">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Greek (
+                                                        <t t-if="o.cocktail_greek">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">House (
+                                                        <t t-if="o.cocktail_house">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Easy Listening &amp; Bossa (
+                                                        <t t-if="o.cocktail_easy_bossa">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+
+                                        <!-- Dinner -->
+                                        <td style="vertical-align:top; width:25%; padding:6px 10px; border-right:1px solid #cfd8dc;">
+                                            <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
+                                                Dinner
+                                            </div>
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
+                                                <tr>
+                                                    <td style="padding:2px 0;">Lounge (
+                                                        <t t-if="o.dinner_lounge">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Turkish Acoustic (
+                                                        <t t-if="o.dinner_turkish_acoustic">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Turkish Retro (
+                                                        <t t-if="o.dinner_turkish_retro">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Italian &amp; French &amp; Greek (
+                                                        <t t-if="o.dinner_italian_french_greek">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Oldies &amp; Goldies (
+                                                        <t t-if="o.dinner_oldies">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+
+                                        <!-- Party -->
+                                        <td style="vertical-align:top; width:25%; padding:6px 10px; border-right:1px solid #cfd8dc;">
+                                            <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
+                                                Party
+                                            </div>
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
+                                                <tr>
+                                                    <td style="padding:2px 0;">Turkish (
+                                                        <t t-if="o.party_turkish">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Turkish 80’s 90’s (
+                                                        <t t-if="o.party_turkish_80s_90s">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Local (
+                                                        <t t-if="o.party_local">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Radio Top 50 (
+                                                        <t t-if="o.party_radio_top50">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Oldies &amp; Goldies (
+                                                        <t t-if="o.party_oldies">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Latin &amp; Salsa &amp; Reggaeton (
+                                                        <t t-if="o.party_latin_salsa">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Hip Hop &amp; R&amp;B (
+                                                        <t t-if="o.party_hiphop_rnb">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">90’s 2000’s Hits (
+                                                        <t t-if="o.party_90s_2000s_hits">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Turkish Rock (
+                                                        <t t-if="o.party_turkish_rock">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">House &amp; Electronic (
+                                                        <t t-if="o.party_house_electronic">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+
+                                        <!-- After Party -->
+                                        <td style="vertical-align:top; width:25%; padding:6px 10px;">
+                                            <div style="font-weight:700; margin-bottom:6px;">Type of Music at the After
+                                                Party
+                                            </div>
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
+                                                <tr>
+                                                    <td style="padding:2px 0;">Turkish (
+                                                        <t t-if="o.after_turkish">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Turkish 80’s 90’s (
+                                                        <t t-if="o.after_turkish_80s_90s">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Radio Top 50 (
+                                                        <t t-if="o.after_radio_top50">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Party Hits (
+                                                        <t t-if="o.after_party_hits">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Oldies &amp; Goldies (
+                                                        <t t-if="o.after_oldies">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Latin &amp; Salsa &amp; Reggaeton (
+                                                        <t t-if="o.after_latin_salsa">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Hip Hop &amp; R&amp;B (
+                                                        <t t-if="o.after_hiphop_rnb">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">90’s 2000’s Hits (
+                                                        <t t-if="o.after_90s_2000s_hits">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">Turkish Rock (
+                                                        <t t-if="o.after_turkish_rock">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:2px 0;">House &amp; Electronic (
+                                                        <t t-if="o.after_house_electronic">
+                                                            <strong>x</strong>
+                                                        </t>
+                                                        <t t-else=""></t>)
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
                             <!-- Footer -->
                             <div class="footer"
                                  style="position: absolute; bottom: 18px; width: 100%; font-size:10px; text-align:center; color:#888;">
@@ -1211,6 +1601,7 @@
                                 </span>
                             </div>
                         </div>
+
                     </t>
                 </main>
             </t>

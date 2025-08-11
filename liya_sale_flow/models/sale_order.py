@@ -163,8 +163,10 @@ class SaleOrder(models.Model):
 
         sinem_user = self.env['res.users'].sudo().search([('name', '=', 'Sinem Kösem Uzun')], limit=1)
         parisa_user = self.env['res.users'].sudo().search([('name', '=', 'Parisa Mirabi')], limit=1)
-        sinem_tag = self.env['crm.tag'].sudo().search([('name', '=', 'Sinem Kösem Uzun')], limit=1)
-        parisa_tag = self.env['crm.tag'].sudo().search([('name', '=', 'Parisa Mirabi')], limit=1)
+
+        Tag = self.env['crm.tag'].sudo()
+        sinem_tag = Tag.search([('name', '=', 'Sinem Kösem Uzun')], limit=1) or Tag.create({'name': 'Sinem Kösem Uzun'})
+        parisa_tag = Tag.search([('name', '=', 'Parisa Mirabi')], limit=1) or Tag.create({'name': 'Parisa Mirabi'})
 
         sale_model = self.env['ir.model'].sudo().search([('model', '=', 'sale.order')], limit=1)
 
@@ -173,50 +175,31 @@ class SaleOrder(models.Model):
                 self._change_opportunity_stage(sale)
 
                 if sale.user_id == sinem_user and parisa_tag in sale.tag_ids:
-                    sale.sudo().write({
-                        'user_id': parisa_user.id,
-                        'tag_ids': [(3, parisa_tag.id), (4, sinem_tag.id)],
-                    })
+                    cmds = [(3, parisa_tag.id), (4, sinem_tag.id)]
+                    sale.sudo().write({'user_id': parisa_user.id, 'tag_ids': cmds})
+
                 elif sale.user_id == parisa_user and sinem_tag in sale.tag_ids:
-                    sale.sudo().write({
-                        'user_id': sinem_user.id,
-                        'tag_ids': [(3, sinem_tag.id), (4, parisa_tag.id)],
-                    })
+                    cmds = [(3, sinem_tag.id), (4, parisa_tag.id)]
+                    sale.sudo().write({'user_id': sinem_user.id, 'tag_ids': cmds})
+
             if sale.team_id.event_team:
-
                 activity_types = self.env['mail.activity.type'].search(
-                    [('is_quot', '=', True),
-                     ('is_event', '=', True)])
-
-                for atype in activity_types:
-                    self.env['mail.activity'].create({
-                        'res_model_id': sale_model.id,
-                        'res_model': 'sale.order',
-                        'res_id': sale.id,
-                        'activity_type_id': atype.id,
-                        'user_id': sale.user_id.id or sale.create_uid.id,
-                        'date_deadline': date.today(),
-                    })
-            elif not sale.team_id.event_team:
-
-                activity_types = self.env['mail.activity.type'].search(
-                    [('is_quot', '=', True),
-                     ('is_event', '=', False)])
-
-                for atype in activity_types:
-                    self.env['mail.activity'].create({
-                        'res_model_id': sale_model.id,
-                        'res_model': 'sale.order',
-                        'res_id': sale.id,
-                        'activity_type_id': atype.id,
-                        'user_id': sale.user_id.id or sale.create_uid.id,
-                        'date_deadline': date.today(),
-                    })
+                    [('is_quot', '=', True), ('is_event', '=', True)])
             else:
-                return sale
+                activity_types = self.env['mail.activity.type'].search(
+                    [('is_quot', '=', True), ('is_event', '=', False)])
 
-        return sale
+            for atype in activity_types:
+                self.env['mail.activity'].create({
+                    'res_model_id': sale_model.id,
+                    'res_model': 'sale.order',
+                    'res_id': sale.id,
+                    'activity_type_id': atype.id,
+                    'user_id': sale.user_id.id or sale.create_uid.id,
+                    'date_deadline': date.today(),
+                })
 
+        return sales
     def _change_opportunity_stage(self,order_id):
         for order in order_id:
             if order.opportunity_id.stage_id.name in ['Meeting Lead','Aday']:
