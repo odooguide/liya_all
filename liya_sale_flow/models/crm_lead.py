@@ -469,11 +469,29 @@ class CrmLead(models.Model):
 
     def action_view_quotations(self):
         self.ensure_one()
-        return self.env.ref('liya_sale_flow.action_sale_order_quotations_by_lead').read()[0]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Teklifler'),
+            'res_model': 'sale.order',
+            'view_mode': 'list,form',
+            'views': [(self.env.ref('sale.view_order_tree').id, 'list'), (False, 'form')],
+            'domain': [('opportunity_id', '=', self.id), ('state', 'in', ['draft', 'sent'])],
+            'context': {'default_opportunity_id': self.id},
+            'target': 'current',
+        }
 
     def action_view_orders(self):
         self.ensure_one()
-        return self.env.ref('liya_sale_flow.action_sale_order_orders_by_lead').read()[0]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Siparişler'),
+            'res_model': 'sale.order',
+            'view_mode': 'list,form',
+            'views': [(self.env.ref('sale.view_order_tree').id, 'list'), (False, 'form')],
+            'domain': [('opportunity_id', '=', self.id), ('state', 'in', ['sale', 'done'])],
+            'context': {'default_opportunity_id': self.id},
+            'target': 'current',
+        }
 
 
 class ForeignLocal(models.Model):

@@ -52,7 +52,7 @@
   <field name="arch" type="xml">
     <xpath expr="//page[@name='description']" position="before">
       <page string="Sale Order Infos">
-        <field name="sale_order_summary" widget="html" readonly="1" colspan="2"/>
+        <field name="som" widget="html" readonly="1" colspan="2"/>
       </page>
     </xpath>
   </field>

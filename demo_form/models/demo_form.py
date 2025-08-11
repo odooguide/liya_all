@@ -241,9 +241,8 @@ class ProjectDemoForm(models.Model):
     photo_drone = fields.Boolean(string="Drone Camera")
     photo_harddisk_delivered = fields.Selection(
         [('delivered', 'Delivered'),
-         ('def', "Seçiniz"),
         ('later', 'Deliver Later')],
-        defautl='def',string="Hard Disk 1TB")
+       string="Hard Disk 1TB")
     photo_yacht_shoot = fields.Boolean(string='Yacht Photo Shoot')
     # Music
     music_description = fields.Html(
@@ -254,7 +253,7 @@ class ProjectDemoForm(models.Model):
     music_dj_fatih = fields.Boolean(string="DJ: Fatih Aşçı")
     music_dj_engin = fields.Boolean(string="DJ: Engin Sadiki")
     music_other = fields.Boolean(string="Other")
-    dj_person = fields.Selection([ ('', "Seçiniz"),('engin', 'DJ: Engin Sadiki'), ('fatih', 'DJ: Fatih Aşçı'), ('other', 'Diğer')],string='DJ')
+    dj_person = fields.Selection([ ('engin', 'DJ: Engin Sadiki'), ('fatih', 'DJ: Fatih Aşçı'), ('other', 'Diğer')],string='DJ')
     music_other_details = fields.Char(string="If Other, specify")
 
     # ── Table Decoration page ────────────────────────────────────────────────
@@ -592,8 +591,14 @@ class ProjectDemoForm(models.Model):
                     _("Barbekü wraps yalnızca After Party ve Ultra birlikte seçildiğinde aktif olabilir."))
 
     @api.onchange('dj_person')
-    def onchange_dj_person(self):
+    def _onchange_dj_person(self):
         for rec in self:
-            if rec.dj_person:
-                rec.dj_person=self.project_id.dj_person
+            if rec.project_id:
+                rec.project_id.dj_person = rec.dj_person
+
+    @api.depends('dj_person')
+    def _sync_project(self):
+        for rec in self:
+            if rec.project_id and rec.project_id.dj_person != rec.dj_person:
+                rec.project_id.dj_person = rec.dj_person
 

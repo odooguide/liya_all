@@ -34,6 +34,12 @@ class ProjectProject(models.Model):
         readonly=True,
         help="Sale Order'dan (indirim satırları hariç) çekilen özet bilgi."
     )
+    som = fields.Html(
+        string="Sale Order Summary",
+        sanitize=False,
+        readonly=True,
+        help="Sale Order'dan (indirim satırları hariç) çekilen özet bilgi."
+    )
     dj_person=fields.Selection([('engin','DJ: Engin Sadiki'),('fatih','DJ: Fatih Aşçı'),('other','Diğer')], string='DJ')
     crm_partner_id = fields.Many2one(
         'res.partner',
@@ -239,6 +245,7 @@ class ProjectProject(models.Model):
             html += "</tbody></table>"
 
             rec.sale_order_summary = html
+            rec.som=html
 
     @api.onchange('confirmed_demo_form_plan')
     def _onchange_confirmed_contract_security(self):
@@ -267,7 +274,7 @@ class ProjectProject(models.Model):
         is_org_manager = user.has_group('__export__.res_groups_102_8eb2392b')
         is_admin = user.has_group('base.group_system')
 
-        if is_admin or is_project_manager or is_org_manager:
+        if is_admin or is_project_manager or is_org_manager or self.user_id.id==user.id:
             return True
 
         demo_task = self._get_demo_task()
@@ -437,11 +444,13 @@ class ProjectProject(models.Model):
                 if "Özel" in name:
                     vals['music_other'] = True
                     vals['music_other_details'] = "Custom Live Music package"
-
+                if self.dj_person:
+                    vals['dj_person']=self.dj_person
                 if name.upper() == "BARNEY":
                     vals['prehost_barney'] = True
                 if name.upper() == "FRED":
                     vals['prehost_fred'] = True
+
 
                 if name == "Breakfast Service":
                     vals['prehost_breakfast'] = True
@@ -505,27 +514,56 @@ class ProjectProject(models.Model):
             'res_id': demo.id,
             'target': 'current',
         }
+
     @api.onchange('dj_person')
-    def onchange_dj_person(self):
+    def _onchange_dj_person(self):
         for rec in self:
-            if rec.dj_person:
-                self.demo_form_ids[0].dj_person=rec.dj_person
+            for demo in rec.demo_form_ids:
+                demo.dj_person = rec.dj_person
+
+    @api.depends('dj_person')
+    def _sync_demo_forms(self):
+        for rec in self:
+            for demo in rec.demo_form_ids:
+                if demo.dj_person != rec.dj_person:
+                    demo.dj_person = rec.dj_person
 
     def _get_done_stage(self):
         """stage_id'nin comodel'ini dinamik bul ve 'Tamamlanan/Done/Completed/Bitti' benzeri bir stage getir."""
         field = self._fields.get('stage_id')
         if not field or field.type != 'many2one':
-            return False
-        Stage = self.env[field.comodel_name].sudo()
-        stage = Stage.search([
-            '|', '|', '|',
-            ('name', 'ilike', 'catamaran'),  # Tamamlanan / Tamamlandi
-            ('name', 'ilike', 'bitti'),
-            ('name', 'ilike', 'done'),
-            ('name', 'ilike', 'complet'),  # complete/completed
-        ], limit=1)
-        return stage
+            return self.env['ir.model'].browse()  # boş recordset
 
+        model_name = getattr(field, 'comodel_name', False)
+        if not model_name:
+            return self.env['ir.model'].browse()
+
+        Stage = self.env[model_name].sudo()
+
+        # Önce isimden bulmaya çalış
+        stage = Stage.search([
+            '|', '|', '|', '|',
+            ('name', '=', 'Tamamlanan'),
+            ('name', '=', 'Completed'),
+            ('name', '=', 'Bitti'),
+            ('name', '=', 'Done'),
+            ('name', 'ilike', 'Complet'),
+        ], limit=1)
+
+        if stage:
+            return stage
+
+        if 'is_closed' in Stage._fields:
+            stage = Stage.search([('is_closed', '=', True)], limit=1)
+            if stage:
+                return stage
+
+        if 'fold' in Stage._fields:
+            stage = Stage.search([('fold', '=', True)], limit=1)
+            if stage:
+                return stage
+
+        return self.env[model_name].browse()
 
     @api.model
     def cron_update_stage_by_wedding_date(self):

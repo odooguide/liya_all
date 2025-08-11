@@ -206,8 +206,8 @@
                                            widget="html" colspan="2" nolabel="1"/>
                                     <separator string="Accommodation" colspan="2"/>
                                     <group col="2">
-                                        <field name="accommodation_hotel" invisible="accommodation_service==False"/>
                                         <field name="accommodation_service" widget="boolean_toggle"/>
+                                        <field name="accommodation_hotel" invisible="accommodation_service==False"/>
                                         <field name="accomodation_notes"
                                                placeholder="Write your accommodation notes in here" widget="html"
                                                colspan="2" nolabel="1"/>
@@ -269,7 +269,7 @@
                                            invisible="photo_homesession==False"/>
                                     <field name="photo_yacht_shoot" widget="boolean_toggle"
                                            invisible="sale_template_id!=3"/>
-                                    <field name="photo_harddisk_delivered"/>
+                                    <field name="photo_harddisk_delivered" placeholder="Seçiniz…"/>
                                 </group>
                             </group>
                             <group>
@@ -286,7 +286,7 @@
 
                                 </group>
                                 <group col="2">
-                                    <field name="dj_person"/>
+                                    <field name="dj_person" placeholder="Seçiniz…"/>
                                     <field name="music_other_details" invisible="dj_person!='other'"/>
                                 </group>
                             </group>
@@ -301,10 +301,10 @@
                         <page string="DJ" name="dj">
 
                             <group string="Significant Songs" col="2">
-                                <field name="entrance_song"/>
-                                <field name="first_dance_song"/>
-                                <field name="cake_song"/>
-                                <field name="bouquet_toss_song"/>
+                                <field name="entrance_song" placeholder="Lütfen buraya belirtin."/>
+                                <field name="first_dance_song" placeholder="Lütfen buraya belirtin."/>
+                                <field name="cake_song" placeholder="Lütfen buraya belirtin."/>
+                                <field name="bouquet_toss_song" placeholder="Lütfen buraya belirtin."/>
                             </group>
 
                             <!-- 2A. Language Ratio -->
@@ -367,35 +367,35 @@
                                 <field name="local_music" widget="boolean_toggle"/>
                                 <field name="local_music_songs"
                                        widget="html"
-                                       invisible="local_music == False"/>
+                                       invisible="local_music == False" placeholder="Lütfen notlarınızı buraya yazın."/>
                             </group>
 
                             <!-- 4) Request songs as HTML editors -->
                             <group col="2">
                                 <group string="Cocktail Request Songs">
-                                    <field name="cocktail_request" widget="html"/>
+                                    <field name="cocktail_request" widget="html" placeholder="Lütfen notlarınızı buraya yazın."/>
                                 </group>
                                 <group string="Dinner Request Songs">
-                                    <field name="dinner_request" widget="html"/>
+                                    <field name="dinner_request" widget="html" placeholder="Lütfen notlarınızı buraya yazın."/>
                                 </group>
                             </group>
                             <group col="2">
                                 <group string="Party Request Songs">
-                                    <field name="party_request" widget="html"/>
+                                    <field name="party_request" widget="html" placeholder="Lütfen buraya yazın."/>
                                 </group>
                                 <group string="After Party Request Songs">
-                                    <field name="afterparty_request" widget="html"/>
+                                    <field name="afterparty_request" widget="html" placeholder="Lütfen buraya yazın."/>
                                 </group>
                             </group>
 
                             <!-- 5) Ban Songs/Artists -->
                             <group string="Ban Songs/Artists">
-                                <field name="ban_songs" widget="html"/>
+                                <field name="ban_songs" widget="html" placeholder="Lütfen buraya yazın."/>
                             </group>
 
                             <!-- 6) Other Music Notes -->
                             <group string="Other Notes about Music">
-                                <field name="other_music_notes" widget="html"/>
+                                <field name="other_music_notes" widget="html" placeholder="Lütfen notlarınızı buraya yazın."/>
                             </group>
                         </page>
 
@@ -410,9 +410,9 @@
                                            widget="many2many_checkboxes"/>
                                     <field name="table_color_ids"
                                            widget="many2many_tags"/>
-                                    <field name="table_tag_ids"/>
+                                    <field name="table_tag_ids" placeholder="Seçiniz…"/>
                                     <field name="cake_choice_ids"
-                                           widget="many2many_checkboxes"/>
+                                           widget="many2many_checkboxes" />
                                     <field name="cake_real" widget="boolean_toggle"/>
                                     <field name="cake_champagne_tower" widget="boolean_toggle"/>
                                 </group>

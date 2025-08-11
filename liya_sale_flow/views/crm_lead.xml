@@ -290,29 +290,6 @@
           </xpath>
         </field>
       </record>
-       <record id="action_sale_order_quotations_by_lead" model="ir.actions.act_window">
-      <field name="name">Lead Teklifleri</field>
-      <field name="res_model">sale.order</field>
-      <field name="view_mode">list,form</field>
-      <field name="view_id" ref="sale.view_order_tree"/>
-      <field name="domain">
-        [('opportunity_id', '=', active_id),
-         ('state', 'in', ['draft','sent'])]
-      </field>
-      <field name="context">{}</field>
-    </record>
-
-    <record id="action_sale_order_orders_by_lead" model="ir.actions.act_window">
-      <field name="name">Lead Siparişleri</field>
-      <field name="res_model">sale.order</field>
-      <field name="view_mode">list,form</field>
-      <field name="view_id" ref="sale.view_order_tree"/>
-      <field name="domain">
-        [('opportunity_id', '=', active_id),
-         ('state', 'in', ['sale','done'])]
-      </field>
-      <field name="context">{}</field>
-    </record>
 
     <record id="view_crm_lead_form_with_lead_buttons" model="ir.ui.view">
     <field name="name">crm.lead.form.with.lead.buttons</field>

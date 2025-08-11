@@ -67,7 +67,7 @@ class ProjectTask(models.Model):
             ]).ids
             for rec in self:
                 uid = self.env.uid
-                if uid != rec.user_id.id and uid not in special_users:
+                if uid not in rec.user_ids and uid not in special_users:
                     raise UserError("Bu aşamayı değiştirmeye yetkiniz yok.")
 
         res = super(ProjectTask, self).write(vals)
