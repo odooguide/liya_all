@@ -521,18 +521,11 @@ class ProjectProject(models.Model):
             'target': 'current',
         }
 
-    @api.onchange('dj_person')
-    def _onchange_dj_person(self):
-        for rec in self:
-            for demo in rec.demo_form_ids:
-                demo.dj_person = rec.dj_person
-
-    @api.depends('dj_person')
-    def _sync_demo_forms(self):
-        for rec in self:
-            for demo in rec.demo_form_ids:
-                if demo.dj_person != rec.dj_person:
-                    demo.dj_person = rec.dj_person
+    def write(self, vals):
+        res = super().write(vals)
+        if 'dj_person' in vals:
+            self.mapped('demo_form_ids').write({'dj_person': vals['dj_person']})
+        return res
 
     def _get_done_stage(self):
         """stage_id'nin comodel'ini dinamik bul ve 'Tamamlanan/Done/Completed/Bitti' benzeri bir stage getir."""
