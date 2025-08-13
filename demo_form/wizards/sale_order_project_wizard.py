@@ -59,7 +59,7 @@ class SaleOrderProjectWizard(models.TransientModel):
         partner_slug = (order.opportunity_id and order.opportunity_id.name or '').replace(' ', '-')
         project_name = f"D{seq_num}-{date_str}-{partner_slug}"
 
-        user_recs = order.coordinator_ids.mapped('employee_ids.user_id')
+        user_recs = order.coordinator_ids.sudo().mapped('employee_ids.user_id')
 
         users = self.env['res.users'].sudo().search([
             ('id', 'in', user_recs.ids)
