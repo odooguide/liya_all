@@ -32,7 +32,6 @@
                         icon="fa-briefcase"
                         class="oe_stat_button"
                         invisible="project_id==False"
-                        groups="base.group_user"
                 />
             </xpath>
         </field>
