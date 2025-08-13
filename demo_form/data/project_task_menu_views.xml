@@ -26,10 +26,10 @@
         'search_default_my_tasks': 1,
         'group_by': ['project_id']
       }"/>
-        <field name="view_ids" eval="[
-        (5, 0, 0),
-        (0, 0, {'sequence': 1, 'view_mode':'list','view_id':ref('project.open_view_my_task_list_tree')})
-      ]"/>
+<!--        <field name="view_ids" eval="[-->
+<!--        (5, 0, 0),-->
+<!--        (0, 0, {'sequence': 1, 'view_mode':'list','view_id':ref('project.open_view_my_task_list_tree')})-->
+<!--      ]"/>-->
     </record>
 
 </odoo>
