@@ -77,7 +77,7 @@ class SaleOrderProjectWizard(models.TransientModel):
 
         }
 
-        project = self.env['project.project'].create(vals)
+        project = self.env['project.project'].sudo().create(vals)
         done_stage = self.env['project.task.type'].search([
             ('project_ids', 'in', project.id),
             ('name', '=', 'Done')
