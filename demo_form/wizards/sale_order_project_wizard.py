@@ -61,7 +61,7 @@ class SaleOrderProjectWizard(models.TransientModel):
 
         user_recs = order.coordinator_ids.mapped('employee_ids.user_id')
 
-        users = self.env['res.users'].search([
+        users = self.env['res.users'].sudo().search([
             ('id', 'in', user_recs.ids)
         ])
 
