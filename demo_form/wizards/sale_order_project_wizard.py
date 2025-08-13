@@ -83,7 +83,7 @@ class SaleOrderProjectWizard(models.TransientModel):
             ('name', '=', 'Done')
         ], limit=1)
         if not done_stage:
-            done_stage = self.env['project.task.type'].create({
+            done_stage = self.env['project.task.type'].sudo().create({
                 'name': 'Done',
                 'sequence': 10,
                 'project_ids': [(4, project.id)],
@@ -93,7 +93,7 @@ class SaleOrderProjectWizard(models.TransientModel):
             ('name', '=', 'Cancel')
         ], limit=1)
         if not cancel_stage:
-            cancel_stage = self.env['project.task.type'].create({
+            cancel_stage = self.env['project.task.type'].sudo().create({
                 'name': 'Cancel',
                 'sequence': 0,
                 'project_ids': [(4, project.id)],
