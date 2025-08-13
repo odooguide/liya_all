@@ -19,4 +19,16 @@
     <record id="calendar.action_calendar_event" model="ir.actions.act_window">
         <field name="view_mode" eval="'calendar,pivot,form,list'"/>
     </record>
+
+    <record id="view_calendar_event_form_quick_create_inherit_event_place" model="ir.ui.view">
+      <field name="name">calendar.event.quick.create.add.event.place</field>
+      <field name="model">calendar.event</field>
+      <field name="inherit_id" ref="calendar.view_calendar_event_form_quick_create"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='description']" position="before">
+          <field name="event_place" required="1" nolabel="1" placeholder="Etkinlik mekânı"/>
+        </xpath>
+      </field>
+    </record>
+
 </odoo>
