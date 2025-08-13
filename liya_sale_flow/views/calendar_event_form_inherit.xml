@@ -9,7 +9,7 @@
 
       </xpath>
         <xpath expr="//field[@name='location']" position="replace">
-            <field name="event_place" required="categ_name in ['Etkinlik Satış Toplantısı','Düğün Satış Toplantısı','Demo Toplantısı']"/>
+            <field name="event_place" required="1"/>
             <field name="categ_name" invisible="1"/>
             <field name="meeting_date" invisible="1"/>
         </xpath>

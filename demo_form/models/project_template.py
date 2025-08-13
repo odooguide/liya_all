@@ -100,6 +100,7 @@ class ProjectProject(models.Model):
         compute='_compute_crm_sale_fields',
         store=True,
         readonly=True)
+    event_date=fields.Date(string='Event Date',compute='_compute_crm_sale_fields',)
 
     @api.depends('reinvoiced_sale_order_id',
                  'reinvoiced_sale_order_id.opportunity_id',
@@ -110,7 +111,8 @@ class ProjectProject(models.Model):
                  'reinvoiced_sale_order_id.people_count',
                  'reinvoiced_sale_order_id.sale_order_template_id',
                  'reinvoiced_sale_order_id.coordinator_ids',
-                 'reinvoiced_sale_order_id.opportunity_id')
+                 'reinvoiced_sale_order_id.opportunity_id',
+                 'reinvoiced_sale_order_id.wedding_date')
     def _compute_crm_sale_fields(self):
         for rec in self:
             so = rec.reinvoiced_sale_order_id
@@ -122,18 +124,9 @@ class ProjectProject(models.Model):
                 rec.crm_yabanci_turk = opp.yabanci_turk.id or False
                 rec.so_people_count = so.people_count or 0
                 rec.so_sale_template_id = so.sale_order_template_id.id or False
-                rec.so_coordinator_ids = [(6, 0, so.coordinator_ids.ids)]
-                rec.so_opportunity_id=opp
-            else:
-                rec.crm_partner_id = False
-                rec.crm_second_contact = False
-                rec.crm_request_date = False
-                rec.crm_yabanci_turk = False
-                rec.so_people_count = 0
-                rec.so_sale_template_id = False
-                rec.so_coordinator_ids  = [(5, 0, 0)]
-                rec.so_opportunity_id=False,
-
+                rec.so_coordinator_ids = [(6, 0, so.coordinator_ids.ids)] or False
+                rec.so_opportunity_id=opp or False
+                rec.event_date=so.wedding_date or False
 
     @api.depends('event_ids.start')
     def _compute_demo_state(self):
@@ -148,7 +141,7 @@ class ProjectProject(models.Model):
                 date_val = dt_obj.date() if dt_obj else None
                 if self.demo_form_ids:
                     for demo in self.demo_form_ids:
-                        if date_val and demo.confirmed_demo_form_plan:
+                        if date_val<today and demo.confirmed_demo_form_plan:
                             rec.demo_state = 'completed'
                         else:
                             rec.demo_state = 'planned'
@@ -172,7 +165,7 @@ class ProjectProject(models.Model):
 
             summary_pairs = [
                 ('Müşteri', opportunity.name or ''),
-                ('Koordinator', so.coordinator_ids.display_name or ''),
+                ('Koordinatör', so.coordinator_ids.display_name or ''),
                 ('Satış Temsilcisi', so.user_id.display_name or ''),
                 ('Kişi Sayısı', so.people_count or ''),
                 ('Sözleşme Tarihi', so.contract_date or ''),
@@ -249,11 +242,11 @@ class ProjectProject(models.Model):
             rec.sale_order_summary = html
             rec.som=html
 
-    @api.onchange('confirmed_demo_form_plan')
+    @api.onchange('seat_plan')
     def _onchange_confirmed_contract_security(self):
         for rec in self:
             origin = rec._origin
-            if origin.confirmed_demo_form_plan and not self.env.user.has_group('base.group_system'):
+            if origin.seat_plan and not self.env.user.has_group('base.group_system'):
                 rec.seat_plan = origin.seat_plan
                 raise UserError(
                     _('Only administrators can modify or delete the Confirmed Demo Form once uploaded.')
@@ -317,7 +310,7 @@ class ProjectProject(models.Model):
             future = future.sorted(key='start')
             if future:
                 rec.next_event_id = future[0]
-                rec.next_event_date = fields.Datetime.to_string(future[0].start)
+                rec.next_event_date = future[0].start.strftime('%d.%m.%Y')
             else:
                 rec.next_event_id = False
                 rec.next_event_date = False
@@ -463,22 +456,16 @@ class ProjectProject(models.Model):
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty)
                 vals['photo_standard'] = True
 
-                # if name == "Pasta Show'da Gerçek Pasta":
-                #     vals['cake_choice'] = 'real'
-                # if name == "Pasta Show'da Şampanya Kulesi":
-                #     vals['cake_choice'] = 'champagne'
-
             tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
                 'photo_video_plus',
                 'afterparty_service', 'afterparty_shot_service',
                 'afterparty_sushi',
-                 'afterparty_fog_laser',
                 'accommodation_service','dance_lesson',
             ]
 
-            ultra_extra = ['music_live', 'music_percussion', 'music_trio','photo_yacht_shoot','table_fresh_flowers','bar_alcohol_service',
-                           'photo_drone',]
+            ultra_extra = ['music_live', 'music_percussion', 'music_trio','photo_yacht_shoot','bar_alcohol_service',
+                           'photo_drone', 'afterparty_fog_laser','prehost_barney']
             ultra_fields = elite_fields + ultra_extra
             if tmpl == 'plus':
                 date_str = vals.get('invitation_date') or vals.get('demo_date')

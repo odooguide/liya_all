@@ -30,6 +30,14 @@
     <template id="demo_form_report_layout">
         <t t-call="web.html_container">
             <t t-call="web.external_layout">
+                <style>
+                    .liya-static-page{
+                    page-break-before: always; page-break-after: always;
+                    break-before: page; break-after: page;
+                    clear: both; min-height: 260mm; position: relative;
+                    }
+                </style>
+
                 <main>
                     <t t-foreach="docs" t-as="o">
                         <div class="page" style="font-family: 'Helvetica', Arial, sans-serif; position:relative;">
@@ -116,9 +124,9 @@
                                                     <td colspan="2"
                                                         style="padding:4px 6px; vertical-align:top;text-align:top;width:100%">
                                                         <t t-if="o.special_notes_preview">
-                                                            <div style="white-space:pre-wrap;word-break: break-all;">
-                                                                <span t-field="o.special_notes_preview"/>
-                                                            </div>
+                                                            <div t-field="o.special_notes_preview"
+                                                                 t-options='{"widget":"html"}'
+                                                                 style="word-break:break-word;"/>
                                                         </t>
                                                         <t t-if="not o.special_notes_preview">-</t>
                                                     </td>
@@ -132,9 +140,10 @@
                                 <div style="margin-top:8px; font-size:10pt; font-family:Helvetica, Arial, sans-serif;">
                                     <div style="border:1px solid #4a8599; padding:10px; box-sizing:border-box;">
                                         <strong>Special Notes (continued):</strong>
-                                        <div style=";white-space:pre-wrap;word-break: break-all;text-align:top;">
-                                            <span t-esc="o.special_notes_remaining"/>
-                                        </div>
+                                        no
+                                        <div t-field="o.special_notes_remaining"
+                                             t-options='{"widget":"html"}'
+                                             style="word-break:break-word;"/>
                                     </div>
                                 </div>
                             </t>
@@ -185,8 +194,11 @@
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top;">
                                                     <t t-if="line.location_notes">
-                                                        <span t-esc="line.location_notes"/>
+                                                        <div t-field="line.location_notes"
+                                                             t-options='{"widget":"html"}'
+                                                             style="word-break:break-word;"/>
                                                     </t>
+
                                                 </td>
                                             </tr>
                                         </t>
@@ -244,10 +256,12 @@
                             <!-- C) MENÜ NOTLARI -->
                             <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
                                 <h3 style="margin-bottom:6px;">C) MENU</h3>
-                                <div style="margin-bottom:8px; font-style:italic;">
-                                    <span t-field="o.menu_description"/>
-                                </div>
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
+
+                                <div t-field="o.menu_description"
+                                     t-options='{"widget":"html"}'
+                                     style="word-break:break-word;"/>
+                                <table class="table table-borderless"
+                                       style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tbody>
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600; width:180px;">Hot Appetizer:
@@ -329,10 +343,11 @@
                             <!-- D) BAR NOTLARI -->
                             <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
                                 <h3 style="margin-bottom:6px;">D) BAR</h3>
-                                <div style="margin-bottom:8px;">
-                                    <span t-field="o.bar_description"/>
-                                </div>
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <div t-field="o.bar_description"
+                                     t-options='{"widget":"html"}'
+                                     style="word-break:break-word;"/>
+                                <table class="table table-borderless"
+                                       style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tbody>
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600; width:200px;">Alcohol Service:
@@ -399,7 +414,8 @@
                                 <div style="margin-bottom:8px;">
                                     <span t-field="o.afterparty_description"/>
                                 </div>
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <table class="table table-borderless"
+                                       style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tbody>
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600; width:170px;">After Party:</td>
@@ -779,7 +795,7 @@
                                 <div style="margin-bottom:6px; font-style:italic;">
                                     <span t-field="o.photo_description"/>
                                 </div>
-                                <table class='table table-borderless'
+                                <table class="table table-borderless"
                                        style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600; width:180px;">Standard Photography
@@ -899,7 +915,8 @@
                                 <div style="margin-bottom:6px; font-style:italic;">
                                     <span t-field="o.music_description"/>
                                 </div>
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless"
+                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">Live Music:</td>
                                         <td style="padding:4px 8px;">
@@ -972,7 +989,7 @@
                                 <div style="font-weight:700; font-size:16pt; margin-bottom:6px;">K) TABLE DECORATION
                                 </div>
 
-                                <table class='table table-borderless'
+                                <table class="table table-borderless"
                                        style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600; white-space:nowrap;">Table Theme:
@@ -986,7 +1003,7 @@
                                                     <t t-if="it in o.table_theme_ids">
                                                         <strong>x</strong>
                                                     </t>
-                                                    <t t-else=""></t>
+                                                    <t t-else=""/>
                                                     ),
 
                                                 </t>
@@ -1008,7 +1025,7 @@
                                                     <t t-if="it in o.table_charger_ids">
                                                         <strong>x</strong>
                                                     </t>
-                                                    <t t-else=""></t>
+                                                    <t t-else=""/>
                                                     ),
 
                                                 </t>
@@ -1032,7 +1049,7 @@
                                                     <t t-if="it in o.table_runner_design_ids">
                                                         <strong>x</strong>
                                                     </t>
-                                                    <t t-else=""></t>
+                                                    <t t-else=""/>
                                                     ),
                                                 </t>
                                             </t>
@@ -1052,7 +1069,7 @@
                                                     <t t-if="it in o.table_color_ids">
                                                         <strong>x</strong>
                                                     </t>
-                                                    <t t-else=""></t>
+                                                    <t t-else=""/>
                                                     ),
                                                 </t>
                                             </t>
@@ -1083,7 +1100,7 @@
                                                     <t t-if="it in o.cake_choice_ids">
                                                         <strong>x</strong>
                                                     </t>
-                                                    <t t-else=""></t>
+                                                    <t t-else=""/>
                                                     ),
                                                 </t>
                                             </t>
@@ -1092,14 +1109,14 @@
                                                 <t t-if="o.cake_real">
                                                     <strong>x</strong>
                                                 </t>
-                                                <t t-else=""></t>
+                                                <t t-else=""/>
                                                 )
                                             </span>
                                             <span style="margin-left:12px;">Champagne Tower (
                                                 <t t-if="o.cake_champagne_tower">
                                                     <strong>x</strong>
                                                 </t>
-                                                <t t-else=""></t>
+                                                <t t-else=""/>
                                                 )
                                             </span>
                                         </td>
@@ -1113,24 +1130,24 @@
                                             <t t-if="o.table_fresh_flowers">
                                                 <strong>x</strong>
                                             </t>
-                                            <t t-else=""></t>
+                                            <t t-else=""/>
                                             ) - No (
                                             <t t-if="not o.table_fresh_flowers">
                                                 <strong>x</strong>
                                             </t>
-                                            <t t-else=""></t>
+                                            <t t-else=""/>
                                             )
                                             <span style="margin-left:16px;">/</span>
                                             <span style="margin-left:16px;">Dried Flowers: Yes (
                                                 <t t-if="o.table_dried_flowers">
                                                     <strong>x</strong>
                                                 </t>
-                                                <t t-else=""></t>
+                                                <t t-else=""/>
                                                 ) - No (
                                                 <t t-if="not o.table_dried_flowers">
                                                     <strong>x</strong>
                                                 </t>
-                                                <t t-else=""></t>
+                                                <t t-else=""/>
                                                 )
                                             </span>
                                         </td>
@@ -1154,7 +1171,7 @@
                             <!-- L) OTHER NOTES -->
                             <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
                                 <div style="font-weight:700; font-size:16pt; margin-bottom:6px;">L) OTHER NOTES</div>
-                                <table class='table table-borderless'
+                                <table class="table table-borderless"
                                        style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">RSVP:</td>
@@ -1163,12 +1180,12 @@
                                             <t t-if="o.other_lcv">
                                                 <strong>x</strong>
                                             </t>
-                                            <t t-else=""></t>
+                                            <t t-else=""/>
                                             ) - No (
                                             <t t-if="not o.other_lcv">
                                                 <strong>x</strong>
                                             </t>
-                                            <t t-else=""></t>
+                                            <t t-else=""/>
                                             )
                                         </td>
                                     </tr>
@@ -1179,12 +1196,12 @@
                                             <t t-if="o.other_social_media_tag">
                                                 <strong>x</strong>
                                             </t>
-                                            <t t-else=""></t>
+                                            <t t-else=""/>
                                             ) - No (
                                             <t t-if="not o.other_social_media_tag">
                                                 <strong>x</strong>
                                             </t>
-                                            <t t-else=""></t>
+                                            <t t-else=""/>
                                             )
                                             <span style="margin-left:10px;">
                                                 <t t-if="o.other_social_media_tag">
@@ -1209,7 +1226,8 @@
                                 <!-- 1) Significant Songs -->
                                 <div style="font-weight:700; font-size:12pt; margin-bottom:4px;">1) SIGNIFICANT SONGS
                                 </div>
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px;">
+                                <table class="table table-borderless"
+                                       style="width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px;">
                                     <tr>
                                         <td style="padding:4px 8px; width:220px; font-weight:600;">A — Entrance Song:
                                         </td>
@@ -1257,7 +1275,7 @@
                                         <t t-if="o.ratio_choice == '50_50'">
                                             <strong>x</strong>
                                         </t>
-                                        <t t-else=""></t>
+                                        <t t-else=""/>
                                         )
                                     </span>
                                     <span style="margin-right:14px;">//</span>
@@ -1267,7 +1285,7 @@
                                         <t t-if="o.ratio_choice == '25_75'">
                                             <strong>x</strong>
                                         </t>
-                                        <t t-else=""></t>
+                                        <t t-else=""/>
                                         )
                                     </span>
                                     <span style="margin-right:14px;">//</span>
@@ -1277,7 +1295,7 @@
                                         <t t-if="o.ratio_choice == '75_25'">
                                             <strong>x</strong>
                                         </t>
-                                        <t t-else=""></t>
+                                        <t t-else=""/>
                                         )
                                     </span>
                                     <span style="margin-right:14px;">//</span>
@@ -1287,7 +1305,7 @@
                                         <t t-if="o.ratio_choice == 'other'">
                                             <strong>x</strong>
                                         </t>
-                                        <t t-else=""></t>
+                                        <t t-else=""/>
                                         ):
                                         Turkish %
                                         <span t-esc="o.ratio_turkish or '____'"/>
@@ -1304,20 +1322,22 @@
                                     You may choose the type of music for the four different parts of your wedding.
                                 </div>
 
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless"
+                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <!-- Cocktail -->
                                         <td style="vertical-align:top; width:25%; padding:6px 10px; border-right:1px solid #cfd8dc;">
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
                                                 Cocktail
                                             </div>
-                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless"
+                                                   style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Lounge (
                                                         <t t-if="o.cocktail_lounge">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1325,7 +1345,7 @@
                                                         <t t-if="o.cocktail_french">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1333,7 +1353,7 @@
                                                         <t t-if="o.cocktail_italian">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1341,7 +1361,7 @@
                                                         <t t-if="o.cocktail_greek">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1349,7 +1369,7 @@
                                                         <t t-if="o.cocktail_house">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1357,7 +1377,7 @@
                                                         <t t-if="o.cocktail_easy_bossa">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                             </table>
@@ -1368,13 +1388,14 @@
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
                                                 Dinner
                                             </div>
-                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless"
+                                                   style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Lounge (
                                                         <t t-if="o.dinner_lounge">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1382,7 +1403,7 @@
                                                         <t t-if="o.dinner_turkish_acoustic">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1390,7 +1411,7 @@
                                                         <t t-if="o.dinner_turkish_retro">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1398,7 +1419,7 @@
                                                         <t t-if="o.dinner_italian_french_greek">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1406,7 +1427,7 @@
                                                         <t t-if="o.dinner_oldies">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                             </table>
@@ -1417,13 +1438,14 @@
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
                                                 Party
                                             </div>
-                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless"
+                                                   style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Turkish (
                                                         <t t-if="o.party_turkish">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1431,7 +1453,7 @@
                                                         <t t-if="o.party_turkish_80s_90s">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1439,7 +1461,7 @@
                                                         <t t-if="o.party_local">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1447,7 +1469,7 @@
                                                         <t t-if="o.party_radio_top50">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1455,7 +1477,7 @@
                                                         <t t-if="o.party_oldies">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1463,7 +1485,7 @@
                                                         <t t-if="o.party_latin_salsa">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1471,7 +1493,7 @@
                                                         <t t-if="o.party_hiphop_rnb">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1479,7 +1501,7 @@
                                                         <t t-if="o.party_90s_2000s_hits">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1487,7 +1509,7 @@
                                                         <t t-if="o.party_turkish_rock">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1495,7 +1517,7 @@
                                                         <t t-if="o.party_house_electronic">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                             </table>
@@ -1506,13 +1528,14 @@
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the After
                                                 Party
                                             </div>
-                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless"
+                                                   style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Turkish (
                                                         <t t-if="o.after_turkish">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1520,7 +1543,7 @@
                                                         <t t-if="o.after_turkish_80s_90s">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1528,7 +1551,7 @@
                                                         <t t-if="o.after_radio_top50">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1536,7 +1559,7 @@
                                                         <t t-if="o.after_party_hits">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1544,7 +1567,7 @@
                                                         <t t-if="o.after_oldies">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1552,7 +1575,7 @@
                                                         <t t-if="o.after_latin_salsa">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1560,7 +1583,7 @@
                                                         <t t-if="o.after_hiphop_rnb">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1568,7 +1591,7 @@
                                                         <t t-if="o.after_90s_2000s_hits">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1576,7 +1599,7 @@
                                                         <t t-if="o.after_turkish_rock">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1584,7 +1607,7 @@
                                                         <t t-if="o.after_house_electronic">
                                                             <strong>x</strong>
                                                         </t>
-                                                        <t t-else=""></t>)
+                                                        <t t-else=""/>)
                                                     </td>
                                                 </tr>
                                             </table>
@@ -1592,6 +1615,140 @@
                                     </tr>
                                 </table>
                             </div>
+                            <!-- 3) LOCAL MUSIC DURING THE PARTY -->
+                            <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
+                                <div style="font-weight:700; font-size:12pt; margin-bottom:6px;">3) LOCAL MUSIC DURING
+                                    THE PARTY
+                                </div>
+                                <div style="font-size:11pt; margin-bottom:6px;">
+                                    Would you like local music during the Party?
+                                    Yes (
+                                    <t t-if="o.local_music">
+                                        <strong>x</strong>
+                                    </t>
+                                    <t t-else=""></t>
+                                    ) - No (
+                                    <t t-if="not o.local_music">
+                                        <strong>x</strong>
+                                    </t>
+                                    <t t-else=""></t>
+                                    )
+                                </div>
+
+                                <div style="font-size:10pt; color:#444; margin-bottom:4px;">If yes, please specify the
+                                    songs:
+                                </div>
+                                <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;">
+                                    <t t-if="o.local_music_songs">
+                                        <span t-field="o.local_music_songs"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="color:#999;">—</span>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- 4) REQUEST SONGS -->
+                            <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
+                                <div style="font-weight:700; font-size:12pt; margin-bottom:6px;">4) REQUEST SONGS</div>
+                                <table class='table table-borderless'
+                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                    <tr>
+                                        <!-- Cocktail -->
+                                        <td style="vertical-align:top; width:25%; padding:6px 8px; border-right:1px solid #cfd8dc;">
+                                            <div style="font-weight:600; margin-bottom:4px;">Cocktail request songs:
+                                            </div>
+                                            <div style="white-space:pre-wrap;">
+                                                <t t-if="o.cocktail_request">
+                                                    <span t-field="o.cocktail_request"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color:#999;">-</span>
+                                                </t>
+                                            </div>
+                                        </td>
+                                        <!-- Dinner -->
+                                        <td style="vertical-align:top; width:25%; padding:6px 8px; border-right:1px solid #cfd8dc;">
+                                            <div style="font-weight:600; margin-bottom:4px;">Dinner request songs:</div>
+                                            <div style="white-space:pre-wrap;">
+                                                <t t-if="o.dinner_request">
+                                                    <span t-field="o.dinner_request"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color:#999;">-</span>
+                                                </t>
+                                            </div>
+                                        </td>
+                                        <!-- Party -->
+                                        <td style="vertical-align:top; width:25%; padding:6px 8px; border-right:1px solid #cfd8dc;">
+                                            <div style="font-weight:600; margin-bottom:4px;">Party request songs:</div>
+                                            <div style="white-space:pre-wrap;">
+                                                <t t-if="o.party_request">
+                                                    <span t-field="o.party_request"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color:#999;">-</span>
+                                                </t>
+                                            </div>
+                                        </td>
+                                        <!-- After Party -->
+                                        <td style="vertical-align:top; width:25%; padding:6px 8px;">
+                                            <div style="font-weight:600; margin-bottom:4px;">After Party request
+                                                songs:
+                                            </div>
+                                            <div style="white-space:pre-wrap;">
+                                                <t t-if="o.afterparty_request">
+                                                    <span t-field="o.afterparty_request"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color:#999;">-</span>
+                                                </t>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- 5) BAN ANY SONGS OR ARTISTS -->
+                            <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
+                                <div style="font-weight:700; font-size:12pt; margin-bottom:6px;">5) BAN ANY SONGS OR
+                                    ARTISTS
+                                </div>
+                                <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;">
+                                    <t t-if="o.ban_songs">
+                                        <span t-field="o.ban_songs"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="color:#999;">-</span>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- 6) OTHER NOTES ABOUT MUSIC -->
+                            <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
+                                <div style="font-weight:700; font-size:12pt; margin-bottom:6px;">6) OTHER NOTES ABOUT
+                                    MUSIC
+                                </div>
+                                <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;">
+                                    <t t-if="o.other_music_notes">
+                                        <span t-field="o.other_music_notes"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="color:#999;">-</span>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Optional: spillover long notes, if you use preview/remaining on this page -->
+                            <t t-if="o.special_notes_remaining">
+                                <div style="margin-top:10px; font-family:Helvetica, Arial, sans-serif;">
+                                    <div style="font-weight:700; font-size:11pt; margin-bottom:4px;">Special Notes
+                                        (continued)
+                                    </div>
+                                    <span t-field="o.special_notes_remaining"/>
+                                </div>
+                            </t>
+
 
                             <!-- Footer -->
                             <div class="footer"
@@ -1599,6 +1756,112 @@
                                 <span>Generated on
                                     <t t-esc="time.strftime('%Y-%m-%d %H:%M')"/>
                                 </span>
+                            </div>
+                        </div>
+                        <!-- ========== STATIC PAGE: EXPLICIT CONSENT TEXT (EN) ==================== -->
+                        <!-- ===== STATİK SAYFA: AÇIK RIZA METNİ (TR) ===== -->
+                        <div class="page liya-static-page"
+                             style="font-family:Helvetica, Arial, sans-serif; clear:both;">
+
+                            <!-- Başlık -->
+                            <div style="text-align:center; margin-bottom:10px;">
+                                <div style="font-weight:700; letter-spacing:0.4px;">LİYA ETKİNLİK YÖNETİMİ VE RESTAURANT
+                                    İŞLETMECİLİĞİ A.Ş.
+                                </div>
+                                <div style="font-weight:700; font-size:14pt; margin-top:6px;">AÇIK RIZA METNİ</div>
+                            </div>
+
+                            <!-- Bilgilendirme kutusu -->
+                            <div style="font-size:10pt; line-height:1.45; color:#111; border:1px solid #ccc; padding:8px; margin-bottom:10px;">
+                                <p>Bu açık rıza metni size, tarafınıza aydınlatma yapıldıktan sonra sunulmuştur. Lütfen
+                                    önce aydınlatma metnini
+                                    okuduğunuzdan ve bu metne özgür iradenizle onay verdiğinizden emin olunuz. Bu metne
+                                    konu kişisel verilerin
+                                    işlenmesine açık rızanızı dilediğiniz zaman geri alabilirsiniz. Kişisel verilerinizi
+                                    önemsiyor ve koruyoruz.
+                                </p>
+                            </div>
+
+                            <!-- Gövde -->
+                            <div style="font-size:12pt; line-height:1.55; color:#111;">
+                                <p>İşbu açık rıza metni; belirli bir konuya ilişkin, bilgilendirmeye dayanan ve özgür
+                                    iradeyle açıklanan rızayı
+                                    ifade etmekte olup; aşağıda belirtilen konulara ilişkin bilgilendirme içermektedir
+                                    ve bu metne onay verip
+                                    vermeme konusunda özgür olduğunuzu hatırlatır.
+                                </p>
+
+                                <p>6698 sayılı Kişisel Verilerin Korunması Kanunu’nun (“KVKK”) 5 ve 6’ncı maddeleri
+                                    kapsamında ve kanundan
+                                    kaynaklanan hukuki sebeplere dayanarak; <strong>“Liya Müşteri Aydınlatma
+                                        Metni”</strong>’ni okuduğunuzu
+                                    ve anladığınızı beyan edersiniz.
+                                </p>
+
+                                <p>Bu kapsamda, yalnızca açık rıza gerektiren işleme, muhafaza ve aktarma faaliyetleri
+                                    için rızanız talep
+                                    edilmektedir. Kişisel verileriniz, belirtilen amaçlarla gerekli olduğu ölçüde
+                                    işlenecektir.
+                                </p>
+
+                                <p>Veri sorumlusu <strong>LİYA ETKİNLİK YÖNETİMİ VE RESTAURANT İŞLETMECİLİĞİ A.Ş.
+                                </strong> olarak; KVKK’da yer alan
+                                    istisnalar saklı kalmak kaydıyla aşağıdaki hususlarda kişisel verilerinizin
+                                    işlenmesi ve aktarılması için
+                                    açık rızanızı talep ediyoruz. Detaylar için <strong>Liya Müşteri Aydınlatma
+                                        Metni</strong>’ne başvurabilirsiniz.
+                                </p>
+
+                                <p style="margin-top:8px; margin-bottom:0; font-weight:700;">Açık rızanın kapsamı</p>
+                                <div style="margin-top:12px; border:1px solid #333; padding:10px; font-size:10.5pt;">
+                                    <p style="margin-top:4px;">
+                                        Organizasyon/hizmet süreçlerinin yürütülmesi, iletişim faaliyetlerinin
+                                        yürütülmesi, izinli iletişim ve LCV
+                                        aramalarının yapılması amacıyla <strong>iletişim bilgilerimin işlenmesi ve
+                                        aktarılmasına</strong>; ayrıca
+                                        listemi verdiğim misafirlerimin ilgili bilgilendirme arama ve SMS’lerinden
+                                        faydalanabilmeleri için verilerinin
+                                        işlenmesine açık rıza veriyorum.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Rıza seçenekleri -->
+                            <table class="table table-borderless"
+                                   style="width:100%; border-collapse:collapse; margin-top:10px; font-size:10.5pt;">
+                                <tr>
+                                    <td style="padding:6px 8px; width:26px;">
+                                        <span style="display:inline-block; width:14px; height:14px; border:1px solid #333; vertical-align:middle;"></span>
+                                    </td>
+                                    <td style="padding:6px 8px;">Kabul ediyorum.</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:6px 8px;">
+                                        <span style="display:inline-block; width:14px; height:14px; border:1px solid #333; vertical-align:middle;"></span>
+                                    </td>
+                                    <td style="padding:6px 8px;">Kabul etmiyorum.</td>
+                                </tr>
+                            </table>
+
+                            <!-- Veri sahibi bilgileri -->
+                            <div style="margin-top:12px; border:1px solid #333; padding:10px; font-size:10.5pt;">
+                                <div style="margin-bottom:8px; font-weight:700;">Veri Sahibi</div>
+
+                                <table class="table table-borderless"
+                                       style="width:100%; border-collapse:collapse; font-size:10.5pt;">
+                                    <tr>
+                                        <td style="padding:6px 8px; width:120px;">Adı Soyadı:</td>
+                                        <td style="padding:6px 8px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:6px 8px;">Tarih:</td>
+                                        <td style="padding:6px 8px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:6px 8px;">İmza:</td>
+                                        <td style="padding:6px 8px;"></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
 

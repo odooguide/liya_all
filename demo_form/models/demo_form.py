@@ -448,7 +448,6 @@ class ProjectDemoForm(models.Model):
 
     def _onchange_start_end_time(self):
         for rec in self:
-            # 1) Orijinal base end time
             if rec.afterparty_ultra:
                 base_end_dt = datetime.strptime('02:00', '%H:%M')
             elif rec.afterparty_service:
@@ -456,7 +455,6 @@ class ProjectDemoForm(models.Model):
             else:
                 base_end_dt = datetime.strptime('23:30', '%H:%M')
 
-            # 2) Eğer dance show varsa +15 dk
             end_dt = base_end_dt + (timedelta(minutes=15) if rec.afterparty_dance_show else timedelta())
             end_str = end_dt.strftime('%H:%M')
 
@@ -484,7 +482,6 @@ class ProjectDemoForm(models.Model):
                 else:
                     t.time = ''
 
-            # 7) Çift Dönüş transport lines
             for t in rec.transport_line_ids.filtered(lambda l: l.label == 'Çift Dönüş'):
                 if rec.afterparty_ultra or rec.afterparty_service:
                     later_dt = base_end_dt + timedelta(minutes=15)
@@ -507,9 +504,9 @@ class ProjectDemoForm(models.Model):
                 continue
             # subtract or add 30 minutes
             if rec.prehost_breakfast:
-                dt_new_transport=dt_transport-timedelta(minutes=30)
+                dt_new_transport=dt_transport-timedelta(minutes=60)
             else:
-                dt_new_transport = dt_transport + timedelta(minutes=30)
+                dt_new_transport = dt_transport + timedelta(minutes=60)
             first_transport.time = dt_new_transport.strftime('%H:%M')
 
     def write(self, vals):

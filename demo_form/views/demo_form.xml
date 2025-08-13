@@ -57,16 +57,16 @@
                         <group>
                             <field name="project_id" invisible="1"/>
                             <field name="invitation_owner"/>
-                            <field name="invitation_date"/>
+                            <field name="invitation_date" readonly="1"/>
                             <field name="duration_days"/>
-                            <field name="ceremony"/>
+                            <field name="ceremony" required="1"/>
                             <field name="start_end_time"/>
 
                         </group>
                         <group>
-                            <field name="demo_date"/>
-                            <field name="sale_template_id"/>
-                            <field name="guest_count"/>
+                            <field name="demo_date" readonly="1" />
+                            <field name="sale_template_id" readonly="1"/>
+                            <field name="guest_count" readonly="1"/>
                             <field name="special_notes" widget="html" placeholder="Write your notes in here"/>
                             <field name="special_notes_preview" widget="html" invisible="1"/>
                             <field name="special_notes_remaining" widget="html" invisible="1"/>
@@ -436,7 +436,7 @@
                                 <field name="other_lcv" widget="boolean_toggle"/>
                                 <field name="other_social_media_tag" widget="boolean_toggle"/>
                                 <field name="other_social_media_details"
-                                       invisible="other_social_media_tag==False"/>
+                                       invisible="other_social_media_tag==False" placeholder="Lütfen Belirtiniz"/>
                             </group>
                             <group>
                                 <field name="other_description" placeholder="Write your other notes in here"
