@@ -120,7 +120,7 @@ class SaleOrderProjectWizard(models.TransientModel):
             sale_line = order.order_line.filtered(lambda l: l.product_id == tmpl.optional_product_id)
             sale_line_id = sale_line and sale_line[0].id or False
 
-            new_task = self.env['project.task'].create({
+            new_task = self.env['project.task'].sudo().create({
                 'project_id': project.id,
                 'name': tmpl.name,
                 'description': tmpl.description,
