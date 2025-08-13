@@ -1864,6 +1864,74 @@
                                 </table>
                             </div>
                         </div>
+                        <!-- ===== STATİK SAYFA: LİYA MÜŞTERİ AYDINLATMA METNİ (TR) ===== -->
+<div class="page liya-static-page" style="font-family:Helvetica, Arial, sans-serif; clear:both;">
+
+  <!-- Başlık -->
+  <div style="text-align:center; margin-bottom:8px;">
+    <div style="font-weight:700; font-size:12pt; letter-spacing:0.3px;">LİYA MÜŞTERİ AYDINLATMA METNİ</div>
+    <div style="font-size:10pt; margin-top:6px; color:#222;">
+      İşbu aydınlatma metni; veri sorumlusu tarafından hangi kişisel verilerinizin hangi amaçla, nasıl ve hangi
+      hukuki sebebe dayanılarak işlendiği, kimlerle paylaşıldığı ve ne kadar süreyle saklandığı konusunda sizi
+      bilgilendirmek amacıyla hazırlanmıştır. Bilgilendirme, 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun
+      10’uncu maddesi kapsamında yapılmaktadır.
+    </div>
+  </div>
+
+  <!-- İki sütunlu içerik -->
+  <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10.5pt; line-height:1.45;">
+    <tr>
+      <!-- Sol sütun -->
+      <td style="vertical-align:top; width:50%; padding:8px 10px; border-right:1px solid #bfc7cf;">
+        <div style="font-weight:700; margin-bottom:6px;">LİYA ETKİNLİK YÖNETİMİ VE RESTAURANT İŞLETMECİLİĞİ A.Ş.</div>
+
+        <div style="font-weight:700; margin-top:6px;">MADDE 1: VERİ SORUMLUSU</div>
+        <p>Kişisel verileriniz, veri sorumlusu sıfatıyla <strong>LİYA ETKİNLİK YÖNETİMİ VE RESTAURANT
+           İŞLETMECİLİĞİ A.Ş.</strong> tarafından, aşağıda açıklanan kapsamda işlenebilecektir.</p>
+
+        <div style="font-weight:700; margin-top:6px;">MADDE 2: İŞLENEN KİŞİSEL VERİLER VE AMAÇLARI</div>
+        <p>LİYA; davet sahibinin oluşturduğu davetli listesindeki kişilerin <strong>ad-soyad</strong> ve
+           <strong>telefon</strong> bilgilerini; misafir katılım koordinasyonu, LCV aramaları ve organizasyona
+           dair SMS/telefon bilgilendirmeleri amacıyla işler. Veriler, yalnızca ilgili organizasyonun
+           iletişim/operasyon süreçlerinin yürütülmesi kapsamında kullanılır.</p>
+
+        <div style="font-weight:700; margin-top:6px;">MADDE 3: TOPLAMA YÖNTEMİ VE HUKUKİ SEBEPLER</div>
+        <p>Veriler, organizasyon öncesinde davet sahibinden temin edilir. İşleme faaliyetleri; gerektiğinde
+           <em>açık rıza</em>, bunun dışında Kanun’un 5/2 ve 6’ncı maddelerindeki <em>meşru menfaat</em> ve
+           sözleşmenin kurulması/ifası hukuki sebeplerine dayanılarak yürütülür. Telefon numaraları yalnızca
+           LCV aramaları ve ilgili SMS gönderimleri için kullanılır; hizmet kalitesi ve olası aksaklıkların
+           giderilmesi amacıyla da iletişim kurulabilir.</p>
+
+        <div style="font-weight:700; margin-top:6px;">MADDE 4: SAKLAMA SÜRESİ</div>
+        <p>Bu aydınlatma metninde yer alan kişisel veriler, organizasyon süresince ve amaçla sınırlı olarak
+           saklanır. Organizasyonun bitimini müteakip ilgili veriler KVKK ve ikincil mevzuata uygun şekilde
+           silinir, yok edilir veya anonim hale getirilir.</p>
+      </td>
+
+      <!-- Sağ sütun -->
+      <td style="vertical-align:top; width:50%; padding:8px 10px;">
+        <div style="font-weight:700; margin-top:6px;">MADDE 5: İLGİLİ KİŞİNİN HAKLARI</div>
+        <p>KVKK m.11 kapsamında, veri sahibi olarak aşağıdaki haklara sahipsiniz:</p>
+        <ol style="margin:0 0 0 16px; padding:0;">
+          <li style="margin-bottom:6px;">Kişisel verilerinizin işlenip işlenmediğini öğrenme,</li>
+          <li style="margin-bottom:6px;">İşlenmişse buna ilişkin bilgi talep etme,</li>
+          <li style="margin-bottom:6px;">İşleme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme,</li>
+          <li style="margin-bottom:6px;">Kanunda öngörülen şartlar çerçevesinde verilerin silinmesini/yok edilmesini isteme,</li>
+          <li style="margin-bottom:6px;">Aktarım yapılan üçüncü kişilere bildirim yapılmasını talep etme,</li>
+          <li style="margin-bottom:6px;">Münhasıran otomatik sistemler ile analiz sonucu aleyhinize bir sonucun ortaya çıkmasına itiraz etme,</li>
+          <li>Kanuna aykırı işleme nedeniyle zararın giderilmesini talep etme.</li>
+        </ol>
+
+        <p style="margin-top:10px;">Haklarınıza ilişkin taleplerinizi, Liya Müşteri Aydınlatma Metni’nde açıklanan
+           başvuru yöntemleriyle veri sorumlusuna iletebilirsiniz. Başvurularınız yasal süreler içinde
+           değerlendirilecek ve sonuçlandırılacaktır.</p>
+
+        <div style="margin-top:18px;">Saygılarımızla,</div>
+        <div style="margin-top:28px;">……………………………………</div>
+      </td>
+    </tr>
+  </table>
+</div>
 
                     </t>
                 </main>
