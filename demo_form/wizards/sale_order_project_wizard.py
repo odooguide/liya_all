@@ -113,10 +113,8 @@ class SaleOrderProjectWizard(models.TransientModel):
             if tmpl.user_ids:
                 responsibles = tmpl.user_ids.ids
             else:
-                user_recs = order.coordinator_ids.mapped('employee_ids.user_id')
-                users = self.env['res.users'].search([
-                    ('id', 'in', user_recs.ids)
-                ])
+                user_recs = order.coordinator_ids.sudo().mapped('employee_ids.user_id')
+                users = self.env['res.users'].sudo().search([('id', 'in', user_recs.ids)])
                 responsibles = users.ids
 
             sale_line = order.order_line.filtered(lambda l: l.product_id == tmpl.optional_product_id)
