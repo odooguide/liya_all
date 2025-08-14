@@ -61,6 +61,20 @@
                             <field name="duration_days"/>
                             <field name="ceremony" required="1"/>
                             <field name="start_end_time"/>
+                            <field name="company_id" invisible="1"/>
+                            <div class="oe_edit_only o_input_group oe_inline">
+                <button type="object"
+                        name="action_shift_minus"
+                        class="btn btn-secondary o_btn_icon"
+                        string=""
+                        icon="fa-minus"/>
+                <field name="minutes" nolabel="1" widget="integer" class="o_input"/>
+                <button type="object"
+                        name="action_shift_plus"
+                        class="btn btn-secondary o_btn_icon"
+                        string=""
+                        icon="fa-plus"/>
+            </div>
 
                         </group>
                         <group>

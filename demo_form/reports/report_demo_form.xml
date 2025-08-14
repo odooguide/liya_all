@@ -28,7 +28,7 @@
     </record>
 
     <template id="demo_form_report_layout">
-        <t t-call="web.html_container">
+       <t t-call="web.html_container">
             <t t-call="web.external_layout">
                 <style>
                     .liya-static-page{
@@ -36,22 +36,61 @@
                     break-before: page; break-after: page;
                     clear: both; min-height: 260mm; position: relative;
                     }
+
+                    .liya-theme .c-teal { color:#2D7F97; } /* başlıklar, label'lar */
+                    .liya-theme .c-orange { color:#C86A00; } /* bölüm başlıkları, vurgu */
+
+                    /* Başlıklar */
+                    .liya-theme h1,h2,h3 { color:#2D7F97; font-weight:800; letter-spacing:.5px; }
+
+                    .liya-theme .section-title { color:#C86A00; font-weight:800; }
+                    .liya-theme h4,h5,h6 { color:#C86A00; font-weight:700; }
+
+                    /* Label görünümleri (senin tablolarında label hücreleri genelde font-weight:600) */
+                    .liya-theme td[style*="font-weight:600"] { color:#2D7F97; }
+
+                    /* Kutu ve çizgi renkleri (önceden #4a8599 kullanıyordun, aynısını koruyoruz) */
+                    .liya-theme .liya-box { border:1px solid #4A8599; }
+                    .liya-theme .liya-border { border-color:#4A8599 !important; }
+
+                    /* Mevcut inline border'ları temaya uydurmak istersen (opsiyonel) */
+                    .liya-theme [style*="border:1px solid #4a8599"] { border-color:#4A8599 !important; }
+
+                    /* İnce alt-çizgi için yardımcı sınıf */
+                    .liya-theme .thin-line { border-bottom:1px solid #2D7F97; }
+
+                    /* Linkler ve kalın vurgular */
+                    .liya-theme a { color:#2D7F97; }
+                    .liya-theme strong { color:#2D7F97; }
+                    .liya-theme table {line-height:10pt;}
                 </style>
 
                 <main>
                     <t t-foreach="docs" t-as="o">
-                        <div class="page" style="font-family: 'Helvetica', Arial, sans-serif; position:relative;">
-                            <div style="text-align:center; margin-bottom:10px;">
-                                <h1 style="margin:0; font-family:Helvetica, Arial, sans-serif;">LIYA ALL-WEDDING PLAN
-                                    2025
-                                </h1>
-                            </div>
-                            <table class="table table-borderless"
-                                   style="width:100%; border-collapse:collapse; margin-bottom:15px;">
+                        <div class="page liya-theme" style="font-family: 'Helvetica', Arial, sans-serif; position:relative;font-size:10pt">
+                           <div style="margin:2px 0 8px 0; overflow:hidden;">
+  <!-- Sol sütun kadar alan: başlık -->
+  <div style="float:left; width:50%; text-align:center;">
+    <div style="display:inline-block; color:#2D7F97; font-weight:800; font-size:14pt; letter-spacing:2px;">
+      LIYA ALL - WEDDING PLAN 2025
+    </div>
+    <div style="height:2px; background:#2D7F97; width:85%; margin:6px auto 0;"></div>
+  </div>
+
+  <!-- Sağ sütun: logo -->
+  <div style="float:right; width:50%; text-align:right; padding-top:2px;">
+  <img t-if="o and o.env.company.logo"
+       t-att-src="image_data_uri(o.env.company.logo)"
+       alt="Logo"
+       style="max-height:44px; width:auto;"/>
+</div>
+  <div style="clear:both;"></div>
+</div>
+                            <table class="table table-borderless" style="width:100%; border-collapse:collapse; margin-bottom:15px;">
                                 <tr>
                                     <!-- Event Summary -->
                                     <td style="width:50%; padding-right:5px; vertical-align:top;">
-                                        <div style="border:1px solid #4a8599; padding:12px; box-sizing:border-box; font-size:11pt; line-height:1.3; height:100%;">
+                                        <div style="border:1px solid #4a8599; padding:12px; box-sizing:border-box; line-height:1.3; height:100%;">
                                             <table style="width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif;">
                                                 <tr>
                                                     <td style="padding:4px 6px; font-weight:600; width:140px;">
@@ -104,7 +143,7 @@
 
                                     <!-- Details -->
                                     <td style="width:50%; padding-left:5px; vertical-align:top;">
-                                        <div style="border:1px solid #4a8599; padding:12px; box-sizing:border-box; font-size:11pt; line-height:1.3; height:100%;">
+                                        <div style="border:1px solid #4a8599; padding:12px; box-sizing:border-box; line-height:1.3; height:100%;">
                                             <table style="width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif;">
                                                 <tr>
                                                     <td style="padding:4px 6px; font-weight:600; width:140px;">Demo
@@ -115,18 +154,14 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="2"
-                                                        style="padding:4px 6px; font-weight:600; vertical-align:top;">
+                                                    <td colspan="2" style="padding:4px 6px; font-weight:600; vertical-align:top;">
                                                         Special Notes:
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="2"
-                                                        style="padding:4px 6px; vertical-align:top;text-align:top;width:100%">
+                                                    <td colspan="2" style="padding:4px 6px; vertical-align:top;text-align:top;width:100%">
                                                         <t t-if="o.special_notes_preview">
-                                                            <div t-field="o.special_notes_preview"
-                                                                 t-options='{"widget":"html"}'
-                                                                 style="word-break:break-word;"/>
+                                                            <div t-field="o.special_notes_preview" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
                                                         </t>
                                                         <t t-if="not o.special_notes_preview">-</t>
                                                     </td>
@@ -137,21 +172,18 @@
                                 </tr>
                             </table>
                             <t t-if="o.special_notes_remaining">
-                                <div style="margin-top:8px; font-size:10pt; font-family:Helvetica, Arial, sans-serif;">
+                                <div style="margin-top:8px; font-family:Helvetica, Arial, sans-serif;">
                                     <div style="border:1px solid #4a8599; padding:10px; box-sizing:border-box;">
                                         <strong>Special Notes (continued):</strong>
                                         no
-                                        <div t-field="o.special_notes_remaining"
-                                             t-options='{"widget":"html"}'
-                                             style="word-break:break-word;"/>
+                                        <div t-field="o.special_notes_remaining" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
                                     </div>
                                 </div>
                             </t>
 
                             <div style="display:block; margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
-                                <h3 style="margin-bottom:8px;">A) PROGRAM SCHEDULE</h3>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <h6 style="margin-bottom:8px;">A) PROGRAM SCHEDULE</h6>
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; ">
                                     <thead>
                                         <tr>
                                             <th style="text-align:left; padding:4px 8px; width:30px;"/>
@@ -194,9 +226,7 @@
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top;">
                                                     <t t-if="line.location_notes">
-                                                        <div t-field="line.location_notes"
-                                                             t-options='{"widget":"html"}'
-                                                             style="word-break:break-word;"/>
+                                                        <div t-field="line.location_notes" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
                                                     </t>
 
                                                 </td>
@@ -206,9 +236,8 @@
                                 </table>
                             </div>
                             <div style="display:block; margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
-                                <h3 style="margin-bottom:8px;">A) TRANSPORT SCHEDULE</h3>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <h6 style="margin-bottom:8px;">A) TRANSPORT SCHEDULE</h6>
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; ">
                                     <thead>
                                         <tr>
                                             <th style="text-align:left; padding:6px 8px; width:10px;"/>
@@ -221,8 +250,7 @@
                                     <tbody>
                                         <t t-foreach="o.transport_line_ids.sorted('sequence')" t-as="line">
                                             <tr>
-                                                <td style="padding:6px 8px; vertical-align:top;"><t
-                                                        t-esc="line.sequence or ''"/>.
+                                                <td style="padding:6px 8px; vertical-align:top;"><t t-esc="line.sequence or ''"/>.
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top;">
                                                     <strong>
@@ -255,13 +283,10 @@
                             </div>
                             <!-- C) MENÜ NOTLARI -->
                             <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
-                                <h3 style="margin-bottom:6px;">C) MENU</h3>
+                                <h6 style="margin-bottom:6px;">C) MENU</h6>
 
-                                <div t-field="o.menu_description"
-                                     t-options='{"widget":"html"}'
-                                     style="word-break:break-word;"/>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <div t-field="o.menu_description" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                     <tbody>
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600; width:180px;">Hot Appetizer:
@@ -342,12 +367,9 @@
 
                             <!-- D) BAR NOTLARI -->
                             <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
-                                <h3 style="margin-bottom:6px;">D) BAR</h3>
-                                <div t-field="o.bar_description"
-                                     t-options='{"widget":"html"}'
-                                     style="word-break:break-word;"/>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <h6 style="margin-bottom:6px;">D) BAR</h6>
+                                <div t-field="o.bar_description" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                     <tbody>
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600; width:200px;">Alcohol Service:
@@ -410,12 +432,11 @@
 
                             <!-- E) AFTER PARTY -->
                             <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
-                                <h3 style="margin-bottom:6px;">E) AFTER PARTY</h3>
+                                <h6 style="margin-bottom:6px;">E) AFTER PARTY</h6>
                                 <div style="margin-bottom:8px;">
                                     <span t-field="o.afterparty_description"/>
                                 </div>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:10pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                     <tbody>
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600; width:170px;">After Party:</td>
@@ -602,14 +623,13 @@
                             </div>
                             <!-- F) PRE-HOSTING / KONAKLAMA / DANS DERSİ -->
                             <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                     <tr>
                                         <!-- F) Pre-Hosting -->
                                         <td style="vertical-align:top; padding:6px 8px; width:40%;">
-                                            <div style="font-weight:600; font-size:14pt; margin-bottom:4px;">F)
+                                            <h6>F)
                                                 PRE-HOSTING:
-                                            </div>
+                                            </h6>
                                             <div style="margin-bottom:4px;">
                                                 Barney (
                                                 <t t-if="o.prehost_barney">
@@ -654,9 +674,9 @@
 
                                         <!-- F2) KONAKLAMA -->
                                         <td style="vertical-align:top; padding:6px 8px;  width:30%;">
-                                            <div style="font-weight:600; font-size:14pt; margin-bottom:4px;">F2)
+                                            <h6>F2)
                                                 Accommodation
-                                            </div>
+                                            </h6>
                                             <div style="margin-bottom:4px;">
                                                 <span style="font-weight:600;">Hotel:</span>
                                                 <span style="border-bottom:1px solid #000; padding-left:4px; padding-right:60px; display:inline-block;">
@@ -679,7 +699,7 @@
                                                 )
                                             </div>
                                             <t t-if="o.accomodation_notes">
-                                                <div style="margin-top:4px; font-style:italic; font-size:10pt;">
+                                                <div style="margin-top:4px; font-style:italic;">
                                                     <span t-field="o.accomodation_notes"/>
                                                 </div>
                                             </t>
@@ -687,9 +707,9 @@
 
                                         <!-- F3) DANS DERSİ -->
                                         <td style="vertical-align:top; padding:6px 8px;  width:30%;">
-                                            <div style="font-weight:600; font-size:14pt; margin-bottom:4px;">F3) DANCE
+                                            <h6 >F3) DANCE
                                                 LESSON
-                                            </div>
+                                            </h6>
                                             <div style="margin-bottom:4px;">
                                                 Yes (
                                                 <t t-if="o.dance_lesson">
@@ -717,8 +737,8 @@
 
                             <!-- G) KUAFÖR MAKYÖZ -->
                             <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:600; font-size:16pt; margin-bottom:6px;">G) Hair and Makeup:
-                                </div>
+                                <h6>G) Hair and Makeup:
+                                </h6>
                                 <div style="margin-left:12px; margin-bottom:4px;">
                                     <ul style="padding-left:18px; margin:0; list-style-type:disc;">
                                         <li style="margin-bottom:4px;">
@@ -767,7 +787,7 @@
                             </div>
                             <!-- H) NİKAH ŞAHİTLERİ -->
                             <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:600; font-size:16pt; margin-bottom:4px;">H) Witnesses:</div>
+                                <h6>H) Witnesses:</h6>
                                 <t t-if="o.witness_description">
                                     <div style="margin-bottom:6px; font-style:italic; font-size:10pt;">
                                         <span t-field="o.witness_description"/>
@@ -791,12 +811,11 @@
                             </div>
                             <!-- I) FOTOĞRAF -->
                             <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:600; font-size:16pt; margin-bottom:4px;">I) PHOTOGRAPHY</div>
+                                <h6>I) PHOTOGRAPHY</h6>
                                 <div style="margin-bottom:6px; font-style:italic;">
                                     <span t-field="o.photo_description"/>
                                 </div>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600; width:180px;">Standard Photography
                                             Service:
@@ -911,12 +930,11 @@
 
                             <!-- J) MÜZİK -->
                             <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:600; font-size:16pt; margin-bottom:4px;">J) MUSIC</div>
+                                <h6>J) MUSIC</h6>
                                 <div style="margin-bottom:6px; font-style:italic;">
                                     <span t-field="o.music_description"/>
                                 </div>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">Live Music:</td>
                                         <td style="padding:4px 8px;">
@@ -986,11 +1004,10 @@
                             </div>
                             <!-- K) MASA DEKORU -->
                             <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:700; font-size:16pt; margin-bottom:6px;">K) TABLE DECORATION
-                                </div>
+                                <h6>K) TABLE DECORATION
+                                </h6>
 
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600; white-space:nowrap;">Table Theme:
                                         </td>
@@ -1016,8 +1033,7 @@
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">Charger:</td>
                                         <td style="padding:4px 8px;">
-                                            <t t-set="chargers"
-                                               t-value="o.env['project.demo.table.charger'].search([])"/>
+                                            <t t-set="chargers" t-value="o.env['project.demo.table.charger'].search([])"/>
                                             <t t-if="chargers">
                                                 <t t-foreach="chargers" t-as="it">
                                                     <span t-esc="it.name"/>
@@ -1040,8 +1056,7 @@
                                             &amp; Runner Design:
                                         </td>
                                         <td style="padding:4px 8px;">
-                                            <t t-set="designs"
-                                               t-value="o.env['project.demo.runner.design'].search([])"/>
+                                            <t t-set="designs" t-value="o.env['project.demo.runner.design'].search([])"/>
                                             <t t-if="designs">
                                                 <t t-foreach="designs" t-as="it">
                                                     <span t-esc="it.name"/>
@@ -1170,9 +1185,8 @@
 
                             <!-- L) OTHER NOTES -->
                             <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:700; font-size:16pt; margin-bottom:6px;">L) OTHER NOTES</div>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <h6>L) OTHER NOTES</h6>
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">RSVP:</td>
                                         <td style="padding:4px 8px;">
@@ -1221,13 +1235,12 @@
                                 </table>
                             </div>
                             <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:700; font-size:16pt; margin-bottom:8px;">M) MUSIC CHOICES</div>
+                                <h6>M) MUSIC CHOICES</h6>
 
                                 <!-- 1) Significant Songs -->
-                                <div style="font-weight:700; font-size:12pt; margin-bottom:4px;">1) SIGNIFICANT SONGS
+                                <div style="font-weight:700; font-size:10pt; margin-bottom:6px;">1) SIGNIFICANT SONGS
                                 </div>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px;">
                                     <tr>
                                         <td style="padding:4px 8px; width:220px; font-weight:600;">A — Entrance Song:
                                         </td>
@@ -1264,7 +1277,7 @@
                                 </table>
 
                                 <!-- 2) Language Ratio -->
-                                <div style="font-weight:700; font-size:12pt; margin-bottom:4px;">2) LANGUAGE RATIO</div>
+                                <div style="font-weight:700; font-size:10pt; margin-bottom:6px;">2) LANGUAGE RATIO</div>
                                 <div style="font-size:10pt; color:#444; margin-bottom:6px;">
                                     You may choose the ratio of the language of songs throughout your wedding.
                                 </div>
@@ -1299,7 +1312,7 @@
                                         )
                                     </span>
                                     <span style="margin-right:14px;">//</span>
-
+                                    <br/>
                                     <span>
                                         Other (
                                         <t t-if="o.ratio_choice == 'other'">
@@ -1315,23 +1328,21 @@
                                 </div>
                             </div><!-- 2B) TYPE OF MUSIC BY PART -->
                             <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:700; font-size:12pt; margin-bottom:6px;">2B) TYPE OF MUSIC — BY
+                                <div style="font-weight:700; font-size:10pt; margin-bottom:6px;">2B) TYPE OF MUSIC — BY
                                     PART
                                 </div>
                                 <div style="font-size:10pt; color:#444; margin-bottom:8px;">
                                     You may choose the type of music for the four different parts of your wedding.
                                 </div>
 
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <!-- Cocktail -->
                                         <td style="vertical-align:top; width:25%; padding:6px 10px; border-right:1px solid #cfd8dc;">
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
                                                 Cocktail
                                             </div>
-                                            <table class="table table-borderless"
-                                                   style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Lounge (
                                                         <t t-if="o.cocktail_lounge">
@@ -1388,8 +1399,7 @@
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
                                                 Dinner
                                             </div>
-                                            <table class="table table-borderless"
-                                                   style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Lounge (
                                                         <t t-if="o.dinner_lounge">
@@ -1438,8 +1448,7 @@
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
                                                 Party
                                             </div>
-                                            <table class="table table-borderless"
-                                                   style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Turkish (
                                                         <t t-if="o.party_turkish">
@@ -1528,8 +1537,7 @@
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the After
                                                 Party
                                             </div>
-                                            <table class="table table-borderless"
-                                                   style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Turkish (
                                                         <t t-if="o.after_turkish">
@@ -1617,21 +1625,21 @@
                             </div>
                             <!-- 3) LOCAL MUSIC DURING THE PARTY -->
                             <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:700; font-size:12pt; margin-bottom:6px;">3) LOCAL MUSIC DURING
+                                <h6>3) LOCAL MUSIC DURING
                                     THE PARTY
-                                </div>
+                                </h6>
                                 <div style="font-size:11pt; margin-bottom:6px;">
                                     Would you like local music during the Party?
                                     Yes (
                                     <t t-if="o.local_music">
                                         <strong>x</strong>
                                     </t>
-                                    <t t-else=""></t>
+                                    <t t-else=""/>
                                     ) - No (
                                     <t t-if="not o.local_music">
                                         <strong>x</strong>
                                     </t>
-                                    <t t-else=""></t>
+                                    <t t-else=""/>
                                     )
                                 </div>
 
@@ -1650,9 +1658,8 @@
 
                             <!-- 4) REQUEST SONGS -->
                             <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:700; font-size:12pt; margin-bottom:6px;">4) REQUEST SONGS</div>
-                                <table class='table table-borderless'
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <h6>4) REQUEST SONGS</h6>
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <!-- Cocktail -->
                                         <td style="vertical-align:top; width:25%; padding:6px 8px; border-right:1px solid #cfd8dc;">
@@ -1711,9 +1718,9 @@
 
                             <!-- 5) BAN ANY SONGS OR ARTISTS -->
                             <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:700; font-size:12pt; margin-bottom:6px;">5) BAN ANY SONGS OR
+                                <h6>5) BAN ANY SONGS OR
                                     ARTISTS
-                                </div>
+                                </h6>
                                 <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;">
                                     <t t-if="o.ban_songs">
                                         <span t-field="o.ban_songs"/>
@@ -1726,9 +1733,9 @@
 
                             <!-- 6) OTHER NOTES ABOUT MUSIC -->
                             <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
-                                <div style="font-weight:700; font-size:12pt; margin-bottom:6px;">6) OTHER NOTES ABOUT
+                                <h6>6) OTHER NOTES ABOUT
                                     MUSIC
-                                </div>
+                                </h6>
                                 <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;">
                                     <t t-if="o.other_music_notes">
                                         <span t-field="o.other_music_notes"/>
@@ -1751,8 +1758,7 @@
 
 
                             <!-- Footer -->
-                            <div class="footer"
-                                 style="position: absolute; bottom: 18px; width: 100%; font-size:10px; text-align:center; color:#888;">
+                            <div class="footer" style="position: absolute; bottom: 18px; width: 100%; font-size:10px; text-align:center; color:#888;">
                                 <span>Generated on
                                     <t t-esc="time.strftime('%Y-%m-%d %H:%M')"/>
                                 </span>
@@ -1760,8 +1766,7 @@
                         </div>
                         <!-- ========== STATIC PAGE: EXPLICIT CONSENT TEXT (EN) ==================== -->
                         <!-- ===== STATİK SAYFA: AÇIK RIZA METNİ (TR) ===== -->
-                        <div class="page liya-static-page"
-                             style="font-family:Helvetica, Arial, sans-serif; clear:both;">
+                        <div class="page liya-static-page" style="font-family:Helvetica, Arial, sans-serif; clear:both;">
 
                             <!-- Başlık -->
                             <div style="text-align:center; margin-bottom:10px;">
@@ -1827,17 +1832,16 @@
                             </div>
 
                             <!-- Rıza seçenekleri -->
-                            <table class="table table-borderless"
-                                   style="width:100%; border-collapse:collapse; margin-top:10px; font-size:10.5pt;">
+                            <table class="table table-borderless" style="width:100%; border-collapse:collapse; margin-top:10px; font-size:10.5pt;">
                                 <tr>
                                     <td style="padding:6px 8px; width:26px;">
-                                        <span style="display:inline-block; width:14px; height:14px; border:1px solid #333; vertical-align:middle;"></span>
+                                        <span style="display:inline-block; width:14px; height:14px; border:1px solid #333; vertical-align:middle;"/>
                                     </td>
                                     <td style="padding:6px 8px;">Kabul ediyorum.</td>
                                 </tr>
                                 <tr>
                                     <td style="padding:6px 8px;">
-                                        <span style="display:inline-block; width:14px; height:14px; border:1px solid #333; vertical-align:middle;"></span>
+                                        <span style="display:inline-block; width:14px; height:14px; border:1px solid #333; vertical-align:middle;"/>
                                     </td>
                                     <td style="padding:6px 8px;">Kabul etmiyorum.</td>
                                 </tr>
@@ -1847,91 +1851,133 @@
                             <div style="margin-top:12px; border:1px solid #333; padding:10px; font-size:10.5pt;">
                                 <div style="margin-bottom:8px; font-weight:700;">Veri Sahibi</div>
 
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:10.5pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10.5pt;">
                                     <tr>
                                         <td style="padding:6px 8px; width:120px;">Adı Soyadı:</td>
-                                        <td style="padding:6px 8px;"></td>
+                                        <td style="padding:6px 8px;"/>
                                     </tr>
                                     <tr>
                                         <td style="padding:6px 8px;">Tarih:</td>
-                                        <td style="padding:6px 8px;"></td>
+                                        <td style="padding:6px 8px;"/>
                                     </tr>
                                     <tr>
                                         <td style="padding:6px 8px;">İmza:</td>
-                                        <td style="padding:6px 8px;"></td>
+                                        <td style="padding:6px 8px;"/>
                                     </tr>
                                 </table>
                             </div>
                         </div>
                         <!-- ===== STATİK SAYFA: LİYA MÜŞTERİ AYDINLATMA METNİ (TR) ===== -->
-<div class="page liya-static-page" style="font-family:Helvetica, Arial, sans-serif; clear:both;">
+                        <div class="page liya-static-page" style="font-family:Helvetica, Arial, sans-serif; clear:both;">
 
-  <!-- Başlık -->
-  <div style="text-align:center; margin-bottom:8px;">
-    <div style="font-weight:700; font-size:12pt; letter-spacing:0.3px;">LİYA MÜŞTERİ AYDINLATMA METNİ</div>
-    <div style="font-size:10pt; margin-top:6px; color:#222;">
-      İşbu aydınlatma metni; veri sorumlusu tarafından hangi kişisel verilerinizin hangi amaçla, nasıl ve hangi
-      hukuki sebebe dayanılarak işlendiği, kimlerle paylaşıldığı ve ne kadar süreyle saklandığı konusunda sizi
-      bilgilendirmek amacıyla hazırlanmıştır. Bilgilendirme, 6698 sayılı Kişisel Verilerin Korunması Kanunu’nun
-      10’uncu maddesi kapsamında yapılmaktadır.
-    </div>
-  </div>
+                            <!-- Başlık -->
+                            <div style="text-align:center; margin-bottom:8px;">
+                                <div style="font-weight:700; font-size:12pt; letter-spacing:0.3px;">LİYA MÜŞTERİ
+                                    AYDINLATMA METNİ
+                                </div>
+                                <div style="font-size:10pt; margin-top:6px; color:#222;">
+                                    İşbu aydınlatma metni; veri sorumlusu tarafından hangi kişisel verilerinizin hangi
+                                    amaçla, nasıl ve hangi
+                                    hukuki sebebe dayanılarak işlendiği, kimlerle paylaşıldığı ve ne kadar süreyle
+                                    saklandığı konusunda sizi
+                                    bilgilendirmek amacıyla hazırlanmıştır. Bilgilendirme, 6698 sayılı Kişisel Verilerin
+                                    Korunması Kanunu’nun
+                                    10’uncu maddesi kapsamında yapılmaktadır.
+                                </div>
+                            </div>
 
-  <!-- İki sütunlu içerik -->
-  <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10.5pt; line-height:1.45;">
-    <tr>
-      <!-- Sol sütun -->
-      <td style="vertical-align:top; width:50%; padding:8px 10px; border-right:1px solid #bfc7cf;">
-        <div style="font-weight:700; margin-bottom:6px;">LİYA ETKİNLİK YÖNETİMİ VE RESTAURANT İŞLETMECİLİĞİ A.Ş.</div>
+                            <!-- İki sütunlu içerik -->
+                            <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10.5pt; line-height:1.45;">
+                                <tr>
+                                    <!-- Sol sütun -->
+                                    <td style="vertical-align:top; width:50%; padding:8px 10px; border-right:1px solid #bfc7cf;">
+                                        <div style="font-weight:700; margin-bottom:6px;">LİYA ETKİNLİK YÖNETİMİ VE
+                                            RESTAURANT İŞLETMECİLİĞİ A.Ş.
+                                        </div>
 
-        <div style="font-weight:700; margin-top:6px;">MADDE 1: VERİ SORUMLUSU</div>
-        <p>Kişisel verileriniz, veri sorumlusu sıfatıyla <strong>LİYA ETKİNLİK YÖNETİMİ VE RESTAURANT
-           İŞLETMECİLİĞİ A.Ş.</strong> tarafından, aşağıda açıklanan kapsamda işlenebilecektir.</p>
+                                        <div style="font-weight:700; margin-top:6px;">MADDE 1: VERİ SORUMLUSU</div>
+                                        <p>Kişisel verileriniz, veri sorumlusu sıfatıyla <strong>LİYA ETKİNLİK YÖNETİMİ
+                                            VE RESTAURANT
+                                            İŞLETMECİLİĞİ A.Ş.
+                                        </strong> tarafından, aşağıda açıklanan kapsamda işlenebilecektir.
+                                        </p>
 
-        <div style="font-weight:700; margin-top:6px;">MADDE 2: İŞLENEN KİŞİSEL VERİLER VE AMAÇLARI</div>
-        <p>LİYA; davet sahibinin oluşturduğu davetli listesindeki kişilerin <strong>ad-soyad</strong> ve
-           <strong>telefon</strong> bilgilerini; misafir katılım koordinasyonu, LCV aramaları ve organizasyona
-           dair SMS/telefon bilgilendirmeleri amacıyla işler. Veriler, yalnızca ilgili organizasyonun
-           iletişim/operasyon süreçlerinin yürütülmesi kapsamında kullanılır.</p>
+                                        <div style="font-weight:700; margin-top:6px;">MADDE 2: İŞLENEN KİŞİSEL VERİLER
+                                            VE AMAÇLARI
+                                        </div>
+                                        <p>LİYA; davet sahibinin oluşturduğu davetli listesindeki kişilerin <strong>
+                                            ad-soyad
+                                        </strong> ve
+                                            <strong>telefon</strong>
+                                            bilgilerini; misafir katılım koordinasyonu, LCV aramaları ve organizasyona
+                                            dair SMS/telefon bilgilendirmeleri amacıyla işler. Veriler, yalnızca ilgili
+                                            organizasyonun
+                                            iletişim/operasyon süreçlerinin yürütülmesi kapsamında kullanılır.
+                                        </p>
 
-        <div style="font-weight:700; margin-top:6px;">MADDE 3: TOPLAMA YÖNTEMİ VE HUKUKİ SEBEPLER</div>
-        <p>Veriler, organizasyon öncesinde davet sahibinden temin edilir. İşleme faaliyetleri; gerektiğinde
-           <em>açık rıza</em>, bunun dışında Kanun’un 5/2 ve 6’ncı maddelerindeki <em>meşru menfaat</em> ve
-           sözleşmenin kurulması/ifası hukuki sebeplerine dayanılarak yürütülür. Telefon numaraları yalnızca
-           LCV aramaları ve ilgili SMS gönderimleri için kullanılır; hizmet kalitesi ve olası aksaklıkların
-           giderilmesi amacıyla da iletişim kurulabilir.</p>
+                                        <div style="font-weight:700; margin-top:6px;">MADDE 3: TOPLAMA YÖNTEMİ VE HUKUKİ
+                                            SEBEPLER
+                                        </div>
+                                        <p>Veriler, organizasyon öncesinde davet sahibinden temin edilir. İşleme
+                                            faaliyetleri; gerektiğinde
+                                            <em>açık rıza</em>, bunun dışında Kanun’un 5/2 ve 6’ncı maddelerindeki <em>
+                                                meşru menfaat
+                                            </em> ve
+                                            sözleşmenin kurulması/ifası hukuki sebeplerine dayanılarak yürütülür.
+                                            Telefon numaraları yalnızca
+                                            LCV aramaları ve ilgili SMS gönderimleri için kullanılır; hizmet kalitesi ve
+                                            olası aksaklıkların
+                                            giderilmesi amacıyla da iletişim kurulabilir.
+                                        </p>
 
-        <div style="font-weight:700; margin-top:6px;">MADDE 4: SAKLAMA SÜRESİ</div>
-        <p>Bu aydınlatma metninde yer alan kişisel veriler, organizasyon süresince ve amaçla sınırlı olarak
-           saklanır. Organizasyonun bitimini müteakip ilgili veriler KVKK ve ikincil mevzuata uygun şekilde
-           silinir, yok edilir veya anonim hale getirilir.</p>
-      </td>
+                                        <div style="font-weight:700; margin-top:6px;">MADDE 4: SAKLAMA SÜRESİ</div>
+                                        <p>Bu aydınlatma metninde yer alan kişisel veriler, organizasyon süresince ve
+                                            amaçla sınırlı olarak
+                                            saklanır. Organizasyonun bitimini müteakip ilgili veriler KVKK ve ikincil
+                                            mevzuata uygun şekilde
+                                            silinir, yok edilir veya anonim hale getirilir.
+                                        </p>
+                                    </td>
 
-      <!-- Sağ sütun -->
-      <td style="vertical-align:top; width:50%; padding:8px 10px;">
-        <div style="font-weight:700; margin-top:6px;">MADDE 5: İLGİLİ KİŞİNİN HAKLARI</div>
-        <p>KVKK m.11 kapsamında, veri sahibi olarak aşağıdaki haklara sahipsiniz:</p>
-        <ol style="margin:0 0 0 16px; padding:0;">
-          <li style="margin-bottom:6px;">Kişisel verilerinizin işlenip işlenmediğini öğrenme,</li>
-          <li style="margin-bottom:6px;">İşlenmişse buna ilişkin bilgi talep etme,</li>
-          <li style="margin-bottom:6px;">İşleme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme,</li>
-          <li style="margin-bottom:6px;">Kanunda öngörülen şartlar çerçevesinde verilerin silinmesini/yok edilmesini isteme,</li>
-          <li style="margin-bottom:6px;">Aktarım yapılan üçüncü kişilere bildirim yapılmasını talep etme,</li>
-          <li style="margin-bottom:6px;">Münhasıran otomatik sistemler ile analiz sonucu aleyhinize bir sonucun ortaya çıkmasına itiraz etme,</li>
-          <li>Kanuna aykırı işleme nedeniyle zararın giderilmesini talep etme.</li>
-        </ol>
+                                    <!-- Sağ sütun -->
+                                    <td style="vertical-align:top; width:50%; padding:8px 10px;">
+                                        <div style="font-weight:700; margin-top:6px;">MADDE 5: İLGİLİ KİŞİNİN HAKLARI
+                                        </div>
+                                        <p>KVKK m.11 kapsamında, veri sahibi olarak aşağıdaki haklara sahipsiniz:</p>
+                                        <ol style="margin:0 0 0 16px; padding:0;">
+                                            <li style="margin-bottom:6px;">Kişisel verilerinizin işlenip işlenmediğini
+                                                öğrenme,
+                                            </li>
+                                            <li style="margin-bottom:6px;">İşlenmişse buna ilişkin bilgi talep etme,
+                                            </li>
+                                            <li style="margin-bottom:6px;">İşleme amacını ve amacına uygun kullanılıp
+                                                kullanılmadığını öğrenme,
+                                            </li>
+                                            <li style="margin-bottom:6px;">Kanunda öngörülen şartlar çerçevesinde
+                                                verilerin silinmesini/yok edilmesini isteme,
+                                            </li>
+                                            <li style="margin-bottom:6px;">Aktarım yapılan üçüncü kişilere bildirim
+                                                yapılmasını talep etme,
+                                            </li>
+                                            <li style="margin-bottom:6px;">Münhasıran otomatik sistemler ile analiz
+                                                sonucu aleyhinize bir sonucun ortaya çıkmasına itiraz etme,
+                                            </li>
+                                            <li>Kanuna aykırı işleme nedeniyle zararın giderilmesini talep etme.</li>
+                                        </ol>
 
-        <p style="margin-top:10px;">Haklarınıza ilişkin taleplerinizi, Liya Müşteri Aydınlatma Metni’nde açıklanan
-           başvuru yöntemleriyle veri sorumlusuna iletebilirsiniz. Başvurularınız yasal süreler içinde
-           değerlendirilecek ve sonuçlandırılacaktır.</p>
+                                        <p style="margin-top:10px;">Haklarınıza ilişkin taleplerinizi, Liya Müşteri
+                                            Aydınlatma Metni’nde açıklanan
+                                            başvuru yöntemleriyle veri sorumlusuna iletebilirsiniz. Başvurularınız yasal
+                                            süreler içinde
+                                            değerlendirilecek ve sonuçlandırılacaktır.
+                                        </p>
 
-        <div style="margin-top:18px;">Saygılarımızla,</div>
-        <div style="margin-top:28px;">……………………………………</div>
-      </td>
-    </tr>
-  </table>
-</div>
+                                        <div style="margin-top:18px;">Saygılarımızla,</div>
+                                        <div style="margin-top:28px;">……………………………………</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
 
                     </t>
                 </main>

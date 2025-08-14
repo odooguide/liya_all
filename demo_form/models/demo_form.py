@@ -5,6 +5,8 @@ from lxml import html as lhtml
 from markupsafe import escape as html_escape
 import re
 
+TIME_PATTERN = re.compile(r'(\d{1,2}):([0-5]\d)')
+
 
 class ProjectDemoForm(models.Model):
     _name = 'project.demo.form'
@@ -34,7 +36,7 @@ class ProjectDemoForm(models.Model):
         ('actual', "Actual"),
         ('def', "Seçiniz"),
         ('staged', "Staged")],
-       default='def', string="Ceremony Type")
+        default='def', string="Ceremony Type")
     start_end_time = fields.Char(string="Start-End Time")
 
     # ── Schedule page ─────────────────────────────────────────────────────────
@@ -241,8 +243,8 @@ class ProjectDemoForm(models.Model):
     photo_drone = fields.Boolean(string="Drone Camera")
     photo_harddisk_delivered = fields.Selection(
         [('delivered', 'Delivered'),
-        ('later', 'Deliver Later')],
-       string="Hard Disk 1TB")
+         ('later', 'Deliver Later')],
+        string="Hard Disk 1TB")
     photo_yacht_shoot = fields.Boolean(string='Yacht Photo Shoot')
     # Music
     music_description = fields.Html(
@@ -253,7 +255,8 @@ class ProjectDemoForm(models.Model):
     music_dj_fatih = fields.Boolean(string="DJ: Fatih Aşçı")
     music_dj_engin = fields.Boolean(string="DJ: Engin Sadiki")
     music_other = fields.Boolean(string="Other")
-    dj_person = fields.Selection([ ('engin', 'DJ: Engin Sadiki'), ('fatih', 'DJ: Fatih Aşçı'), ('other', 'Diğer')],string='DJ')
+    dj_person = fields.Selection([('engin', 'DJ: Engin Sadiki'), ('fatih', 'DJ: Fatih Aşçı'), ('other', 'Diğer')],
+                                 string='DJ')
     music_other_details = fields.Char(string="If Other, specify")
 
     # ── Table Decoration page ────────────────────────────────────────────────
@@ -296,8 +299,8 @@ class ProjectDemoForm(models.Model):
         'rel_form_cake_choice',
         'demo_form_id', 'cake_id',
         string="Cake Choices")
-    cake_real=fields.Boolean(string='Real Cake')
-    cake_champagne_tower=fields.Boolean(string='Champagne Tower')
+    cake_real = fields.Boolean(string='Real Cake')
+    cake_champagne_tower = fields.Boolean(string='Champagne Tower')
     table_fresh_flowers = fields.Boolean(
         string="Fresh Flowers",
         help="Include fresh flowers?")
@@ -387,6 +390,14 @@ class ProjectDemoForm(models.Model):
     special_notes_preview = fields.Html(string="Special Notes Preview", compute='_compute_split_notes')
     special_notes_remaining = fields.Html(string="Special Notes Remaining", compute='_compute_split_notes')
 
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        default=lambda self: self.env.company,
+        required=True,
+    )
+    minutes = fields.Integer(string='Adjust Time')
+
     @api.depends('special_notes')
     def _compute_split_notes(self):
         limit = 150
@@ -445,9 +456,9 @@ class ProjectDemoForm(models.Model):
                 rec.duration_days = turkish_days[dt.weekday()]
             else:
                 rec.duration_days = False
-
     def _onchange_start_end_time(self):
         for rec in self:
+            # 1) Orijinal base end time
             if rec.afterparty_ultra:
                 base_end_dt = datetime.strptime('02:00', '%H:%M')
             elif rec.afterparty_service:
@@ -494,17 +505,17 @@ class ProjectDemoForm(models.Model):
     def _onchange_breakfast(self):
         for rec in self:
             lines = rec.schedule_line_ids.sorted('sequence')
-            transport_lines=rec.transport_line_ids
+            transport_lines = rec.transport_line_ids
             if not lines:
                 continue
-            first_transport=transport_lines[0]
+            first_transport = transport_lines[0]
             try:
-                dt_transport=datetime.strptime(first_transport.time,'%H:%M')
+                dt_transport = datetime.strptime(first_transport.time, '%H:%M')
             except (ValueError, TypeError):
                 continue
             # subtract or add 30 minutes
             if rec.prehost_breakfast:
-                dt_new_transport=dt_transport-timedelta(minutes=60)
+                dt_new_transport = dt_transport - timedelta(minutes=60)
             else:
                 dt_new_transport = dt_transport + timedelta(minutes=60)
             first_transport.time = dt_new_transport.strftime('%H:%M')
@@ -599,3 +610,44 @@ class ProjectDemoForm(models.Model):
             if rec.project_id and rec.project_id.dj_person != rec.dj_person:
                 rec.project_id.dj_person = rec.dj_person
 
+    def action_shift_plus(self):
+        for rec in self:
+            rec._shift_all_times(+rec.minutes)
+
+    def action_shift_minus(self):
+        for rec in self:
+            rec._shift_all_times(-rec.minutes)
+
+    # === Core ===
+    def _shift_all_times(self, minutes_delta: int):
+        """Kayıt içindeki tüm saat metinlerini dakika bazında kaydırır."""
+        for rec in self:
+            # start_end_time
+            if isinstance(rec.start_end_time, str) and rec.start_end_time.strip():
+                rec.start_end_time = self._shift_time_string(rec.start_end_time, minutes_delta)
+
+            # schedule lines
+            for line in rec.schedule_line_ids:
+                if isinstance(line.time, str) and line.time.strip():
+                    line.time = self._shift_time_string(line.time, minutes_delta)
+
+            # transport lines
+            for t in rec.transport_line_ids:
+                if isinstance(t.time, str) and t.time.strip():
+                    t.time = self._shift_time_string(t.time, minutes_delta)
+
+    @staticmethod
+    def _shift_time_string(text: str, minutes_delta: int) -> str:
+        """
+        Verilen metin içindeki TÜM HH:MM eşleşmelerini minutes_delta kadar kaydırır.
+        '12:30 - 12:45' gibi aralıklarda iki ucu da kaydırır.
+        """
+
+        def _shift_match(m: re.Match) -> str:
+            h = int(m.group(1))
+            mnt = int(m.group(2))
+            total = (h * 60 + mnt + minutes_delta) % (24 * 60)  # 24 saati sar
+            nh, nm = divmod(total, 60)
+            return f'{nh:02d}:{nm:02d}'
+
+        return TIME_PATTERN.sub(_shift_match, text)
