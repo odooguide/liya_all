@@ -1,6 +1,6 @@
 from odoo import fields, models, _, api
 from odoo.exceptions import UserError
-
+from datetime import datetime
 
 class ProjectProject(models.Model):
     _inherit = 'project.project'
@@ -306,14 +306,19 @@ class ProjectProject(models.Model):
     def _compute_next_event(self):
         now = fields.Datetime.now()
         for rec in self:
-            future = rec.event_ids.filtered(lambda e: e.start and e.start >= now)
-            future = future.sorted(key='start')
-            if future:
-                rec.next_event_id = future[0]
-                rec.next_event_date = future[0].start.strftime('%d.%m.%Y')
-            else:
+            events = rec.event_ids.filtered(lambda e: e.start).sorted(key='start')
+            if not events:
                 rec.next_event_id = False
                 rec.next_event_date = False
+                continue
+
+            future = [e for e in events if e.start >= now]
+            chosen = future[0] if future else events[-1]
+
+            rec.next_event_id = chosen
+
+            dt_local = fields.Datetime.context_timestamp(rec, chosen.start)
+            rec.next_event_date = dt_local.strftime('%d.%m.%Y')
 
     def action_view_next_event(self):
         """Tıklanınca takvimi o etkinliğe odaklayarak açar."""
@@ -341,7 +346,9 @@ class ProjectProject(models.Model):
         self.ensure_one()
         if not self.demo_form_ids:
             return {'type': 'ir.actions.act_window_close'}
-        demo = self.demo_form_ids[0]
+
+        demo = self.demo_form_ids[:1].sudo()
+
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'project.demo.form',
@@ -349,7 +356,6 @@ class ProjectProject(models.Model):
             'res_id': demo.id,
             'target': 'current',
         }
-
     def action_create_demo_form(self):
         """Create a new Demo Form with pre‑filled values and open it."""
         self.ensure_one()
@@ -369,7 +375,7 @@ class ProjectProject(models.Model):
                 'invitation_date': order.wedding_date,
                 'guest_count': order.people_count,
                 'sale_template_id': order.sale_order_template_id.id or False,
-                'demo_date': self.next_event_date
+                'demo_date': self.next_event_date and datetime.strptime(self.next_event_date, "%d.%m.%Y").date().isoformat() or False,
             })
             sched_cmds = []
             for line in order.sale_order_template_id.schedule_line_ids:

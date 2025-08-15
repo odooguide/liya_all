@@ -30,7 +30,7 @@
                     </div>
                 </button>
             </xpath>
-            <xpath expr="//field[@name='date']" position="after">
+            <xpath expr="//field[@name='date_start']" position="replace">
                 <field name="event_date"/>
             </xpath>
         </field>
@@ -71,7 +71,7 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="crm_second_contact"/>
                 <field name="dj_person"/>
-                <field name="crm_request_date"/>
+                <field name="event_date"/>
                 <field name="crm_yabanci_turk"/>
                 <field name="so_people_count"/>
                 <field name="so_sale_template_id"/>

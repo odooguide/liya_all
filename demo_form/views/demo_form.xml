@@ -62,23 +62,18 @@
                             <field name="ceremony" required="1"/>
                             <field name="start_end_time"/>
                             <field name="company_id" invisible="1"/>
-                            <div class="oe_edit_only o_input_group oe_inline">
-                <button type="object"
-                        name="action_shift_minus"
-                        class="btn btn-secondary o_btn_icon"
-                        string=""
-                        icon="fa-minus"/>
-                <field name="minutes" nolabel="1" widget="integer" class="o_input"/>
-                <button type="object"
-                        name="action_shift_plus"
-                        class="btn btn-secondary o_btn_icon"
-                        string=""
-                        icon="fa-plus"/>
-            </div>
+                            <div class="oe_edit_only" style="display:flex; align-items:center; gap:4px;">
+                                <button type="object" name="action_shift_minus" class="btn btn-secondary o_btn_icon"
+                                        string="" icon="fa-minus"/>
+                                <field name="minutes" nolabel="1" widget="integer"
+                                       style="width:40px; text-align:center;"/>
+                                <button type="object" name="action_shift_plus" class="btn btn-secondary o_btn_icon"
+                                        string="" icon="fa-plus"/>
+                            </div>
 
                         </group>
                         <group>
-                            <field name="demo_date" readonly="1" />
+                            <field name="demo_date" readonly="1"/>
                             <field name="sale_template_id" readonly="1"/>
                             <field name="guest_count" readonly="1"/>
                             <field name="special_notes" widget="html" placeholder="Write your notes in here"/>
@@ -387,10 +382,12 @@
                             <!-- 4) Request songs as HTML editors -->
                             <group col="2">
                                 <group string="Cocktail Request Songs">
-                                    <field name="cocktail_request" widget="html" placeholder="Lütfen notlarınızı buraya yazın."/>
+                                    <field name="cocktail_request" widget="html"
+                                           placeholder="Lütfen notlarınızı buraya yazın."/>
                                 </group>
                                 <group string="Dinner Request Songs">
-                                    <field name="dinner_request" widget="html" placeholder="Lütfen notlarınızı buraya yazın."/>
+                                    <field name="dinner_request" widget="html"
+                                           placeholder="Lütfen notlarınızı buraya yazın."/>
                                 </group>
                             </group>
                             <group col="2">
@@ -409,7 +406,8 @@
 
                             <!-- 6) Other Music Notes -->
                             <group string="Other Notes about Music">
-                                <field name="other_music_notes" widget="html" placeholder="Lütfen notlarınızı buraya yazın."/>
+                                <field name="other_music_notes" widget="html"
+                                       placeholder="Lütfen notlarınızı buraya yazın."/>
                             </group>
                         </page>
 
@@ -423,10 +421,10 @@
                                     <field name="table_runner_design_ids"
                                            widget="many2many_checkboxes"/>
                                     <field name="table_color_ids"
-                                           widget="many2many_tags"/>
+                                           widget="many2many_checkboxes"/>
                                     <field name="table_tag_ids" placeholder="Seçiniz…"/>
                                     <field name="cake_choice_ids"
-                                           widget="many2many_checkboxes" />
+                                           widget="many2many_checkboxes"/>
                                     <field name="cake_real" widget="boolean_toggle"/>
                                     <field name="cake_champagne_tower" widget="boolean_toggle"/>
                                 </group>
