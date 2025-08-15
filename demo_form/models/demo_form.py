@@ -400,7 +400,7 @@ class ProjectDemoForm(models.Model):
 
     @api.depends('special_notes')
     def _compute_split_notes(self):
-        limit = 150
+        limit = 300
         for rec in self:
             raw_html = rec.special_notes or ''
             # HTML içinden düz metin çıkar
