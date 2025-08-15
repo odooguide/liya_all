@@ -131,22 +131,15 @@ class ProjectProject(models.Model):
     @api.depends('event_ids.start', 'demo_form_ids.confirmed_demo_form_plan')
     def _compute_demo_state(self):
         for rec in self:
-            rec.demo_state = 'no_date'
-            rec.event_date = False
+            # Demo tarihi var mı? (herhangi bir etkinlikte start varsa yeter)
+            has_demo_date = bool(rec.event_ids.filtered('start'))
 
-            events = rec.event_ids.filtered(lambda e: e.start).sorted(key='start')
-            if events:
-                now = fields.Datetime.now()
-                chosen = next((e for e in events if e.start >= now), None) or events[-1]
-
-                dt_local = fields.Datetime.context_timestamp(rec, chosen.start)
-                rec.event_date = dt_local.date()
-
+            # Onaylı demo form var mı?
             confirmed_any = any(rec.demo_form_ids.mapped('confirmed_demo_form_plan'))
 
-            if rec.event_date and confirmed_any:
+            if has_demo_date and confirmed_any:
                 rec.demo_state = 'completed'
-            elif rec.event_date:
+            elif has_demo_date:
                 rec.demo_state = 'planned'
             else:
                 rec.demo_state = 'no_date'
