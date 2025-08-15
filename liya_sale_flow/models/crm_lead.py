@@ -262,7 +262,7 @@ class CrmLead(models.Model):
                 'Y/T': lead.yabanci_turk,
             }
             missing = [name for name, value in required_fields.items() if not value]
-            if missing:
+            if missing and lead.team_id.wedding_team:
                 raise UserError(_(
                     'Lütfen aşağıdaki alanları doldurun: %s'
                 ) % ', '.join(missing))
