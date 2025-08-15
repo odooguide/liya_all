@@ -321,20 +321,21 @@ class ProjectProject(models.Model):
             rec.next_event_date = dt_local.strftime('%d.%m.%Y')
 
     def action_view_next_event(self):
-        """Tıklanınca takvimi o etkinliğe odaklayarak açar."""
         self.ensure_one()
         if not self.next_event_id:
             return {'type': 'ir.actions.act_window_close'}
-        action = self.env.ref('calendar.action_calendar_event').read()[0]
-        action.update({
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Calendar',
+            'res_model': 'calendar.event',
             'view_mode': 'calendar,form',
             'domain': [('id', '=', self.next_event_id.id)],
             'context': dict(self.env.context or {},
                             default_res_model='project.project',
-                            default_res_id=self.id,
-                            ),
-        })
-        return action
+                            default_res_id=self.id),
+            'target': 'current',
+        }
 
     @api.depends('demo_form_ids')
     def _compute_demo_form_count(self):
