@@ -475,7 +475,7 @@ class ProjectProject(models.Model):
                 if name == "Breakfast Service":
                     vals['prehost_breakfast'] = True
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty)
-                vals['photo_standard'] = True
+
 
             tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
@@ -488,6 +488,10 @@ class ProjectProject(models.Model):
             ultra_extra = ['music_live', 'music_percussion', 'music_trio','photo_yacht_shoot','bar_alcohol_service',
                            'photo_drone', 'afterparty_fog_laser','prehost_barney']
             ultra_fields = elite_fields + ultra_extra
+            if tmpl=='elite':
+                vals['photo_standard'] = True
+            else:
+                vals['photo_standard'] = False
             if tmpl == 'plus':
                 date_str = vals.get('invitation_date') or vals.get('demo_date')
                 if date_str:
