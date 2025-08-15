@@ -102,31 +102,47 @@ class ProjectProject(models.Model):
         readonly=True)
     event_date=fields.Date(string='Event Date',compute='_compute_crm_sale_fields',compute_sudo=True)
 
-    @api.depends('reinvoiced_sale_order_id',
-                 'reinvoiced_sale_order_id.opportunity_id',
-                 'reinvoiced_sale_order_id.opportunity_id.partner_id',
-                 'reinvoiced_sale_order_id.opportunity_id.second_contact',
-                 'reinvoiced_sale_order_id.opportunity_id.request_date',
-                 'reinvoiced_sale_order_id.opportunity_id.yabanci_turk',
-                 'reinvoiced_sale_order_id.people_count',
-                 'reinvoiced_sale_order_id.sale_order_template_id',
-                 'reinvoiced_sale_order_id.coordinator_ids',
-                 'reinvoiced_sale_order_id.opportunity_id',
-                 'reinvoiced_sale_order_id.wedding_date')
+    @api.depends(
+        'reinvoiced_sale_order_id',
+        'reinvoiced_sale_order_id.opportunity_id',
+        'reinvoiced_sale_order_id.opportunity_id.partner_id',
+        'reinvoiced_sale_order_id.opportunity_id.second_contact',
+        'reinvoiced_sale_order_id.opportunity_id.request_date',
+        'reinvoiced_sale_order_id.opportunity_id.yabanci_turk',
+        'reinvoiced_sale_order_id.people_count',
+        'reinvoiced_sale_order_id.sale_order_template_id',
+        'reinvoiced_sale_order_id.coordinator_ids',
+        'reinvoiced_sale_order_id.wedding_date'
+    )
     def _compute_crm_sale_fields(self):
         for rec in self:
+            rec.crm_partner_id = False
+            rec.crm_second_contact = False
+            rec.crm_request_date = False
+            rec.crm_yabanci_turk = False
+            rec.so_people_count = 0
+            rec.so_sale_template_id = False
+            rec.so_coordinator_ids = [(6, 0, [])]
+            rec.so_opportunity_id = False
+            rec.event_date = False
+
             so = rec.reinvoiced_sale_order_id
-            if so:
-                opp = so.opportunity_id
-                rec.crm_partner_id = opp.partner_id.id or False
+            if not so:
+                continue
+
+            opp = so.opportunity_id
+
+            rec.so_people_count = so.people_count or 0
+            rec.so_sale_template_id = so.sale_order_template_id.id or False
+            rec.so_coordinator_ids = [(6, 0, so.coordinator_ids.ids)] if so.coordinator_ids else [(6, 0, [])]
+            rec.so_opportunity_id = opp or False  # many2one'a recordset vermek OK
+            rec.event_date = so.wedding_date or False
+
+            if opp:
+                rec.crm_partner_id = opp.partner_id.id if opp.partner_id else False
                 rec.crm_second_contact = opp.second_contact or False
                 rec.crm_request_date = opp.request_date or False
-                rec.crm_yabanci_turk = opp.yabanci_turk.id or False
-                rec.so_people_count = so.people_count or 0
-                rec.so_sale_template_id = so.sale_order_template_id.id or False
-                rec.so_coordinator_ids = [(6, 0, so.coordinator_ids.ids)] or False
-                rec.so_opportunity_id=opp or False
-                rec.event_date=so.wedding_date or False
+                rec.crm_yabanci_turk = opp.yabanci_turk.id if opp.yabanci_turk else False
 
     @api.depends('event_ids.start', 'demo_form_ids.confirmed_demo_form_plan')
     def _compute_demo_state(self):
