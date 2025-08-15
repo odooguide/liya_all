@@ -100,7 +100,7 @@ class ProjectProject(models.Model):
         compute='_compute_crm_sale_fields',
         store=True,
         readonly=True)
-    event_date=fields.Date(string='Event Date',compute='_compute_crm_sale_fields',)
+    event_date=fields.Date(string='Event Date',compute='_compute_crm_sale_fields',compute_sudo=True)
 
     @api.depends('reinvoiced_sale_order_id',
                  'reinvoiced_sale_order_id.opportunity_id',
@@ -517,7 +517,7 @@ class ProjectProject(models.Model):
     def write(self, vals):
         res = super().write(vals)
         if 'dj_person' in vals:
-            self.mapped('demo_form_ids').write({'dj_person': vals['dj_person']})
+            self.mapped('demo_form_ids').sudo().write({'dj_person': vals['dj_person']})
         return res
 
     def _get_done_stage(self):
