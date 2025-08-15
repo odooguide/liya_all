@@ -131,27 +131,25 @@ class ProjectProject(models.Model):
     @api.depends('event_ids.start', 'demo_form_ids.confirmed_demo_form_plan')
     def _compute_demo_state(self):
         for rec in self:
-            today = fields.Date.context_today(rec)
-            now = fields.Datetime.now()
+            rec.demo_state = 'no_date'
+            rec.event_date = False
 
             events = rec.event_ids.filtered(lambda e: e.start).sorted(key='start')
-            if not events:
-                rec.demo_state = 'no_date'
-                continue
+            if events:
+                now = fields.Datetime.now()
+                chosen = next((e for e in events if e.start >= now), None) or events[-1]
 
-            future = [e for e in events if e.start >= now]
+                dt_local = fields.Datetime.context_timestamp(rec, chosen.start)
+                rec.event_date = dt_local.date()
 
-            if future:
+            confirmed_any = any(rec.demo_form_ids.mapped('confirmed_demo_form_plan'))
+
+            if rec.event_date and confirmed_any:
+                rec.demo_state = 'completed'
+            elif rec.event_date:
                 rec.demo_state = 'planned'
             else:
-                last_past = events[-1]
-                last_date_local = fields.Datetime.context_timestamp(rec, last_past.start).date()
-                confirmed_any = any(rec.demo_form_ids.mapped('confirmed_demo_form_plan'))
-
-                if last_date_local < today and confirmed_any:
-                    rec.demo_state = 'completed'
-                else:
-                    rec.demo_state = 'planned'
+                rec.demo_state = 'no_date'
 
     def _is_discount_line(self, line):
         name = (line.name or '').lower()
