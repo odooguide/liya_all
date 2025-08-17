@@ -148,7 +148,7 @@
                                        colspan="1" nolabel="1"/>
 
                             </group>
-                            <group string="Mezeler">
+                            <group string="Mezeler ">
 
                                 <group col="2">
                                     <field name="menu_meze_ids" widget="many2many_checkboxes"/>
