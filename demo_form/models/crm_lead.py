@@ -38,17 +38,17 @@ class CrmLead(models.Model):
             },
         }
 
-    def write(self, vals):
-        if 'stage_id' in vals:
-            new_stage = self.env['crm.stage'].browse(vals['stage_id'])
-
-            if new_stage.name.lower() in ('kazanıldı', 'won') and self.has_contract:
-                no_project = self.filtered(lambda lead: not lead.project_id)
-                if no_project:
-                    raise UserError(
-                        _("Proje atanmadan Kazanıldı/Won aşamasına geçemezsiniz.")
-                    )
-        return super(CrmLead, self).write(vals)
+    # def write(self, vals):
+    #     if 'stage_id' in vals:
+    #         new_stage = self.env['crm.stage'].browse(vals['stage_id'])
+    #
+    #         if new_stage.name.lower() in ('kazanıldı', 'won') and self.has_contract:
+    #             no_project = self.filtered(lambda lead: not lead.project_id)
+    #             if no_project:
+    #                 raise UserError(
+    #                     _("Proje atanmadan Kazanıldı/Won aşamasına geçemezsiniz.")
+    #                 )
+    #     return super(CrmLead, self).write(vals)
 
     def action_open_project(self):
         self.ensure_one()
