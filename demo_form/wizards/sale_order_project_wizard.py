@@ -59,26 +59,43 @@ class SaleOrderProjectWizard(models.TransientModel):
         partner_slug = (order.opportunity_id and order.opportunity_id.name or '').replace(' ', '-')
         project_name = f"D{seq_num}-{date_str}-{partner_slug}"
 
+        user_recs = order.coordinator_ids.sudo().mapped('employee_ids.user_id')
+
+        users = self.env['res.users'].sudo().search([
+            ('id', 'in', user_recs.ids)
+        ])
+
         vals = {
             'name': project_name,
             'partner_id': order.partner_id.id,
             'company_id': order.company_id.id,
-            'user_id': order.user_id.id or self.env.uid,
+            'user_id':  users[0].id,
             'allow_billable': True,
             'privacy_visibility': 'portal',
             'reinvoiced_sale_order_id': order.id,
             'sale_line_id': order.order_line and order.order_line[0].id or False
+
         }
 
-        project = self.env['project.project'].create(vals)
+        project = self.env['project.project'].sudo().create(vals)
         done_stage = self.env['project.task.type'].search([
             ('project_ids', 'in', project.id),
             ('name', '=', 'Done')
         ], limit=1)
         if not done_stage:
-            done_stage = self.env['project.task.type'].create({
+            done_stage = self.env['project.task.type'].sudo().create({
                 'name': 'Done',
                 'sequence': 10,
+                'project_ids': [(4, project.id)],
+            })
+        cancel_stage = self.env['project.task.type'].search([
+            ('project_ids', 'in', project.id),
+            ('name', '=', 'Cancel')
+        ], limit=1)
+        if not cancel_stage:
+            cancel_stage = self.env['project.task.type'].sudo().create({
+                'name': 'Cancel',
+                'sequence': 0,
                 'project_ids': [(4, project.id)],
             })
         order.project_id = project.id
@@ -96,16 +113,14 @@ class SaleOrderProjectWizard(models.TransientModel):
             if tmpl.user_ids:
                 responsibles = tmpl.user_ids.ids
             else:
-                user_recs = order.coordinator_ids.mapped('employee_ids.user_id')
-                users = self.env['res.users'].search([
-                    ('id', 'in', user_recs.ids)
-                ])
+                user_recs = order.coordinator_ids.sudo().mapped('employee_ids.user_id')
+                users = self.env['res.users'].sudo().search([('id', 'in', user_recs.ids)])
                 responsibles = users.ids
 
             sale_line = order.order_line.filtered(lambda l: l.product_id == tmpl.optional_product_id)
             sale_line_id = sale_line and sale_line[0].id or False
 
-            new_task = self.env['project.task'].create({
+            new_task = self.env['project.task'].sudo().create({
                 'project_id': project.id,
                 'name': tmpl.name,
                 'description': tmpl.description,

@@ -28,7 +28,7 @@
             <xpath expr="//button[@name='action_schedule_meeting']" position="before">
                 <button name="action_open_project"
                         type="object"
-                        string="Project"
+                        string="Organizasyon"
                         icon="fa-briefcase"
                         class="oe_stat_button"
                         invisible="project_id==False"

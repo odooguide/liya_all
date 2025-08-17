@@ -262,7 +262,7 @@ class CrmLead(models.Model):
                 'Y/T': lead.yabanci_turk,
             }
             missing = [name for name, value in required_fields.items() if not value]
-            if missing:
+            if missing and lead.team_id.wedding_team:
                 raise UserError(_(
                     'Lütfen aşağıdaki alanları doldurun: %s'
                 ) % ', '.join(missing))
@@ -466,6 +466,33 @@ class CrmLead(models.Model):
                 lead.write(write_vals)
 
         return True
+
+    def action_view_quotations(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Teklifler'),
+            'res_model': 'sale.order',
+            'view_mode': 'list,form',
+            'views': [(self.env.ref('sale.view_order_tree').id, 'list'), (False, 'form')],
+            'domain': [('opportunity_id', '=', self.id), ('state', 'in', ['draft', 'sent'])],
+            'context': {'default_opportunity_id': self.id},
+            'target': 'current',
+        }
+
+    def action_view_orders(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Siparişler'),
+            'res_model': 'sale.order',
+            'view_mode': 'list,form',
+            'views': [(self.env.ref('sale.view_order_tree').id, 'list'), (False, 'form')],
+            'domain': [('opportunity_id', '=', self.id), ('state', 'in', ['sale', 'done'])],
+            'context': {'default_opportunity_id': self.id},
+            'target': 'current',
+        }
+
 
 class ForeignLocal(models.Model):
     _name = 'foreign.local'

@@ -176,10 +176,10 @@
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='day_close']" position="after">
-                <field name="seeing_state_date"/>
-                <field name="contract_state_date"/>
-                <field name="won_state_date" />
-                <field name="lost_state_date"/>
+                <field name="seeing_state_date" groups="base.group_system"/>
+                <field name="contract_state_date" groups="base.group_system"/>
+                <field name="won_state_date"  groups="base.group_system"/>
+                <field name="lost_state_date" groups="base.group_system"/>
                 <field name="date_conversion" readonly="1"/>
                 <field name="type" groups="base.group_system"/>
 
@@ -290,4 +290,37 @@
           </xpath>
         </field>
       </record>
+
+    <record id="view_crm_lead_form_with_lead_buttons" model="ir.ui.view">
+    <field name="name">crm.lead.form.with.lead.buttons</field>
+    <field name="model">crm.lead</field>
+    <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//button[@name='action_schedule_meeting']" position="after">
+        <button name="action_view_quotations"
+                type="object"
+                string="Teklifler"
+                class="oe_stat_button"
+                icon="fa-pencil-square-o">
+            <field name="quotation_count" widget="statinfo" string="Quotations"/>
+
+        </button>
+        <button name="action_view_orders"
+                type="object"
+                string="Siparişler"
+                class="oe_stat_button"
+                icon="fa-usd"
+                invisible="sale_order_count &lt; 1">
+            <span class="o_stat_text"> Orders</span>
+            <field name="sale_order_count" invisible="1"/>
+
+        </button>
+      </xpath>
+      <xpath expr="//button[@name='action_view_sale_order']" position="replace"/>
+
+      <xpath expr="//button[@name='action_view_sale_quotation']" position="replace"/>
+        <xpath expr="//label[@for='date_deadline']" position="replace"/>
+        <xpath expr="//div[contains(@class, 'o_lead_opportunity_form_inline_fields')]" position="replace"/>
+    </field>
+  </record>
 </odoo>

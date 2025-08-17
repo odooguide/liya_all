@@ -24,7 +24,7 @@
                 <button name="action_create_demo_form"
                         type="object"
                         string="Create Demo Form"
-                        invisible="demo_form_count>0"/>
+                        invisible="demo_form_count>0 or next_event_id==False"/>
             </header>
         </field>
     </record>
@@ -57,16 +57,25 @@
                         <group>
                             <field name="project_id" invisible="1"/>
                             <field name="invitation_owner"/>
-                            <field name="invitation_date"/>
+                            <field name="invitation_date" readonly="1"/>
                             <field name="duration_days"/>
-                            <field name="ceremony"/>
+                            <field name="ceremony" required="1"/>
                             <field name="start_end_time"/>
+                            <field name="company_id" invisible="1"/>
+                            <div class="oe_edit_only" style="display:flex; align-items:center; gap:4px;">
+                                <button type="object" name="action_shift_minus" class="btn btn-secondary o_btn_icon"
+                                        string="" icon="fa-minus"/>
+                                <field name="minutes" nolabel="1" widget="integer"
+                                       style="width:40px; text-align:center;"/>
+                                <button type="object" name="action_shift_plus" class="btn btn-secondary o_btn_icon"
+                                        string="" icon="fa-plus"/>
+                            </div>
 
                         </group>
                         <group>
-                            <field name="demo_date"/>
-                            <field name="sale_template_id"/>
-                            <field name="guest_count"/>
+                            <field name="demo_date" readonly="1"/>
+                            <field name="sale_template_id" readonly="1"/>
+                            <field name="guest_count" readonly="1"/>
                             <field name="special_notes" widget="html" placeholder="Write your notes in here"/>
                             <field name="special_notes_preview" widget="html" invisible="1"/>
                             <field name="special_notes_remaining" widget="html" invisible="1"/>
@@ -80,69 +89,75 @@
                         <page string="Schedule and Transportation" name="schedule">
                             <separator string="Schedule Infos" colspan="2"/>
                             <group>
-                                <group>
-                                    <field name="schedule_line_ids" nolabel="1">
-                                        <list editable="bottom">
-                                            <field name="sequence" widget="handle"/>
-                                            <field name="sequence" invisible="1"/>
-                                            <field name="event"/>
-                                            <field name="time"/>
-                                            <field name="location_type"/>
-                                            <field name="location_notes" placeholder="Write your notes in here"/>
-                                        </list>
-                                    </field>
-                                </group>
-                                <group col="1">
-                                    <field name="schedule_description" placeholder="Write your schedule notes in here"
-                                           widget="html" colspan="1" nolabel="1"/>
-                                </group>
+                                <field name="schedule_line_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="sequence" invisible="1"/>
+                                        <field name="event"/>
+                                        <field name="time"/>
+                                        <field name="location_type"/>
+                                        <field name="location_notes" placeholder="Write your notes in here"/>
+                                    </list>
+                                </field>
                             </group>
+                            <group>
+                                <field name="schedule_description"
+                                       widget="html"
+                                       placeholder="Write your schedule notes in here"
+                                       nolabel="1"
+                                       colspan="2"/>
+                            </group>
+
                             <separator string="Transportation Infos" colspan="2"/>
                             <group>
-                                <group>
-                                    <field name="transport_line_ids" nolabel="1">
-                                        <list editable="bottom">
-                                            <field name="sequence" widget="handle"/>
-                                            <field name="sequence" invisible="1"/>
-                                            <field name="label"/>
-                                            <field name="time"/>
-                                            <field name="port_ids" widget="many2many_tags"/>
-                                            <field name="other_port"/>
-                                        </list>
-                                    </field>
-                                </group>
-                                <group col="1">
-                                    <field name="transportation_description"
-                                           placeholder="Write your transportation notes in here" widget="html"
-                                           colspan="1" nolabel="1"/>
-                                </group>
+                                <field name="transport_line_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="sequence" invisible="1"/>
+                                        <field name="label"/>
+                                        <field name="time"/>
+                                        <field name="port_ids" widget="many2many_tags"/>
+                                        <field name="other_port"/>
+                                    </list>
+                                </field>
+                            </group>
+                            <group>
+                                <field name="transportation_description"
+                                       widget="html"
+                                       placeholder="Write your transportation notes in here"
+                                       nolabel="1"
+                                       colspan="2"/>
                             </group>
                         </page>
 
                         <page string="Menu and Bar" name="menu">
-                            <div class="o_form_label"
-                                 invisible="sale_template_id!=3">
-                                Standart mezelere ilave olarak Kayısı Yahnisi,
-                                Karides ve Ahtapot soğuk deniz mezeleri de servis edilir.
-                            </div>
                             <separator string="Menu" colspan="2"/>
                             <group>
                                 <group col="2">
                                     <field name="menu_hot_appetizer" widget="radio"/>
-                                    <field name="menu_hot_appetizer_ultra" widget="radio"
+                                    <field name="menu_hot_appetizer_ultra" widget="boolean_toggle"
                                            invisible="sale_template_id != 3"/>
                                 </group>
                                 <group col="2">
                                     <field name="menu_dessert_ids" widget="many2many_checkboxes"/>
+                                    <field name="menu_dessert_ultra_ids" widget="many2many_checkboxes"
+                                           invisible="sale_template_id!=3"/>
+
                                 </group>
                                 <field name="menu_description" placeholder="Write your menu notes in here" widget="html"
                                        colspan="1" nolabel="1"/>
 
                             </group>
-                            <group>
+                            <group string="Mezeler">
+
                                 <group col="2">
-                                    <field name="menu_meze_ids" widget="many2many_tags"/>
+                                    <field name="menu_meze_ids" widget="many2many_checkboxes"/>
                                 </group>
+                                <div class="o_form_label"
+                                     invisible="sale_template_id!=3">
+                                    Standart mezelere ilave olarak Kayısı Yahnisi,
+                                    Karides ve Ahtapot soğuk deniz mezeleri de servis edilir.
+                                </div>
                                 <field name="menu_meze_notes" placeholder="Write your meze notes in here" widget="html"
                                        colspan="1" nolabel="1"/>
                             </group>
@@ -200,8 +215,8 @@
                                            widget="html" colspan="2" nolabel="1"/>
                                     <separator string="Accommodation" colspan="2"/>
                                     <group col="2">
-                                        <field name="accommodation_hotel" invisible="accommodation_service==False"/>
                                         <field name="accommodation_service" widget="boolean_toggle"/>
+                                        <field name="accommodation_hotel" invisible="accommodation_service==False"/>
                                         <field name="accomodation_notes"
                                                placeholder="Write your accommodation notes in here" widget="html"
                                                colspan="2" nolabel="1"/>
@@ -250,17 +265,20 @@
                         <page string="Photography" name="photography">
                             <group>
                                 <group col="2">
-                                    <field name="photo_standard" widget="boolean_toggle"/>
+                                    <field name="photo_standard" widget="boolean_toggle"
+                                           invisible="sale_template_id==3"/>
                                     <field name="photo_video_plus" widget="boolean_toggle"/>
-                                    <field name="photo_homesession" widget="boolean_toggle"/>
-                                    <field name="photo_homesession_address"
-                                           invisible="photo_homesession==False"/>
+                                    <field name="photo_drone" widget="boolean_toggle"/>
+
                                 </group>
                                 <group col="2">
                                     <field name="photo_print_service" widget="boolean_toggle"/>
-                                    <field name="photo_drone" widget="boolean_toggle"/>
-                                    <field name="photo_yacht_shoot" widget="boolean_toggle" invisible="sale_template_id.id!=3"/>
-                                    <field name="photo_harddisk_delivered"/>
+                                    <field name="photo_homesession" widget="boolean_toggle"/>
+                                    <field name="photo_homesession_address"
+                                           invisible="photo_homesession==False"/>
+                                    <field name="photo_yacht_shoot" widget="boolean_toggle"
+                                           invisible="sale_template_id!=3"/>
+                                    <field name="photo_harddisk_delivered" placeholder="Seçiniz…"/>
                                 </group>
                             </group>
                             <group>
@@ -269,18 +287,16 @@
                             </group>
                         </page>
                         <page string="Music" name="music">
-
                             <group>
                                 <group col="2">
                                     <field name="music_live" widget="boolean_toggle"/>
                                     <field name="music_trio" widget="boolean_toggle"/>
                                     <field name="music_percussion" widget="boolean_toggle"/>
-                                    <field name="music_dj_fatih" widget="boolean_toggle"/>
+
                                 </group>
                                 <group col="2">
-                                    <field name="music_dj_engin" widget="boolean_toggle"/>
-                                    <field name="music_other" widget="boolean_toggle"/>
-                                    <field name="music_other_details" invisible="music_other==False"/>
+                                    <field name="dj_person" placeholder="Seçiniz…"/>
+                                    <field name="music_other_details" invisible="dj_person!='other'"/>
                                 </group>
                             </group>
                             <group>
@@ -289,11 +305,15 @@
                             </group>
 
 
+                        </page>
+
+                        <page string="DJ" name="dj">
+
                             <group string="Significant Songs" col="2">
-                                <field name="entrance_song"/>
-                                <field name="first_dance_song"/>
-                                <field name="cake_song"/>
-                                <field name="bouquet_toss_song"/>
+                                <field name="entrance_song" placeholder="Lütfen buraya belirtin."/>
+                                <field name="first_dance_song" placeholder="Lütfen buraya belirtin."/>
+                                <field name="cake_song" placeholder="Lütfen buraya belirtin."/>
+                                <field name="bouquet_toss_song" placeholder="Lütfen buraya belirtin."/>
                             </group>
 
                             <!-- 2A. Language Ratio -->
@@ -306,9 +326,9 @@
                             </group>
 
                             <!-- 2B. Type of Music -->
-                            <group string="Type of Music" col="4">
+                            <group string="Type of Music" col="2">
                                 <!-- Cocktail -->
-                                <group col="1">
+                                <group col="2" string="Type Of Music at the Cocktail">
                                     <field name="cocktail_lounge" widget="boolean_toggle"/>
                                     <field name="cocktail_french" widget="boolean_toggle"/>
                                     <field name="cocktail_italian" widget="boolean_toggle"/>
@@ -317,7 +337,7 @@
                                     <field name="cocktail_easy_bossa" widget="boolean_toggle"/>
                                 </group>
                                 <!-- Dinner -->
-                                <group col="1">
+                                <group col="2" string="Type Of Music at the Dinner">
                                     <field name="dinner_lounge" widget="boolean_toggle"/>
                                     <field name="dinner_turkish_acoustic" widget="boolean_toggle"/>
                                     <field name="dinner_turkish_retro" widget="boolean_toggle"/>
@@ -325,7 +345,7 @@
                                     <field name="dinner_oldies" widget="boolean_toggle"/>
                                 </group>
                                 <!-- Party -->
-                                <group col="1">
+                                <group col="2" string="Type Of Music at the Party">
                                     <field name="party_turkish" widget="boolean_toggle"/>
                                     <field name="party_turkish_80s_90s" widget="boolean_toggle"/>
                                     <field name="party_local" widget="boolean_toggle"/>
@@ -338,7 +358,7 @@
                                     <field name="party_house_electronic" widget="boolean_toggle"/>
                                 </group>
                                 <!-- After Party -->
-                                <group col="1">
+                                <group col="2" string="Type Of Music at the After Party">
                                     <field name="after_turkish" widget="boolean_toggle"/>
                                     <field name="after_turkish_80s_90s" widget="boolean_toggle"/>
                                     <field name="after_radio_top50" widget="boolean_toggle"/>
@@ -356,35 +376,38 @@
                                 <field name="local_music" widget="boolean_toggle"/>
                                 <field name="local_music_songs"
                                        widget="html"
-                                       invisible="local_music == False"/>
+                                       invisible="local_music == False" placeholder="Lütfen notlarınızı buraya yazın."/>
                             </group>
 
                             <!-- 4) Request songs as HTML editors -->
                             <group col="2">
                                 <group string="Cocktail Request Songs">
-                                    <field name="cocktail_request" widget="html"/>
+                                    <field name="cocktail_request" widget="html"
+                                           placeholder="Lütfen notlarınızı buraya yazın."/>
                                 </group>
                                 <group string="Dinner Request Songs">
-                                    <field name="dinner_request" widget="html"/>
+                                    <field name="dinner_request" widget="html"
+                                           placeholder="Lütfen notlarınızı buraya yazın."/>
                                 </group>
                             </group>
                             <group col="2">
                                 <group string="Party Request Songs">
-                                    <field name="party_request" widget="html"/>
+                                    <field name="party_request" widget="html" placeholder="Lütfen buraya yazın."/>
                                 </group>
                                 <group string="After Party Request Songs">
-                                    <field name="afterparty_request" widget="html"/>
+                                    <field name="afterparty_request" widget="html" placeholder="Lütfen buraya yazın."/>
                                 </group>
                             </group>
 
                             <!-- 5) Ban Songs/Artists -->
                             <group string="Ban Songs/Artists">
-                                <field name="ban_songs" widget="html"/>
+                                <field name="ban_songs" widget="html" placeholder="Lütfen buraya yazın."/>
                             </group>
 
                             <!-- 6) Other Music Notes -->
                             <group string="Other Notes about Music">
-                                <field name="other_music_notes" widget="html"/>
+                                <field name="other_music_notes" widget="html"
+                                       placeholder="Lütfen notlarınızı buraya yazın."/>
                             </group>
                         </page>
 
@@ -398,10 +421,12 @@
                                     <field name="table_runner_design_ids"
                                            widget="many2many_checkboxes"/>
                                     <field name="table_color_ids"
-                                           widget="many2many_tags"/>
-                                    <field name="table_tag_ids"/>
+                                           widget="many2many_checkboxes"/>
+                                    <field name="table_tag_ids" placeholder="Seçiniz…"/>
                                     <field name="cake_choice_ids"
                                            widget="many2many_checkboxes"/>
+                                    <field name="cake_real" widget="boolean_toggle"/>
+                                    <field name="cake_champagne_tower" widget="boolean_toggle"/>
                                 </group>
 
                                 <group>
@@ -423,13 +448,14 @@
                                 <field name="other_lcv" widget="boolean_toggle"/>
                                 <field name="other_social_media_tag" widget="boolean_toggle"/>
                                 <field name="other_social_media_details"
-                                       invisible="other_social_media_tag==False"/>
+                                       invisible="other_social_media_tag==False" placeholder="Lütfen Belirtiniz"/>
                             </group>
                             <group>
                                 <field name="other_description" placeholder="Write your other notes in here"
                                        widget="html" colspan="2" nolabel="1"/>
                             </group>
                         </page>
+
                     </notebook>
                 </sheet>
                 <chatter/>
