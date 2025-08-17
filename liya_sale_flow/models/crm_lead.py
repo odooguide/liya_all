@@ -227,7 +227,7 @@ class CrmLead(models.Model):
 
             year = int(self.wedding_year)
 
-            if year < 2024:
+            if year < 2022:
                 raise ValidationError("Etkinlik yılı 2023'den büyük olmalıdır (minimum 2024).")
 
             if year > 2100:
