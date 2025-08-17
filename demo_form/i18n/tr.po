@@ -169,7 +169,7 @@ msgstr ""
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__accommodation_service
 msgid "Accommodation Provided"
-msgstr "Konaklama Sağlandı mı?"
+msgstr "Konaklama"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__accomodation_notes
@@ -524,12 +524,12 @@ msgstr "Kokteyl İstek Şarkılar"
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_table_color__name
 msgid "Color Choice"
-msgstr "Renk Tercihi"
+msgstr "Masa Örtüsü Renk Tercihi"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__table_color_ids
 msgid "Color Choices"
-msgstr "Renk Tercihleri"
+msgstr "Masa Örtüsü Renk Tercihleri"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_task__communication_type
@@ -2642,7 +2642,7 @@ msgstr "Bar notlarınızı buraya yazabilirsiniz."
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
 msgid "Write your dance notes in here"
-msgstr "Dnas notlarınızı buraya yazabilirsiniz."
+msgstr "Dans notlarınızı buraya yazabilirsiniz."
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
