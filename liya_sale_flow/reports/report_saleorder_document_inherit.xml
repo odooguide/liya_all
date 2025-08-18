@@ -63,7 +63,7 @@
                                         </td>
 
                                     </tr>
-                                    <t t-if="mini not in doc.sale_order_template_id.name.lower()">
+                                    <t t-if="'mini' not in doc.sale_order_template_id.name.lower()">
                                     <tr>
                                         <td>Price Per Guest</td>
                                         <td>
