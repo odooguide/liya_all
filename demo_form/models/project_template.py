@@ -371,8 +371,9 @@ class ProjectProject(models.Model):
             'res_id': demo.id,
             'target': 'current',
         }
+
     def action_create_demo_form(self):
-        """Create a new Demo Form with pre‑filled values and open it."""
+        """Create a new Demo Form with pre-filled values and open it."""
         self.ensure_one()
         if self.demo_form_ids:
             return self.action_open_demo_form()
@@ -383,146 +384,159 @@ class ProjectProject(models.Model):
 
         order = self.reinvoiced_sale_order_id
         if order:
-            inv_name = f'{order.partner_id.name}-{order.opportunity_id.second_contact}'
+            # --- Güvenli davetiye adı ---
+            partner = (order.partner_id.name or '').strip()
+            second = (getattr(order.opportunity_id, 'second_contact', '') or '').strip()
+            inv_name = f'{partner}-{second}'.strip('-').strip()
+
+            # --- Temel alanlar ---
             vals.update({
-                'name': f'{inv_name} Demo Formu',
-                'invitation_owner': inv_name,
-                'invitation_date': order.wedding_date,
+                'name': f'{inv_name} Demo Formu' if inv_name else 'Demo Formu',
+                'invitation_owner': inv_name or partner or False,
+                'invitation_date': order.wedding_date,  # Date obj veya 'YYYY-MM-DD'
                 'guest_count': order.people_count,
                 'sale_template_id': order.sale_order_template_id.id or False,
-                'demo_date': self.next_event_date and datetime.strptime(self.next_event_date, "%d.%m.%Y").date().isoformat() or False,
+                'demo_date': (
+                        self.next_event_date
+                        and datetime.strptime(self.next_event_date, "%d.%m.%Y").date().isoformat()
+                        or False
+                ),
             })
-            sched_cmds = []
-            for line in order.sale_order_template_id.schedule_line_ids:
-                sched_cmds.append((0, 0, {
+
+            # --- Şablondan schedule/transport kopyala ---
+            sched_cmds = [
+                (0, 0, {
                     'sequence': line.sequence,
                     'event': line.event,
                     'time': line.time,
                     'location_type': line.location_type,
                     'location_notes': line.location_notes,
-                }))
+                })
+                for line in order.sale_order_template_id.schedule_line_ids
+            ]
             vals['schedule_line_ids'] = sched_cmds
 
-            trans_cmds = []
-            for line in order.sale_order_template_id.transport_line_ids:
-                trans_cmds.append((0, 0, {
+            trans_cmds = [
+                (0, 0, {
                     'sequence': line.sequence,
                     'label': line.label,
                     'time': line.time,
                     'port_ids': [(6, 0, line.port_ids.ids)],
                     'other_port': line.other_port,
-                }))
+                })
+                for line in order.sale_order_template_id.transport_line_ids
+            ]
             vals['transport_line_ids'] = trans_cmds
 
+            # --- Yardımcı: tarih bazlı saç/makyaj seçimi ---
+            def _apply_hair_choice(_vals):
+                date_str = _vals.get('invitation_date') or _vals.get('demo_date')
+                if not date_str:
+                    return
+                dt = fields.Date.from_string(date_str)
+                # Mon=0, Tue=1, Wed=2, Thu=3, Fri=4, Sat=5, Sun=6
+                if dt.weekday() in (2, 3, 4, 5):
+                    _vals['hair_studio_3435'] = True
+                else:
+                    _vals['hair_garage_caddebostan'] = True
+
+            # --- Satırlardan paket/opsiyon çıkarımı ---
             for sol in order.order_line:
-                name = sol.product_id.name.strip()
-                if name == "Photo & Video Plus":
+                pname = (sol.product_id.name or '').strip()
+                up = pname.upper()
+
+                # Foto/video & aksesuarlar
+                if pname == "Photo & Video Plus":
                     vals['photo_video_plus'] = True
-                if name == "Drone Kamera":
+                if pname == "Drone Kamera":
                     vals['photo_drone'] = True
 
-                if name == "Hard Disk 1TB Delivered":
-                    vals['photo_harddisk_delivered'] = True
-                if name == "Will Deliver Later":
-                    vals['photo_harddisk_later'] = True
+                # HDD teslim (SELECTION!)
+                if pname == "Hard Disk 1TB Delivered":
+                    vals['photo_harddisk_delivered'] = 'delivered'
+                if pname == "Will Deliver Later":
+                    vals['photo_harddisk_delivered'] = 'later'
 
-                if name == "After Party":
+                # After party & alt opsiyonlar
+                if pname == "After Party":
                     vals['afterparty_service'] = True
-                if name == "After Party Shot Servisi":
+                if pname == "After Party Shot Servisi":
                     vals['afterparty_shot_service'] = True
-                if name == "Sushi Bar":
+                if pname == "Sushi Bar":
                     vals['afterparty_sushi'] = True
-                if name == "Yabancı İçki Servisi":
-                    vals['bar_alcohol_service'] = True
-                if name == "Dans Show":
+                if pname == "After Party Ultra":
+                    vals['afterparty_ultra'] = True  # constrains/onchange kontrol edecek
+                if pname == "Dans Show":
                     vals['afterparty_dance_show'] = True
-                if name == "Fog + Laser Show":
+                if pname == "Fog + Laser Show":
                     vals['afterparty_fog_laser'] = True
-                if name == "After Party Ultra":
-                    vals['afterparty_ultra'] = True
 
-                if name == "Saç & Makyaj":
-                    date_str = vals.get('invitation_date') or vals.get('demo_date')
-                    if date_str:
-                        dt = fields.Date.from_string(date_str)
-                        # Monday=0, Tuesday=1, Wednesday=2
-                        if dt.weekday() in (2, 3, 4, 5):
-                            vals['hair_studio_3435'] = True
-                        else:
-                            vals['hair_garage_caddebostan'] = True
+                # Bar
+                if pname == "Yabancı İçki Servisi":
+                    vals['bar_alcohol_service'] = True
 
-                if "Canlı Müzik" in name:
+                # Saç & makyaj
+                if pname == "Saç & Makyaj":
+                    _apply_hair_choice(vals)
+
+                # Müzik & pasta
+                if "Canlı Müzik" in pname:
                     vals['music_live'] = True
-                if "Pasta Show'da Gerçek Pasta" in name:
+                if "Pasta Show'da Gerçek Pasta" in pname:
                     vals['cake_real'] = True
-                if "Pasta Show'da Şampanya Kulesi" in name:
+                if "Pasta Show'da Şampanya Kulesi" in pname:
                     vals['cake_champagne_tower'] = True
-                if "PERKÜSYON" in name.upper():
+                if "PERKÜSYON" in up:
                     vals['music_percussion'] = True
-                if "TRIO" in name.upper():
+                if "TRIO" in up:
                     vals['music_trio'] = True
-                if "Özel" in name:
+                if "Özel" in pname:
                     vals['music_other'] = True
                     vals['music_other_details'] = "Custom Live Music package"
+
+                # DJ (project alanı varsa formla senkron)
                 if self.dj_person:
-                    vals['dj_person']=self.dj_person
-                if name.upper() == "BARNEY":
+                    vals['dj_person'] = self.dj_person
+
+                # Pre-host
+                if up == "BARNEY":
                     vals['prehost_barney'] = True
-                if name.upper() == "FRED":
+                if up == "FRED":
                     vals['prehost_fred'] = True
-
-
-                if name == "Breakfast Service":
+                if pname == "Breakfast Service":
                     vals['prehost_breakfast'] = True
-                    vals['prehost_breakfast_count'] = int(sol.product_uom_qty)
+                    vals['prehost_breakfast_count'] = int(sol.product_uom_qty or 0)
 
-
+            # --- Şablon bazlı paketler ---
             tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
                 'photo_video_plus',
                 'afterparty_service', 'afterparty_shot_service',
                 'afterparty_sushi',
-                'accommodation_service','dance_lesson',
+                'accommodation_service', 'dance_lesson',
             ]
-
-            ultra_extra = ['music_live', 'music_percussion', 'music_trio','photo_yacht_shoot','bar_alcohol_service',
-                           'photo_drone', 'afterparty_fog_laser','prehost_barney']
+            ultra_extra = [
+                'music_live', 'music_percussion', 'music_trio',
+                'photo_yacht_shoot', 'bar_alcohol_service',
+                'photo_drone', 'afterparty_fog_laser', 'prehost_barney'
+            ]
             ultra_fields = elite_fields + ultra_extra
-            if tmpl=='elite':
-                vals['photo_standard'] = True
-            else:
-                vals['photo_standard'] = False
-            if tmpl == 'plus':
-                date_str = vals.get('invitation_date') or vals.get('demo_date')
-                if date_str:
-                    dt = fields.Date.from_string(date_str)
-                    # Monday=0, Tuesday=1, Wednesday=2
-                    if dt.weekday() in (2, 3, 4, 5):
-                        vals['hair_studio_3435'] = True
-                    else:
-                        vals['hair_garage_caddebostan'] = True
 
+            vals['photo_standard'] = (tmpl == 'elite')
+
+            if tmpl == 'plus':
+                _apply_hair_choice(vals)
                 for f in elite_fields:
                     vals[f] = True
-                if name == 'After Party Ultra':
-                    vals['afterparty_ultra'] = True
-                vals['start_end_time'] = '19:30 - 1:30'
+                # NOT: afterparty_ultra zaten ürün satırından işaretlenmiş olabilir;
+                # burada tekrar elle set etmiyoruz.
+                # start_end_time set ETMİYORUZ: model create() sonrası onchange hesaplayacak.
 
             elif tmpl == 'ultra':
-                date_str = vals.get('invitation_date') or vals.get('demo_date')
-                if date_str:
-                    dt = fields.Date.from_string(date_str)
-                    # Monday=0, Tuesday=1, Wednesday=2
-                    if dt.weekday() in (2, 3, 4, 5):
-                        vals['hair_studio_3435'] = True
-                    else:
-                        vals['hair_garage_caddebostan'] = True
+                _apply_hair_choice(vals)
                 for f in ultra_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True
-                vals['start_end_time'] = '19:30 - 2:00'
-            else:
-                vals['start_end_time'] = '19:30 - 23:30'
 
         demo = self.env['project.demo.form'].create(vals)
         return {

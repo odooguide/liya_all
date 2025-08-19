@@ -105,11 +105,27 @@ class SaleOrder(models.Model):
             },
         }
 
+    def action_open_update_tasks_wizard(self):
+        """Ek protokol vb. durumlarda, kendi projesi olmayan ancak
+        CRM lead'inde proje bulunan siparişten görev güncelleme sihirbazını aç."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _("Görevleri Güncelle"),
+            'res_model': 'sale.order.update.tasks.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_sale_order_id': self.id,
+            }
+        }
+
     @api.onchange('wedding_date')
     def _onchange_wedding_date(self):
         for rec in self:
             if rec.project_task_ids:
                 rec.project_task_ids._onchange_deadline_date()
+
 
 
 class SaleOrderOption(models.Model):
