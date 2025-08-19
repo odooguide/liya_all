@@ -7,6 +7,7 @@ from odoo.exceptions import ValidationError, UserError
 
 class CrmLead(models.Model):
     _inherit = "crm.lead"
+    expected_revenue = fields.Monetary('Expected Revenue', currency_field='company_currency', tracking=False, default=0.0)
 
     date_conversion = fields.Datetime('Conversion Date', readonly=False)
     option1 = fields.Date(string="Optional Date 1")
