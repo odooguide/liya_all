@@ -655,7 +655,7 @@ class ProjectDemoForm(models.Model):
                 else:
                     line.time = f'22:30 - {party_end_str}'
 
-            for t in rec.transport_line_ids.filtered(lambda l: l.label in ['After Party Dönüş','After Parti Dönüş']):
+            for t in rec.transport_line_ids.filtered(lambda l: l.label in ['After Party Dönüş','After Parti Dönüş','After Parti Dönüşü']):
                 if rec.afterparty_ultra or rec.afterparty_service:
                     t.time = end_str
                 else:
