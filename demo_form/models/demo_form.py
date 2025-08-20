@@ -36,9 +36,8 @@ class ProjectDemoForm(models.Model):
     guest_count = fields.Integer(string="Guest Count")
     ceremony = fields.Selection([
         ('actual', "Actual"),
-        ('def', "Seçiniz"),
         ('staged', "Staged")],
-        default='def', string="Ceremony Type")
+        string="Ceremony Type")
     start_end_time = fields.Char(string="Start-End Time")
 
     # ── Schedule page ─────────────────────────────────────────────────────────

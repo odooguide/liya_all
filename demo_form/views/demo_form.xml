@@ -221,7 +221,7 @@
                                     <separator string="Accommodation" colspan="2"/>
                                     <group col="2">
                                         <field name="accommodation_service" widget="boolean_toggle"/>
-                                        <field name="accommodation_hotel" invisible="accommodation_service==False"/>
+                                        <field name="accommodation_hotel" invisible="accommodation_service==False" placeholder="Hotel"/>
                                         <field name="accomodation_notes"
                                                placeholder="Write your accommodation notes in here" widget="html"
                                                colspan="2" nolabel="1"/>
