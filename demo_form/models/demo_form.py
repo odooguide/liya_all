@@ -7,7 +7,6 @@ import re
 import json
 from html import escape as E
 
-from workspace.enterprises.enterprise_17.sale_purchase_inter_company_rules.models.sale_order import sale_order
 
 TIME_PATTERN = re.compile(r'(\d{1,2}):([0-5]\d)')
 
