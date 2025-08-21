@@ -28,7 +28,7 @@
     </record>
 
     <template id="demo_form_report_layout">
-        <t t-call="web.html_container">
+         <t t-call="web.html_container">
             <t t-call="web.external_layout">
                 <style>
                     .liya-static-page{
@@ -75,11 +75,10 @@
                         <div class="page liya-theme" style="font-family: 'Helvetica', Arial, sans-serif; position:relative;font-size:10pt">
                             <div style="margin:2px 0 8px 0; overflow:hidden;">
                                 <!-- Sol sütun kadar alan: başlık -->
-                                <div style="float:left; width:50%; text-align:center;">
-                                    <div style="display:inline-block; color:#2D7F97; font-weight:800; font-size:14pt; letter-spacing:2px;">
-                                        LIYA ALL - WEDDING PLAN 2025
+                                <div style="float:left; width:80%; text-align:center;">
+                                    <div style="display:inline-block; color:#2D7F97; font-weight:800; font-size:18pt;">
+                                        LIYA ALL - WEDDING PLAN <t t-esc="o.invitation_date.strftime('%Y')"/>
                                     </div>
-                                    <div style="height:2px; background:#2D7F97; width:85%; margin:6px auto 0;"/>
                                 </div>
 
                                 <!-- Sağ sütun: logo -->
@@ -149,7 +148,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2" style="padding:4px 6px; font-weight:600; vertical-align:top;">
+                                                <td colspan="2" style="padding:4px 6px; font-weight:600; vertical-align:top;line-height:12pt">
                                                     Special Notes:
                                                 </td>
                                             </tr>
@@ -198,25 +197,26 @@
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top; white-space:nowrap;">
                                                     <t t-if="line.time">
-                                                        <span t-esc="line.time"/>
+                                                        <span style="font-weight:600;" t-esc="line.time"/>
                                                     </t>
                                                     <t t-if="not line.time">__ : __</t>
                                                 </td>
                                                 <td style="padding:6px 8px; text-align:center; vertical-align:top;">
-                                                    <t t-if="line.location_type == 'restaurant' or line.location_type == 'beach'">
-                                                        <t t-if="line.location_type == 'restaurant'">Restaurant
-                                                            (<strong>
-                                                                x</strong>) -
-                                                        </t>
-                                                        <t t-if="line.location_type != 'restaurant'">Restaurant
-                                                            (<strong/>) -
-                                                        </t>
-                                                        <t t-if="line.location_type == 'beach'">Beach (<strong>
-                                                            x</strong>)
-                                                        </t>
-                                                        <t t-if="line.location_type != 'beach'">Beach (<strong/>)
-                                                        </t>
+                                                  <t t-if="line.location_type == 'restaurant' or line.location_type == 'beach'">
+                                                    <t t-if="line.location_type == 'restaurant'">
+                                                        <span style="color:#C86A00;">Restaurant</span> (<strong>x</strong>) -
                                                     </t>
+                                                    <t t-if="line.location_type != 'restaurant'">
+                                                        <span style="color:#C86A00;">Restaurant</span> (<strong/>) -
+                                                    </t>
+
+                                                    <t t-if="line.location_type == 'beach'">
+                                                        <span style="color:#2D7F97;">Beach</span> (<strong>x</strong>)
+                                                    </t>
+                                                    <t t-if="line.location_type != 'beach'">
+                                                        <span style="color:#2D7F97;">Beach</span> (<strong/>)
+                                                    </t>
+                                                </t>
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top;">
                                                     <t t-if="line.location_notes">
@@ -253,12 +253,13 @@
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top; white-space:nowrap;">
                                                     <t t-if="line.time">
-                                                        <span t-esc="line.time"/>
+                                                        <span style="font-weight:600;" t-esc="line.time"/>
                                                     </t>
                                                     <t t-if="not line.time">__ : __</t>
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top;">
                                                     <t t-if="line.port_ids">
+                                                        <span style="color:#2D7F97;">Limanlar: </span>
                                                         <t t-foreach="line.port_ids" t-as="p">
                                                             <span t-esc="p.name"/>,
                                                         </t>
@@ -1224,7 +1225,9 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="page liya-theme" style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
+                            </div>
+                            <div class="page liya-static-page">
+                            <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
                                 <h6>M) MUSIC CHOICES</h6>
 
                                 <!-- 1) Significant Songs -->
@@ -1380,7 +1383,7 @@
 
                                         <!-- Dinner -->
                                         <td style="vertical-align:top; width:25%; padding:6px 10px; border-right:1px solid #cfd8dc;">
-                                            <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
+                                            <div style="font-weight:700; margin-bottom:3px;">Type of Music at the
                                                 Dinner
                                             </div>
                                             <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
@@ -1630,7 +1633,7 @@
                                 <div style="font-size:9pt; color:#444; margin-bottom:4px;">If yes, please specify the
                                     songs:
                                 </div>
-                                <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;">
+                                <div style="font-size:9pt;  border-bottom:1px dashed #999; padding:4px 0;">
                                     <t t-if="o.local_music_songs">
                                         <span t-field="o.local_music_songs"/>
                                     </t>
@@ -1641,18 +1644,17 @@
                             </div>
 
                             <!-- 4) REQUEST SONGS -->
-                            <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
+                            <div style="margin-top:6px; font-family:Helvetica, Arial, sans-serif;">
                                 <h6>4) REQUEST SONGS</h6>
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;max-height:50px">
                                     <tr>
                                         <!-- Cocktail -->
-                                        <td style="vertical-align:top; width:25%; padding:6px 8px; border-right:1px solid #cfd8dc;">
-                                            <div style="font-weight:600; margin-bottom:2px;">Cocktail request songs:
+                                        <td style="vertical-align:top; width:25%; padding-bottom:2px; border-right:1px solid #cfd8dc;">
+                                            <div style="font-weight:600;">Cocktail request songs:
                                             </div>
                                             <div style="white-space:pre-wrap;font-size:9pt">
                                                 <t t-if="o.cocktail_request">
                                                     <div t-field="o.cocktail_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
-
                                                 </t>
                                                 <t t-else="">
                                                     <span style="color:#999;">-</span>
@@ -1660,8 +1662,8 @@
                                             </div>
                                         </td>
                                         <!-- Dinner -->
-                                        <td style="vertical-align:top; width:25%; padding:6px 8px; border-right:1px solid #cfd8dc;">
-                                            <div style="font-weight:600; margin-bottom:2px;">Dinner request songs:</div>
+                                        <td style="vertical-align:top; width:25%; padding-bottom:2px; border-right:1px solid #cfd8dc;">
+                                            <div style="font-weight:600;">Dinner request songs:</div>
                                             <div style="white-space:pre-wrap;font-size:9pt">
                                                 <t t-if="o.dinner_request">
                                                     <div t-field="o.dinner_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
@@ -1673,8 +1675,8 @@
                                             </div>
                                         </td>
                                         <!-- Party -->
-                                        <td style="vertical-align:top; width:25%; padding:6px 8px; border-right:1px solid #cfd8dc;">
-                                            <div style="font-weight:600; margin-bottom:2px;">Party request songs:</div>
+                                        <td style="vertical-align:top; width:25%; padding-bottom:2px; border-right:1px solid #cfd8dc;">
+                                            <div style="font-weight:600;">Party request songs:</div>
                                             <div style="white-space:pre-wrap;font-size:9pt">
                                                 <t t-if="o.party_request">
                                                     <div t-field="o.party_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
@@ -1686,8 +1688,8 @@
                                             </div>
                                         </td>
                                         <!-- After Party -->
-                                        <td style="vertical-align:top; width:25%; padding:6px 8px;">
-                                            <div style="font-weight:600; margin-bottom:2px;">After Party request
+                                        <td style="vertical-align:top; width:25%; padding-bottom:2px;">
+                                            <div style="font-weight:600;">After Party request
                                                 songs:
                                             </div>
                                             <div style="white-space:pre-wrap;font-size:9pt">
@@ -1709,7 +1711,7 @@
                                 <h6>5) BAN ANY SONGS OR
                                     ARTISTS
                                 </h6>
-                                <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;font-size:9pt">
+                                <div style="min-height:36px; border-bottom:1px dashed #999; padding-bottom:2px;font-size:9pt">
                                     <t t-if="o.ban_songs">
                                         <div t-field="o.ban_songs" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
@@ -1725,7 +1727,7 @@
                                 <h6>6) OTHER NOTES ABOUT
                                     MUSIC
                                 </h6>
-                                <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;">
+                                <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;font-size:9pt">
                                     <t t-if="o.other_music_notes">
                                         <span t-field="o.other_music_notes"/>
                                     </t>
@@ -1771,7 +1773,8 @@
                                     </tr>
                                 </table>
                             </div>
-                        </div>
+                            </div>
+
                         <!-- ===== STATİK SAYFA: AÇIK RIZA METNİ (TR) ===== -->
                         <div class="page liya-static-page" style="font-family:Helvetica, Arial, sans-serif; clear:both;line-height:15pt">
 
@@ -2001,6 +2004,9 @@
                                         </td>
                                     </tr>
                                 </table>
+                                 <div style="                                    text-align:center;                                    margin-top:15px;                                    font-size:6pt;                                    color:#9aa7b1;                                   ">
+                                Demo Version 1.0
+                              </div>
 
                             </div>
                     </t>
