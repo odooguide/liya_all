@@ -310,7 +310,7 @@ class ProjectProject(models.Model):
             default_categ_ids=default_cats,
         )
 
-        action.update({
+        action.sudo().update({
             'context': ctx,
             'domain': [('res_model', '=', 'project.project'), ('res_id', '=', self.id)],
         })
