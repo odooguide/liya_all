@@ -1223,7 +1223,7 @@ class ProjectDemoForm(models.Model):
         html = f"""
         <div>
           <p>🏁 <b>Tarih:</b> {E(tarih)}</p>
-          <p>👩‍❤️‍👨 <b>Çiftimiz:</b> {self.reinvoiced_sale_order_id.opportunity_id.name}</p>
+          <p>👩‍❤️‍👨 <b>Çiftimiz:</b> {self.project_id.reinvoiced_sale_order_id.opportunity_id.name}</p>
           <p>🔳 <b>Düğün Tipi:</b> {E(tip)}</p>
           <p>🟡 <b>Kişi sayısı:</b> {E(guest)}</p>
           <p>🟢 <b>Beklenen:</b> {E(expected)}</p>
