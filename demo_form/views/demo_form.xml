@@ -48,11 +48,7 @@
         <field name="model">project.demo.form</field>
         <field name="arch" type="xml">
             <form string="Demo Form">
-                <header>
-                    <button name="action_generate_whatsapp_message"
-                        type="object"
-                        string="Whatsapp Mesajı Oluştur"
-                       />
+  <header>
                 </header>
                 <sheet>
                     <h1>
@@ -65,6 +61,8 @@
                             <field name="invitation_date" readonly="1"/>
                             <field name="duration_days"/>
                             <field name="ceremony" required="1"/>
+                            <field name="is_ceremony" widget="boolean_toggle"/>
+                            <field name="merasim"/>
                             <field name="start_end_time"/>
                             <field name="company_id" invisible="1"/>
                             <div class="oe_edit_only" style="display:flex; align-items:center; gap:4px;">

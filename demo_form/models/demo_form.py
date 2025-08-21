@@ -391,6 +391,9 @@ class ProjectDemoForm(models.Model):
     special_notes_preview = fields.Html(string="Special Notes Preview", compute='_compute_split_notes')
     special_notes_remaining = fields.Html(string="Special Notes Remaining", compute='_compute_split_notes')
 
+    is_ceremony=fields.Boolean(string="Seramoni Düzeni")
+    merasim=fields.Selection([('nostaljik','Nostaljik Kapı'),('yemek','Yemek Sırasında'),('none','Yok')],string='Merasim')
+
     company_id = fields.Many2one(
         'res.company',
         string='Company',
@@ -1000,15 +1003,24 @@ class ProjectDemoForm(models.Model):
         return out
 
     def _collect_general_notes(self):
-        """Genel notlar: nikah/seremoni/konaklama vb. + özel notlar."""
+        self.ensure_one()
         CEREMONY_MAP = {'actual': 'Gerçek', 'staged': 'Mizansen', 'def': 'Seçili değil'}
         lines = []
+
         if self.ceremony:
             lines.append(f"➖Nikah : {CEREMONY_MAP.get(self.ceremony, self.ceremony)}")
 
         if self.accommodation_service:
             acc = self.accommodation_hotel or "Var"
             lines.append(f"➖Konaklama : {acc}")
+
+        if self.merasim:
+            sel = self.with_context(lang=self.env.user.lang).fields_get(['merasim'])['merasim']['selection']
+            merasim_label = dict(sel).get(self.merasim, self.merasim)
+            lines.append(f"➖Merasim : {merasim_label}")
+        ceremony='VAR' if self.is_ceremony else 'YOK'
+        lines.append(f'Seramoni Düzeni : {ceremony}')
+
         other = self._html_to_text(self.other_description)
         addl = self._html_to_text(self.additional_services_description)
         notes = "\n".join(x for x in [other, addl] if x).strip()
@@ -1109,7 +1121,7 @@ class ProjectDemoForm(models.Model):
           <p>🟡 <b>Kişi sayısı:</b> {E(guest)}</p>
           <p>🟢 <b>Beklenen:</b> {E(expected)}</p>
           <p>👧 <b>Koordinatör:</b> {E(koordinatör or "-")}</p>
-          <p>🎧 <b>DJ:</b> {E(dj)}</p>
+          <p>🎧 <b>DJ:</b> {E(dj)}</p><br/>
     
           <h4>➕ Ek Paketler:</h4>
           {ul(packages or ["*"])}
@@ -1122,6 +1134,7 @@ class ProjectDemoForm(models.Model):
     
           <h4>🔴 Genel Notlar:</h4>
           {ul(genel)}
+          
     
           <h4>⚜️ Dekor Notları:</h4>
           {ul(dekor)}

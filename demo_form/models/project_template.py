@@ -1,5 +1,5 @@
 from odoo import fields, models, _, api
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError,AccessError
 from datetime import datetime
 
 class ProjectProject(models.Model):
@@ -604,3 +604,41 @@ class ProjectProject(models.Model):
         for rec in records.filtered(lambda r: r.stage_id != done_stage):
             rec.stage_id = done_stage.id
 
+    def action_compose_whatsapp_message(self):
+        self.ensure_one()
+        project = self
+
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
+        if project.user_id and project.user_id != self.env.user and not is_admin:
+            raise AccessError(
+                _("Bu buton sadece bu projenin yöneticisi (%s) tarafından kullanılabilir.") % (project.user_id.name,))
+
+
+        demo = self.env['project.demo.form'].search([('project_id', '=', project.id)], limit=1)
+        if not demo:
+            raise UserError(_("Bu projeye bağlı mesaj kaynağı (demo form) bulunamadı."))
+
+        html_body = demo._build_whatsapp_message()
+
+        ctx = {
+            'default_model': 'project.project',
+            'default_res_ids':[project.id],
+            'default_composition_mode': 'comment',
+            'default_is_log': True,
+            'default_subtype_id': self.env.ref('mail.mt_note').id,
+            'default_subject': 'WhatsApp Mesajı',
+            'default_body': html_body,
+        }
+
+        view = self.env.ref('mail.email_compose_message_wizard_form')
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Log Ekle (WhatsApp)',
+            'res_model': 'mail.compose.message',
+            'view_mode': 'form',
+            'view_id': view.id,
+            'target': 'new',
+            'context': ctx,
+        }

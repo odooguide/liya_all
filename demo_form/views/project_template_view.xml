@@ -10,6 +10,10 @@
                         type="object"
                         class="btn-secondary"
                 />
+                <button name="action_compose_whatsapp_message"
+                        type="object"
+                        string="Whatsapp Mesajı Oluştur"
+                       />
             </header>
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="next_event_date" invisible="1"/>
