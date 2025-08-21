@@ -1119,6 +1119,67 @@ class ProjectDemoForm(models.Model):
         DJ_MAP = {'engin': 'Engin', 'fatih': 'Fatih', 'other': 'Diğer'}
         return DJ_MAP.get(self.dj_person) or ("Diğer" if self.music_other else "")
 
+    def _collect_menu_bar_notes(self):
+        """Menü ve Bar notlarını satır listesi olarak döndürür (WhatsApp formatına uygun)."""
+        self.ensure_one()
+        lines = []
+
+        # --- Menü ---
+        # Selection etiketlerini kullanıcı dilinde al
+        hot_sel = self.with_context(lang=self.env.user.lang).fields_get(['menu_hot_appetizer'])['menu_hot_appetizer'][
+            'selection']
+        hot_map = dict(hot_sel)
+
+        if self.menu_hot_appetizer:
+            hot_label = hot_map.get(self.menu_hot_appetizer, self.menu_hot_appetizer)
+            lines.append(f"➖Sıcak Başlangıç : {hot_label}")
+
+        if self.menu_hot_appetizer_ultra:
+            lines.append("➖Sıcak Ekstra : Rocket Shrimp")
+
+        # M2M isimlerini virgülle birleştir
+        def names(m2m):
+            return ", ".join(m2m.mapped('name')) if m2m else ""
+
+        if self.menu_meze_ids:
+            lines.append(f"➖Mezeler : {names(self.menu_meze_ids)}")
+
+        meze_notes_txt = self._html_to_text(self.menu_meze_notes) if self.menu_meze_notes else ""
+        if meze_notes_txt:
+            lines.append(f"➖Meze Notu : {meze_notes_txt}")
+
+        if self.menu_dessert_ids:
+            lines.append(f"➖Tatlı : {names(self.menu_dessert_ids)}")
+
+        if self.menu_dessert_ultra_ids:
+            lines.append(f"➖Ultra Tatlı : {names(self.menu_dessert_ultra_ids)}")
+
+        menu_notes_txt = self._html_to_text(self.menu_description) if self.menu_description else ""
+        if menu_notes_txt:
+            lines.append(f"➖Menü Notu : {menu_notes_txt}")
+
+        # --- Bar ---
+        # Rakı markası selection’ı da yerelleştir
+        raki_sel = self.with_context(lang=self.env.user.lang).fields_get(['bar_raki_brand'])['bar_raki_brand'][
+            'selection']
+        raki_map = dict(raki_sel)
+
+        if self.bar_alcohol_service:
+            lines.append("➖Alkollü içecek servisi : Var")
+        else:
+            lines.append("➖Alkollü içecek servisi : Yok")
+            if self.bar_purchase_advice:
+                lines.append(f"➖Satın alma önerisi : {self.bar_purchase_advice}")
+
+        if self.bar_raki_brand:
+            lines.append(f"➖Rakı Markası : {raki_map.get(self.bar_raki_brand, self.bar_raki_brand)}")
+
+        bar_notes_txt = self._html_to_text(self.bar_description) if self.bar_description else ""
+        if bar_notes_txt:
+            lines.append(f"➖Bar Notu : {bar_notes_txt}")
+
+        return lines
+
     def _build_whatsapp_message(self):
         self.ensure_one()
 
@@ -1137,6 +1198,7 @@ class ProjectDemoForm(models.Model):
         dekor = self._collect_decor_notes()
         muzik = self._collect_music_notes()
         ikram = self._collect_treats()
+        mb_lines = self._collect_menu_bar_notes()
 
         # Yardımcılar
         def ul(items):
@@ -1184,6 +1246,10 @@ class ProjectDemoForm(models.Model):
     
           <h4>⚜️ Dekor Notları:</h4>
           {ul(dekor)}
+          
+          <h4>⚜️ Menü ve Bar:</h4>
+          {ul(mb_lines)}
+          
     
           <h4>🎶 Eğlence Notları:</h4>
           {ul(muzik)}
