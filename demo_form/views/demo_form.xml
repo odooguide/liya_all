@@ -168,7 +168,7 @@
                             <group>
                                 <group col="2">
                                     <field name="bar_alcohol_service" widget="boolean_toggle"/>
-                                    <field name="bar_purchase_advice"/>
+                                    <field name="bar_purchase_advice" placeholder="Buraya yazın"/>
                                 </group>
                                 <group col="2">
                                     <field name="bar_raki_brand" widget="radio"/>

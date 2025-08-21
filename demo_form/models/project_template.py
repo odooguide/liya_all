@@ -196,6 +196,7 @@ class ProjectProject(models.Model):
                 ('Yabancı/Türk', opportunity.yabanci_turk.name or ''),
                 ('Kaynak', opportunity.source_id.name or ''),
                 ('Kaynak Kategorisi', opportunity.wedding_place.name or ''),
+                ('Satış Notları', so.note or ''),
             ]
 
             # Başlangıçta tabloyu açıyoruz
@@ -310,7 +311,7 @@ class ProjectProject(models.Model):
             default_categ_ids=default_cats,
         )
 
-        action.sudo().update({
+        action.update({
             'context': ctx,
             'domain': [('res_model', '=', 'project.project'), ('res_id', '=', self.id)],
         })

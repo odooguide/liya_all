@@ -68,15 +68,15 @@
 
                 <main>
                     <t t-foreach="docs" t-as="o">
-                         <div t-attf-class="o_company_#{o.company_id.id}_layout header" style="text-align:center;padding-top:35mm;padding-left:160mm">
-                                    <img t-if="docs.company_id.logo" style="width:80px" t-att-src="image_data_uri(docs.company_id.logo)" alt="Logo"/>
+                         <div t-attf-class="o_company_#{o.company_id.id}_layout header" style="text-align:center;padding-top:35mm;padding-left:180mm">
+                                    <img t-if="docs.company_id.logo" style="width:100px" t-att-src="image_data_uri(docs.company_id.logo)" alt="Logo"/>
 
                                 </div>
                         <div class="page liya-theme" style="font-family: 'Helvetica', Arial, sans-serif; position:relative;font-size:10pt">
                             <div style="margin:2px 0 8px 0; overflow:hidden;">
                                 <!-- Sol sütun kadar alan: başlık -->
-                                <div style="float:left; width:80%; text-align:center;">
-                                    <div style="display:inline-block; color:#2D7F97; font-weight:800; font-size:18pt;">
+                                <div style="float:left; width:100%; text-align:center;">
+                                    <div style="display:inline-block; color:#2D7F97; font-weight:800; font-size:22pt;">
                                         LIYA ALL - WEDDING PLAN <t t-esc="o.invitation_date.strftime('%Y')"/>
                                     </div>
                                 </div>
@@ -303,6 +303,7 @@
                                                 </span>
                                             </td>
                                         </tr>
+                                        <t t-if="o.sale_template_id.name.lower()=='ultra'">
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600;">Hot Appetizer Ultra:</td>
                                             <td style="padding:4px 8px;">
@@ -316,6 +317,7 @@
 
                                             </td>
                                         </tr>
+                                        </t>
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600;">Desserts:</td>
                                             <td style="padding:4px 8px;">
@@ -328,6 +330,16 @@
                                                 <t t-if="not o.menu_dessert_ids">-</t>
                                             </td>
                                         </tr>
+                                         <tr t-if="o.menu_meze_notes">
+                                            <td style="padding:4px 8px; font-weight:600; vertical-align:top;">Menu
+                                                Notes:
+                                            </td>
+                                            <td style="padding:4px 8px;">
+                                                <span t-field="o.menu_description" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
+
+                                            </td>
+                                        </tr>
+                                         <t t-if="o.sale_template_id.name.lower()=='ultra'">
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600;">Meze:</td>
                                             <td style="padding:4px 8px;">
@@ -340,6 +352,7 @@
                                                 <t t-if="not o.menu_meze_ids">-</t>
                                             </td>
                                         </tr>
+                                         </t>
                                         <tr t-if="o.menu_meze_notes">
                                             <td style="padding:4px 8px; font-weight:600; vertical-align:top;">Meze
                                                 Notes:
@@ -351,7 +364,6 @@
 
                                     </tbody>
                                 </table>
-                                <div t-field="o.menu_description" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
                             </div>
 
@@ -382,8 +394,8 @@
                                             </td>
                                         </tr>
                                         <tr t-if="not o.bar_alcohol_service">
-                                            <td style="padding:4px 8px; font-weight:600;">Customer Buy Advice:</td>
-                                            <td style="padding:4px 8px;">
+                                            <td style="padding:4px; font-weight:600;">Customer Buy Advice:</td>
+                                            <td style="padding:4px;">
                                                 <span t-esc="o.bar_purchase_advice or '-'"/>
                                             </td>
                                         </tr>
@@ -621,7 +633,7 @@
                                             <h6>F)
                                                 PRE-HOSTING:
                                             </h6>
-                                            <div style="margin-bottom:4px;">
+                                            <div style="margin-bottom:4px;font-weight:600;">
                                                 Barney (
                                                 <t t-if="o.prehost_barney">
                                                     <strong>x</strong>
@@ -636,7 +648,7 @@
                                                 <t t-if="not o.prehost_fred"/>
                                                 )
                                             </div>
-                                            <div style="margin-bottom:4px;">
+                                            <div style="margin-bottom:4px;font-weight:600">
                                                 Kahvaltı:
                                                 Yes (
                                                 <t t-if="o.prehost_breakfast">
@@ -657,7 +669,7 @@
                                                 </t>
                                             </div>
                                             <t t-if="o.prehost_notes">
-                                                <div style="margin-top:4px; font-style:italic; font-size:10pt;">
+                                                <div style="margin-top:4px; font-style:italic; font-size:10pt;font-weight:600">
                                                     <span t-field="o.prehost_notes"/>
                                                 </div>
                                             </t>
@@ -852,6 +864,7 @@
                                             </t>
                                             <t t-if="o.photo_homesession"/>)
                                         </td>
+                                        <t t-if="o.photo_homesession">
                                         <td style="padding:4px 8px; font-weight:600;">Address:</td>
                                         <td style="padding:4px 8px;">
                                             <span style="border-bottom:1px solid #000; display:inline-block; min-width:150px;">
@@ -859,7 +872,9 @@
                                             </span>
                                             <span style="margin-left:4px; font-size:9pt; color:#555;">/ ISTANBUL</span>
                                         </td>
+                                        </t>
                                     </tr>
+
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">Photo Print Service:</td>
                                         <td style="padding:4px 8px;">
@@ -970,16 +985,7 @@
                                         </td>
                                         <td style="padding:4px 8px; font-weight:600;">DJ:</td>
                                         <td style="padding:4px 8px;">
-                                            Fatih Aşçı (
-                                            <t t-if="o.music_dj_fatih">
-                                                <strong>x</strong>
-                                            </t>
-                                            <t t-if="not o.music_dj_fatih"/>) /
-                                            Engin Sadiki (
-                                            <t t-if="o.music_dj_engin">
-                                                <strong>x</strong>
-                                            </t>
-                                            <t t-if="not o.music_dj_engin"/>)
+                                            <t t-esc="o.dj_person"/>
                                         </td>
                                     </tr>
                                     <tr>

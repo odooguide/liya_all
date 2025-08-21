@@ -7,6 +7,8 @@ import re
 import json
 from html import escape as E
 
+from workspace.enterprises.enterprise_17.sale_purchase_inter_company_rules.models.sale_order import sale_order
+
 TIME_PATTERN = re.compile(r'(\d{1,2}):([0-5]\d)')
 
 
@@ -589,12 +591,7 @@ class ProjectDemoForm(models.Model):
             rec.special_notes_preview = preview_html
             rec.special_notes_remaining = remaining_html
 
-    def action_refresh_missing_requirements(self):
-        for rec in self:
-            prev = rec._get_missing_list()
-            new = rec._compute_missing_products()
-            rec._set_missing_list(new)
-            rec._sync_missing_activity_and_chatter(prev, new)
+
 
     @api.model
     def create(self, vals):
@@ -606,6 +603,7 @@ class ProjectDemoForm(models.Model):
 
         rec._onchange_start_end_time()
         rec._onchange_breakfast()
+
         prev = rec._get_missing_list()
         new = rec._compute_missing_products()
         rec._set_missing_list(new)
@@ -637,8 +635,7 @@ class ProjectDemoForm(models.Model):
             else:
                 base_end_dt = datetime.strptime('23:30', '%H:%M')
 
-            end_dt = base_end_dt + (timedelta(minutes=15) if rec.afterparty_dance_show else timedelta())
-            end_str = end_dt.strftime('%H:%M')
+            end_str = base_end_dt.strftime('%H:%M')
 
             rec.start_end_time = f'19:30-{end_str}'
 
@@ -649,8 +646,7 @@ class ProjectDemoForm(models.Model):
                     line.time = ''
 
 
-            party_end_dt = datetime.strptime('23:30', '%H:%M') + (
-                timedelta(minutes=15) if rec.afterparty_dance_show else timedelta())
+            party_end_dt = datetime.strptime('23:30', '%H:%M')
             party_end_str = party_end_dt.strftime('%H:%M')
             for line in rec.schedule_line_ids.filtered(lambda l: l.event in ['Party','Parti']):
                 if rec.afterparty_ultra or rec.afterparty_service:
@@ -667,8 +663,6 @@ class ProjectDemoForm(models.Model):
             for t in rec.transport_line_ids.filtered(lambda l: l.label == 'Çift Dönüş'):
                 if rec.afterparty_ultra or rec.afterparty_service:
                     later_dt = base_end_dt + timedelta(minutes=15)
-                    if rec.afterparty_dance_show:
-                        later_dt += timedelta(minutes=15)
                     t.time = later_dt.strftime('%H:%M')
                 else:
                     t.time = '23:45'
@@ -901,38 +895,91 @@ class ProjectDemoForm(models.Model):
         return out
 
     def _collect_program(self):
-        """Program akışı başlığı ve satırları (schedule_line_ids)."""
+        """Program akışı başlığı ve satırları (schedule_line_ids) + satır notları."""
         EVENT_TR = {
-            'Cocktail': 'Kokteyl', 'Kokteyl':'Kokteyl',
-            'Ceremony': 'Seremoni', 'Seremoni':'Seremoni',
-            'Dinner': 'Yemek', 'Yemek':'Yemek',
-            'Party': 'Eğlence', 'Parti':'Eğlence',
-            'After Party': 'After Party', 'After Parti':'After Party',
+            'Cocktail': 'Kokteyl', 'Kokteyl': 'Kokteyl',
+            'Ceremony': 'Seremoni', 'Seremoni': 'Seremoni',
+            'Dinner': 'Yemek', 'Yemek': 'Yemek',
+            'Party': 'Eğlence', 'Parti': 'Eğlence',
+            'After Party': 'After Party', 'After Parti': 'After Party',
         }
         lines = []
         for ln in self.schedule_line_ids.sorted('sequence'):
             ev = (ln.event or '').strip()
             ev_tr = EVENT_TR.get(ev, ev or '-')
             tm = (ln.time or '').strip()
-            if ev_tr or tm:
-                if tm:
-                    lines.append(f"➖{ev_tr}:  {tm}")
-                else:
-                    lines.append(f"➖{ev_tr}")
-        # başlıkta 19:30-01:30 gibi göster
+
+            base = f"➖{ev_tr}:  {tm}" if tm else f"➖{ev_tr}"
+            lines.append(base)
+
+            # Satır notları (HTML olabilir)
+            note_html = getattr(ln, 'location_notes', '') or getattr(ln, 'notes', '') or getattr(ln, 'note', '')
+            note_txt = self._html_to_text(note_html) if note_html else ''
+            if note_txt:
+                for sub in note_txt.splitlines():
+                    s = sub.strip()
+                    if s:
+                        lines.append(f"    • {s}")
+
         header = (self.start_end_time or '').replace(' ', '')
         return header, lines
 
     def _collect_transports(self):
-        """Tekne/ulaşım satırları (transport_line_ids)."""
+        """Tekne/ulaşım satırları (transport_line_ids).
+        - 'dönüş' içeren etiketlerde birden fazla liman varsa ayrı satırlar üretir.
+        - Satır notlarını alt satırda gösterir.
+        - Listenin en altına 'Ertesi gün çift dönüşü:' maddesini ekler (listede yoksa).
+        """
+        import re
         out = []
-        for i, t in enumerate(self.transport_line_ids.sorted('sequence'), start=1):
+        i = 1
+
+        found_next_day = any(
+            'ertesi gün çift dönüşü' in (t.label or '').lower()
+            for t in self.transport_line_ids
+        )
+
+        for t in self.transport_line_ids.sorted('sequence'):
             label = (t.label or '').strip()
             tm = (t.time or '').strip()
-            ports = ', '.join(p.name for p in t.port_ids) if t.port_ids else (t.other_port or '')
-            suffix = f" {ports}" if ports else ""
-            line = f"{i}/ {label}: {tm}{suffix}".rstrip()
-            out.append(line)
+
+            ports = [p.name.strip() for p in t.port_ids] if t.port_ids else []
+            other_port = (t.other_port or '').strip()
+            if other_port:
+                extra = [p.strip() for p in re.split(r'[,\-/;–—·•]+', other_port) if p.strip()]
+                for p in extra:
+                    if p not in ports:
+                        ports.append(p)
+
+            note_html = getattr(t, 'notes', '') or getattr(t, 'note', '') or getattr(t, 'description', '')
+            note_txt = self._html_to_text(note_html) if note_html else ''
+
+            is_return = 'dönüş' in label.lower() or 'dönüşü' in label.lower()
+
+            if is_return and len(ports) > 1:
+                for p in ports:
+                    line = f"{i}/ {label}: {tm} {p}".rstrip()
+                    out.append(line)
+                    if note_txt:
+                        for sub in note_txt.splitlines():
+                            s = sub.strip()
+                            if s:
+                                out.append(f"    • {s}")
+                    i += 1
+            else:
+                suffix = f" {', '.join(ports)}" if ports else ""
+                line = f"{i}/ {label}: {tm}{suffix}".rstrip()
+                out.append(line)
+                if note_txt:
+                    for sub in note_txt.splitlines():
+                        s = sub.strip()
+                        if s:
+                            out.append(f"    • {s}")
+                i += 1
+
+        if not found_next_day:
+            out.append(f"{i}/ Ertesi gün çift dönüşü: haber vereceğim.")
+
         return out
 
     def _collect_decor_notes(self):
@@ -1019,7 +1066,7 @@ class ProjectDemoForm(models.Model):
             merasim_label = dict(sel).get(self.merasim, self.merasim)
             lines.append(f"➖Merasim : {merasim_label}")
         ceremony='VAR' if self.is_ceremony else 'YOK'
-        lines.append(f'Seramoni Düzeni : {ceremony}')
+        lines.append(f'➖Seramoni Düzeni : {ceremony}')
 
         other = self._html_to_text(self.other_description)
         addl = self._html_to_text(self.additional_services_description)
@@ -1109,14 +1156,13 @@ class ProjectDemoForm(models.Model):
 
         other_all = "\n".join(filter(None, [
             getattr(self, "special_notes", "") or "",
-            getattr(self, "other_music_notes", "") or "",
         ])).strip()
         other_all=self._html_to_text(other_all)
 
         html = f"""
         <div>
           <p>🏁 <b>Tarih:</b> {E(tarih)}</p>
-          <p>👩</p>
+          <p>👩‍❤️‍👨 <b>Çiftimiz:</b> {self.reinvoiced_sale_order_id.opportunity_id.name}</p>
           <p>🔳 <b>Düğün Tipi:</b> {E(tip)}</p>
           <p>🟡 <b>Kişi sayısı:</b> {E(guest)}</p>
           <p>🟢 <b>Beklenen:</b> {E(expected)}</p>
