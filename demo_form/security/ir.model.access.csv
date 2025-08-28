@@ -21,6 +21,8 @@ access_project_demo_runner_design,project.demo.runner.design_access,model_projec
 access_project_demo_table_color,project.demo.table.color_access,model_project_demo_table_color,base.group_user,1,1,1,1
 access_project_demo_ceremony_tag,project.demo.ceremony.tag_access,model_project_demo_ceremony_tag,base.group_user,1,1,1,1
 access_project_demo_cake_choice,project.demo.cake.choice_access,model_project_demo_cake_choice,base.group_user,1,1,1,1
+access_project_demo_form_print,project.demo.form.print,model_demo_form_print,base.group_user,1,1,1,1
 access_sale_order_update_tasks_wizard_user,sale.order.update.tasks.wizard,model_sale_order_update_tasks_wizard,base.group_user,1,1,1,1
 access_sale_order_update_tasks_wizard_line_user,sale.order.update.tasks.wizard.line,model_sale_order_update_tasks_wizard_line,base.group_user,1,1,1,1
 access_project_demo_extra_protocol_wizard_user,project.demo.extra.protocol.wizard,model_project_demo_extra_protocol_wizard,base.group_user,1,1,1,1
+
