@@ -347,26 +347,37 @@ class ProjectProject(models.Model):
         self.ensure_one()
         self._check_schedule_demo_rights()
 
+        # Action'ı oku (sudo sadece action okuma için)
+        action = self.env.ref('calendar.action_calendar_event').sudo().read()[0]
+
+        # Demo kategorisini sadece default olarak hazırla (kayıt yaratmaz)
         demo_cat = self.env['calendar.event.type'].sudo().search([('name', 'ilike', 'demo')], limit=1)
 
-        vals = {
-            'name': self.name,
-            'res_model': 'project.project',
-            'res_id': self.id,
-            'categ_ids': [(6, 0, demo_cat.ids)] if demo_cat else False,
+        ctx = dict(
+            self.env.context,
+            # Kullanıcı "Create" derse bu alanlar default olur, ama şu an kayıt oluşmaz
+            default_res_model='project.project',
+            default_res_id=self.id,
+            default_name=self.name,
+            default_start=fields.Datetime.now(),
+            default_categ_ids=[(6, 0, demo_cat.ids)] if demo_cat else False,
+            search_default_mymeetings=1,
+        )
 
-        }
-        meeting = self.env['calendar.event'].sudo().create(vals)
+        cal_view = self.env.ref('calendar.view_calendar_event_calendar', raise_if_not_found=False)
+        views = action.get('views') or []
+        if cal_view:
+            views = [(cal_view.id, 'calendar')] + [(vid, vtype) for vid, vtype in views if vtype != 'calendar']
 
-        view = self.env.ref('calendar.view_calendar_event_form', raise_if_not_found=False)
-        return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'calendar.event',
-            'view_mode': 'form',
-            'res_id': meeting.id,
-            'view_id': view.id if view else False,
+        action.update({
+            'name': _('Meetings – %s') % self.name,
+            'view_mode': 'calendar,tree,form',
+            'views': views or [('calendar.view_calendar_event_calendar', 'calendar')],
+            'context': ctx,
+            'domain': [('res_model', '=', 'project.project'), ('res_id', '=', self.id)],
             'target': 'current',
-        }
+        })
+        return action
 
     @api.depends('event_ids.start')
     def _compute_next_event(self):

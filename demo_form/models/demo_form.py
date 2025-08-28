@@ -471,18 +471,14 @@ class ProjectDemoForm(models.Model):
             new_val = vals[f]
             old_val = getattr(self, f)
 
-            # Selection olan özel alan:
             if f == 'photo_harddisk_delivered':
-                # False/boş'a geçişte sorma
                 if not new_val:
                     continue
-                # Değer aynıysa sorma
                 if new_val == old_val:
                     continue
                 labels = self.PRODUCT_REQUIREMENTS[f].get(new_val, []) or []
 
             else:
-                # Boolean/flag’ler: yalnızca OFF -> ON geçişte sorma
                 if not bool(new_val):
                     continue
                 if bool(old_val):
@@ -515,21 +511,6 @@ class ProjectDemoForm(models.Model):
             return mapping.get(val, []) if val else []
         return mapping
 
-    def _first_missing_label_for_values(self, prospective_vals: dict):
-        """
-        Kaydetmeden önce 'vals' ile oluşacak yeni durum üzerinden ilk eksik ürünü bul.
-        YOKSA (None, None) döner.
-        """
-        purchased = self._get_purchased_product_names()
-        for f in self.TRACKED_FIELDS:
-            # yeni değer varsa onu, yoksa mevcut kayıttaki değeri kullan
-            new_val = prospective_vals.get(f) if f in prospective_vals else getattr(self, f)
-            if not new_val:
-                continue
-            for lbl in self._required_labels_for_field(f, prospective_val=new_val):
-                if lbl not in purchased:
-                    return f, lbl
-        return None, None
 
     @api.depends('special_notes')
     def _compute_split_notes(self):
