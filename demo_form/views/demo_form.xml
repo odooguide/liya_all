@@ -457,7 +457,6 @@
                                 <field name="other_description" placeholder="Write your other notes in here"
                                        widget="html" colspan="2" nolabel="1"/>
                             </group>
-                            <field name="missing_products_json" invisible="1"/>
                         </page>
 
                     </notebook>

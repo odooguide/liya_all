@@ -21,6 +21,7 @@
         "data/check_project_stage_cron.xml",
         "wizards/sale_order_project_wizard_view.xml",
         "wizards/update_project_wizard.xml",
+        "wizards/extra_protocol_wizard_view.xml",
         "reports/report_demo_form.xml",
         "security/ir.model.access.csv",
     ],

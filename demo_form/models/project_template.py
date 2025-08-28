@@ -1,6 +1,7 @@
 from odoo import fields, models, _, api
 from odoo.exceptions import UserError,AccessError
 from datetime import datetime
+from odoo.osv.expression import OR, AND
 
 class ProjectProject(models.Model):
     _inherit = 'project.project'
@@ -102,6 +103,42 @@ class ProjectProject(models.Model):
         readonly=True)
     event_date=fields.Date(string='Event Date',compute='_compute_crm_sale_fields',compute_sudo=True)
 
+    related_sale_order_ids = fields.Many2many(
+        comodel_name='sale.order',
+        relation='project_sale_order_rel',
+        column1='project_id',
+        column2='sale_order_id',
+        string='Bağlı Satışlar',
+        compute='_compute_related_sale_orders',
+        store=False,
+        compute_sudo=True,
+    )
+
+    @api.depends('reinvoiced_sale_order_id')
+    def _compute_related_sale_orders(self):
+        SaleOrder = self.env['sale.order']
+        for rec in self:
+            so = rec.reinvoiced_sale_order_id
+            if not so:
+                rec.related_sale_order_ids = [(5, 0, 0)]
+                continue
+
+            domains = []
+            if so.opportunity_id:
+                domains.append([('opportunity_id', '=', so.opportunity_id.id)])
+
+            commercial = so.partner_id.commercial_partner_id if so.partner_id else False
+            if commercial:
+                domains.append([('partner_id', 'child_of', commercial.id)])
+
+            if domains:
+                domain = AND([OR(domains), [('state', '!=', 'cancel')]])
+            else:
+                domain = [('id', '=', so.id)]
+
+            orders = SaleOrder.search(domain)
+            rec.related_sale_order_ids = [(6, 0, orders.ids)]
+
     @api.depends(
         'reinvoiced_sale_order_id',
         'reinvoiced_sale_order_id.opportunity_id',
@@ -168,38 +205,44 @@ class ProjectProject(models.Model):
             return True
         return False
 
-    @api.depends('reinvoiced_sale_order_id')
+    @api.depends('reinvoiced_sale_order_id')  # sadece header bazı alanlar için gerekli
     def _compute_sale_order_summary(self):
         for rec in self:
             so = rec.reinvoiced_sale_order_id
             if not so:
                 rec.sale_order_summary = False
                 continue
+
             opportunity = so.opportunity_id
+            coordinators = ', '.join(
+                so.coordinator_ids.mapped('display_name')) if 'coordinator_ids' in so._fields else ''
 
             summary_pairs = [
-                ('Müşteri', opportunity.name or ''),
-                ('Koordinatör', so.coordinator_ids.display_name or ''),
+                ('Müşteri', (opportunity.name if opportunity else '') or ''),
+                ('Koordinatör', coordinators or ''),
                 ('Satış Temsilcisi', so.user_id.display_name or ''),
                 ('Kişi Sayısı', so.people_count or ''),
                 ('Sözleşme Tarihi', so.contract_date or ''),
-                ('Demo Tarihi', self.next_event_date or ''),
-                ('Birincil Kontak', opportunity.partner_id.name or ''),
-                ('Birincil Mail', opportunity.email_from or ''),
-                ('Birincil Telefon', opportunity.phone or ''),
-                ('Birincil Meslek', opportunity.function or ''),
-                ('İkincil Kontak', opportunity.second_contact or ''),
-                ('İkincil Mail', opportunity.second_mail or ''),
-                ('İkincil Telefon', opportunity.second_phone or ''),
-                ('İkincil Meslek', opportunity.second_job_position or ''),
-                ('İkincil Ülke', opportunity.second_country.name or ''),
-                ('Yabancı/Türk', opportunity.yabanci_turk.name or ''),
-                ('Kaynak', opportunity.source_id.name or ''),
-                ('Kaynak Kategorisi', opportunity.wedding_place.name or ''),
+                ('Demo Tarihi', rec.next_event_date or ''),
+                ('Birincil Kontak',
+                 (opportunity.partner_id.name if opportunity and opportunity.partner_id else '') or ''),
+                ('Birincil Mail', (opportunity.email_from if opportunity else '') or ''),
+                ('Birincil Telefon', (opportunity.phone if opportunity else '') or ''),
+                ('Birincil Meslek', (opportunity.function if opportunity else '') or ''),
+                ('İkincil Kontak', (opportunity.second_contact if opportunity else '') or ''),
+                ('İkincil Mail', (opportunity.second_mail if opportunity else '') or ''),
+                ('İkincil Telefon', (opportunity.second_phone if opportunity else '') or ''),
+                ('İkincil Meslek', (opportunity.second_job_position if opportunity else '') or ''),
+                ('İkincil Ülke',
+                 (opportunity.second_country.name if opportunity and opportunity.second_country else '') or ''),
+                ('Yabancı/Türk',
+                 (opportunity.yabanci_turk.name if opportunity and opportunity.yabanci_turk else '') or ''),
+                ('Kaynak', (opportunity.source_id.name if opportunity and opportunity.source_id else '') or ''),
+                ('Kaynak Kategorisi',
+                 (opportunity.wedding_place.name if opportunity and opportunity.wedding_place else '') or ''),
                 ('Satış Notları', so.note or ''),
             ]
 
-            # Başlangıçta tabloyu açıyoruz
             html = """
             <table style="width:100%; border-collapse:collapse; margin-bottom:10px;">
               <tbody>
@@ -226,11 +269,16 @@ class ProjectProject(models.Model):
             <hr style="margin:10px 0;"/>
             """
 
-            lines = so.order_line.filtered(lambda l: not rec._is_discount_line(l))
+            orders = rec.related_sale_order_ids.exists()
+            lines = orders.mapped('order_line').exists()
+            lines = lines.filtered(lambda l: not rec._is_discount_line(l))
+            lines = lines.sorted(key=lambda l: (l.order_id.id, l.sequence or 0))
+
             html += """
             <table style="width:100%; border-collapse:collapse;">
               <thead>
                 <tr>
+                  <th style="border:1px solid #ccc;padding:4px;">Sipariş</th>
                   <th style="border:1px solid #ccc;padding:4px;">Ürün</th>
                   <th style="border:1px solid #ccc;padding:4px;">Açıklama</th>
                   <th style="border:1px solid #ccc;padding:4px;">Adet</th>
@@ -246,6 +294,7 @@ class ProjectProject(models.Model):
                 uom = l.product_uom.display_name or ''
                 html += f"""
                 <tr>
+                  <td style="border:1px solid #ccc;padding:4px;">{l.order_id.name or ''}</td>
                   <td style="border:1px solid #ccc;padding:4px;">{prod}</td>
                   <td style="border:1px solid #ccc;padding:4px;">{desc}</td>
                   <td style="border:1px solid #ccc;padding:4px;text-align:center;">{qty}</td>
@@ -255,7 +304,7 @@ class ProjectProject(models.Model):
             html += "</tbody></table>"
 
             rec.sale_order_summary = html
-            rec.som=html
+            rec.som = html
 
     @api.onchange('seat_plan')
     def _onchange_confirmed_contract_security(self):

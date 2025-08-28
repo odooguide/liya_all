@@ -62,7 +62,7 @@
                     /* Linkler ve kalın vurgular */
                     .liya-theme a { color:#2D7F97; }
                     .liya-theme strong { color:#2D7F97; }
-                    .liya-theme table {line-height:10pt; font-size:9pt;}
+                    .liya-theme table {line-height:10pt; font-size:10pt;}
 
                 </style>
 
@@ -197,7 +197,7 @@
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top; white-space:nowrap;">
                                                     <t t-if="line.time">
-                                                        <span style="font-weight:600;" t-esc="line.time"/>
+                                                        <span style="font-weight:700;" t-esc="line.time"/>
                                                     </t>
                                                     <t t-if="not line.time">__ : __</t>
                                                 </td>
@@ -237,7 +237,7 @@
                                             <th style="text-align:left; padding:6px 8px; width:10px;"/>
                                             <th style="text-align:left; padding:6px 8px; width:160px;"/>
                                             <th style="text-align:left; padding:6px 8px; width:50px;"/>
-                                            <th style="text-align:left; padding:6px 8px; width:160px;"/>
+                                            <th style="text-align:left; padding:6px 8px; width:300px;"/>
                                             <th style="text-align:left; padding:6px 8px;"/>
                                         </tr>
                                     </thead>
@@ -253,7 +253,7 @@
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top; white-space:nowrap;">
                                                     <t t-if="line.time">
-                                                        <span style="font-weight:600;" t-esc="line.time"/>
+                                                        <span style="font-weight:700;" t-esc="line.time"/>
                                                     </t>
                                                     <t t-if="not line.time">__ : __</t>
                                                 </td>
@@ -633,7 +633,7 @@
                                             <h6>F)
                                                 PRE-HOSTING:
                                             </h6>
-                                            <div style="margin-bottom:4px;font-weight:600;">
+                                            <div style="margin-bottom:4px;font-weight:700;">
                                                 Barney (
                                                 <t t-if="o.prehost_barney">
                                                     <strong>x</strong>
@@ -648,7 +648,7 @@
                                                 <t t-if="not o.prehost_fred"/>
                                                 )
                                             </div>
-                                            <div style="margin-bottom:4px;font-weight:600">
+                                            <div style="margin-bottom:4px;font-weight:700">
                                                 Kahvaltı:
                                                 Yes (
                                                 <t t-if="o.prehost_breakfast">
@@ -680,13 +680,13 @@
                                             <h6>F2)
                                                 Accommodation
                                             </h6>
-                                            <div style="margin-bottom:4px;">
-                                                <span style="font-weight:600;">Hotel:</span>
+                                            <div style="margin-bottom:4px; font-weight:700;">
+                                                <span >Hotel:</span>
                                                 <span style="border-bottom:1px solid #000; padding-left:4px; padding-right:60px; display:inline-block;">
                                                     <span t-esc="o.accommodation_hotel or ''"/>
                                                 </span>
                                             </div>
-                                            <div style="margin-bottom:4px;">
+                                            <div style="margin-bottom:4px;font-weight:700;">
                                                 Yes (
                                                 <t t-if="o.accommodation_service">
                                                     <strong>x</strong>
@@ -702,7 +702,7 @@
                                                 )
                                             </div>
                                             <t t-if="o.accomodation_notes">
-                                                <div style="margin-top:4px; font-style:italic;">
+                                                <div style="margin-top:4px; font-style:italic;font-weight:700;">
                                                     <span t-field="o.accomodation_notes"/>
                                                 </div>
                                             </t>
@@ -713,7 +713,7 @@
                                             <h6>F3) DANCE
                                                 LESSON
                                             </h6>
-                                            <div style="margin-bottom:4px;">
+                                            <div style="margin-bottom:4px;font-weight:700;">
                                                 Yes (
                                                 <t t-if="o.dance_lesson">
                                                     <strong>x</strong>
@@ -729,7 +729,7 @@
                                                 )
                                             </div>
                                             <t t-if="o.dance_lesson_notes">
-                                                <div style="margin-top:4px; font-style:italic; font-size:10pt;">
+                                                <div style="margin-top:4px; font-style:italic; font-size:10pt;font-weight:700;">
                                                     <span t-field="o.dance_lesson_notes"/>
                                                 </div>
                                             </t>
@@ -818,7 +818,7 @@
                                 <div style="margin-bottom:6px; font-style:italic;">
                                     <span t-field="o.photo_description"/>
                                 </div>
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:9pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600; width:180px;">Standard Photography
                                             Service:
@@ -870,7 +870,7 @@
                                             <span style="border-bottom:1px solid #000; display:inline-block; min-width:150px;">
                                                 <span t-esc="o.photo_homesession_address or ''"/>
                                             </span>
-                                            <span style="margin-left:4px; font-size:9pt; color:#555;">/ ISTANBUL</span>
+                                            <span style="margin-left:4px; font-size:10pt; color:#555;">/ ISTANBUL</span>
                                         </td>
                                         </t>
                                     </tr>
@@ -940,7 +940,7 @@
                                 <div style="margin-bottom:6px; font-style:italic;">
                                     <span t-field="o.music_description"/>
                                 </div>
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:9pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">Live Music:</td>
                                         <td style="padding:4px 8px;">
@@ -1004,7 +1004,7 @@
                                 <h6>K) TABLE DECORATION
                                 </h6>
 
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:9pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600; white-space:nowrap;">Table Theme:
                                         </td>
@@ -1183,7 +1183,7 @@
                             <!-- L) OTHER NOTES -->
                             <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
                                 <h6>L) OTHER NOTES</h6>
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:9pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">RSVP:</td>
                                         <td style="padding:4px 8px;padding-left:0">
@@ -1239,7 +1239,7 @@
                                 <!-- 1) Significant Songs -->
                                 <div style="font-weight:700; font-size:10pt; margin-bottom:6px;">1) SIGNIFICANT SONGS
                                 </div>
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:9pt; margin-bottom:10px;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:10px;">
                                     <tr>
                                         <td style="padding:4px 8px; width:220px; font-weight:600;">A — Entrance Song:
                                         </td>
@@ -1277,7 +1277,7 @@
 
                                 <!-- 2) Language Ratio -->
                                 <div style="font-weight:700; font-size:10pt; margin-bottom:6px;">2) LANGUAGE RATIO</div>
-                                <div style="font-size:9pt; color:#444; margin-bottom:6px;">
+                                <div style="font-size:10pt; color:#444; margin-bottom:6px;">
                                     You may choose the ratio of the language of songs throughout your wedding.
                                 </div>
 
@@ -1328,7 +1328,7 @@
                                     You may choose the type of music for the four different parts of your wedding.
                                 </div>
 
-                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:9pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10pt;">
                                     <tr>
                                         <!-- Cocktail -->
                                         <td style="vertical-align:top; width:25%; padding:6px 10px; border-right:1px solid #cfd8dc;">
@@ -1636,10 +1636,10 @@
                                     )
                                 </div>
 
-                                <div style="font-size:9pt; color:#444; margin-bottom:4px;">If yes, please specify the
+                                <div style="font-size:10pt; color:#444; margin-bottom:4px;">If yes, please specify the
                                     songs:
                                 </div>
-                                <div style="font-size:9pt;  border-bottom:1px dashed #999; padding:4px 0;">
+                                <div style="font-size:10pt;  border-bottom:1px dashed #999; padding:4px 0;">
                                     <t t-if="o.local_music_songs">
                                         <span t-field="o.local_music_songs"/>
                                     </t>
@@ -1658,7 +1658,7 @@
                                         <td style="vertical-align:top; width:25%; padding-bottom:2px; border-right:1px solid #cfd8dc;">
                                             <div style="font-weight:600;">Cocktail request songs:
                                             </div>
-                                            <div style="white-space:pre-wrap;font-size:9pt">
+                                            <div style="white-space:pre-wrap;font-size:10pt">
                                                 <t t-if="o.cocktail_request">
                                                     <div t-field="o.cocktail_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
                                                 </t>
@@ -1670,7 +1670,7 @@
                                         <!-- Dinner -->
                                         <td style="vertical-align:top; width:25%; padding-bottom:2px; border-right:1px solid #cfd8dc;">
                                             <div style="font-weight:600;">Dinner request songs:</div>
-                                            <div style="white-space:pre-wrap;font-size:9pt">
+                                            <div style="white-space:pre-wrap;font-size:10pt">
                                                 <t t-if="o.dinner_request">
                                                     <div t-field="o.dinner_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
@@ -1683,7 +1683,7 @@
                                         <!-- Party -->
                                         <td style="vertical-align:top; width:25%; padding-bottom:2px; border-right:1px solid #cfd8dc;">
                                             <div style="font-weight:600;">Party request songs:</div>
-                                            <div style="white-space:pre-wrap;font-size:9pt">
+                                            <div style="white-space:pre-wrap;font-size:10pt">
                                                 <t t-if="o.party_request">
                                                     <div t-field="o.party_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
@@ -1698,7 +1698,7 @@
                                             <div style="font-weight:600;">After Party request
                                                 songs:
                                             </div>
-                                            <div style="white-space:pre-wrap;font-size:9pt">
+                                            <div style="white-space:pre-wrap;font-size:10pt">
                                                 <t t-if="o.afterparty_request">
                                                     <div t-field="o.afterparty_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
@@ -1717,7 +1717,7 @@
                                 <h6>5) BAN ANY SONGS OR
                                     ARTISTS
                                 </h6>
-                                <div style="min-height:36px; border-bottom:1px dashed #999; padding-bottom:2px;font-size:9pt">
+                                <div style="min-height:36px; border-bottom:1px dashed #999; padding-bottom:2px;font-size:10pt">
                                     <t t-if="o.ban_songs">
                                         <div t-field="o.ban_songs" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
@@ -1733,7 +1733,7 @@
                                 <h6>6) OTHER NOTES ABOUT
                                     MUSIC
                                 </h6>
-                                <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;font-size:9pt">
+                                <div style="min-height:36px; border-bottom:1px dashed #999; padding:4px 0;font-size:10pt">
                                     <t t-if="o.other_music_notes">
                                         <span t-field="o.other_music_notes"/>
                                     </t>
@@ -1785,7 +1785,7 @@
                         <div class="page liya-static-page" style="font-family:Helvetica, Arial, sans-serif; clear:both;line-height:15pt">
 
                             <!-- Başlık -->
-                            <div style="text-align:center; margin-bottom:10px;padding-top:20mm">
+                            <div style="text-align:center; margin-bottom:10px;">
                                 <div style="font-weight:700; letter-spacing:0.4px;">LİYA ETKİNLİK YÖNETİMİ VE RESTAURANT
                                     İŞLETMECİLİĞİ A.Ş.
                                 </div>
@@ -1793,7 +1793,7 @@
                             </div>
 
                             <!-- Bilgilendirme kutusu -->
-                            <div style="font-size:10pt; line-height:1.45; color:#111; border:1px solid #ccc; padding:8px; margin-bottom:10px;">
+                            <div style="font-size:10pt; line-height:1.45; color:#111; border:1px solid #ccc; padding:8px;text-align:center;margin-bottom:10px;">
                                 <p>Bu açık rıza metni size, tarafınıza aydınlatma yapıldıktan sonra sunulmuştur. Lütfen
                                     önce aydınlatma metnini
                                     okuduğunuzdan ve bu metne özgür iradenizle onay verdiğinizden emin olunuz. Bu metne
@@ -1891,11 +1891,11 @@
 
                             <!-- Başlık -->
                             <div style="text-align:center; margin-bottom:8px;">
-                                <div style="font-weight:700; font-size:12pt; letter-spacing:0.3px;padding-top:20mm">LİYA
+                                <div style="font-weight:700; font-size:12pt; letter-spacing:0.3px;">LİYA
                                     MÜŞTERİ
                                     AYDINLATMA METNİ
                                 </div>
-                                <div style="font-size:12pt; margin-top:6px; border:1px solid; padding:10px; color:#222;">
+                                <div style="font-size:12pt; margin-top:6px; border:1px solid; padding:10px; color:#222">
                                     İşbu aydınlatma metni; veri sorumlusu tarafından hangi kişisel verilerinizin hangi
                                     amaçla, nasıl ve hangi
                                     hukuki sebebe dayanılarak işlendiği, kimlerle paylaşıldığı ve ne kadar süreyle

@@ -1,6 +1,6 @@
 from odoo import api, fields, models, _
 from datetime import date, datetime, timedelta
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError,RedirectWarning
 from lxml import html as lhtml
 from markupsafe import escape as html_escape
 import re
@@ -403,12 +403,6 @@ class ProjectDemoForm(models.Model):
     )
     minutes = fields.Integer(string='Adjust Time')
 
-    missing_products_json = fields.Text(
-        string="Eksik Opsiyonlar (JSON)",
-        copy=False, tracking=True,
-        help="Demo Form'da aktif olup satışlarda karşılığı olmayan ürünlerin JSON listesi."
-    )
-
     PRODUCT_REQUIREMENTS = {
         'photo_video_plus': ['Photo & Video Plus'],
         'photo_drone': ['Drone Kamera'],
@@ -425,26 +419,16 @@ class ProjectDemoForm(models.Model):
         'bar_alcohol_service': ['Yabancı İçki Servisi'],
         'hair_studio_3435': ['Saç & Makyaj'],
         'hair_garage_caddebostan': ['Saç & Makyaj'],
-        'cake_real': ["Pasta Show'da Gerçek Pasta"],
-        'cake_champagne_tower': ["Pasta Show'da Şampanya Kulesi"],
+        "cake_real": ["Pasta Show'da Gerçek Pasta"],
+        "cake_champagne_tower": ["Pasta Show'da Şampanya Kulesi"],
         'prehost_barney': ['BARNEY'],
         'prehost_fred': ['FRED'],
         'prehost_breakfast': ['Breakfast Service'],
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
 
-    # ---- Yardımcılar ----
-    def _get_missing_list(self):
-        try:
-            return json.loads(self.missing_products_json or '[]')
-        except Exception:
-            return []
-
-    def _set_missing_list(self, arr):
-        self.missing_products_json = json.dumps(sorted(set(arr)), ensure_ascii=False)
-
     def _get_related_confirmed_sale_orders(self):
-        """Bu projenin bağlı olduğu CRM fırsatındaki onaylı (sale/done) tüm siparişler."""
+        """Bu projenin bağlı olduğu CRM fırsatındaki onaylı (sale/done) siparişler."""
         self.ensure_one()
         base_order = self.project_id and self.project_id.reinvoiced_sale_order_id
         opp = base_order.opportunity_id if base_order else False
@@ -454,6 +438,46 @@ class ProjectDemoForm(models.Model):
             ('opportunity_id', '=', opp.id),
             ('state', 'in', ('sale', 'done')),
         ])
+
+    def _first_missing_for_changed_fields(self, vals: dict):
+        """
+        Bu write çağrısında değiştirilen TRACKED_FIELDS içinden,
+        *yalnızca True yönüne geçenleri* kontrol eder.
+        İlk eksik ürünü (field, label) döndürür; yoksa (None, None).
+        """
+        self.ensure_one()
+        purchased = self._get_purchased_product_names()
+
+        for f in self.TRACKED_FIELDS:
+            if f not in vals:
+                continue
+
+            new_val = vals[f]
+            old_val = getattr(self, f)
+
+            # Selection olan özel alan:
+            if f == 'photo_harddisk_delivered':
+                # False/boş'a geçişte sorma
+                if not new_val:
+                    continue
+                # Değer aynıysa sorma
+                if new_val == old_val:
+                    continue
+                labels = self.PRODUCT_REQUIREMENTS[f].get(new_val, []) or []
+
+            else:
+                # Boolean/flag’ler: yalnızca OFF -> ON geçişte sorma
+                if not bool(new_val):
+                    continue
+                if bool(old_val):
+                    continue
+                labels = self.PRODUCT_REQUIREMENTS[f]
+
+            for lbl in labels:
+                if lbl not in purchased:
+                    return f, lbl
+
+        return None, None
 
     def _get_purchased_product_names(self):
         """İlgili sipariş satırlarından ürün adlarını topla."""
@@ -465,97 +489,31 @@ class ProjectDemoForm(models.Model):
                     names.add(n)
         return names
 
-    def _collect_required_products_from_demo(self):
-        """Demo Form'da aktif seçilmiş opsiyonlardan beklenen ürünleri üretir."""
-        req = set()
-        for field, mapping in self.PRODUCT_REQUIREMENTS.items():
-            val = getattr(self, field)
-            if not val:
-                continue
-            if field == 'photo_harddisk_delivered':
-                prods = mapping.get(val) or []
-            else:
-                prods = mapping
-            req.update(prods)
-        return req
+    def _required_labels_for_field(self, field_name, prospective_val=None):
+        """Bir alan için beklenen ürün etiket(ler)i; seçim alanı için prospective_val kullanılabilir."""
+        mapping = self.PRODUCT_REQUIREMENTS.get(field_name)
+        if not mapping:
+            return []
+        if field_name == 'photo_harddisk_delivered':
+            val = prospective_val if prospective_val is not None else getattr(self, field_name)
+            return mapping.get(val, []) if val else []
+        return mapping
 
-    def _compute_missing_products(self):
-        """Aktif opsiyonlar – satın alınmış ürünler = eksikler."""
-        required = self._collect_required_products_from_demo()
+    def _first_missing_label_for_values(self, prospective_vals: dict):
+        """
+        Kaydetmeden önce 'vals' ile oluşacak yeni durum üzerinden ilk eksik ürünü bul.
+        YOKSA (None, None) döner.
+        """
         purchased = self._get_purchased_product_names()
-        missing = sorted(p for p in required if p not in purchased)
-        return missing
-
-    def _sync_missing_activity_and_chatter(self, prev_missing, new_missing):
-        """Eksik listesi değişiminde chatter ve aktiviteyi yönetir."""
-        if set(prev_missing) == set(new_missing):
-            return
-
-        # Mesaj gövdesi
-        parts = []
-        added = sorted(set(new_missing) - set(prev_missing))
-        removed = sorted(set(prev_missing) - set(new_missing))
-        if added:
-            parts.append(_("<b>Eksik</b> (satın alınmamış) opsiyonlar eklendi: %s") % ", ".join(added))
-        if removed:
-            parts.append(_("Aşağıdaki opsiyonlar artık satışlarda mevcut: %s") % ", ".join(removed))
-        if not parts:
-            parts.append(_("Liste güncellendi."))
-
-        if new_missing:
-            parts.append(_("<b>Öneri:</b> Bu opsiyonlar için <i>Ek Protokol</i> teklifi açılmalı."))
-
-        self.message_post(
-            body="<br/>".join(parts),
-            subtype_xmlid='mail.mt_note'
-        )
-
-        Activity = self.env['mail.activity'].sudo()
-        todo_type = self.env.ref('mail.mail_activity_data_todo')
-
-        # Mevcut açık ToDo'yu bul
-        act = Activity.search([
-            ('res_model', '=', self._name),
-            ('res_id', '=', self.id),
-            ('activity_type_id', '=', todo_type.id),
-            ('state', '=', 'planned'),
-            ('summary', '=', 'Eksik satın alınan opsiyonlar'),
-        ], limit=1)
-
-        if new_missing:
-            note = _(
-                "Aşağıdaki opsiyonlar Demo Form’da aktif, ancak ilgili satışlarda ürün bulunmuyor:\n- %s\n\nLütfen Ek Protokol teklifi oluşturun.") % (
-                       "\n- ".join(new_missing)
-                   )
-            vals = {
-                'res_model_id': self.env['ir.model']._get_id(self._name),
-                'res_model': self._name,
-                'res_id': self.id,
-                'activity_type_id': todo_type.id,
-                'summary': 'Eksik satın alınan opsiyonlar',
-                'note': note,
-                'user_id': self.project_id.user_id.id or self.env.user.id,
-                'date_deadline': fields.Date.today(),
-            }
-            if act:
-                act.write({'note': note})
-            else:
-                Activity.create(vals)
-        else:
-            if act:
-                act.action_feedback(feedback=_("Tüm opsiyonlar satışlarda mevcut; aktivite tamamlandı."))
-            if prev_missing:
-                self.message_post(
-                    body=_("Eksik opsiyon listesi boşaldı; aktivite tamamlandı."),
-                    subtype_xmlid='mail.mt_note'
-                )
-
-    def action_refresh_missing_requirements(self):
-        for rec in self:
-            prev = rec._get_missing_list()
-            new = rec._compute_missing_products()
-            rec._set_missing_list(new)
-            rec._sync_missing_activity_and_chatter(prev, new)
+        for f in self.TRACKED_FIELDS:
+            # yeni değer varsa onu, yoksa mevcut kayıttaki değeri kullan
+            new_val = prospective_vals.get(f) if f in prospective_vals else getattr(self, f)
+            if not new_val:
+                continue
+            for lbl in self._required_labels_for_field(f, prospective_val=new_val):
+                if lbl not in purchased:
+                    return f, lbl
+        return None, None
 
     @api.depends('special_notes')
     def _compute_split_notes(self):
@@ -685,15 +643,32 @@ class ProjectDemoForm(models.Model):
             first_transport.time = dt_new_transport.strftime('%H:%M')
 
     def write(self, vals):
+        if not (self.env.context.get('extra_protocol_confirmed') or
+                self.env.context.get('skip_extra_protocol_check')):
+            if set(self.TRACKED_FIELDS).intersection(vals.keys()) or 'photo_harddisk_delivered' in vals:
+                for rec in self:
+                    field_name, missing_label = rec._first_missing_for_changed_fields(vals or {})
+                    if missing_label:
+                        action_id = self.env.ref('demo_form.action_project_demo_extra_protocol_wizard').id
+                        msg = _(
+                            "%s ürünü onaylı tekliflerde bulunamadı.\n\nEk Protokol görevi açılsın mı?") % missing_label
+                        raise RedirectWarning(
+                            msg,
+                            action_id,
+                            _("Görevi Aç"),
+                            additional_context={
+                                'default_demo_id': rec.id,
+                                'default_product_label': missing_label,
+                                'default_pending_vals_json': json.dumps(vals, ensure_ascii=False),
+                            }
+                        )
         res = super().write(vals)
 
         for rec in self:
             if any(f in vals for f in ('afterparty_service', 'afterparty_ultra', 'afterparty_dance_show')):
                 rec._onchange_start_end_time()
-
             if 'prehost_breakfast' in vals:
                 rec._onchange_breakfast()
-
             if 'afterparty_ultra' in vals:
                 rec._onchange_afterparty_ultra()
             if 'afterparty_street_food' in vals:
@@ -702,12 +677,6 @@ class ProjectDemoForm(models.Model):
                 rec._onchange_fog_laser()
             if 'afterparty_bbq_wraps' in vals:
                 rec._onchange_bbq_wraps()
-
-            if any(f in vals for f in rec.TRACKED_FIELDS + ['project_id']):
-                prev = rec._get_missing_list()
-                new = rec._compute_missing_products()
-                rec._set_missing_list(new)
-                rec._sync_missing_activity_and_chatter(prev, new)
 
         return res
 

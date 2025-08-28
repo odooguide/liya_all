@@ -1,5 +1,7 @@
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError,ValidationError
+
+ADDENDUM_NAMES = ['Ek Protokol', 'Extra Protocol']
 
 
 class SaleOrder(models.Model):
@@ -125,6 +127,105 @@ class SaleOrder(models.Model):
         for rec in self:
             if rec.project_task_ids:
                 rec.project_task_ids._onchange_deadline_date()
+
+
+    def _get_existing_order_in_same_opportunity(self):
+        """Aynı fırsattaki (cancel hariç) mevcut siparişlerden birini getirir.
+        Genelde tek olduğundan bu yeterli."""
+        self.ensure_one()
+        if not self.opportunity_id:
+            return self.env['sale.order']
+        domain = [
+            ('opportunity_id', '=', self.opportunity_id.id),
+            ('id', '!=', self.id or 0),
+            ('state', '!=', 'cancel'),
+        ]
+        return self.env['sale.order'].search(domain, order='create_date desc, id desc', limit=1)
+
+    def _get_addendum_template_ids(self):
+        Template = self.env['sale.order.template']
+        dom = ['|', ('name', 'ilike', ADDENDUM_NAMES[0]), ('name', 'ilike', ADDENDUM_NAMES[1])]
+        return set(Template.search(dom).ids)
+
+    def _ensure_template_policy(self, candidate_template_id):
+        """Mevcut fırsatta zaten bir satış varsa,
+        candidate_template_id yalnızca:
+          - önceki satışın template'i
+          - veya 'Ek Protokol' / 'Extra Protocol'
+        olabilir. Değilse ValidationError fırlatır."""
+        self.ensure_one()
+        existing = self._get_existing_order_in_same_opportunity()
+        if not existing:
+            return
+
+        prev_tmpl_id = existing.sale_order_template_id.id or False
+        addendum_ids = self._get_addendum_template_ids()
+
+        allowed_ids = set(addendum_ids)
+        if prev_tmpl_id:
+            allowed_ids.add(prev_tmpl_id)
+
+        if not candidate_template_id and not prev_tmpl_id:
+            return
+
+        if candidate_template_id not in allowed_ids:
+            prev_name = existing.sale_order_template_id.display_name or '—'
+            addendum_names = ', '.join(
+                self.env['sale.order.template'].browse(list(addendum_ids)).mapped('display_name')
+            ) or ', '.join(ADDENDUM_NAMES)
+
+            raise ValidationError(
+                "Bu fırsata zaten bir satış bağlı. Yeni satış için yalnızca şu şablonlara izin var:\n"
+                f"- Önceki satışın şablonu: {prev_name}\n"
+                f"- Ek protokol şablonları: {addendum_names}"
+            )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        orders = super().create(vals_list)
+        for order, vals in zip(orders, vals_list):
+            if vals.get('opportunity_id') and 'sale_order_template_id' in vals:
+                order._ensure_template_policy(vals.get('sale_order_template_id'))
+            elif vals.get('opportunity_id'):
+                pass
+        return orders
+
+    def write(self, vals):
+        res = super().write(vals)
+        if {'sale_order_template_id', 'opportunity_id'} & set(vals.keys()):
+            for order in self:
+                order._ensure_template_policy(order.sale_order_template_id.id)
+        return res
+
+    @api.onchange('opportunity_id', 'sale_order_template_id')
+    def _onchange_template_policy(self):
+        if not self.opportunity_id:
+            return
+
+        existing = self._get_existing_order_in_same_opportunity()
+        if not existing:
+            return
+
+        addendum_ids = self._get_addendum_template_ids()
+        allowed_ids = set(addendum_ids)
+        if existing.sale_order_template_id:
+            allowed_ids.add(existing.sale_order_template_id.id)
+
+        res = {'domain': {'sale_order_template_id': [('id', 'in', list(allowed_ids) or [0])]}}
+        if self.sale_order_template_id and self.sale_order_template_id.id not in allowed_ids:
+            prev_name = existing.sale_order_template_id.display_name or '—'
+            addendum_names = ', '.join(
+                self.env['sale.order.template'].browse(list(addendum_ids)).mapped('display_name')
+            ) or ', '.join(ADDENDUM_NAMES)
+            res['warning'] = {
+                'title': "Şablon Kısıtı",
+                'message': (
+                    "Bu fırsatta zaten bir satış var. Yeni satış yalnızca şu şablonlarla açılabilir:\n"
+                    f"- Önceki satışın şablonu: {prev_name}\n"
+                    f"- Ek protokol şablonları: {addendum_names}"
+                )
+            }
+        return res
 
 
 

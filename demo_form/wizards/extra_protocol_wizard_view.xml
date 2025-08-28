@@ -1,0 +1,32 @@
+<odoo>
+  <data>
+    <record id="view_project_demo_extra_protocol_wizard_form" model="ir.ui.view">
+      <field name="name">project.demo.extra.protocol.wizard.form</field>
+      <field name="model">project.demo.extra.protocol.wizard</field>
+      <field name="arch" type="xml">
+        <form string="Ek Protokol Onayı">
+          <sheet>
+            <group>
+              <field name="product_label" readonly="1"/>
+              <field name="demo_id" invisible="1"/>
+              <field name="pending_vals_json" invisible="1"/>
+              <field name="description" placeholder="Görev için kısa not ekleyin (opsiyonel)"/>
+            </group>
+          </sheet>
+          <footer>
+            <button string="Vazgeç" class="btn-secondary" special="cancel"/>
+            <button name="action_confirm_create_task" type="object" string="Görevi Oluştur" class="btn-primary"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+    <record id="action_project_demo_extra_protocol_wizard" model="ir.actions.act_window">
+      <field name="name">Ek Protokol</field>
+      <field name="res_model">project.demo.extra.protocol.wizard</field>
+      <field name="view_mode">form</field>
+      <field name="target">new</field>
+      <field name="context">{}</field>
+    </record>
+  </data>
+</odoo>

@@ -60,6 +60,7 @@
             <xpath expr="//page[@name='description']" position="before">
                 <page string="Sale Order Infos">
                     <field name="sale_order_summary" widget="html" readonly="1" colspan="2"/>
+                    <field name="related_sale_order_ids"  invisible="1"/>
                 </page>
             </xpath>
              <xpath expr="//page[@name='settings']" position="attributes">
