@@ -92,7 +92,7 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
                 'email_template_id': tmpl.email_template_id.id,
                 'communication_type': tmpl.communication_type,
                 'sale_line_id': sale_line_id,
-                'task_tags': tmpl.name,  # sende custom alan; standartta tag_ids olurdu
+                'task_tags': tmpl.name,
             })
 
             if tmpl.communication_type == 'phone' and tmpl.email_template_id:
@@ -176,7 +176,7 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
             if vals:
                 demo.write(vals)
 
-
+        order.state='sale'
         return {'type': 'ir.actions.act_window_close'}
 
 

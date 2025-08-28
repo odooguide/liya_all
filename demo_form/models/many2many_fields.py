@@ -62,3 +62,7 @@ class CakeChoice(models.Model):
     _name = 'project.demo.cake.choice'
     _description = "Cake Choice Option"
     name = fields.Char(string="Cake Choice", required=True)
+
+class DemoFormPrint(models.Model):
+    _name='demo.form.print'
+    name=fields.Char('Bölüm Adı')

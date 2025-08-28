@@ -107,9 +107,19 @@ class SaleOrder(models.Model):
             },
         }
 
-    def action_open_update_tasks_wizard(self):
-        """Ek protokol vb. durumlarda, kendi projesi olmayan ancak
-        CRM lead'inde proje bulunan siparişten görev güncelleme sihirbazını aç."""
+    def _should_open_extra_protocol_wizard_on_confirm(self):
+        """Ek Protokol siparişini onaylarken wizard açalım mı?"""
+        self.ensure_one()
+        tmpl = (self.sale_order_template_id.name or '').strip().lower()
+        return (
+            tmpl == 'ek protokol'
+            and self.opportunity_id
+            and self.opportunity_id.project_id
+            and not self.project_id
+        )
+
+    def _action_open_update_tasks_wizard_from_confirm(self):
+        """Confirm akışından wizard'ı açacak action dict."""
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
@@ -119,8 +129,17 @@ class SaleOrder(models.Model):
             'target': 'new',
             'context': {
                 'default_sale_order_id': self.id,
+                'confirm_sale_on_wizard_ok': True,
             }
         }
+
+    def action_confirm(self):
+        if not self.env.context.get('skip_extra_protocol_on_confirm'):
+            for order in self:
+                if order.sale_order_template_id.name.lower()=='ek protokol':
+                    return order._action_open_update_tasks_wizard_from_confirm()
+
+        return super().action_confirm()
 
     @api.onchange('wedding_date')
     def _onchange_wedding_date(self):

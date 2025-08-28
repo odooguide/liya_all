@@ -329,7 +329,7 @@ class ProjectProject(models.Model):
         self.ensure_one()
         user = self.env.user
 
-        is_project_manager = user.has_group('__export__.res_groups_101_9be46a0ar')
+        is_project_manager = user.has_group('__export__.res_groups_101_9be46a0a')
         is_org_manager = user.has_group('__export__.res_groups_102_8eb2392b')
         is_admin = user.has_group('base.group_system')
 
@@ -347,24 +347,26 @@ class ProjectProject(models.Model):
         self.ensure_one()
         self._check_schedule_demo_rights()
 
-        action = self.env.ref('calendar.action_calendar_event').sudo().read()[0]
         demo_cat = self.env['calendar.event.type'].sudo().search([('name', 'ilike', 'demo')], limit=1)
-        default_cats = [(6, 0, [demo_cat.id])] if demo_cat else []
 
-        ctx = dict(
-            self.env.context,
-            default_res_model='project.project',
-            default_res_id=self.id,
-            default_name=self.name,
-            default_start=fields.Datetime.now(),
-            default_categ_ids=default_cats,
-        )
+        vals = {
+            'name': self.name,
+            'res_model': 'project.project',
+            'res_id': self.id,
+            'categ_ids': [(6, 0, demo_cat.ids)] if demo_cat else False,
 
-        action.update({
-            'context': ctx,
-            'domain': [('res_model', '=', 'project.project'), ('res_id', '=', self.id)],
-        })
-        return action
+        }
+        meeting = self.env['calendar.event'].sudo().create(vals)
+
+        view = self.env.ref('calendar.view_calendar_event_form', raise_if_not_found=False)
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'calendar.event',
+            'view_mode': 'form',
+            'res_id': meeting.id,
+            'view_id': view.id if view else False,
+            'target': 'current',
+        }
 
     @api.depends('event_ids.start')
     def _compute_next_event(self):
@@ -580,7 +582,7 @@ class ProjectProject(models.Model):
                     vals[f] = True
                 vals['afterparty_ultra'] = True
 
-        demo = self.env['project.demo.form'].create(vals)
+        demo = self.env['project.demo.form'].sudo().create(vals)
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'project.demo.form',

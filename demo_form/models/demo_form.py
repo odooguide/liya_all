@@ -1,6 +1,6 @@
 from odoo import api, fields, models, _
 from datetime import date, datetime, timedelta
-from odoo.exceptions import ValidationError,RedirectWarning
+from odoo.exceptions import ValidationError,RedirectWarning,UserError
 from lxml import html as lhtml
 from markupsafe import escape as html_escape
 import re
@@ -395,6 +395,12 @@ class ProjectDemoForm(models.Model):
     is_ceremony=fields.Boolean(string="Seramoni Düzeni")
     merasim=fields.Selection([('nostaljik','Nostaljik Kapı'),('yemek','Yemek Sırasında'),('none','Yok')],string='Merasim')
 
+    demo_part_ids = fields.Many2many(
+        'demo.form.print',
+        'rel_form_demo_print',  # relation table
+        'demo_form_id', 'demo_print_id',  # fkeys
+        string="Demo Parts")
+
     company_id = fields.Many2one(
         'res.company',
         string='Company',
@@ -426,6 +432,16 @@ class ProjectDemoForm(models.Model):
         'prehost_breakfast': ['Breakfast Service'],
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
+
+    @api.onchange('confirmed_demo_form_plan')
+    def _onchange_confirmed_contract_security(self):
+        for rec in self:
+            origin = rec._origin
+            if origin.confirmed_demo_form_plan and not self.env.user.has_group('base.group_system'):
+                rec.confirmed_demo_form_plan = origin.seat_plan
+                raise UserError(
+                    _('Only administrators can modify or delete the Confirmed Demo Form once uploaded.')
+                )
 
     def _get_related_confirmed_sale_orders(self):
         """Bu projenin bağlı olduğu CRM fırsatındaki onaylı (sale/done) siparişler."""

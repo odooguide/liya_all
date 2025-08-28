@@ -134,5 +134,17 @@
               parent="menu_demo_form_fields"
               action="action_project_demo_cake_choice"
               sequence="90"/>
+    <!-- Demo Form Pages -->
+    <record id="action_project_demo_form_pages" model="ir.actions.act_window">
+        <field name="name">Demo Çıktı Bölümleri</field>
+        <field name="res_model">demo.form.print</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_demo_form_print"
+              name="Demo Çıktı Bölümleri"
+              parent="menu_demo_form_fields"
+              action="action_project_demo_form_pages"
+              sequence="90"/>
 
 </odoo>

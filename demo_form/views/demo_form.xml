@@ -452,6 +452,7 @@
                                 <field name="other_social_media_tag" widget="boolean_toggle"/>
                                 <field name="other_social_media_details"
                                        invisible="other_social_media_tag==False" placeholder="Lütfen Belirtiniz"/>
+
                             </group>
                             <group>
                                 <field name="other_description" placeholder="Write your other notes in here"
