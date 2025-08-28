@@ -157,7 +157,7 @@ class SaleOrder(models.Model):
         domain = [
             ('opportunity_id', '=', self.opportunity_id.id),
             ('id', '!=', self.id or 0),
-            ('state', '!=', 'cancel'),
+            ('state', 'in', ['sale','done']),
         ]
         return self.env['sale.order'].search(domain, order='create_date desc, id desc', limit=1)
 

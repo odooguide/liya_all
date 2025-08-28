@@ -80,9 +80,7 @@
                                         LIYA ALL - WEDDING PLAN <t t-esc="o.invitation_date.strftime('%Y')"/>
                                     </div>
                                 </div>
-
                                 <!-- Sağ sütun: logo -->
-
                                 <div style="clear:both;"/>
                             </div>
                             <table class="table table-borderless" style="width:100%; border-collapse:separate; border-spacing:5px 0; margin-bottom:15px;">
