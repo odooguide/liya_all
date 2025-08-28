@@ -592,8 +592,11 @@ class ProjectProject(models.Model):
                 for f in ultra_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True
+        if self.user_id == self.env.user:
+            demo = self.env['project.demo.form'].sudo().create(vals)
+        else:
+            demo = self.env['project.demo.form'].create(vals)
 
-        demo = self.env['project.demo.form'].sudo().create(vals)
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'project.demo.form',
