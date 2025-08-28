@@ -561,11 +561,6 @@ class ProjectDemoForm(models.Model):
         rec._onchange_start_end_time()
         rec._onchange_breakfast()
 
-        prev = rec._get_missing_list()
-        new = rec._compute_missing_products()
-        rec._set_missing_list(new)
-        rec._sync_missing_activity_and_chatter(prev, new)
-
         return rec
 
     @api.depends('invitation_date')

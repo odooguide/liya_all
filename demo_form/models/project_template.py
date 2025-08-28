@@ -439,7 +439,6 @@ class ProjectProject(models.Model):
             second = (getattr(order.opportunity_id, 'second_contact', '') or '').strip()
             inv_name = f'{partner}-{second}'.strip('-').strip()
 
-            # --- Temel alanlar ---
             vals.update({
                 'name': f'{inv_name} Demo Formu' if inv_name else 'Demo Formu',
                 'invitation_owner': inv_name or partner or False,
@@ -453,7 +452,6 @@ class ProjectProject(models.Model):
                 ),
             })
 
-            # --- Şablondan schedule/transport kopyala ---
             sched_cmds = [
                 (0, 0, {
                     'sequence': line.sequence,
@@ -478,7 +476,6 @@ class ProjectProject(models.Model):
             ]
             vals['transport_line_ids'] = trans_cmds
 
-            # --- Yardımcı: tarih bazlı saç/makyaj seçimi ---
             def _apply_hair_choice(_vals):
                 date_str = _vals.get('invitation_date') or _vals.get('demo_date')
                 if not date_str:
@@ -490,12 +487,10 @@ class ProjectProject(models.Model):
                 else:
                     _vals['hair_garage_caddebostan'] = True
 
-            # --- Satırlardan paket/opsiyon çıkarımı ---
             for sol in order.order_line:
                 pname = (sol.product_id.name or '').strip()
                 up = pname.upper()
 
-                # Foto/video & aksesuarlar
                 if pname == "Photo & Video Plus":
                     vals['photo_video_plus'] = True
                 if pname == "Drone Kamera":
@@ -578,9 +573,6 @@ class ProjectProject(models.Model):
                 _apply_hair_choice(vals)
                 for f in elite_fields:
                     vals[f] = True
-                # NOT: afterparty_ultra zaten ürün satırından işaretlenmiş olabilir;
-                # burada tekrar elle set etmiyoruz.
-                # start_end_time set ETMİYORUZ: model create() sonrası onchange hesaplayacak.
 
             elif tmpl == 'ultra':
                 _apply_hair_choice(vals)
