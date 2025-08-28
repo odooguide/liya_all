@@ -446,7 +446,7 @@ class ProjectDemoForm(models.Model):
     def _get_related_confirmed_sale_orders(self):
         """Bu projenin bağlı olduğu CRM fırsatındaki onaylı (sale/done) siparişler."""
         self.ensure_one()
-        base_order = self.project_id and self.project_id.reinvoiced_sale_order_id
+        base_order = self.project_id and self.project_id.sudo().reinvoiced_sale_order_id
         opp = base_order.opportunity_id if base_order else False
         if not opp:
             return self.env['sale.order']

@@ -445,7 +445,7 @@ class ProjectProject(models.Model):
             'project_id': self.id,
         }
 
-        order = self.reinvoiced_sale_order_id
+        order = self.sudo().reinvoiced_sale_order_id
         if order:
             # --- Güvenli davetiye adı ---
             partner = (order.partner_id.name or '').strip()
