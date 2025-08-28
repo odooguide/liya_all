@@ -4,14 +4,6 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
         <field name="arch" type="xml">
-            <xpath expr="//header" position="inside">
-              <button name="action_open_update_tasks_wizard"
-                      string="Görevleri Güncelle"
-                      type="object"
-                      class="btn-secondary"
-                    invisible="opportunity_id.project_id == False or is_project_true != False"
-              />
-        </xpath>
             <xpath expr="//page[@name='optional_products']" position="after">
                 <page string="Project Tasks">
                     <field name="is_project_true" invisible="1"/>
