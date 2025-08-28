@@ -329,11 +329,11 @@ class ProjectProject(models.Model):
         self.ensure_one()
         user = self.env.user
 
-        is_project_manager = user.has_group('__export__.res_groups_101_9be46a0a')
+        #is_project_manager = user.has_group('__export__.res_groups_101_9be46a0a')
         is_org_manager = user.has_group('__export__.res_groups_102_8eb2392b')
         is_admin = user.has_group('base.group_system')
 
-        if is_admin or is_project_manager or is_org_manager or self.user_id.id == user.id:
+        if is_admin or is_org_manager or self.user_id.id == user.id:
             return True
 
         demo_task = self._get_demo_task()
@@ -565,7 +565,6 @@ class ProjectProject(models.Model):
                     vals['prehost_breakfast'] = True
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty or 0)
 
-            # --- Şablon bazlı paketler ---
             tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
                 'photo_video_plus',

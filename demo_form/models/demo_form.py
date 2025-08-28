@@ -412,10 +412,6 @@ class ProjectDemoForm(models.Model):
     PRODUCT_REQUIREMENTS = {
         'photo_video_plus': ['Photo & Video Plus'],
         'photo_drone': ['Drone Kamera'],
-        'photo_harddisk_delivered': {
-            'delivered': ['Hard Disk 1TB Delivered'],
-            'later': ['Will Deliver Later'],
-        },
         'afterparty_service': ['After Party'],
         'afterparty_ultra': ['After Party Ultra'],
         'afterparty_shot_service': ['After Party Shot Servisi'],
