@@ -447,7 +447,7 @@ class ProjectDemoForm(models.Model):
         """Bu projenin bağlı olduğu CRM fırsatındaki onaylı (sale/done) siparişler."""
         self.ensure_one()
         base_order = self.project_id and self.project_id.sudo().reinvoiced_sale_order_id
-        opp = base_order.opportunity_id if base_order else False
+        opp = base_order.sudo().opportunity_id if base_order else False
         if not opp:
             return self.env['sale.order']
         return self.env['sale.order'].sudo().search([
@@ -495,7 +495,7 @@ class ProjectDemoForm(models.Model):
         """İlgili sipariş satırlarından ürün adlarını topla."""
         names = set()
         for so in self._get_related_confirmed_sale_orders():
-            for l in so.order_line:
+            for l in so.sudo().order_line:
                 n = (l.product_id.name or '').strip()
                 if n:
                     names.add(n)
