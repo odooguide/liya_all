@@ -22,7 +22,7 @@ class ProjectDemoExtraProtocolWizard(models.TransientModel):
     def _resolve_responsibles(self):
         self.ensure_one()
         demo = self.demo_id
-        order = demo.project_id.reinvoiced_sale_order_id if demo.project_id else False
+        order = demo.project_id.sudo().reinvoiced_sale_order_id if demo.project_id else False
         users = [order.user_id.id]
         if not users and demo.project_id and demo.project_id.user_id:
             users = [demo.project_id.user_id.id]
