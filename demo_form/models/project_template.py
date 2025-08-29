@@ -129,7 +129,7 @@ class ProjectProject(models.Model):
         column2='sale_order_id',
         string='Bağlı Satışlar',
         compute='_compute_related_sale_orders',
-        store=False,
+        store=True,
         compute_sudo=True,
     )
 
@@ -140,31 +140,48 @@ class ProjectProject(models.Model):
         'related_sale_order_ids.state',
     )
     def _compute_so_people_count(self):
-        """
-        Projeye bağlı sale.order'lardaki, UoM'i 'Kişi' (veya 'kisi') olan satırların
-        miktarlarını toplar. Yalnızca onaylı siparişler (sale, done) dikkate alınır.
-        Section/note satırları hariç tutulur.
-        """
-        kisi_uoms = self.env['uom.uom'].search(['|','|', ('name', 'ilike', 'kişi'), ('name', 'ilike', 'kisi'),('name', 'ilike', 'people')])
+        kisi_uoms = self.env['uom.uom'].search([
+            '|', '|',
+            ('name', 'ilike', 'kişi'),
+            ('name', 'ilike', 'kisi'),
+            ('name', 'ilike', 'people'),
+        ])
         kisi_uom_ids = set(kisi_uoms.ids)
 
-        for project in self:
-            if not project.related_sale_order_ids or not kisi_uom_ids:
+        if not kisi_uom_ids:
+            for project in self:
                 project.so_people_count = 0
-                continue
+            return
 
-            domain = [
-                ('order_id', 'in', project.related_sale_order_ids.ids),
-                ('order_id.state', 'in', ('sale', 'done')),
-                ('product_uom', 'in', list(kisi_uom_ids)),
-            ]
-            grouped = self.env['sale.order.line'].read_group(
-                domain=domain,
-                fields=['product_uom_qty:sum'],
-                groupby=[],
-            )
-            qty = grouped and grouped[0].get('product_uom_qty_sum') or 0.0
-            project.so_people_count = int(qty)
+        proj_to_orders = {
+            project.id: project.related_sale_order_ids.ids
+            for project in self
+        }
+        all_order_ids = {so_id for ids in proj_to_orders.values() for so_id in ids}
+
+        if not all_order_ids:
+            for project in self:
+                project.so_people_count = 0
+            return
+
+        # Tek seferde tüm ilgili siparişlerin Kişi UoM’lu miktar toplamları
+        domain = [
+            ('order_id', 'in', list(all_order_ids)),
+            ('order_id.state', 'in', ('sale', 'done')),  # gerekirse durum filtresini genişlet
+            ('product_uom', 'in', list(kisi_uom_ids)),
+            ('display_type', '=', False),  # section/note satırlarını hariç tut
+        ]
+        grouped = self.env['sale.order.line'].read_group(
+            domain=domain,
+            fields=['product_uom_qty:sum', 'order_id'],
+            groupby=['order_id'],
+        )
+        sum_by_order = {g['order_id'][0]: (g.get('product_uom_qty_sum') or 0.0) for g in grouped}
+
+        # Her proje için kendi bağlı siparişlerinin toplamını yaz
+        for project in self:
+            total = sum(sum_by_order.get(so_id, 0.0) for so_id in proj_to_orders.get(project.id, []))
+            project.so_people_count = int(total)
 
     @api.depends('reinvoiced_sale_order_id')
     def _compute_related_sale_orders(self):
