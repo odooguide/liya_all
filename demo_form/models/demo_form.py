@@ -2,7 +2,7 @@ from odoo import api, fields, models, _
 from datetime import date, datetime, timedelta
 from odoo.exceptions import ValidationError,RedirectWarning,UserError
 from lxml import html as lhtml
-from markupsafe import escape as html_escape
+from odoo.tools import html2plaintext, plaintext2html
 import re
 import json
 from html import escape as E
@@ -528,40 +528,32 @@ class ProjectDemoForm(models.Model):
             return mapping.get(val, []) if val else []
         return mapping
 
-
     @api.depends('special_notes')
     def _compute_split_notes(self):
         limit = 300
         for rec in self:
             raw_html = rec.special_notes or ''
-            # HTML içinden düz metin çıkar
-            try:
-                doc = lhtml.fromstring(raw_html or "<div/>")
-                notes = doc.text_content().strip()
-            except Exception:
-                # fallback: basit regex ile tag kaldır
-                notes = re.sub(r'<[^>]+>', '', raw_html).strip()
+
+            # HTML → düz metin (satır sonları korunur)
+            notes = html2plaintext(raw_html or '')
+
+            # Satır sonlarını normalize et, gereksiz boşlukları toparla
+            notes = notes.replace('\r\n', '\n').replace('\r', '\n')
+            notes = re.sub(r'[ \t\u00A0]+', ' ', notes)  # ardışık boşlukları tek boşluk yap
+            notes = re.sub(r'\n{3,}', '\n\n', notes)  # fazla boş satırları azalt
+            notes = notes.strip()
 
             if len(notes) <= limit:
-                preview = notes
-                remaining = ''
+                preview, remaining = notes, ''
             else:
-                preview_candidate = notes[:limit]
-                last_space = preview_candidate.rfind(' ')
-                if last_space > 0:
-                    preview = preview_candidate[:last_space]
-                    remaining = notes[last_space + 1:].lstrip()
-                else:
-                    preview = preview_candidate
-                    remaining = notes[limit:].lstrip()
+                cut = notes[:limit]
+                last_ws = max(cut.rfind(' '), cut.rfind('\n'), cut.rfind('\t'))
+                split_at = last_ws if last_ws != -1 else limit
+                preview = cut[:split_at]
+                remaining = notes[split_at:].lstrip()
 
-            # HTML alanlara güvenli şekilde ver; satır sonlarını koru
-            preview_html = f"<div>{html_escape(preview).replace(chr(10), '<br/>')}</div>"
-            remaining_html = f"<div>{html_escape(remaining).replace(chr(10), '<br/>')}</div>" if remaining else ''
-
-            rec.special_notes_preview = preview_html
-            rec.special_notes_remaining = remaining_html
-
+            rec.special_notes_preview = plaintext2html(preview)
+            rec.special_notes_remaining = plaintext2html(remaining) if remaining else ''
 
 
     @api.model

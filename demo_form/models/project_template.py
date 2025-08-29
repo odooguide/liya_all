@@ -95,6 +95,13 @@ class ProjectProject(models.Model):
         readonly=True,
         compute_sudo=True,
     )
+    so_people_count_char = fields.Char(
+        string='Kişi Sayısı (M)',
+        compute='_compute_so_people_count',
+        store=True,
+        readonly=True,
+        compute_sudo=True,
+    )
     so_sale_template_id = fields.Many2one(
         'sale.order.template',
         string='Paket',
@@ -134,30 +141,20 @@ class ProjectProject(models.Model):
     )
 
     @api.depends(
-        'related_sale_order_ids.order_line.product_uom',
-        'related_sale_order_ids.order_line.product_uom_qty',
+        'related_sale_order_ids.people_count', 'related_sale_order_ids.state',
     )
     def _compute_so_people_count(self):
-        # UoM'i 'Kişi/kisi/people' olanları bul
-        kisi_uoms = self.env['uom.uom'].search([
-            '|', '|',
-            ('name', 'ilike', 'kişi'),
-            ('name', 'ilike', 'kisi'),
-            ('name', 'ilike', 'people'),
-        ])
-        kisi_uom_ids = kisi_uoms.ids
-
         for project in self:
-            if not project.related_sale_order_ids or not kisi_uom_ids:
-                project.so_people_count = 0
-                continue
-
-            lines = self.env['sale.order.line'].search([
-                ('order_id', 'in', project.related_sale_order_ids.ids),
-                ('product_uom', 'in', kisi_uom_ids),
-                ('display_type', '=', False),  # section/note hariç
+            orders = self.env['sale.order'].search([
+                ('project_id', '=', project.id),
+                ('state', 'in', ('sale', 'done')),
             ])
-            project.so_people_count = int(sum(lines.mapped('product_uom_qty')))
+            total = 0
+            for o in orders:
+                total += int(o.people_count or 0)
+
+            project.so_people_count = total
+            project.so_people_count_char = str(total)
 
     @api.depends('reinvoiced_sale_order_id')
     def _compute_related_sale_orders(self):
@@ -279,7 +276,7 @@ class ProjectProject(models.Model):
                 ('Müşteri', (opportunity.name if opportunity else '') or ''),
                 ('Koordinatör', coordinators or ''),
                 ('Satış Temsilcisi', so.user_id.display_name or ''),
-                ('Kişi Sayısı', so.people_count or ''),
+                ('Kişi Sayısı', self.so_people_count_char or ''),
                 ('Sözleşme Tarihi', so.contract_date or ''),
                 ('Demo Tarihi', rec.next_event_date or ''),
                 ('Birincil Kontak',

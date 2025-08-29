@@ -85,7 +85,8 @@
                 <field name="dj_person"/>
                 <field name="event_date"/>
                 <field name="crm_yabanci_turk"/>
-                <field name="so_people_count"/>
+                <field name="so_people_count" column_invisible="1"/>
+                <field name="so_people_count_char"/>
                 <field name="so_sale_template_id"/>
             </xpath>
             <xpath expr="//field[@name='stage_id']" position="replace">
