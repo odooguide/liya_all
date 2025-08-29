@@ -654,6 +654,9 @@ class ProjectDemoForm(models.Model):
             first_transport.time = dt_new.strftime('%H:%M')
 
     def write(self, vals):
+        if any(rec.confirmed_demo_form_plan for rec in self) and not self.env.user.has_group('base.group_system'):
+            raise UserError("Onaylanmış kayıtta değişiklik yapılamaz.")
+
         if not (self.env.context.get('extra_protocol_confirmed') or
                 self.env.context.get('skip_extra_protocol_check')):
             if set(self.TRACKED_FIELDS).intersection(vals.keys()) or 'photo_harddisk_delivered' in vals:

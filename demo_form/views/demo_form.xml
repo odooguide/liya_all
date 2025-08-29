@@ -50,7 +50,7 @@
             <form string="Demo Form">
                 <header>
                 </header>
-                <sheet readonly="confirmed_demo_form_plan!=False">
+                <sheet >
                     <h1>
                         <field name="name"/>
                     </h1>

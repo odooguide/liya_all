@@ -14,6 +14,7 @@
                 <button name="action_compose_whatsapp_message"
                         type="object"
                         string="Whatsapp Mesajı Oluştur"
+                        invisible="is_confirmed_demo_form==False"
                        />
             </header>
             <xpath expr="//field[@name='tag_ids']" position="after">

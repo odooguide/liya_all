@@ -1,3 +1,5 @@
+from wsgiref.simple_server import demo_app
+
 from odoo import fields, models, _, api
 from odoo.exceptions import UserError,AccessError
 from datetime import datetime,date
@@ -139,6 +141,16 @@ class ProjectProject(models.Model):
         store=True,
         compute_sudo=True,
     )
+    is_confirmed_demo_form=fields.Boolean(string='Is There Confirmed Demo Form', compute='_compute_confirmed_form',
+                                          compute_sudo=True,store=True)
+
+    @api.depends('demo_form_ids.confirmed_demo_form_plan')
+    def _compute_confirmed_form(self):
+        for rec in self:
+            if rec.demo_form_ids.confirmed_demo_form_plan:
+                self.is_confirmed_demo_form=True
+            else:
+                self.is_confirmed_demo_form = False
 
     @api.depends(
         'related_sale_order_ids.people_count', 'related_sale_order_ids.state',
