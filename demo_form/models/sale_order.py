@@ -188,14 +188,12 @@ class SaleOrder(models.Model):
             return
 
         if candidate_template_id not in allowed_ids:
-            prev_name = existing.sale_order_template_id.display_name or '—'
             addendum_names = ', '.join(
                 self.env['sale.order.template'].browse(list(addendum_ids)).mapped('display_name')
             ) or ', '.join(ADDENDUM_NAMES)
 
             raise ValidationError(
                 "Bu fırsata zaten bir satış bağlı. Yeni satış için yalnızca şu şablonlara izin var:\n"
-                f"- Önceki satışın şablonu: {prev_name}\n"
                 f"- Ek protokol şablonları: {addendum_names}"
             )
 

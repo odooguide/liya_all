@@ -4,24 +4,18 @@
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_form2"/>
         <field name="arch" type="xml">
-
             <header>
                 <button name="action_send_task_email"
                         string="Send E-mail"
                         type="object"
                         class="btn-primary"
                         invisible="communication_type=='phone'"/>
-
-
             </header>
-
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="email_template_id"/>
                 <field name="communication_type"/>
                 <field name="task_tags"/>
-
             </xpath>
-
         </field>
     </record>
 

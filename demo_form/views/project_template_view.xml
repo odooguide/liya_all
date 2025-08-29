@@ -9,6 +9,7 @@
                         string="Assing Demo Date"
                         type="object"
                         class="btn-secondary"
+                        invisible="next_event_date!=False"
                 />
                 <button name="action_compose_whatsapp_message"
                         type="object"
@@ -47,6 +48,9 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_open_share_project_wizard']" position="replace"/>
             <xpath expr="//button[@name='action_customer_preview']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_sos']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
         </field>

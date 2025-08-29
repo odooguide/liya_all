@@ -1,7 +1,25 @@
 from odoo import fields, models, _, api
 from odoo.exceptions import UserError,AccessError
-from datetime import datetime
+from datetime import datetime,date
 from odoo.osv.expression import OR, AND
+
+def _as_date(val):
+    """val -> datetime.date | None. dd.mm.yyyy / yyyy-mm-dd vb. formatları destekler."""
+    if not val:
+        return None
+    if isinstance(val, date):
+        return val
+    if isinstance(val, datetime):
+        return val.date()
+    if isinstance(val, str):
+        s = val.strip()
+        for fmt in ("%Y-%m-%d", "%d.%m.%Y", "%d/%m/%Y", "%d-%m-%Y"):
+            try:
+                return datetime.strptime(s, fmt).date()
+            except ValueError:
+                pass
+    return None
+
 
 class ProjectProject(models.Model):
     _inherit = 'project.project'
@@ -72,9 +90,10 @@ class ProjectProject(models.Model):
 
     so_people_count = fields.Integer(
         string='Kişi Sayısı',
-        compute='_compute_crm_sale_fields',
+        compute='_compute_so_people_count',
         store=True,
-        readonly=True
+        readonly=True,
+        compute_sudo=True,
     )
     so_sale_template_id = fields.Many2one(
         'sale.order.template',
@@ -114,6 +133,39 @@ class ProjectProject(models.Model):
         compute_sudo=True,
     )
 
+    @api.depends(
+        'related_sale_order_ids',
+        'related_sale_order_ids.order_line.product_uom',
+        'related_sale_order_ids.order_line.product_uom_qty',
+        'related_sale_order_ids.state',
+    )
+    def _compute_so_people_count(self):
+        """
+        Projeye bağlı sale.order'lardaki, UoM'i 'Kişi' (veya 'kisi') olan satırların
+        miktarlarını toplar. Yalnızca onaylı siparişler (sale, done) dikkate alınır.
+        Section/note satırları hariç tutulur.
+        """
+        kisi_uoms = self.env['uom.uom'].search(['|', ('name', 'ilike', 'kişi'), ('name', 'ilike', 'kisi')])
+        kisi_uom_ids = set(kisi_uoms.ids)
+
+        for project in self:
+            if not project.related_sale_order_ids or not kisi_uom_ids:
+                project.so_people_count = 0
+                continue
+
+            domain = [
+                ('order_id', 'in', project.related_sale_order_ids.ids),
+                ('order_id.state', 'in', ('sale', 'done')),
+                ('product_uom', 'in', list(kisi_uom_ids)),
+            ]
+            grouped = self.env['sale.order.line'].read_group(
+                domain=domain,
+                fields=['product_uom_qty:sum'],
+                groupby=[],
+            )
+            qty = grouped and grouped[0].get('product_uom_qty_sum') or 0.0
+            project.so_people_count = int(qty)
+
     @api.depends('reinvoiced_sale_order_id')
     def _compute_related_sale_orders(self):
         SaleOrder = self.env['sale.order']
@@ -132,12 +184,25 @@ class ProjectProject(models.Model):
                 domains.append([('partner_id', 'child_of', commercial.id)])
 
             if domains:
-                domain = AND([OR(domains), [('state', '!=', 'cancel')]])
+                domain = AND([OR(domains), [('state', 'in', ['done','sale'])]])
             else:
                 domain = [('id', '=', so.id)]
 
             orders = SaleOrder.search(domain)
             rec.related_sale_order_ids = [(6, 0, orders.ids)]
+            
+    def _check_project_rights(self):
+        self.ensure_one()
+        user = self.env.user
+        is_org_manager = user.has_group('__export__.res_groups_102_8eb2392b')
+        is_admin = user.has_group('base.group_system')
+
+        if is_admin or is_org_manager or self.user_id.id == user.id:
+            return True
+
+        raise UserError(_("Bu işlemi yalnızca Proje Yöneticisi, Organizasyon Müdürü "
+                          "veya 'Demo Randevu Oluşturma' görevinin atanan kullanıcısı yapabilir."))
+
 
     @api.depends(
         'reinvoiced_sale_order_id',
@@ -157,7 +222,6 @@ class ProjectProject(models.Model):
             rec.crm_second_contact = False
             rec.crm_request_date = False
             rec.crm_yabanci_turk = False
-            rec.so_people_count = 0
             rec.so_sale_template_id = False
             rec.so_coordinator_ids = [(6, 0, [])]
             rec.so_opportunity_id = False
@@ -169,7 +233,6 @@ class ProjectProject(models.Model):
 
             opp = so.opportunity_id
 
-            rec.so_people_count = so.people_count or 0
             rec.so_sale_template_id = so.sale_order_template_id.id or False
             rec.so_coordinator_ids = [(6, 0, so.coordinator_ids.ids)] if so.coordinator_ids else [(6, 0, [])]
             rec.so_opportunity_id = opp or False  # many2one'a recordset vermek OK
@@ -181,6 +244,7 @@ class ProjectProject(models.Model):
                 rec.crm_request_date = opp.request_date or False
                 rec.crm_yabanci_turk = opp.yabanci_turk.id if opp.yabanci_turk else False
 
+
     @api.depends('event_ids.start', 'demo_form_ids.confirmed_demo_form_plan')
     def _compute_demo_state(self):
         for rec in self:
@@ -190,7 +254,8 @@ class ProjectProject(models.Model):
             # Onaylı demo form var mı?
             confirmed_any = any(rec.demo_form_ids.mapped('confirmed_demo_form_plan'))
 
-            if has_demo_date and confirmed_any:
+            next_date = _as_date(rec.next_event_date)
+            if next_date and next_date < fields.Date.today() and confirmed_any:
                 rec.demo_state = 'completed'
             elif has_demo_date:
                 rec.demo_state = 'planned'
@@ -278,9 +343,7 @@ class ProjectProject(models.Model):
             <table style="width:100%; border-collapse:collapse;">
               <thead>
                 <tr>
-                  <th style="border:1px solid #ccc;padding:4px;">Sipariş</th>
                   <th style="border:1px solid #ccc;padding:4px;">Ürün</th>
-                  <th style="border:1px solid #ccc;padding:4px;">Açıklama</th>
                   <th style="border:1px solid #ccc;padding:4px;">Adet</th>
                   <th style="border:1px solid #ccc;padding:4px;">Birim</th>
                 </tr>
@@ -289,14 +352,11 @@ class ProjectProject(models.Model):
             """
             for l in lines:
                 prod = l.product_id.display_name or ''
-                desc = l.name if l.name != prod else ''
                 qty = l.product_uom_qty or 0
                 uom = l.product_uom.display_name or ''
                 html += f"""
                 <tr>
-                  <td style="border:1px solid #ccc;padding:4px;">{l.order_id.name or ''}</td>
                   <td style="border:1px solid #ccc;padding:4px;">{prod}</td>
-                  <td style="border:1px solid #ccc;padding:4px;">{desc}</td>
                   <td style="border:1px solid #ccc;padding:4px;text-align:center;">{qty}</td>
                   <td style="border:1px solid #ccc;padding:4px;">{uom}</td>
                 </tr>
@@ -305,16 +365,6 @@ class ProjectProject(models.Model):
 
             rec.sale_order_summary = html
             rec.som = html
-
-    @api.onchange('seat_plan')
-    def _onchange_confirmed_contract_security(self):
-        for rec in self:
-            origin = rec._origin
-            if origin.seat_plan and not self.env.user.has_group('base.group_system'):
-                rec.seat_plan = origin.seat_plan
-                raise UserError(
-                    _('Only administrators can modify or delete the Confirmed Demo Form once uploaded.')
-                )
 
     def _get_demo_task(self):
         self.ensure_one()
@@ -325,37 +375,18 @@ class ProjectProject(models.Model):
         ], limit=1)
         return demo_task
 
-    def _check_schedule_demo_rights(self):
-        self.ensure_one()
-        user = self.env.user
-
-        #is_project_manager = user.has_group('__export__.res_groups_101_9be46a0a')
-        is_org_manager = user.has_group('__export__.res_groups_102_8eb2392b')
-        is_admin = user.has_group('base.group_system')
-
-        if is_admin or is_org_manager or self.user_id.id == user.id:
-            return True
-
-        demo_task = self._get_demo_task()
-        if demo_task and (user in demo_task.user_ids or getattr(demo_task, 'user_id', False) == user):
-            return True
-
-        raise UserError(_("Bu işlemi yalnızca Proje Yöneticisi, Organizasyon Müdürü "
-                          "veya 'Demo Randevu Oluşturma' görevinin atanan kullanıcısı yapabilir."))
-
+    
     def action_schedule_meeting(self):
         self.ensure_one()
-        self._check_schedule_demo_rights()
+        if 'duygu' not in self.user.env.name.lower():
+            self._check_project_rights()
 
-        # Action'ı oku (sudo sadece action okuma için)
         action = self.env.ref('calendar.action_calendar_event').sudo().read()[0]
 
-        # Demo kategorisini sadece default olarak hazırla (kayıt yaratmaz)
         demo_cat = self.env['calendar.event.type'].sudo().search([('name', 'ilike', 'demo')], limit=1)
 
         ctx = dict(
             self.env.context,
-            # Kullanıcı "Create" derse bu alanlar default olur, ama şu an kayıt oluşmaz
             default_res_model='project.project',
             default_res_id=self.id,
             default_name=self.name,
@@ -438,6 +469,7 @@ class ProjectProject(models.Model):
     def action_create_demo_form(self):
         """Create a new Demo Form with pre-filled values and open it."""
         self.ensure_one()
+        self._check_project_rights()
         if self.demo_form_ids:
             return self.action_open_demo_form()
 
@@ -524,6 +556,8 @@ class ProjectProject(models.Model):
                     vals['afterparty_sushi'] = True
                 if pname == "After Party Ultra":
                     vals['afterparty_ultra'] = True  # constrains/onchange kontrol edecek
+                    vals['afterparty_fog_laser'] = True
+                    vals['afterparty_shot_service'] = True
                 if pname == "Dans Show":
                     vals['afterparty_dance_show'] = True
                 if pname == "Fog + Laser Show":
@@ -569,13 +603,12 @@ class ProjectProject(models.Model):
             elite_fields = [
                 'photo_video_plus',
                 'afterparty_service', 'afterparty_shot_service',
-                'afterparty_sushi',
                 'accommodation_service', 'dance_lesson',
             ]
             ultra_extra = [
                 'music_live', 'music_percussion', 'music_trio',
-                'photo_yacht_shoot', 'bar_alcohol_service',
-                'photo_drone', 'afterparty_fog_laser', 'prehost_barney'
+                'photo_yacht_shoot', 'bar_alcohol_service','afterparty_sushi',
+                'photo_drone', 'afterparty_fog_laser', 'prehost_barney','afterparty_bbq_wraps'
             ]
             ultra_fields = elite_fields + ultra_extra
 

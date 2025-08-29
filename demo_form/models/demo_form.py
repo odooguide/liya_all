@@ -101,7 +101,8 @@ class ProjectDemoForm(models.Model):
     menu_meze_notes = fields.Html(
         string="Menu Meze Notes",
         sanitize=True,
-        help="Provide notes or instructions for the Menu page."
+        help="Provide notes or instructions for the Menu page.",
+        default='Standart mezelere ilave olarak Kayısı Yahnisi, Lakerda ve Ahtapot soğuk deniz mezeleri de servis edilir.'
     )
 
     # ── Bar page ─────────────────────────────────────────────────────────────
@@ -113,6 +114,9 @@ class ProjectDemoForm(models.Model):
     bar_alcohol_service = fields.Boolean(
         string="Alcoholic Beverage Service",
         help="Does the bar include alcoholic beverages?"
+    )
+    alcohol_service=fields.Boolean(
+        string="Alcohol Service"
     )
     bar_purchase_advice = fields.Char(
         string="If No, purchase advice",
@@ -146,7 +150,7 @@ class ProjectDemoForm(models.Model):
         help="Offer additional drink varieties?"
     )
     afterparty_street_food = fields.Boolean(
-        string="Street Food",
+        string="Street Food Atıştırmalık",
         help="Include Street Food stations?"
     )
     afterparty_bbq_wraps = fields.Boolean(
@@ -198,7 +202,7 @@ class ProjectDemoForm(models.Model):
         string="Hotel",
         help="Name of the hotel for accommodation")
     accommodation_service = fields.Boolean(
-        string="Accommodation Provided",
+        string="Accommodation",
         help="Is accommodation provided?")
 
     accomodation_notes = fields.Html(
@@ -408,6 +412,7 @@ class ProjectDemoForm(models.Model):
         required=True,
     )
     minutes = fields.Integer(string='Adjust Time')
+    demo_seat_plan=fields.Many2one('demo.seat.plan', string='Oturma Planı')
 
     PRODUCT_REQUIREMENTS = {
         'photo_video_plus': ['Photo & Video Plus'],
@@ -425,7 +430,9 @@ class ProjectDemoForm(models.Model):
         "cake_champagne_tower": ["Pasta Show'da Şampanya Kulesi"],
         'prehost_barney': ['BARNEY'],
         'prehost_fred': ['FRED'],
-        'prehost_breakfast': ['Breakfast Service'],
+        'accommodation_service': ['Konaklama'],
+        'dance_lesson': ['Dans Dersi'],
+        'photo_homesession': ['Ev Çekimi'],
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
 
@@ -434,7 +441,7 @@ class ProjectDemoForm(models.Model):
         for rec in self:
             origin = rec._origin
             if origin.confirmed_demo_form_plan and not self.env.user.has_group('base.group_system'):
-                rec.confirmed_demo_form_plan = origin.seat_plan
+                rec.confirmed_demo_form_plan = origin.confirmed_demo_form_plan
                 raise UserError(
                     _('Only administrators can modify or delete the Confirmed Demo Form once uploaded.')
                 )
@@ -860,22 +867,13 @@ class ProjectDemoForm(models.Model):
             'After Party': 'After Party', 'After Parti': 'After Party',
         }
         lines = []
-        for ln in self.schedule_line_ids.sorted('sequence'):
+        for ln in self.schedule_line_ids.sorted('sequence')[1:]:
             ev = (ln.event or '').strip()
             ev_tr = EVENT_TR.get(ev, ev or '-')
             tm = (ln.time or '').strip()
 
             base = f"➖{ev_tr}:  {tm}" if tm else f"➖{ev_tr}"
             lines.append(base)
-
-            # Satır notları (HTML olabilir)
-            note_html = getattr(ln, 'location_notes', '') or getattr(ln, 'notes', '') or getattr(ln, 'note', '')
-            note_txt = self._html_to_text(note_html) if note_html else ''
-            if note_txt:
-                for sub in note_txt.splitlines():
-                    s = sub.strip()
-                    if s:
-                        lines.append(f"    • {s}")
 
         header = (self.start_end_time or '').replace(' ', '')
         return header, lines
@@ -959,7 +957,7 @@ class ProjectDemoForm(models.Model):
             cake_bits.insert(0, cake)
         cake_txt = ', '.join(cake_bits)
 
-        flower = ("Taze" if self.table_fresh_flowers else "") or ("Kuru" if self.table_dried_flowers else "")
+        flower = ("Canlı" if self.table_fresh_flowers else "") or ("Kuru" if self.table_dried_flowers else "")
         notes = self._html_to_text(self.table_description)
 
         lines = []
@@ -1050,9 +1048,6 @@ class ProjectDemoForm(models.Model):
         if dessert:           lines.append(f"➖Tatlı : {dessert}")
         if dessert_ultra:     lines.append(f"➖Ultra Tatlı : {dessert_ultra}")
         if self.afterparty_street_food: lines.append("➖Sokak Lezzetleri")
-        if self.prehost_breakfast:
-            cnt = f" (x{int(self.prehost_breakfast_count)})" if self.prehost_breakfast_count else ""
-            lines.append(f"➖Kahvaltı Servisi{cnt}")
         if self.bar_alcohol_service:
             # Raki markası (seçiliyse)
             RAKI = dict(self._fields['bar_raki_brand']._description_selection(self.env))
@@ -1076,12 +1071,14 @@ class ProjectDemoForm(models.Model):
         return DJ_MAP.get(self.dj_person) or ("Diğer" if self.music_other else "")
 
     def _collect_menu_bar_notes(self):
-        """Menü ve Bar notlarını satır listesi olarak döndürür (WhatsApp formatına uygun)."""
+        """Menü ve Bar notlarını satır listesi olarak döndürür (WhatsApp formatına uygun).
+        Not satırları en altta toplanır ve normal alanlarla arasına <br/> eklenir.
+        """
         self.ensure_one()
-        lines = []
+        lines = []  # normal alanlar
+        notes = []  # notlar
 
         # --- Menü ---
-        # Selection etiketlerini kullanıcı dilinde al
         hot_sel = self.with_context(lang=self.env.user.lang).fields_get(['menu_hot_appetizer'])['menu_hot_appetizer'][
             'selection']
         hot_map = dict(hot_sel)
@@ -1092,8 +1089,10 @@ class ProjectDemoForm(models.Model):
 
         if self.menu_hot_appetizer_ultra:
             lines.append("➖Sıcak Ekstra : Rocket Shrimp")
+        if self.prehost_breakfast:
+            cnt = f" (x{int(self.prehost_breakfast_count)})" if self.prehost_breakfast_count else ""
+            lines.append(f"➖Kahvaltı Servisi - {cnt}")
 
-        # M2M isimlerini virgülle birleştir
         def names(m2m):
             return ", ".join(m2m.mapped('name')) if m2m else ""
 
@@ -1102,7 +1101,7 @@ class ProjectDemoForm(models.Model):
 
         meze_notes_txt = self._html_to_text(self.menu_meze_notes) if self.menu_meze_notes else ""
         if meze_notes_txt:
-            lines.append(f"➖Meze Notu : {meze_notes_txt}")
+            notes.append(f"➖Meze Notu : {meze_notes_txt}")  # NOT → en alta
 
         if self.menu_dessert_ids:
             lines.append(f"➖Tatlı : {names(self.menu_dessert_ids)}")
@@ -1112,10 +1111,9 @@ class ProjectDemoForm(models.Model):
 
         menu_notes_txt = self._html_to_text(self.menu_description) if self.menu_description else ""
         if menu_notes_txt:
-            lines.append(f"➖Menü Notu : {menu_notes_txt}")
+            notes.append(f"➖Menü Notu : {menu_notes_txt}")  # NOT → en alta
 
         # --- Bar ---
-        # Rakı markası selection’ı da yerelleştir
         raki_sel = self.with_context(lang=self.env.user.lang).fields_get(['bar_raki_brand'])['bar_raki_brand'][
             'selection']
         raki_map = dict(raki_sel)
@@ -1125,14 +1123,38 @@ class ProjectDemoForm(models.Model):
         else:
             lines.append("➖Alkollü içecek servisi : Yok")
             if self.bar_purchase_advice:
-                lines.append(f"➖Satın alma önerisi : {self.bar_purchase_advice}")
+                notes.append(f"➖Satın alma önerisi : {self.bar_purchase_advice}")  # NOT → en alta
 
         if self.bar_raki_brand:
             lines.append(f"➖Rakı Markası : {raki_map.get(self.bar_raki_brand, self.bar_raki_brand)}")
 
         bar_notes_txt = self._html_to_text(self.bar_description) if self.bar_description else ""
         if bar_notes_txt:
-            lines.append(f"➖Bar Notu : {bar_notes_txt}")
+            notes.append(f"➖Bar Notu : {bar_notes_txt}")  # NOT → en alta
+
+        # --- Ön ev sahibi kahvaltı (F&B) ---
+        if getattr(self, "prehost_breakfast", False):
+            cnt = f" (x{int(self.prehost_breakfast_count)})" if self.prehost_breakfast_count else ""
+            lines.append(f"➖Kahvaltı Servisi{cnt}")
+
+        # --- After Party F&B tek satır ---
+        af_items = []
+        if getattr(self, "afterparty_shot_service", False):
+            af_items.append("Shot Servisi")
+        if getattr(self, "afterparty_bbq_wraps", False):
+            af_items.append("BBQ Dürümleri")
+        if getattr(self, "afterparty_sushi", False) or getattr(self, "afterparty_street_food", False):
+            af_items.append("Street Food Atıştırmalık")
+
+        if af_items:
+            lines.append("➖After Party : " + ", ".join(af_items))
+
+        if getattr(self, "afterparty_more_drinks", False):
+            lines.append("➖After Party İçecekleri : Daha fazla çeşit içki")
+
+        if notes:
+            lines.append("<br/>")
+            lines.extend(notes)
 
         return lines
 
@@ -1145,7 +1167,6 @@ class ProjectDemoForm(models.Model):
         expected = "-"  # Ayrı alan varsa bağlayın
         koordinatör = self._collect_coordinators() or "-"
         dj = self._display_dj() or "-"
-
         # Ek paketler, program, ulașım, notlar
         packages = self._collect_packages()
         program_header, program_lines = self._collect_program()
@@ -1153,21 +1174,15 @@ class ProjectDemoForm(models.Model):
         genel = self._collect_general_notes()
         dekor = self._collect_decor_notes()
         muzik = self._collect_music_notes()
-        ikram = self._collect_treats()
         mb_lines = self._collect_menu_bar_notes()
-
-        # Yardımcılar
         def ul(items):
             items = [i for i in (items or []) if (i or "").strip()]
+            ul_style = "list-style:none; margin:0; padding-left:0;"
+            li_style = "list-style:none; margin:0; padding:0;"
             if not items:
-                return "<ul><li>-</li></ul>"
-            return "<ul>" + "".join(f"<li>{E(i)}</li>" for i in items) + "</ul>"
-
-        def ol(items):
-            items = [i for i in (items or []) if (i or "").strip()]
-            if not items:
-                return ""
-            return "<ol>" + "".join(f"<li>{E(i)}</li>" for i in items) + "</ol>"
+                return f"<ul style='{ul_style}'><li style='{li_style}'>-</li></ul>"
+            lis = "".join(f"<li style='{li_style}'>{E(i)}</li>" for i in items)
+            return f"<ul style='{ul_style}'>{lis}</ul>"
 
         def nl2br(s):
             return E(s).replace("\n", "<br>") if s else ""
@@ -1194,7 +1209,7 @@ class ProjectDemoForm(models.Model):
           {ul(program_lines)}
     
           <h4>⚓️ Tekne Saatleri:</h4>
-          {ol(transport_lines)}
+          {ul(transport_lines)}
     
           <h4>🔴 Genel Notlar:</h4>
           {ul(genel)}
@@ -1214,7 +1229,6 @@ class ProjectDemoForm(models.Model):
           <p>{nl2br(other_all) if other_all else "-"}</p>
     
           <h4>🍭 İkramlar:</h4>
-          {ul(ikram)}
         </div>
         """.strip()
         return html
@@ -1233,7 +1247,6 @@ class ProjectDemoForm(models.Model):
                 'default_body': html_body,  # HTML gövde (escape edilmemiş)
             }
 
-            # Formu modal olarak aç
             view = self.env.ref('mail.email_compose_message_wizard_form')
             return {
                 'type': 'ir.actions.act_window',

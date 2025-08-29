@@ -66,3 +66,10 @@ class CakeChoice(models.Model):
 class DemoFormPrint(models.Model):
     _name='demo.form.print'
     name=fields.Char('Bölüm Adı')
+
+class DemoSeatPlan(models.Model):
+    _name='demo.seat.plan'
+    name=fields.Char('İsim')
+    picture=fields.Binary('Görsel')
+
+
