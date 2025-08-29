@@ -2084,7 +2084,8 @@
                         </div>
                     </t>
                 </main>
-
+            </t>
+              </t>
     </template>
     <!-- report entry point -->
 </odoo>
