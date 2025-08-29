@@ -438,6 +438,7 @@ class ProjectDemoForm(models.Model):
         'accommodation_service': ['Konaklama'],
         'dance_lesson': ['Dans Dersi'],
         'photo_homesession': ['Ev Çekimi'],
+        'prehost_breakfast': ['Kahvaltı'],
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
 
