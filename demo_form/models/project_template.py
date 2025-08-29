@@ -145,7 +145,7 @@ class ProjectProject(models.Model):
         miktarlarını toplar. Yalnızca onaylı siparişler (sale, done) dikkate alınır.
         Section/note satırları hariç tutulur.
         """
-        kisi_uoms = self.env['uom.uom'].search(['|', ('name', 'ilike', 'kişi'), ('name', 'ilike', 'kisi')])
+        kisi_uoms = self.env['uom.uom'].search(['|','|', ('name', 'ilike', 'kişi'), ('name', 'ilike', 'kisi'),('name', 'ilike', 'people')])
         kisi_uom_ids = set(kisi_uoms.ids)
 
         for project in self:
