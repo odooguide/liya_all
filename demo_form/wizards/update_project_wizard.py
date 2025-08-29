@@ -174,7 +174,7 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty or 0)
 
             if vals:
-                demo.write(vals)
+                demo.sudo().write(vals)
 
         order.state='sale'
         return {'type': 'ir.actions.act_window_close'}
