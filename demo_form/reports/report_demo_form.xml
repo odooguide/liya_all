@@ -131,7 +131,7 @@
                                             <tr>
                                                 <td style="padding:4px 6px; font-weight:600;">Wedding Type:</td>
                                                 <td style="padding:4px 6px;">
-                                                    <span t-esc="o.sale_template_id.name or ''"/>
+                                                    <span t-esc="o.sudo().sale_template_id.name or ''"/>
                                                 </td>
                                             </tr>
                                             <tr>
