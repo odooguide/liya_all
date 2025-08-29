@@ -605,7 +605,7 @@ class ProjectProject(models.Model):
             elite_fields = [
                 'photo_video_plus',
                 'afterparty_service', 'afterparty_shot_service',
-                'accommodation_service', 'dance_lesson','after_party'
+                'accommodation_service', 'dance_lesson','afterparty_street_food'
             ]
             ultra_extra = [
                 'music_live', 'music_percussion', 'music_trio',
