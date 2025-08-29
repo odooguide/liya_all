@@ -38,7 +38,7 @@
     </record>
 
     <template id="demo_form_report_layout">
-        <t t-call="web.html_container">
+              <t t-call="web.html_container">
             <t t-call="web.external_layout">
                 <style>
                     .liya-static-page{
@@ -87,21 +87,18 @@
     .seat-plan-cell img {
       max-width: 100%;
       max-height: 237mm;
-      display: inline-block;
+
     }
 
                 </style>
 
                 <main>
                     <t t-foreach="docs" t-as="o">
-                        <div t-attf-class="o_company_#{o.company_id.id}_layout header"
-                             style="text-align:center;padding-top:35mm;padding-left:180mm">
-                            <img t-if="docs.company_id.logo" style="width:100px"
-                                 t-att-src="image_data_uri(docs.company_id.logo)" alt="Logo"/>
+                        <div t-attf-class="o_company_#{o.company_id.id}_layout header" style="text-align:center;padding-top:35mm;padding-left:180mm">
+                            <img t-if="docs.company_id.logo" style="width:100px" t-att-src="image_data_uri(docs.company_id.logo)" alt="Logo"/>
 
                         </div>
-                        <div class="page liya-theme"
-                             style="font-family: 'Helvetica', Arial, sans-serif; position:relative;font-size:11pt">
+                        <div class="page liya-theme" style="font-family: 'Helvetica', Arial, sans-serif; position:relative;font-size:11pt">
                             <div style="margin:2px 0 8px 0; overflow:hidden;">
                                 <!-- Sol sütun kadar alan: başlık -->
                                 <div style="float:left; width:100%; text-align:center;">
@@ -113,8 +110,7 @@
                                 <!-- Sağ sütun: logo -->
                                 <div style="clear:both;"/>
                             </div>
-                            <table class="table table-borderless"
-                                   style="width:100%; border-collapse:separate; border-spacing:5px 0; margin-bottom:15px;font-size:14pt">
+                            <table class="table table-borderless" style="width:100%; border-collapse:separate; border-spacing:5px 0; margin-bottom:15px;font-size:14pt">
                                 <tr>
                                     <!-- Event Summary -->
                                     <td style="width:50%; vertical-align:top; border:1px solid #4a8599;                padding:12px; box-sizing:border-box; line-height:1.3;">
@@ -177,18 +173,14 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"
-                                                    style="padding:4px 6px; font-weight:600; vertical-align:top;line-height:12pt">
+                                                <td colspan="2" style="padding:4px 6px; font-weight:600; vertical-align:top;line-height:12pt">
                                                     Special Notes:
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"
-                                                    style="padding:4px 6px; vertical-align:top;font-style:italic;">
+                                                <td colspan="2" style="padding:4px 6px; vertical-align:top;font-style:italic;">
                                                     <t t-if="o.special_notes_preview">
-                                                        <div t-field="o.special_notes_preview"
-                                                             t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                                             style="word-break:break-word;"/>
+                                                        <div t-field="o.special_notes_preview" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
                                                     </t>
                                                     <t t-if="not o.special_notes_preview">-</t>
                                                 </td>
@@ -201,9 +193,7 @@
                                 <div style="margin-top:8px; font-family:Helvetica, Arial, sans-serif;">
                                     <div style="border:1px solid #4a8599; padding:10px; box-sizing:border-box;font-style:italic;">
                                         <strong>Special Notes (continued):</strong>
-                                        <div t-field="o.special_notes_remaining"
-                                             t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                             style="word-break:break-word;"/>
+                                        <div t-field="o.special_notes_remaining" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
                                     </div>
                                 </div>
                             </t>
@@ -223,8 +213,7 @@
                                     <tbody>
                                         <t t-foreach="o.schedule_line_ids" t-as="line">
                                             <tr>
-                                                <td style="padding:6px 8px; vertical-align:top;color:#2D7F97;"><span
-                                                        t-esc="line_index + 1"/>.
+                                                <td style="padding:6px 8px; vertical-align:top;color:#2D7F97;"><span t-esc="line_index + 1"/>.
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top;">
                                                     <strong>
@@ -260,9 +249,7 @@
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top;font-style:italic;">
                                                     <t t-if="line.location_notes">
-                                                        <div t-field="line.location_notes"
-                                                             t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                                             style="word-break:break-word;"/>
+                                                        <div t-field="line.location_notes" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
                                                     </t>
 
                                                 </td>
@@ -286,8 +273,7 @@
                                     <tbody>
                                         <t t-foreach="o.transport_line_ids.sorted('sequence')" t-as="line">
                                             <tr>
-                                                <td style="padding:6px 8px; vertical-align:top;color:#2D7F97;"><span
-                                                        t-esc="line_index+1"/>.
+                                                <td style="padding:6px 8px; vertical-align:top;color:#2D7F97;"><span t-esc="line_index+1"/>.
                                                 </td>
                                                 <td style="padding:6px 8px; vertical-align:top;">
                                                     <strong>
@@ -379,9 +365,7 @@
                                                 Notes:
                                             </td>
                                             <td style="padding:4px 8px;">
-                                                <span t-field="o.menu_description"
-                                                      t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                                      style="word-break:break-word;"/>
+                                                <span t-field="o.menu_description" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
                                             </td>
                                         </tr>
@@ -497,8 +481,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div t-field="o.bar_description" t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                     style="word-break:break-word;"/>
+                                <div t-field="o.bar_description" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
                             </div>
 
                             <!-- E) AFTER PARTY -->
@@ -887,8 +870,7 @@
                             <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
                                 <h6>I) PHOTOGRAPHY</h6>
 
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600; width:180px;">Standard Photography
                                             Service:
@@ -1012,8 +994,7 @@
                             <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
                                 <h6>J) MUSIC</h6>
 
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">Live Music:</td>
                                         <td style="padding:4px 8px;">
@@ -1080,8 +1061,7 @@
                                 <h6>K) TABLE DECORATION
                                 </h6>
 
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600; white-space:nowrap;">Table Theme:
                                         </td>
@@ -1107,8 +1087,7 @@
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">Charger:</td>
                                         <td style="padding:4px 8px;">
-                                            <t t-set="chargers"
-                                               t-value="o.env['project.demo.table.charger'].search([])"/>
+                                            <t t-set="chargers" t-value="o.env['project.demo.table.charger'].search([])"/>
                                             <t t-if="chargers">
                                                 <t t-foreach="chargers" t-as="it">
                                                     <span t-esc="it.name"/>
@@ -1131,8 +1110,7 @@
                                             &amp; Runner Design:
                                         </td>
                                         <td style="padding:4px 8px;">
-                                            <t t-set="designs"
-                                               t-value="o.env['project.demo.runner.design'].search([])"/>
+                                            <t t-set="designs" t-value="o.env['project.demo.runner.design'].search([])"/>
                                             <t t-if="designs">
                                                 <t t-foreach="designs" t-as="it">
                                                     <span t-esc="it.name"/>
@@ -1264,8 +1242,7 @@
 
                                 <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
                                     <h6>L) OTHER NOTES</h6>
-                                    <table class="table table-borderless"
-                                           style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                    <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                         <tr>
                                             <td style="padding:4px 8px; font-weight:600;">RSVP:</td>
                                             <td style="padding:4px 8px;padding-left:0">
@@ -1324,8 +1301,7 @@
                                 <!-- 1) Significant Songs -->
                                 <div style="font-weight:700; font-size:11pt; margin-bottom:6px;">1) SIGNIFICANT SONGS
                                 </div>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt; margin-bottom:10px;">
                                     <tr>
                                         <td style="padding:4px 8px; width:220px; font-weight:600;">A — Entrance Song:
                                         </td>
@@ -1414,16 +1390,14 @@
                                     You may choose the type of music for the four different parts of your wedding.
                                 </div>
 
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <!-- Cocktail -->
                                         <td style="vertical-align:top; width:25%; padding:6px 10px; border-right:1px solid #cfd8dc;">
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
                                                 Cocktail
                                             </div>
-                                            <table class="table table-borderless"
-                                                   style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Lounge (
                                                         <t t-if="o.cocktail_lounge">
@@ -1480,8 +1454,7 @@
                                             <div style="font-weight:700; margin-bottom:3px;">Type of Music at the
                                                 Dinner
                                             </div>
-                                            <table class="table table-borderless"
-                                                   style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Lounge (
                                                         <t t-if="o.dinner_lounge">
@@ -1530,8 +1503,7 @@
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the
                                                 Party
                                             </div>
-                                            <table class="table table-borderless"
-                                                   style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Turkish (
                                                         <t t-if="o.party_turkish">
@@ -1620,8 +1592,7 @@
                                             <div style="font-weight:700; margin-bottom:6px;">Type of Music at the After
                                                 Party
                                             </div>
-                                            <table class="table table-borderless"
-                                                   style="width:100%; border-collapse:collapse;">
+                                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                                 <tr>
                                                     <td style="padding:2px 0;">Turkish (
                                                         <t t-if="o.after_turkish">
@@ -1743,8 +1714,7 @@
                             <!-- 4) REQUEST SONGS -->
                             <div style="margin-top:6px; font-family:Helvetica, Arial, sans-serif;">
                                 <h6>4) REQUEST SONGS</h6>
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;max-height:50px">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;max-height:50px">
                                     <tr>
                                         <!-- Cocktail -->
                                         <td style="vertical-align:top; width:25%; padding-bottom:2px; border-right:1px solid #cfd8dc;">
@@ -1752,9 +1722,7 @@
                                             </div>
                                             <div style="white-space:pre-wrap;font-size:11pt">
                                                 <t t-if="o.cocktail_request">
-                                                    <div t-field="o.cocktail_request"
-                                                         t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                                         style="word-break:break-word;"/>
+                                                    <div t-field="o.cocktail_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
                                                 </t>
                                                 <t t-else="">
                                                     <span style="color:#999;">-</span>
@@ -1766,9 +1734,7 @@
                                             <div style="font-weight:600;">Dinner request songs:</div>
                                             <div style="white-space:pre-wrap;font-size:11pt">
                                                 <t t-if="o.dinner_request">
-                                                    <div t-field="o.dinner_request"
-                                                         t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                                         style="word-break:break-word;"/>
+                                                    <div t-field="o.dinner_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
                                                 </t>
                                                 <t t-else="">
@@ -1781,9 +1747,7 @@
                                             <div style="font-weight:600;">Party request songs:</div>
                                             <div style="white-space:pre-wrap;font-size:11pt">
                                                 <t t-if="o.party_request">
-                                                    <div t-field="o.party_request"
-                                                         t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                                         style="word-break:break-word;"/>
+                                                    <div t-field="o.party_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
                                                 </t>
                                                 <t t-else="">
@@ -1798,9 +1762,7 @@
                                             </div>
                                             <div style="white-space:pre-wrap;font-size:11pt">
                                                 <t t-if="o.afterparty_request">
-                                                    <div t-field="o.afterparty_request"
-                                                         t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                                         style="word-break:break-word;"/>
+                                                    <div t-field="o.afterparty_request" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
                                                 </t>
                                                 <t t-else="">
@@ -1819,8 +1781,7 @@
                                 </h6>
                                 <div style="min-height:36px; border-bottom:1px dashed #999; padding-bottom:2px;font-size:11pt">
                                     <t t-if="o.ban_songs">
-                                        <div t-field="o.ban_songs" t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                             style="word-break:break-word;"/>
+                                        <div t-field="o.ban_songs" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
 
                                     </t>
                                     <t t-else="">
@@ -1852,8 +1813,7 @@
                                     communication info.
                                 </div>
 
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt;">
                                     <tr>
                                         <!-- DJ 1 -->
                                         <td style="padding:0 10px 0 0; white-space:nowrap; vertical-align:middle;">
@@ -1887,8 +1847,7 @@
                         <!-- ===== STATİK SAYFA: AÇIK RIZA METNİ (TR) ===== -->
                     <t t-if="'Açık Rıza Metni' in o.demo_part_ids.mapped('name')">
 
-                        <div class="page liya-static-page"
-                             style="font-family:Helvetica, Arial, sans-serif; clear:both;line-height:15pt">
+                        <div class="page liya-static-page" style="font-family:Helvetica, Arial, sans-serif; clear:both;line-height:15pt">
 
                             <!-- Başlık -->
                             <div style="text-align:center; margin-bottom:10px;">
@@ -1954,8 +1913,7 @@
                             </div>
 
                             <!-- Rıza seçenekleri -->
-                            <table class="table table-borderless"
-                                   style="width:100%; border-collapse:collapse; margin-top:10px; font-size:10.5pt;">
+                            <table class="table table-borderless" style="width:100%; border-collapse:collapse; margin-top:10px; font-size:10.5pt;">
                                 <tr>
                                     <td style="padding:6px 8px; width:26px;">
                                         <span style="display:inline-block; width:14px; height:14px; border:1px solid #333; vertical-align:middle;"/>
@@ -1974,8 +1932,7 @@
                             <div style="margin-top:12px; border:1px solid #333; padding:10px; font-size:10.5pt;">
                                 <div style="margin-bottom:8px; font-weight:700;">Veri Sahibi</div>
 
-                                <table class="table table-borderless"
-                                       style="width:100%; border-collapse:collapse; font-size:10.5pt;">
+                                <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:10.5pt;">
                                     <tr>
                                         <td style="padding:6px 8px; width:120px;">Adı Soyadı:</td>
                                         <td style="padding:6px 8px;"/>
@@ -1995,8 +1952,7 @@
                         <!-- ===== STATİK SAYFA: LİYA MÜŞTERİ AYDINLATMA METNİ (TR) ===== -->
                     <t t-if="'Müşteri Aydınlatma Metni' in o.demo_part_ids.mapped('name')">
 
-                        <div class="page liya-static-page"
-                             style="font-family:Helvetica, Arial, sans-serif; clear:both; line-height:15pt">
+                        <div class="page liya-static-page" style="font-family:Helvetica, Arial, sans-serif; clear:both; line-height:15pt">
 
                             <div style="text-align:center; margin-bottom:8px;">
                                 <div style="font-weight:700; font-size:11pt; letter-spacing:0.3px;">LİYA
@@ -2015,8 +1971,7 @@
                             </div>
 
                             <!-- İki sütunlu içerik -->
-                            <table class="table table-borderless"
-                                   style="width:100%; border-collapse:collapse; font-size:11pt; line-height:15pt; height:100vh; table-layout:fixed;">
+                            <table class="table table-borderless" style="width:100%; border-collapse:collapse; font-size:11pt; line-height:15pt; height:100vh; table-layout:fixed;">
 
                                 <tr>
                                     <!-- Sol sütun -->
@@ -2102,18 +2057,19 @@
                             </table>
                         </div>
                     </t>
+                    <t t-if="o.demo_seat_plan">
                         <div class="page liya-static-page">
-                            <div class="seat-plan-page">
+                              <div class="seat-plan-page">
                               <div class="seat-plan-cell">
                                 <t t-if="o.demo_seat_plan and o.demo_seat_plan.picture">
-                                  <img t-att-src="'data:image/png;base64,%s' % (o.demo_seat_plan.picture)" alt="Oturma Planı"/>
-                                </t>
-                                <t t-else="">
-                                  <span>Oturma planı görseli bulunamadı.</span>
-                                </t>
+                <img t-if="o.demo_seat_plan.picture"
+                     t-att-src="image_data_uri(o.demo_seat_plan.picture)"
+                     alt="Oturma Planı"/>                            </t>
+
                               </div>
                             </div>
-                          </div>
+                            </div>
+                          </t>
                         <div class="footer" style="padding-top:10px;">
                             <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                                 <tr>
@@ -2129,7 +2085,6 @@
                     </t>
                 </main>
             </t>
-        </t>
     </template>
     <!-- report entry point -->
 </odoo>
