@@ -1153,7 +1153,7 @@ class ProjectDemoForm(models.Model):
             lines.append("➖After Party İçecekleri : Daha fazla çeşit içki")
 
         if notes:
-            lines.append("<br/>")
+            lines.append()
             lines.extend(notes)
 
         return lines

@@ -134,54 +134,30 @@ class ProjectProject(models.Model):
     )
 
     @api.depends(
-        'related_sale_order_ids',
         'related_sale_order_ids.order_line.product_uom',
         'related_sale_order_ids.order_line.product_uom_qty',
-        'related_sale_order_ids.state',
     )
     def _compute_so_people_count(self):
+        # UoM'i 'Kişi/kisi/people' olanları bul
         kisi_uoms = self.env['uom.uom'].search([
             '|', '|',
             ('name', 'ilike', 'kişi'),
             ('name', 'ilike', 'kisi'),
             ('name', 'ilike', 'people'),
         ])
-        kisi_uom_ids = set(kisi_uoms.ids)
+        kisi_uom_ids = kisi_uoms.ids
 
-        if not kisi_uom_ids:
-            for project in self:
-                project.so_people_count = 0
-            return
-
-        proj_to_orders = {
-            project.id: project.related_sale_order_ids.ids
-            for project in self
-        }
-        all_order_ids = {so_id for ids in proj_to_orders.values() for so_id in ids}
-
-        if not all_order_ids:
-            for project in self:
-                project.so_people_count = 0
-            return
-
-        # Tek seferde tüm ilgili siparişlerin Kişi UoM’lu miktar toplamları
-        domain = [
-            ('order_id', 'in', list(all_order_ids)),
-            ('order_id.state', 'in', ('sale', 'done')),  # gerekirse durum filtresini genişlet
-            ('product_uom', 'in', list(kisi_uom_ids)),
-            ('display_type', '=', False),  # section/note satırlarını hariç tut
-        ]
-        grouped = self.env['sale.order.line'].read_group(
-            domain=domain,
-            fields=['product_uom_qty:sum', 'order_id'],
-            groupby=['order_id'],
-        )
-        sum_by_order = {g['order_id'][0]: (g.get('product_uom_qty_sum') or 0.0) for g in grouped}
-
-        # Her proje için kendi bağlı siparişlerinin toplamını yaz
         for project in self:
-            total = sum(sum_by_order.get(so_id, 0.0) for so_id in proj_to_orders.get(project.id, []))
-            project.so_people_count = int(total)
+            if not project.related_sale_order_ids or not kisi_uom_ids:
+                project.so_people_count = 0
+                continue
+
+            lines = self.env['sale.order.line'].search([
+                ('order_id', 'in', project.related_sale_order_ids.ids),
+                ('product_uom', 'in', kisi_uom_ids),
+                ('display_type', '=', False),  # section/note hariç
+            ])
+            project.so_people_count = int(sum(lines.mapped('product_uom_qty')))
 
     @api.depends('reinvoiced_sale_order_id')
     def _compute_related_sale_orders(self):
@@ -395,7 +371,7 @@ class ProjectProject(models.Model):
     
     def action_schedule_meeting(self):
         self.ensure_one()
-        if 'duygu' not in self.user.env.name.lower():
+        if 'duygu' not in (self.env.user.name or '').lower():
             self._check_project_rights()
 
         action = self.env.ref('calendar.action_calendar_event').sudo().read()[0]
