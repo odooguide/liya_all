@@ -156,12 +156,6 @@ class SaleOrder(models.Model):
                 raise UserError(_("Etkinlik tarihi seçilmeden satışı onaylayamazsınız."))
             if not order.people_count > 0:
                 raise UserError(_("Kişi sayısı girmeden satışı onaylayamazsınız."))
-            if order.sale_order_template_id.name.lower() in ['ek protokol','extra protocol']:
-                if not order.confirmed_contract:
-                    raise UserError(_("Kontrat olmadan satışı onaylayamazsınız."))
-                if not order.confirmed_date:
-                    raise UserError(_("Kontrat tarihi olmadan satışı onaylayamazsınız."))
-
         return res
 
     @api.model_create_multi

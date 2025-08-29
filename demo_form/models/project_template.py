@@ -696,15 +696,8 @@ class ProjectProject(models.Model):
 
     def action_compose_whatsapp_message(self):
         self.ensure_one()
+        self._check_project_rights()
         project = self
-
-        user = self.env.user
-        is_admin = user.has_group('base.group_system')
-
-        if project.user_id and project.user_id != self.env.user and not is_admin:
-            raise AccessError(
-                _("Bu buton sadece bu projenin yöneticisi (%s) tarafından kullanılabilir.") % (project.user_id.name,))
-
 
         demo = self.env['project.demo.form'].search([('project_id', '=', project.id)], limit=1)
         if not demo:
