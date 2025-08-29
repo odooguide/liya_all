@@ -75,20 +75,19 @@
                     .liya-theme table {line-height:10pt; font-size:11pt;}
 
                     .seat-plan-page {
-      height: 237mm;
-      width: 100%;
-      display: table;
-    }
-    .seat-plan-cell {
-      display: table-cell;
-      vertical-align: middle;
-      text-align: center;
-    }
-    .seat-plan-cell img {
-      max-width: 100%;
-      max-height: 237mm;
-
-    }
+                      height: 237mm;
+                      width: 100%;
+                      display: table;
+                    }
+                    .seat-plan-cell {
+                      display: table-cell;
+                      vertical-align: middle;
+                      text-align: center;
+                    }
+                    .seat-plan-cell img {
+                      max-width: 100%;
+                      max-height: 237mm;
+                    }
 
                 </style>
 
@@ -110,11 +109,11 @@
                                 <!-- Sağ sütun: logo -->
                                 <div style="clear:both;"/>
                             </div>
-                            <table class="table table-borderless" style="width:100%; border-collapse:separate; border-spacing:5px 0; margin-bottom:15px;font-size:14pt">
+                            <table class="table table-borderless" style="width:100%; border-collapse:separate; border-spacing:5px 0; margin-bottom:15px;">
                                 <tr>
                                     <!-- Event Summary -->
                                     <td style="width:50%; vertical-align:top; border:1px solid #4a8599;                padding:12px; box-sizing:border-box; line-height:1.3;">
-                                        <table style="width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif;">
+                                        <table style="width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif;font-size:13pt;">
                                             <tr>
                                                 <td style="padding:4px 6px; font-weight:600; width:140px;">Invitation
                                                     Owner:
@@ -164,7 +163,7 @@
 
                                     <!-- Details -->
                                     <td style="width:50%; vertical-align:top; border:1px solid #4a8599;                padding:12px; box-sizing:border-box; line-height:1.3;">
-                                        <table style="width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif;">
+                                        <table style="width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif;font-size:13pt">
                                             <tr>
                                                 <td style="padding:4px 6px; font-weight:600; width:140px;">Demo Date:
                                                 </td>
@@ -180,8 +179,7 @@
                                             <tr>
                                                 <td colspan="2" style="padding:4px 6px; vertical-align:top;font-style:italic;">
                                                     <t t-if="o.special_notes_preview">
-                                                        <div t-field="o.special_notes_preview" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
-                                                    </t>
+ <div t-field="o.special_notes_preview" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="white-space:pre-line; word-break:break-word;"/>                                                    </t>
                                                     <t t-if="not o.special_notes_preview">-</t>
                                                 </td>
                                             </tr>
@@ -251,12 +249,16 @@
                                                     <t t-if="line.location_notes">
                                                         <div t-field="line.location_notes" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
                                                     </t>
-
                                                 </td>
                                             </tr>
+
                                         </t>
                                     </tbody>
                                 </table>
+                                 <div style="padding:4px 8px; width:100%">
+                                        <span t-field="o.schedule_description" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
+                                </div>
+
                             </div>
                             <div style="display:block; margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
                                 <h6 style="margin-bottom:8px;">B) TRANSPORT SCHEDULE</h6>
@@ -301,9 +303,15 @@
                                                     </t>
                                                 </td>
                                             </tr>
+
                                         </t>
                                     </tbody>
+
                                 </table>
+                                <div style="padding:4px 8px;width:100%">
+                                                <span t-field="o.transportation_description" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
+
+                                            </div>
                             </div>
                             <!-- C) MENÜ NOTLARI -->
                             <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
@@ -2062,9 +2070,7 @@
                               <div class="seat-plan-page">
                               <div class="seat-plan-cell">
                                 <t t-if="o.demo_seat_plan and o.demo_seat_plan.picture">
-                <img t-if="o.demo_seat_plan.picture"
-                     t-att-src="image_data_uri(o.demo_seat_plan.picture)"
-                     alt="Oturma Planı"/>                            </t>
+                <img t-if="o.demo_seat_plan.picture" t-att-src="image_data_uri(o.demo_seat_plan.picture)" alt="Oturma Planı"/>                            </t>
 
                               </div>
                             </div>
@@ -2085,7 +2091,7 @@
                     </t>
                 </main>
             </t>
-              </t>
+        </t>
     </template>
     <!-- report entry point -->
 </odoo>
