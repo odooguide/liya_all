@@ -455,7 +455,7 @@
                                        widget="html" colspan="2" nolabel="1"/>
                             </group>
                             <group>
-                                <field name="demo_part_ids"/>
+                                <field name="demo_part_ids" widget="many2many_tags"/>
                                 <field name="demo_seat_plan"/>
                             </group>
                         </page>

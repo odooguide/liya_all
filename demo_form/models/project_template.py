@@ -640,15 +640,11 @@ class ProjectProject(models.Model):
         """stage_id'nin comodel'ini dinamik bul ve 'Tamamlanan/Done/Completed/Bitti' benzeri bir stage getir."""
         field = self._fields.get('stage_id')
         if not field or field.type != 'many2one':
-            return self.env['ir.model'].browse()  # boş recordset
-
+            return self.env['ir.model'].browse()
         model_name = getattr(field, 'comodel_name', False)
         if not model_name:
             return self.env['ir.model'].browse()
-
         Stage = self.env[model_name].sudo()
-
-        # Önce isimden bulmaya çalış
         stage = Stage.search([
             '|', '|', '|', '|',
             ('name', '=', 'Tamamlanan'),
@@ -665,12 +661,10 @@ class ProjectProject(models.Model):
             stage = Stage.search([('is_closed', '=', True)], limit=1)
             if stage:
                 return stage
-
         if 'fold' in Stage._fields:
             stage = Stage.search([('fold', '=', True)], limit=1)
             if stage:
                 return stage
-
         return self.env[model_name].browse()
 
     @api.model
