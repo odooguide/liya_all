@@ -814,7 +814,7 @@ class ProjectDemoForm(models.Model):
     def _collect_coordinators(self):
         """Projeye bağlı ana siparişteki koordinatör isimlerini topla (varsa)."""
         self.ensure_one()
-        order = self.project_id.reinvoiced_sale_order_id if self.project_id else False
+        order = self.project_id.sudo().reinvoiced_sale_order_id if self.project_id else False
         if not order:
             return ""
         # Farklı kurulumlar için sağlam toplama
@@ -1195,7 +1195,7 @@ class ProjectDemoForm(models.Model):
         html = f"""
         <div>
           <p>🏁 <b>Tarih:</b> {E(tarih)}</p>
-          <p>👩‍❤️‍👨 <b>Çiftimiz:</b> {self.project_id.reinvoiced_sale_order_id.opportunity_id.name}</p>
+          <p>👩‍❤️‍👨 <b>Çiftimiz:</b> {self.project_id.sudo().reinvoiced_sale_order_id.opportunity_id.name}</p>
           <p>🔳 <b>Düğün Tipi:</b> {E(tip)}</p>
           <p>🟡 <b>Kişi sayısı:</b> {E(guest)}</p>
           <p>🟢 <b>Beklenen:</b> {E(expected)}</p>
