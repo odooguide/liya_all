@@ -731,7 +731,7 @@
                                                 </t>
                                             </div>
                                             <t t-if="o.prehost_notes">
-                                                <div style="margin-top:4px; font-style:italic; font-size:11pt;font-weight:500">
+                                                <div style="margin-top:4px; font-style:italic; font-size:11pt;font-weight:600">
                                                     <span t-field="o.prehost_notes"/>
                                                 </div>
                                             </t>
@@ -744,7 +744,7 @@
                                             </h6>
                                             <div style="margin-bottom:4px; font-weight:700;">
                                                 <span>Hotel:</span>
-                                                <span style="border-bottom:1px solid #000; padding-left:4px; padding-right:60px; display:inline-block;">
+                                                <span style="border-bottom:1px solid #000; padding-left:4px; display:inline-block;">
                                                     <span t-esc="o.accommodation_hotel or ''"/>
                                                 </span>
                                             </div>
@@ -835,11 +835,11 @@
                                             </t>
                                             <t t-if="not o.hair_other"/>
                                             )
-                                            <span style="font-style:italic; color:#555;">Company:</span>
+                                            <span style="color:#555;">Company:</span>
                                             <span t-esc="o.hair_other_company or ''"/>,
-                                            <span style="font-style:italic; color:#555;">Responsible:</span>
+                                            <span style=" color:#555;">Responsible:</span>
                                             <span t-esc="o.hair_other_responsible or ''"/>,
-                                            <span style="font-style:italic; color:#555;">Phone:</span>
+                                            <span style=" color:#555;">Phone:</span>
                                             <span t-esc="o.hair_other_phone or ''"/>
                                         </li>
                                     </ul>
