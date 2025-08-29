@@ -1047,7 +1047,7 @@
                                         </td>
                                         <td style="padding:4px 8px; font-weight:600;">DJ:</td>
                                         <td style="padding:4px 8px;">
-                                            <t t-esc="o.dj_person"/>
+                                            <t t-esc="o._fields['dj_person'].convert_to_display_name(o.dj_person, o.env)"/>
                                         </td>
                                     </tr>
                                     <tr>

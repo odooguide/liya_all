@@ -266,7 +266,7 @@ class ProjectDemoForm(models.Model):
     music_dj_fatih = fields.Boolean(string="DJ: Fatih Aşçı")
     music_dj_engin = fields.Boolean(string="DJ: Engin Sadiki")
     music_other = fields.Boolean(string="Other")
-    dj_person = fields.Selection([('engin', 'DJ: Engin Sadiki'), ('fatih', 'DJ: Fatih Aşçı'), ('other', 'Diğer')],
+    dj_person = fields.Selection([('engin', 'Engin Sadiki'), ('fatih', 'Fatih Aşçı'), ('other', 'Diğer')],
                                  string='DJ')
     music_other_details = fields.Char(string="If Other, specify")
 
