@@ -79,6 +79,7 @@ class SaleOrderProjectWizard(models.TransientModel):
 
         project = self.env['project.project'].sudo().create(vals)
         done_stage = self.env['project.task.type'].search([
+            ('project_ids', 'in', project.id),
             ('name', '=', 'Done')
         ], limit=1)
         if not done_stage:
@@ -88,6 +89,7 @@ class SaleOrderProjectWizard(models.TransientModel):
                 'project_ids': [(4, project.id)],
             })
         cancel_stage = self.env['project.task.type'].search([
+            ('project_ids', 'in', project.id),
             ('name', '=', 'Cancel')
         ], limit=1)
         if not cancel_stage:

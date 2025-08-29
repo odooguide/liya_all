@@ -15,6 +15,10 @@
                 <field name="email_template_id"/>
                 <field name="communication_type"/>
                 <field name="task_tags"/>
+
+            </xpath>
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="invisible">1</attribute>
             </xpath>
         </field>
     </record>

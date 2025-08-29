@@ -9,6 +9,10 @@ from html import escape as E
 
 
 TIME_PATTERN = re.compile(r'(\d{1,2}):([0-5]\d)')
+DEFAULT_MEZE_NOTE = (
+    'Standart mezelere ilave olarak Kayısı Yahnisi, Lakerda ve '
+    'Ahtapot soğuk deniz mezeleri de servis edilir.'
+)
 
 
 class ProjectDemoForm(models.Model):
@@ -102,7 +106,7 @@ class ProjectDemoForm(models.Model):
         string="Menu Meze Notes",
         sanitize=True,
         help="Provide notes or instructions for the Menu page.",
-        default='Standart mezelere ilave olarak Kayısı Yahnisi, Lakerda ve Ahtapot soğuk deniz mezeleri de servis edilir.'
+        default=lambda self: self._default_menu_meze_notes()
     )
 
     # ── Bar page ─────────────────────────────────────────────────────────────
@@ -116,7 +120,8 @@ class ProjectDemoForm(models.Model):
         help="Does the bar include alcoholic beverages?"
     )
     alcohol_service=fields.Boolean(
-        string="Alcohol Service"
+        string="Alcohol Service",
+        default=True
     )
     bar_purchase_advice = fields.Char(
         string="If No, purchase advice",
@@ -436,6 +441,15 @@ class ProjectDemoForm(models.Model):
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
 
+    def _default_menu_meze_notes(self):
+        st_id = self.env.context.get('default_sale_template_id')
+        if not st_id:
+            return False
+        template = self.env['sale.order.template'].browse(st_id)
+        if (template.name or '').strip().lower() == 'ultra':
+            return DEFAULT_MEZE_NOTE
+        return False
+
     @api.onchange('confirmed_demo_form_plan')
     def _onchange_confirmed_contract_security(self):
         for rec in self:
@@ -621,21 +635,31 @@ class ProjectDemoForm(models.Model):
 
     def _onchange_breakfast(self):
         for rec in self:
-            lines = rec.schedule_line_ids.sorted('sequence')
-            transport_lines = rec.transport_line_ids
-            if not lines:
+            if not rec.schedule_line_ids:
                 continue
-            first_transport = transport_lines[0]
+
+            old = bool(rec._origin.prehost_breakfast) if rec._origin else False
+            new = bool(rec.prehost_breakfast)
+
+            if old == new:
+                continue
+            first_transport = rec.transport_line_ids.sorted('sequence')[:1]
+            if not first_transport:
+                continue
+
+            t = first_transport.time
             try:
-                dt_transport = datetime.strptime(first_transport.time, '%H:%M')
+                dt = datetime.strptime(t, '%H:%M')
             except (ValueError, TypeError):
                 continue
-            # subtract or add 30 minutes
-            if rec.prehost_breakfast:
-                dt_new_transport = dt_transport - timedelta(minutes=60)
+            if (not old and new):
+                dt_new = dt - timedelta(minutes=60)
+            elif (old and not new):
+                dt_new = dt + timedelta(minutes=60)
             else:
-                dt_new_transport = dt_transport + timedelta(minutes=60)
-            first_transport.time = dt_new_transport.strftime('%H:%M')
+                continue
+
+            first_transport.time = dt_new.strftime('%H:%M')
 
     def write(self, vals):
         if not (self.env.context.get('extra_protocol_confirmed') or
@@ -1153,7 +1177,7 @@ class ProjectDemoForm(models.Model):
             lines.append("➖After Party İçecekleri : Daha fazla çeşit içki")
 
         if notes:
-            lines.append()
+            lines.append("")
             lines.extend(notes)
 
         return lines

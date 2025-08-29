@@ -455,8 +455,8 @@
                                        widget="html" colspan="2" nolabel="1"/>
                             </group>
                             <group>
-                                <field name="demo_part_ids" widget="many2many_tags"/>
-                                <field name="demo_seat_plan"/>
+                                <field name="demo_part_ids" widget="many2many_checkboxes"/>
+                                <field name="demo_seat_plan" placeholder="Lütfen Seçiniz..."/>
                             </group>
                         </page>
 

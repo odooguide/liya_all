@@ -97,7 +97,7 @@ class ProjectProject(models.Model):
     )
     so_sale_template_id = fields.Many2one(
         'sale.order.template',
-        string='Satış Şablonu',
+        string='Paket',
         compute='_compute_crm_sale_fields',
         store=True,
         readonly=True
@@ -543,14 +543,16 @@ class ProjectProject(models.Model):
                 # After party & alt opsiyonlar
                 if pname == "After Party":
                     vals['afterparty_service'] = True
+                    vals['afterparty_street_food'] = True
                 if pname == "After Party Shot Servisi":
                     vals['afterparty_shot_service'] = True
                 if pname == "Sushi Bar":
                     vals['afterparty_sushi'] = True
                 if pname == "After Party Ultra":
-                    vals['afterparty_ultra'] = True  # constrains/onchange kontrol edecek
+                    vals['afterparty_ultra'] = True
                     vals['afterparty_fog_laser'] = True
                     vals['afterparty_shot_service'] = True
+                    vals['afterparty_bbq_wraps'] = True
                 if pname == "Dans Show":
                     vals['afterparty_dance_show'] = True
                 if pname == "Fog + Laser Show":
@@ -596,7 +598,7 @@ class ProjectProject(models.Model):
             elite_fields = [
                 'photo_video_plus',
                 'afterparty_service', 'afterparty_shot_service',
-                'accommodation_service', 'dance_lesson',
+                'accommodation_service', 'dance_lesson','after_party'
             ]
             ultra_extra = [
                 'music_live', 'music_percussion', 'music_trio',
@@ -690,7 +692,7 @@ class ProjectProject(models.Model):
         if not demo:
             raise UserError(_("Bu projeye bağlı mesaj kaynağı (demo form) bulunamadı."))
 
-        html_body = demo._build_whatsapp_message()
+        html_body = demo.sudo()._build_whatsapp_message()
 
         ctx = {
             'default_model': 'project.project',
