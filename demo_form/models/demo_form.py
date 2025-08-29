@@ -1057,8 +1057,8 @@ class ProjectDemoForm(models.Model):
 
     def _display_wedding_type(self):
         # Öncelik: satış şablonunun adı
-        if self.sale_template_id and self.sale_template_id.name:
-            return self.sale_template_id.name
+        if self.sudo().sale_template_id and self.sudo().sale_template_id.name:
+            return self.sudo().sale_template_id.name
         # Aksi halde selection label
         try:
             MP = dict(self._fields['wedding_type']._description_selection(self.env))
