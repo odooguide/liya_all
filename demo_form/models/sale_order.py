@@ -140,7 +140,7 @@ class SaleOrder(models.Model):
             if order.sale_order_template_id.name.lower() in ['ek protokol', 'extra protocol']:
                 if not order.confirmed_contract:
                     raise UserError(_("Kontrat olmadan satışı onaylayamazsınız."))
-                if not order.confirmed_date:
+                if not order.contract_date:
                     raise UserError(_("Kontrat tarihi olmadan satışı onaylayamazsınız."))
 
         if not self.env.context.get('skip_extra_protocol_on_confirm'):
