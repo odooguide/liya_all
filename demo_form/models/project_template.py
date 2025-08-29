@@ -383,13 +383,11 @@ class ProjectProject(models.Model):
         if 'duygu' not in (self.env.user.name or '').lower():
             self._check_project_rights()
 
-        action = self.env.ref('calendar.action_calendar_event').sudo().read()[0]
-
         demo_cat = self.env['calendar.event.type'].sudo().search([('name', 'ilike', 'demo')], limit=1)
 
         ctx = dict(
             self.env.context,
-            default_res_model='project.project',
+            default_res_model=self._name,
             default_res_id=self.id,
             default_name=self.name,
             default_start=fields.Datetime.now(),
@@ -398,19 +396,19 @@ class ProjectProject(models.Model):
         )
 
         cal_view = self.env.ref('calendar.view_calendar_event_calendar', raise_if_not_found=False)
-        views = action.get('views') or []
-        if cal_view:
-            views = [(cal_view.id, 'calendar')] + [(vid, vtype) for vid, vtype in views if vtype != 'calendar']
+        views = [(cal_view.id, 'calendar')] if cal_view else [(False, 'calendar')]
+        views += [(False, 'list'), (False, 'form')]
 
-        action.update({
-            'name': _('Meetings – %s') % self.name,
-            'view_mode': 'calendar,tree,form',
-            'views': views or [('calendar.view_calendar_event_calendar', 'calendar')],
-            'context': ctx,
-            'domain': [('res_model', '=', 'project.project'), ('res_id', '=', self.id)],
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Meetings – %s') % self.display_name,
+            'res_model': 'calendar.event',
+            'view_mode': 'calendar,list,form',
+            'views': views,
             'target': 'current',
-        })
-        return action
+            'domain': [],
+            'context': ctx,
+        }
 
     @api.depends('event_ids.start')
     def _compute_next_event(self):
