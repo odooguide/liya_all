@@ -38,7 +38,7 @@ class ProjectDemoForm(models.Model):
         ('plus', "Plus"),
         ('ultra', "Ultra")],
         string="Wedding Type")
-    guest_count = fields.Integer(string="Guest Count")
+    guest_count = fields.Integer(related='project_id.so_people_count',string="Guest Count")
     ceremony = fields.Selection([
         ('actual', "Actual"),
         ('staged', "Staged")],
