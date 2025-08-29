@@ -418,6 +418,7 @@ class ProjectDemoForm(models.Model):
     )
     minutes = fields.Integer(string='Adjust Time')
     demo_seat_plan=fields.Many2one('demo.seat.plan', string='Oturma Planı')
+    home_exit=fields.Boolean(string='Ev Çıkış Fotoğraf Çekimi')
 
     PRODUCT_REQUIREMENTS = {
         'photo_video_plus': ['Photo & Video Plus'],
@@ -439,6 +440,7 @@ class ProjectDemoForm(models.Model):
         'dance_lesson': ['Dans Dersi'],
         'photo_homesession': ['Ev Çekimi'],
         'prehost_breakfast': ['Kahvaltı'],
+        'home_exit': ['Ev Çıkış Fotoğraf Çekimi'],
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
 

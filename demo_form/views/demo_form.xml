@@ -273,6 +273,7 @@
                                 <group col="2">
                                     <field name="photo_print_service" widget="boolean_toggle"/>
                                     <field name="photo_homesession" widget="boolean_toggle"/>
+                                    <field name="home_exit" widget="boolean_toggle"/>
                                     <field name="photo_homesession_address"
                                            invisible="photo_homesession==False"/>
                                     <field name="photo_yacht_shoot" widget="boolean_toggle"
