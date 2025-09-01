@@ -131,6 +131,7 @@ class SaleOrderProjectWizard(models.TransientModel):
                 'communication_type': tmpl.communication_type,
                 'sale_line_id': sale_line_id,
                 'task_tags': tmpl.name,
+                'opportunity_name':order.opportunity_id.name or ''
             })
             if tmpl.communication_type == 'phone' and tmpl.email_template_id:
                 template = tmpl.email_template_id

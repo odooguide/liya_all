@@ -5,14 +5,11 @@ from lxml import html as lhtml
 from odoo.tools import html2plaintext, plaintext2html
 import re
 import json
-from html import escape as E
+from markupsafe import escape as E, Markup
 
 
 TIME_PATTERN = re.compile(r'(\d{1,2}):([0-5]\d)')
-DEFAULT_MEZE_NOTE = (
-    'Standart mezelere ilave olarak Kayısı Yahnisi, Lakerda ve '
-    'Ahtapot soğuk deniz mezeleri de servis edilir.'
-)
+
 
 
 class ProjectDemoForm(models.Model):
@@ -105,8 +102,6 @@ class ProjectDemoForm(models.Model):
     menu_meze_notes = fields.Html(
         string="Menu Meze Notes",
         sanitize=True,
-        help="Provide notes or instructions for the Menu page.",
-        default=lambda self: self._default_menu_meze_notes()
     )
 
     # ── Bar page ─────────────────────────────────────────────────────────────
@@ -248,7 +243,7 @@ class ProjectDemoForm(models.Model):
     photo_description = fields.Html(string="Photography Notes", sanitize=True)
     photo_standard = fields.Boolean(string="Standard Photo Service")
     photo_video_plus = fields.Boolean(string="Photo & Video Plus")
-    photo_homesession = fields.Boolean(string="Home Session")
+    #photo_homesession = fields.Boolean(string="Home Session")
     photo_homesession_address = fields.Char(string="Address")
     photo_print_service = fields.Boolean(string="Photo Print Service")
     photo_drone = fields.Boolean(string="Drone Camera")
@@ -263,8 +258,6 @@ class ProjectDemoForm(models.Model):
     music_live = fields.Boolean(string="Live Music")
     music_trio = fields.Boolean(string="Trio")
     music_percussion = fields.Boolean(string="Percussion")
-    music_dj_fatih = fields.Boolean(string="DJ: Fatih Aşçı")
-    music_dj_engin = fields.Boolean(string="DJ: Engin Sadiki")
     music_other = fields.Boolean(string="Other")
     dj_person = fields.Selection([('engin', 'Engin Sadiki'), ('fatih', 'Fatih Aşçı'), ('other', 'Diğer')],
                                  string='DJ')
@@ -518,20 +511,12 @@ class ProjectDemoForm(models.Model):
         'prehost_fred': ['FRED'],
         'accommodation_service': ['Konaklama'],
         'dance_lesson': ['Dans Dersi'],
-        'photo_homesession': ['Ev Çekimi'],
         'prehost_breakfast': ['Kahvaltı'],
         'home_exit': ['Ev Çıkış Fotoğraf Çekimi'],
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
 
-    def _default_menu_meze_notes(self):
-        st_id = self.env.context.get('default_sale_template_id')
-        if not st_id:
-            return False
-        template = self.env['sale.order.template'].browse(st_id)
-        if (template.name or '').strip().lower() == 'ultra':
-            return DEFAULT_MEZE_NOTE
-        return False
+
 
     @api.onchange('confirmed_demo_form_plan')
     def _onchange_confirmed_contract_security(self):
@@ -601,14 +586,11 @@ class ProjectDemoForm(models.Model):
                     names.add(n)
         return names
 
-    def _required_labels_for_field(self, field_name, prospective_val=None):
+    def _required_labels_for_field(self, field_name):
         """Bir alan için beklenen ürün etiket(ler)i; seçim alanı için prospective_val kullanılabilir."""
         mapping = self.PRODUCT_REQUIREMENTS.get(field_name)
         if not mapping:
             return []
-        if field_name == 'photo_harddisk_delivered':
-            val = prospective_val if prospective_val is not None else getattr(self, field_name)
-            return mapping.get(val, []) if val else []
         return mapping
 
     @api.depends('special_notes')
@@ -664,6 +646,26 @@ class ProjectDemoForm(models.Model):
                 rec.duration_days = turkish_days[dt.weekday()]
             else:
                 rec.duration_days = False
+
+    @api.onchange('afterparty_ultra')
+    def _onchange_afterparty_ultra(self):
+        if self.afterparty_ultra:
+            self.afterparty_shot_service = True
+            self.afterparty_sushi = True
+            self.afterparty_fog_laser = True
+            self.afterparty_bbq_wraps = True
+        else:
+            self.afterparty_shot_service = False
+            self.afterparty_sushi = False
+            self.afterparty_fog_laser = False
+            self.afterparty_bbq_wraps = False
+
+    @api.onchange('afterparty_service')
+    def _onchange_afterparty_ultra(self):
+        if self.afterparty_service:
+            self.afterparty_bbq_wraps = True
+        else:
+            self.afterparty_bbq_wraps = False
 
 
     def _onchange_start_end_time(self):
@@ -742,7 +744,8 @@ class ProjectDemoForm(models.Model):
 
         if not (self.env.context.get('extra_protocol_confirmed') or
                 self.env.context.get('skip_extra_protocol_check')):
-            if set(self.TRACKED_FIELDS).intersection(vals.keys()) or 'photo_harddisk_delivered' in vals:
+            changed_tracked = set(vals) & set(self.TRACKED_FIELDS)
+            if changed_tracked:
                 for rec in self:
                     field_name, missing_label = rec._first_missing_for_changed_fields(vals or {})
                     if missing_label:
@@ -933,34 +936,54 @@ class ProjectDemoForm(models.Model):
         return "-".join(dict.fromkeys(names))  # uniq + sırayı koru
 
     def _collect_packages(self):
-        """Ek paket/opsiyon etiketleri (True olanları)"""
-        pkg_map = [
-            ('afterparty_service',          'After Party'),
-            ('afterparty_ultra',            'After Party Ultra'),
-            ('afterparty_shot_service',     'Shot Servisi (After Party)'),
-            ('afterparty_sushi',            'Sushi Bar'),
-            ('afterparty_more_drinks',      'Daha Fazla Çeşit İçki (After party zamanı)'),
-            ('afterparty_fog_laser',        'Sis & Lazer'),
-            ('afterparty_bbq_wraps',        'BBQ Wraps'),
-            ('photo_video_plus',            'Photo & Video Plus'),
-            ('photo_drone',                 'Drone Kamera'),
-            ('menu_hot_appetizer_ultra',    'Rocket Shrimp'),
-            ('bar_alcohol_service',         'Yabancı İçki Servisi'),
-            ('prehost_barney',              'Barney'),
-            ('prehost_fred',                'Fred'),
-            ('prehost_breakfast',           'Breakfast Service'),
+        """Ek paket/opsiyon etiketleri.
+        - Form bayraklarından (Barney/Fred hariç) + satıştan alınan opsiyoneller (örn. Yacht).
+        """
+        flag_labels = [
+            ('afterparty_service', 'After Party'),
+            ('afterparty_ultra', 'After Party Ultra'),
+            ('afterparty_shot_service', 'Shot Servisi (After Party)'),
+            ('afterparty_sushi', 'Sushi Bar'),
+            ('afterparty_fog_laser', 'Sis & Lazer'),
+            ('afterparty_bbq_wraps', 'BBQ Dürümler'),
+            ('photo_video_plus', 'Photo & Video Plus'),
+            ('photo_drone', 'Drone Kamera'),
+            ('photo_yacht_shoot', 'Yacht Photo Shoot'),
+            ('menu_hot_appetizer_ultra', 'Roket Karides'),
+            ('bar_alcohol_service', 'Yabancı İçki Servisi'),
+            ('prehost_breakfast', 'Kahvaltı Çekimi'),
         ]
         out = []
-        for f, label in pkg_map:
+        for f, label in flag_labels:
             if getattr(self, f):
                 if f == 'prehost_breakfast' and self.prehost_breakfast_count:
                     out.append(f"{label} (x{int(self.prehost_breakfast_count)})")
                 else:
                     out.append(label)
+
+        purchased = self._get_purchased_product_names()
+        sold_to_label = {
+            'Yat Çekimi': 'Yat Çekimi',
+            'Yat Fotoğraf Çekimi': 'Yat Fotoğraf Çekimi',
+            'Fog + Laser Show': 'Sis & Lazer',
+            'After Party Shot Servisi': 'Shot Servisi (After Party)',
+            'Sushi Bar': 'Sushi Bar',
+            'Photo & Video Plus': 'Photo & Video Plus',
+            'Drone Kamera': 'Drone Kamera',
+            'Yabancı İçki Servisi': 'Yabancı İçki Servisi',
+            'Breakfast Service': 'Kahvaltı',
+            'After Party Ultra': 'After Party Ultra',
+            'After Party': 'After Party',
+            'Rocket Shrimp': 'Rocket Karides',
+        }
+        for name, label in sold_to_label.items():
+            if name in purchased and label not in out:
+                out.append(label)
+
         return out
 
     def _collect_program(self):
-        """Program akışı başlığı ve satırları (schedule_line_ids) + satır notları."""
+        """Program akışı başlığı ve satırları (schedule_line_ids) + satır notları (HAM HTML)."""
         EVENT_TR = {
             'Cocktail': 'Kokteyl', 'Kokteyl': 'Kokteyl',
             'Ceremony': 'Seremoni', 'Seremoni': 'Seremoni',
@@ -973,9 +996,17 @@ class ProjectDemoForm(models.Model):
             ev = (ln.event or '').strip()
             ev_tr = EVENT_TR.get(ev, ev or '-')
             tm = (ln.time or '').strip()
-
             base = f"➖{ev_tr}:  {tm}" if tm else f"➖{ev_tr}"
             lines.append(base)
+
+            note_html = (
+                    getattr(ln, 'notes_html', '') or getattr(ln, 'notes', '') or
+                    getattr(ln, 'note', '') or getattr(ln, 'description', '') or
+                    getattr(ln, 'location_notes', '')
+            )
+            if note_html and str(note_html).strip():
+                lines.append(note_html)
+                lines.append("&nbsp;")
 
         header = (self.start_end_time or '').replace(' ', '')
         return header, lines
@@ -983,7 +1014,7 @@ class ProjectDemoForm(models.Model):
     def _collect_transports(self):
         """Tekne/ulaşım satırları (transport_line_ids).
         - 'dönüş' içeren etiketlerde birden fazla liman varsa ayrı satırlar üretir.
-        - Satır notlarını alt satırda gösterir.
+        - Satır notlarını HAM HTML ekler.
         - Listenin en altına 'Ertesi gün çift dönüşü:' maddesini ekler (listede yoksa).
         """
         import re
@@ -1007,30 +1038,27 @@ class ProjectDemoForm(models.Model):
                     if p not in ports:
                         ports.append(p)
 
-            note_html = getattr(t, 'notes', '') or getattr(t, 'note', '') or getattr(t, 'description', '')
-            note_txt = self._html_to_text(note_html) if note_html else ''
-
+            # HAM HTML not
+            note_html = getattr(t, 'notes_html', '') or getattr(t, 'notes', '') or getattr(t, 'note', '') or getattr(t,
+                                                                                                                     'description',
+                                                                                                                     '')
             is_return = 'dönüş' in label.lower() or 'dönüşü' in label.lower()
 
             if is_return and len(ports) > 1:
                 for p in ports:
                     line = f"{i}/ {label}: {tm} {p}".rstrip()
                     out.append(line)
-                    if note_txt:
-                        for sub in note_txt.splitlines():
-                            s = sub.strip()
-                            if s:
-                                out.append(f"    • {s}")
+                    if note_html and str(note_html).strip():
+                        out.append(note_html)  # HAM HTML
+                        out.append("&nbsp;")
                     i += 1
             else:
                 suffix = f" {', '.join(ports)}" if ports else ""
                 line = f"{i}/ {label}: {tm}{suffix}".rstrip()
                 out.append(line)
-                if note_txt:
-                    for sub in note_txt.splitlines():
-                        s = sub.strip()
-                        if s:
-                            out.append(f"    • {s}")
+                if note_html and str(note_html).strip():
+                    out.append(note_html)  # HAM HTML
+                    out.append("&nbsp;")
                 i += 1
 
         if not found_next_day:
@@ -1117,18 +1145,36 @@ class ProjectDemoForm(models.Model):
             acc = self.accommodation_hotel or "Var"
             lines.append(f"➖Konaklama : {acc}")
 
-        if self.merasim:
+        if getattr(self, 'merasim', False):
             sel = self.with_context(lang=self.env.user.lang).fields_get(['merasim'])['merasim']['selection']
             merasim_label = dict(sel).get(self.merasim, self.merasim)
             lines.append(f"➖Merasim : {merasim_label}")
-        ceremony='VAR' if self.is_ceremony else 'YOK'
-        lines.append(f'➖Seramoni Düzeni : {ceremony}')
 
-        other = self._html_to_text(self.other_description)
-        addl = self._html_to_text(self.additional_services_description)
-        notes = "\n".join(x for x in [other, addl] if x).strip()
-        if notes:
-            lines.append(notes)
+        ceremony = 'VAR' if getattr(self, 'is_ceremony', False) else 'YOK'
+        lines.append(f'➖Seremoni Düzeni : {ceremony}')
+
+        # Pre-host (Barney/Fred) genel notlara
+        pre = []
+        if getattr(self, 'prehost_barney', False): pre.append('Barney')
+        if getattr(self, 'prehost_fred', False):   pre.append('Fred')
+        if pre:
+            lines.append("➖Pre-host : " + ", ".join(pre))
+
+        # Sosyal medya tag
+        if getattr(self, 'other_social_media_tag', False):
+            sm = "Var"
+            if getattr(self, 'other_social_media_details', False):
+                sm += f" – {self.other_social_media_details}"
+        else:
+            sm = "Yok"
+        lines.append(f"➖Sosyal Medya Tag : {sm}")
+
+        for html in [getattr(self, 'other_description', '') or '',
+                     getattr(self, 'additional_services_description', '') or '']:
+            if html and str(html).strip():
+                lines.append(html)  # HAM HTML
+                lines.append("&nbsp;")  # boşluk
+
         return lines
 
     def _collect_treats(self):
@@ -1173,94 +1219,73 @@ class ProjectDemoForm(models.Model):
         return DJ_MAP.get(self.dj_person) or ("Diğer" if self.music_other else "")
 
     def _collect_menu_bar_notes(self):
-        """Menü ve Bar notlarını satır listesi olarak döndürür (WhatsApp formatına uygun).
-        Not satırları en altta toplanır ve normal alanlarla arasına <br/> eklenir.
-        """
+        """Menü ve Bar notları (ham HTML notlar en altta)."""
         self.ensure_one()
-        lines = []  # normal alanlar
-        notes = []  # notlar
+        lines, notes = [], []
 
-        # --- Menü ---
-        hot_sel = self.with_context(lang=self.env.user.lang).fields_get(['menu_hot_appetizer'])['menu_hot_appetizer'][
-            'selection']
-        hot_map = dict(hot_sel)
-
+        # Menü seçimi/özetleri
+        hot_map = dict(
+            self.with_context(lang=self.env.user.lang).fields_get(['menu_hot_appetizer'])['menu_hot_appetizer'][
+                'selection'])
         if self.menu_hot_appetizer:
-            hot_label = hot_map.get(self.menu_hot_appetizer, self.menu_hot_appetizer)
-            lines.append(f"➖Sıcak Başlangıç : {hot_label}")
-
+            lines.append(f"➖Sıcak Başlangıç : {hot_map.get(self.menu_hot_appetizer, self.menu_hot_appetizer)}")
         if self.menu_hot_appetizer_ultra:
             lines.append("➖Sıcak Ekstra : Rocket Shrimp")
-        if self.prehost_breakfast:
-            cnt = f" (x{int(self.prehost_breakfast_count)})" if self.prehost_breakfast_count else ""
-            lines.append(f"➖Kahvaltı Servisi - {cnt}")
 
         def names(m2m):
             return ", ".join(m2m.mapped('name')) if m2m else ""
 
         if self.menu_meze_ids:
             lines.append(f"➖Mezeler : {names(self.menu_meze_ids)}")
-
-        meze_notes_txt = self._html_to_text(self.menu_meze_notes) if self.menu_meze_notes else ""
-        if meze_notes_txt:
-            notes.append(f"➖Meze Notu : {meze_notes_txt}")  # NOT → en alta
-
         if self.menu_dessert_ids:
             lines.append(f"➖Tatlı : {names(self.menu_dessert_ids)}")
-
         if self.menu_dessert_ultra_ids:
             lines.append(f"➖Ultra Tatlı : {names(self.menu_dessert_ultra_ids)}")
 
-        menu_notes_txt = self._html_to_text(self.menu_description) if self.menu_description else ""
-        if menu_notes_txt:
-            notes.append(f"➖Menü Notu : {menu_notes_txt}")  # NOT → en alta
-
-        # --- Bar ---
-        raki_sel = self.with_context(lang=self.env.user.lang).fields_get(['bar_raki_brand'])['bar_raki_brand'][
-            'selection']
-        raki_map = dict(raki_sel)
-
+        # Bar
+        raki_map = dict(
+            self.with_context(lang=self.env.user.lang).fields_get(['bar_raki_brand'])['bar_raki_brand']['selection'])
         if self.bar_alcohol_service:
             lines.append("➖Alkollü içecek servisi : Var")
         else:
             lines.append("➖Alkollü içecek servisi : Yok")
             if self.bar_purchase_advice:
-                notes.append(f"➖Satın alma önerisi : {self.bar_purchase_advice}")  # NOT → en alta
+                notes.append(f"{self.bar_purchase_advice}")  # ham HTML olabilir
 
         if self.bar_raki_brand:
             lines.append(f"➖Rakı Markası : {raki_map.get(self.bar_raki_brand, self.bar_raki_brand)}")
 
-        bar_notes_txt = self._html_to_text(self.bar_description) if self.bar_description else ""
-        if bar_notes_txt:
-            notes.append(f"➖Bar Notu : {bar_notes_txt}")  # NOT → en alta
+        # HTML notlar ham olarak
+        if self.menu_meze_notes and str(self.menu_meze_notes).strip():
+            notes.append(self.menu_meze_notes)
+        if self.menu_description and str(self.menu_description).strip():
+            notes.append(self.menu_description)
+        if self.bar_description and str(self.bar_description).strip():
+            notes.append(self.bar_description)
 
-        # --- Ön ev sahibi kahvaltı (F&B) ---
         if getattr(self, "prehost_breakfast", False):
             cnt = f" (x{int(self.prehost_breakfast_count)})" if self.prehost_breakfast_count else ""
-            lines.append(f"➖Kahvaltı Servisi{cnt}")
+            lines.append(f"➖Kahvaltı Servisi {cnt}px")
 
-        # --- After Party F&B tek satır ---
+        # After Party F&B
         af_items = []
-        if getattr(self, "afterparty_shot_service", False):
-            af_items.append("Shot Servisi")
-        if getattr(self, "afterparty_bbq_wraps", False):
-            af_items.append("BBQ Dürümleri")
+        if getattr(self, "afterparty_shot_service", False): af_items.append("Shot Servisi")
+        if getattr(self, "afterparty_bbq_wraps", False):    af_items.append("BBQ Dürümleri")
         if getattr(self, "afterparty_sushi", False) or getattr(self, "afterparty_street_food", False):
             af_items.append("Street Food Atıştırmalık")
-
         if af_items:
             lines.append("➖After Party : " + ", ".join(af_items))
-
         if getattr(self, "afterparty_more_drinks", False):
             lines.append("➖After Party İçecekleri : Daha fazla çeşit içki")
 
         if notes:
-            lines.append("")
+            lines.append("&nbsp;")
             lines.extend(notes)
 
         return lines
 
     def _build_whatsapp_message(self):
+        from markupsafe import escape as E  # yoksa: E = html_escape
         self.ensure_one()
 
         tarih = self._format_date_tr(self.invitation_date or self.demo_date)
@@ -1269,68 +1294,68 @@ class ProjectDemoForm(models.Model):
         expected = "-"  # Ayrı alan varsa bağlayın
         koordinatör = self._collect_coordinators() or "-"
         dj = self._display_dj() or "-"
-        # Ek paketler, program, ulașım, notlar
+
         packages = self._collect_packages()
-        program_header, program_lines = self._collect_program()
-        transport_lines = self._collect_transports()
-        genel = self._collect_general_notes()
-        dekor = self._collect_decor_notes()
-        muzik = self._collect_music_notes()
-        mb_lines = self._collect_menu_bar_notes()
-        def ul(items):
-            items = [i for i in (items or []) if (i or "").strip()]
+        program_header, program_lines = self._collect_program()  # program_lines: HTML içerebilir
+        transport_lines = self._collect_transports()  # HTML içerebilir
+        genel = self._collect_general_notes()  # HTML içerebilir
+        dekor = self._collect_decor_notes()  # metin
+        muzik = self._collect_music_notes()  # metin
+        mb_lines = self._collect_menu_bar_notes()  # HTML içerebilir
+        program_notes=self.schedule_description or ''
+        transport_notes=self.transportation_description or ''
+
+        def ul(items, escape_html=True):
             ul_style = "list-style:none; margin:0; padding-left:0;"
             li_style = "list-style:none; margin:0; padding:0;"
+            items = [i for i in (items or []) if (i or "").strip() != ""]
             if not items:
                 return f"<ul style='{ul_style}'><li style='{li_style}'>-</li></ul>"
-            lis = "".join(f"<li style='{li_style}'>{E(i)}</li>" for i in items)
-            return f"<ul style='{ul_style}'>{lis}</ul>"
+            buff = [f"<ul style='{ul_style}'>"]
+            for it in items:
+                if escape_html:
+                    buff.append(f"<li style='{li_style}'>{E(str(it))}</li>")
+                else:
+                    buff.append(f"<li style='{li_style}'>{it}</li>")  # ham HTML
+            buff.append("</ul>")
+            return "".join(buff)
 
-        def nl2br(s):
-            return E(s).replace("\n", "<br>") if s else ""
-
-        other_all = "\n".join(filter(None, [
-            getattr(self, "special_notes", "") or "",
-        ])).strip()
-        other_all=self._html_to_text(other_all)
+        important_html = (self.special_notes or "").strip()
 
         html = f"""
         <div>
           <p>🏁 <b>Tarih:</b> {E(tarih)}</p>
-          <p>👩‍❤️‍👨 <b>Çiftimiz:</b> {self.project_id.sudo().reinvoiced_sale_order_id.opportunity_id.name}</p>
+          <p>👩‍❤️‍👨 <b>Çiftimiz:</b> {E(self.project_id.sudo().reinvoiced_sale_order_id.opportunity_id.name or '')}</p>
           <p>🔳 <b>Düğün Tipi:</b> {E(tip)}</p>
           <p>🟡 <b>Kişi sayısı:</b> {E(guest)}</p>
           <p>🟢 <b>Beklenen:</b> {E(expected)}</p>
-          <p>👧 <b>Koordinatör:</b> {E(koordinatör or "-")}</p>
+          <p>👧 <b>Koordinatör:</b> {E(koordinatör)}</p>
           <p>🎧 <b>DJ:</b> {E(dj)}</p><br/>
-    
+
           <h4>➕ Ek Paketler:</h4>
-          {ul(packages or ["*"])}
-    
+          {ul(packages)}  <!-- metin; escape ON -->
+
           <h4>🕖 Program Akışı{f": {E(program_header)}" if program_header else ""}</h4>
-          {ul(program_lines)}
-    
+          {ul(program_lines, escape_html=False)}  <!-- satır notları HAM HTML -->
+          {Markup(program_notes)}
+
           <h4>⚓️ Tekne Saatleri:</h4>
-          {ul(transport_lines)}
-    
+          {ul(transport_lines, escape_html=False)}  <!-- satır notları HAM HTML -->
+            {Markup(transport_notes)}
           <h4>🔴 Genel Notlar:</h4>
-          {ul(genel)}
-          
-    
+          {ul(genel, escape_html=False)}  <!-- HTML notlar & sosyal medya -->
+
           <h4>⚜️ Dekor Notları:</h4>
-          {ul(dekor)}
-          
-          <h4>⚜️ Menü ve Bar:</h4>
-          {ul(mb_lines)}
-          
-    
+          {ul(dekor)}  <!-- metin -->
+
+          <h4>🍽️ Menü & 🍸 Bar Notları:</h4>
+          {ul(mb_lines, escape_html=False)}  <!-- HTML notlar mümkün -->
+
           <h4>🎶 Eğlence Notları:</h4>
-          {ul(muzik)}
-    
+          {ul(muzik)}  <!-- metin -->
+
           <h4>‼️Önemli Notlar:</h4>
-          <p>{nl2br(other_all) if other_all else "-"}</p>
-    
-          <h4>🍭 İkramlar:</h4>
+          {important_html if important_html else "-"}
         </div>
         """.strip()
         return html

@@ -630,6 +630,11 @@ class ProjectProject(models.Model):
 
             elif tmpl == 'ultra':
                 _apply_hair_choice(vals)
+                DEFAULT_MEZE_NOTE = (
+                    'Standart mezelere ilave olarak Kayısı Yahnisi, Lakerda ve '
+                    'Ahtapot soğuk deniz mezeleri de servis edilir.'
+                )
+                vals['menu_meze_notes']=DEFAULT_MEZE_NOTE
                 for f in ultra_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True

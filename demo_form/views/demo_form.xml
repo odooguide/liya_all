@@ -233,8 +233,8 @@
                         <page string="Hair And Makeup" name="hair">
                             <group>
                                 <group col="2">
-                                    <field name="hair_studio_3435" widget="boolean_toggle"/>
-                                    <field name="hair_garage_caddebostan" widget="boolean_toggle"/>
+                                    <field name="hair_studio_3435" invisible="hair_garage_caddebostan!=False or hair_other!=False" widget="boolean_toggle"/>
+                                    <field name="hair_garage_caddebostan" invisible="hair_studio_3435!=False or hair_other!=False" widget="boolean_toggle"/>
                                 </group>
                                 <group col="2">
                                     <field name="hair_other" widget="boolean_toggle"/>
@@ -273,10 +273,9 @@
                                 </group>
                                 <group col="2">
                                     <field name="photo_print_service" widget="boolean_toggle"/>
-                                    <field name="photo_homesession" widget="boolean_toggle"/>
                                     <field name="home_exit" widget="boolean_toggle"/>
                                     <field name="photo_homesession_address"
-                                           invisible="photo_homesession==False"/>
+                                           invisible="home_exit==False"/>
                                     <field name="photo_yacht_shoot" widget="boolean_toggle"
                                            invisible="sale_template_id!=3"/>
                                     <field name="photo_harddisk_delivered" placeholder="Seçiniz…"/>
