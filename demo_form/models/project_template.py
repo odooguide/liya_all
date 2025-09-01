@@ -385,9 +385,9 @@ class ProjectProject(models.Model):
     
     def action_schedule_meeting(self):
         self.ensure_one()
-        if 'duygu' not in (self.env.user.name or '').lower():
+        demo_task=self._get_demo_task()
+        if not (demo_task.user_ids and demo_task.user_ids[0] == self.env.user):
             self._check_project_rights()
-
         demo_cat = self.env['calendar.event.type'].sudo().search([('name', 'ilike', 'demo')], limit=1)
 
         ctx = dict(

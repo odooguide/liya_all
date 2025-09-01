@@ -27,7 +27,7 @@ TEMPLATE_INCLUDED_FIELDS = {
             'afterparty_sushi', 'bar_alcohol_service', 'photo_drone',
             'afterparty_fog_laser', 'afterparty_bbq_wraps',
             'music_live', 'music_percussion', 'music_trio',
-            'afterparty_dance_show', 'cake_real', 'cake_champagne_tower',
+            'cake_real', 'cake_champagne_tower',
             'prehost_barney',
 
         },
@@ -452,6 +452,29 @@ class ProjectDemoForm(models.Model):
         store=True,
     )
 
+    PRODUCT_REQUIREMENTS = {
+        'photo_video_plus': ['Photo & Video Plus'],
+        'photo_drone': ['Drone Kamera'],
+        'afterparty_service': ['After Party'],
+        'afterparty_ultra': ['After Party Ultra'],
+        'afterparty_shot_service': ['After Party Shot Servisi'],
+        'afterparty_sushi': ['Sushi Bar'],
+        'afterparty_dance_show': ['Dans Show'],
+        'afterparty_fog_laser': ['Fog + Laser Show'],
+        'bar_alcohol_service': ['Yabancı İçki Servisi'],
+        'hair_studio_3435': ['Saç & Makyaj'],
+        'hair_garage_caddebostan': ['Saç & Makyaj'],
+        "cake_real": ["Pasta Show'da Gerçek Pasta"],
+        "cake_champagne_tower": ["Pasta Show'da Şampanya Kulesi"],
+        'prehost_barney': ['BARNEY'],
+        'prehost_fred': ['FRED'],
+        'accommodation_service': ['Konaklama'],
+        'dance_lesson': ['Dans Dersi'],
+        'prehost_breakfast': ['Kahvaltı'],
+        'home_exit': ['Ev Çıkış Fotoğraf Çekimi'],
+    }
+    TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
+
     @api.depends(
         'transport_line_ids',
         'transport_line_ids.label',
@@ -516,31 +539,6 @@ class ProjectDemoForm(models.Model):
                 })
             ]
 
-    PRODUCT_REQUIREMENTS = {
-        'photo_video_plus': ['Photo & Video Plus'],
-        'photo_drone': ['Drone Kamera'],
-        'afterparty_service': ['After Party'],
-        'afterparty_ultra': ['After Party Ultra'],
-        'afterparty_shot_service': ['After Party Shot Servisi'],
-        'afterparty_sushi': ['Sushi Bar'],
-        'afterparty_dance_show': ['Dans Show'],
-        'afterparty_fog_laser': ['Fog + Laser Show'],
-        'bar_alcohol_service': ['Yabancı İçki Servisi'],
-        'hair_studio_3435': ['Saç & Makyaj'],
-        'hair_garage_caddebostan': ['Saç & Makyaj'],
-        "cake_real": ["Pasta Show'da Gerçek Pasta"],
-        "cake_champagne_tower": ["Pasta Show'da Şampanya Kulesi"],
-        'prehost_barney': ['BARNEY'],
-        'prehost_fred': ['FRED'],
-        'accommodation_service': ['Konaklama'],
-        'dance_lesson': ['Dans Dersi'],
-        'prehost_breakfast': ['Kahvaltı'],
-        'home_exit': ['Ev Çıkış Fotoğraf Çekimi'],
-    }
-    TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
-
-
-
     @api.onchange('confirmed_demo_form_plan')
     def _onchange_confirmed_contract_security(self):
         for rec in self:
@@ -603,7 +601,6 @@ class ProjectDemoForm(models.Model):
             if f not in vals:
                 continue
             if f in included_fields:
-                # Şablon zaten içeriyorsa sormuyoruz
                 continue
 
             new_val = vals[f]
@@ -1405,7 +1402,7 @@ class ProjectDemoForm(models.Model):
                     if missing_label:
                         action_id = self.env.ref('demo_form.action_project_demo_extra_protocol_wizard').id
                         msg = _(
-                            "%s ürünü onaylı tekliflerde bulunamadı.\n\nEk Protokol görevi açılsın mı?") % missing_label
+                            "%s ürünü onaylı tekliflerde bulunamadı.\n\nEk Protokol görevi açılsın mı? \n\n“Görevi açmadan devam etmek isterseniz bu uyarıyı kapattıktan sonra sol üstten çarpıya (Discard) basın.") % missing_label
                         raise RedirectWarning(
                             msg,
                             action_id,
