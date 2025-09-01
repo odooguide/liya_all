@@ -9,6 +9,29 @@ from markupsafe import escape as E, Markup
 
 
 TIME_PATTERN = re.compile(r'(\d{1,2}):([0-5]\d)')
+TEMPLATE_INCLUDED_FIELDS = {
+        'elite': {
+            'afterparty_street_food',
+        },
+        'plus': {
+            'photo_video_plus',
+            'afterparty_service', 'afterparty_shot_service',
+            'accommodation_service', 'dance_lesson',
+            'afterparty_street_food',
+        },
+        'ultra': {
+            'photo_video_plus',
+            'afterparty_service', 'afterparty_shot_service',
+            'accommodation_service', 'dance_lesson',
+            'afterparty_street_food',
+            'afterparty_sushi', 'bar_alcohol_service', 'photo_drone',
+            'afterparty_fog_laser', 'afterparty_bbq_wraps',
+            'music_live', 'music_percussion', 'music_trio',
+            'afterparty_dance_show', 'cake_real', 'cake_champagne_tower',
+            'prehost_barney',
+
+        },
+    }
 
 
 
@@ -528,6 +551,31 @@ class ProjectDemoForm(models.Model):
                     _('Only administrators can modify or delete the Confirmed Demo Form once uploaded.')
                 )
 
+    def _template_key(self):
+        name = (self.sudo().sale_template_id.name or '').strip().lower()
+        if not name and self.project_id and self.project_id.reinvoiced_sale_order_id:
+            name = (self.project_id.sudo().reinvoiced_sale_order_id.sale_order_template_id.name or '').strip().lower()
+        if 'elite' in name:
+            return 'elite'
+        if 'plus' in name:
+            return 'plus'
+        if 'ultra' in name:
+            return 'ultra'
+        return None
+
+    def _template_included_fields(self):
+        key = self._template_key()
+        return TEMPLATE_INCLUDED_FIELDS.get(key, set())
+
+    def _template_included_labels(self):
+        """Şablonun dahil ettiği field’lardan beklenen ürün etiketlerini üretir."""
+        labels = set()
+        for f in self._template_included_fields():
+            for lbl in self._required_labels_for_field(f):
+                if lbl:
+                    labels.add(lbl)
+        return labels
+
     def _get_related_confirmed_sale_orders(self):
         """Bu projenin bağlı olduğu CRM fırsatındaki onaylı (sale/done) siparişler."""
         self.ensure_one()
@@ -544,32 +592,30 @@ class ProjectDemoForm(models.Model):
         """
         Bu write çağrısında değiştirilen TRACKED_FIELDS içinden,
         *yalnızca True yönüne geçenleri* kontrol eder.
+        Şablonun dahil ettiği alanlar için kontrol yapılmaz.
         İlk eksik ürünü (field, label) döndürür; yoksa (None, None).
         """
         self.ensure_one()
         purchased = self._get_purchased_product_names()
+        included_fields = self._template_included_fields()
 
         for f in self.TRACKED_FIELDS:
             if f not in vals:
+                continue
+            if f in included_fields:
+                # Şablon zaten içeriyorsa sormuyoruz
                 continue
 
             new_val = vals[f]
             old_val = getattr(self, f)
 
-            if f == 'photo_harddisk_delivered':
-                if not new_val:
-                    continue
-                if new_val == old_val:
-                    continue
-                labels = self.PRODUCT_REQUIREMENTS[f].get(new_val, []) or []
+            # yalın boolean/selection olmayan özel durumlar yoksa tek akış yeter
+            if not bool(new_val):  # OFF’a geçişte sorma
+                continue
+            if bool(old_val):  # zaten ON idiyse sorma
+                continue
 
-            else:
-                if not bool(new_val):
-                    continue
-                if bool(old_val):
-                    continue
-                labels = self.PRODUCT_REQUIREMENTS[f]
-
+            labels = self._required_labels_for_field(f)
             for lbl in labels:
                 if lbl not in purchased:
                     return f, lbl
@@ -577,13 +623,14 @@ class ProjectDemoForm(models.Model):
         return None, None
 
     def _get_purchased_product_names(self):
-        """İlgili sipariş satırlarından ürün adlarını topla."""
+        """İlgili sipariş satırlarından ürün adlarını topla + şablonun dahil ettiklerini ekle."""
         names = set()
         for so in self._get_related_confirmed_sale_orders():
             for l in so.sudo().order_line:
                 n = (l.product_id.name or '').strip()
                 if n:
                     names.add(n)
+        names |= self._template_included_labels()
         return names
 
     def _required_labels_for_field(self, field_name):
@@ -619,20 +666,6 @@ class ProjectDemoForm(models.Model):
 
             rec.special_notes_preview = plaintext2html(preview)
             rec.special_notes_remaining = plaintext2html(remaining) if remaining else ''
-
-
-    @api.model
-    def create(self, vals):
-        if 'name' in vals and vals.get('name') == _('New Demo Form'):
-            vals['name'] = self.env['ir.sequence'].next_by_code(
-                'project.demo.form') or vals['name']
-
-        rec = super(ProjectDemoForm, self).create(vals)
-
-        rec._onchange_start_end_time()
-        rec._onchange_breakfast()
-
-        return rec
 
     @api.depends('invitation_date')
     def _compute_day(self):
@@ -738,47 +771,7 @@ class ProjectDemoForm(models.Model):
 
             first_transport.time = dt_new.strftime('%H:%M')
 
-    def write(self, vals):
-        if any(rec.confirmed_demo_form_plan for rec in self) and not self.env.user.has_group('base.group_system'):
-            raise UserError("Onaylanmış kayıtta değişiklik yapılamaz.")
 
-        if not (self.env.context.get('extra_protocol_confirmed') or
-                self.env.context.get('skip_extra_protocol_check')):
-            changed_tracked = set(vals) & set(self.TRACKED_FIELDS)
-            if changed_tracked:
-                for rec in self:
-                    field_name, missing_label = rec._first_missing_for_changed_fields(vals or {})
-                    if missing_label:
-                        action_id = self.env.ref('demo_form.action_project_demo_extra_protocol_wizard').id
-                        msg = _(
-                            "%s ürünü onaylı tekliflerde bulunamadı.\n\nEk Protokol görevi açılsın mı?") % missing_label
-                        raise RedirectWarning(
-                            msg,
-                            action_id,
-                            _("Görevi Aç"),
-                            additional_context={
-                                'default_demo_id': rec.id,
-                                'default_product_label': missing_label,
-                                'default_pending_vals_json': json.dumps(vals, ensure_ascii=False),
-                            }
-                        )
-        res = super().write(vals)
-
-        for rec in self:
-            if any(f in vals for f in ('afterparty_service', 'afterparty_ultra', 'afterparty_dance_show')):
-                rec._onchange_start_end_time()
-            if 'prehost_breakfast' in vals:
-                rec._onchange_breakfast()
-            if 'afterparty_ultra' in vals:
-                rec._onchange_afterparty_ultra()
-            if 'afterparty_street_food' in vals:
-                rec._onchange_street_food()
-            if 'afterparty_fog_laser' in vals:
-                rec._onchange_fog_laser()
-            if 'afterparty_bbq_wraps' in vals:
-                rec._onchange_bbq_wraps()
-
-        return res
 
     @api.onchange('afterparty_ultra')
     def _onchange_afterparty_ultra(self):
@@ -1385,3 +1378,58 @@ class ProjectDemoForm(models.Model):
                 'context': ctx,
             }
         return True
+
+    @api.model
+    def create(self, vals):
+        if 'name' in vals and vals.get('name') == _('New Demo Form'):
+            vals['name'] = self.env['ir.sequence'].next_by_code(
+                'project.demo.form') or vals['name']
+
+        rec = super(ProjectDemoForm, self).create(vals)
+
+        rec._onchange_start_end_time()
+        rec._onchange_breakfast()
+
+        return rec
+
+    def write(self, vals):
+        if any(rec.confirmed_demo_form_plan for rec in self) and not self.env.user.has_group('base.group_system'):
+            raise UserError("Onaylanmış kayıtta değişiklik yapılamaz.")
+
+        if not (self.env.context.get('extra_protocol_confirmed') or
+                self.env.context.get('skip_extra_protocol_check')):
+            changed_tracked = set(vals) & set(self.TRACKED_FIELDS)
+            if changed_tracked:
+                for rec in self:
+                    field_name, missing_label = rec._first_missing_for_changed_fields(vals or {})
+                    if missing_label:
+                        action_id = self.env.ref('demo_form.action_project_demo_extra_protocol_wizard').id
+                        msg = _(
+                            "%s ürünü onaylı tekliflerde bulunamadı.\n\nEk Protokol görevi açılsın mı?") % missing_label
+                        raise RedirectWarning(
+                            msg,
+                            action_id,
+                            _("Görevi Aç"),
+                            additional_context={
+                                'default_demo_id': rec.id,
+                                'default_product_label': missing_label,
+                                'default_pending_vals_json': json.dumps(vals, ensure_ascii=False),
+                            }
+                        )
+        res = super().write(vals)
+
+        for rec in self:
+            if any(f in vals for f in ('afterparty_service', 'afterparty_ultra', 'afterparty_dance_show')):
+                rec._onchange_start_end_time()
+            if 'prehost_breakfast' in vals:
+                rec._onchange_breakfast()
+            if 'afterparty_ultra' in vals:
+                rec._onchange_afterparty_ultra()
+            if 'afterparty_street_food' in vals:
+                rec._onchange_street_food()
+            if 'afterparty_fog_laser' in vals:
+                rec._onchange_fog_laser()
+            if 'afterparty_bbq_wraps' in vals:
+                rec._onchange_bbq_wraps()
+
+        return res
