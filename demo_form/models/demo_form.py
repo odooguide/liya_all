@@ -418,6 +418,7 @@ class ProjectDemoForm(models.Model):
     )
     minutes = fields.Integer(string='Adjust Time')
     demo_seat_plan=fields.Many2one('demo.seat.plan', string='Oturma Planı')
+    home_exit=fields.Boolean(string='Ev Çıkış Fotoğraf Çekimi')
     wedding_trio_ids = fields.One2many(
         comodel_name='wedding.trio',
         inverse_name='project_id',
@@ -519,6 +520,7 @@ class ProjectDemoForm(models.Model):
         'dance_lesson': ['Dans Dersi'],
         'photo_homesession': ['Ev Çekimi'],
         'prehost_breakfast': ['Kahvaltı'],
+        'home_exit': ['Ev Çıkış Fotoğraf Çekimi'],
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
 

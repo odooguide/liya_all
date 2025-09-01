@@ -569,6 +569,8 @@ class ProjectProject(models.Model):
                     vals['afterparty_dance_show'] = True
                 if pname == "Fog + Laser Show":
                     vals['afterparty_fog_laser'] = True
+                if pname == "Ev Çıkış Fotoğraf Çekimi":
+                    vals['home_exit'] = True
 
                 # Bar
                 if pname == "Yabancı İçki Servisi":
