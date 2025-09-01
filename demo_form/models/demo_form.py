@@ -451,6 +451,39 @@ class ProjectDemoForm(models.Model):
         readonly=True,
         store=True,
     )
+    studio_345 = fields.One2many(
+        comodel_name='studio.345',
+        inverse_name='project_id',
+        string='Studio 345',
+        compute='_compute_studio_345',
+        readonly=True,
+        store=True,
+    )
+    vedan_ids = fields.One2many(
+        comodel_name='partner.vedans',
+        inverse_name='project_id',
+        string='Partner vedans',
+        compute='_compute_partner_vedan',
+        readonly=True,
+        store=True,
+    )
+
+    garage_caddebostan = fields.One2many(
+        comodel_name='garage.caddebostan',
+        inverse_name='project_id',
+        string='Garage Caddebostan',
+        compute='_compute_garage_caddebostan',
+        readonly=True,
+        store=True,
+    )
+    backlight_ids = fields.One2many(
+        comodel_name='backlight',
+        inverse_name='project_id',
+        string='Backlight',
+        compute='_compute_backlight_ids',
+        readonly=True,
+        store=True,
+    )
 
     PRODUCT_REQUIREMENTS = {
         'photo_video_plus': ['Photo & Video Plus'],
@@ -511,11 +544,9 @@ class ProjectDemoForm(models.Model):
         'project_id',
         'project_id.so_people_count',  # güvence için kaynağı da dinliyoruz
         'project_id.event_date',       # etkinlik tarihi alanın buysa
-        # 'project_id.date_start', 'project_id.date',  # alternatif alanlar varsa aç
     )
     def _compute_blue_marmara_ids(self):
         for rec in self:
-            # Etkinlik tarihi (hangi alan varsa onu kullan)
             event_date = (
                 getattr(rec.project_id, 'event_date', False)
                 or getattr(rec.project_id, 'date_start', False)
@@ -539,6 +570,301 @@ class ProjectDemoForm(models.Model):
                 })
             ]
 
+    @api.depends(
+        'hair_studio_3435',  # yalnızca Studio 3435 seçildiyse satır üret
+        'invitation_owner',
+        'invitation_date', 'demo_date',
+        'project_id',
+        'project_id.reinvoiced_sale_order_id',
+        'project_id.reinvoiced_sale_order_id.opportunity_id',
+        'project_id.reinvoiced_sale_order_id.partner_id',
+    )
+    def _compute_studio_345(self):
+        for rec in self:
+            # önce temizle
+            cmds = [(5, 0, 0)]
+
+            # Studio 3435 seçili değilse hiç satır üretme
+            if not rec.hair_studio_3435:
+                rec.studio_345 = cmds
+                continue
+
+            # Etkinlik tarihi: davetiye > demo > (gerekirse proje alanları)
+            event_date = rec.invitation_date or rec.demo_date
+            if not event_date and rec.project_id:
+                # varsa muhtemel proje tarih alanları
+                event_date = (
+                        getattr(rec.project_id, 'event_date', False)
+                        or getattr(rec.project_id, 'date_start', False)
+                        or getattr(rec.project_id, 'date', False)
+                )
+            if event_date:
+                event_date = fields.Date.to_date(event_date)
+
+            # CRM fırsat + partner bilgileri (sudo ile güvenli)
+            order = rec.project_id.sudo().reinvoiced_sale_order_id if rec.project_id else False
+            opp = order.sudo().opportunity_id if order else False
+            partner = order.sudo().partner_id if order else False
+
+            couple = (opp.name or '').strip() if opp else ''
+            # 1. telefon: partner.mobile > partner.phone > opp.mobile > opp.phone
+            first_phone = ''
+            if partner:
+                first_phone = (partner.mobile or partner.phone or '') or ''
+            if not first_phone and opp:
+                first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
+
+            # 2. telefon: olası özel alanlar
+            second_phone = ''
+            if opp:
+                for attr in ('second_phone', 'second_contact_phone', 'x_second_phone', 'x_phone2'):
+                    val = getattr(opp, attr, '') or ''
+                    if val:
+                        second_phone = val
+                        break
+
+            # Satır adı: davet sahibi varsa onu, yoksa "Çift - Studio 3435"
+            name_val = (rec.invitation_owner or '').strip()
+            if not name_val:
+                bits = [b for b in [couple, "Studio 3435 Nişantaşı"] if b]
+                name_val = " - ".join(bits) or "Studio 3435"
+
+            # Studio adı sabit
+            studio_name = "Studio 3435 Nişantaşı"
+
+            cmds.append((0, 0, {
+                'name': name_val,
+                'date': event_date,
+                'opportunity_name': couple,
+                'first_phone': first_phone,
+                'second_phone': second_phone,
+                'photo_studio': studio_name,
+                'project_id': rec.id,
+            }))
+
+            rec.studio_345 = cmds
+
+    @api.depends(
+        'hair_garage_caddebostan',  # yalnızca Studio 3435 seçildiyse satır üret
+        'invitation_owner',
+        'invitation_date', 'demo_date',
+        'project_id',
+        'project_id.reinvoiced_sale_order_id',
+        'project_id.reinvoiced_sale_order_id.opportunity_id',
+        'project_id.reinvoiced_sale_order_id.partner_id',
+    )
+    def _compute_garage_caddebostan(self):
+        for rec in self:
+            cmds = [(5, 0, 0)]
+
+            if not rec.hair_garage_caddebostan:
+                rec.garage_caddebostan = cmds
+                continue
+
+            event_date = rec.invitation_date or rec.demo_date
+            if not event_date and rec.project_id:
+                event_date = (
+                        getattr(rec.project_id, 'event_date', False)
+                        or getattr(rec.project_id, 'date_start', False)
+                        or getattr(rec.project_id, 'date', False)
+                )
+            if event_date:
+                event_date = fields.Date.to_date(event_date)
+
+            # CRM fırsat + partner bilgileri (sudo ile güvenli)
+            order = rec.project_id.sudo().reinvoiced_sale_order_id if rec.project_id else False
+            opp = order.sudo().opportunity_id if order else False
+            partner = order.sudo().partner_id if order else False
+
+            couple = (opp.name or '').strip() if opp else ''
+            first_phone = ''
+            if partner:
+                first_phone = (partner.mobile or partner.phone or '') or ''
+            if not first_phone and opp:
+                first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
+
+            second_phone = ''
+            if opp:
+                for attr in ('second_phone', 'second_contact_phone', 'x_second_phone', 'x_phone2'):
+                    val = getattr(opp, attr, '') or ''
+                    if val:
+                        second_phone = val
+                        break
+
+            name_val = (rec.invitation_owner or '').strip()
+            if not name_val:
+                bits = [b for b in [couple, "Garage Caddebostan"] if b]
+                name_val = " - ".join(bits) or "Garage Caddebostan"
+
+            studio_name = "Garage Caddebostan"
+
+            cmds.append((0, 0, {
+                'name': name_val,
+                'date': event_date,
+                'opportunity_name': couple,
+                'first_phone': first_phone,
+                'second_phone': second_phone,
+                'photo_studio': studio_name,
+                'project_id': rec.id,
+            }))
+
+            rec.garage_caddebostan = cmds
+
+    @api.depends(
+        'invitation_owner',
+        'invitation_date', 'demo_date',
+        'project_id',
+        'project_id.reinvoiced_sale_order_id',
+        'project_id.reinvoiced_sale_order_id.opportunity_id',
+        'project_id.reinvoiced_sale_order_id.partner_id',
+    )
+    def _compute_partner_vedan(self):
+        for rec in self:
+            cmds = [(5, 0, 0)]
+
+            event_date = rec.invitation_date or rec.demo_date
+            if not event_date and rec.project_id:
+                event_date = (
+                        getattr(rec.project_id, 'event_date', False)
+                        or getattr(rec.project_id, 'date_start', False)
+                        or getattr(rec.project_id, 'date', False)
+                )
+            if event_date:
+                event_date = fields.Date.to_date(event_date)
+
+            order = rec.project_id.sudo().reinvoiced_sale_order_id if rec.project_id else False
+            opp = order.sudo().opportunity_id if order else False
+            partner = order.sudo().partner_id if order else False
+
+            couple = (opp.name or '').strip() if opp else ''
+            first_phone = ''
+            if partner:
+                first_phone = (partner.mobile or partner.phone or '') or ''
+            if not first_phone and opp:
+                first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
+
+            second_phone = ''
+            if opp:
+                for attr in ('second_phone', 'second_contact_phone', 'x_second_phone', 'x_phone2'):
+                    val = getattr(opp, attr, '') or ''
+                    if val:
+                        second_phone = val
+                        break
+
+            name_val = (rec.invitation_owner or '').strip()
+
+            cmds.append((0, 0, {
+                'name': name_val,
+                'date': event_date,
+                'opportunity_name': couple,
+                'first_phone': first_phone,
+                'second_phone': second_phone,
+                'project_id': rec.id,
+            }))
+
+            rec.vedan_ids = cmds
+
+    @api.depends(
+        'photo_drone', 'home_exit',
+        'invitation_owner',
+        'invitation_date', 'demo_date',
+        'project_id',
+        'project_id.event_date',
+        'project_id.so_opportunity_id',
+        'project_id.so_opportunity_id.name',
+        'project_id.so_opportunity_id.phone',
+        'project_id.so_opportunity_id.second_phone',
+        'project_id.email_from',  # birincil mail (istersen opp.email_from'a da çekebilirsin)
+        'project_id.so_opportunity_id.second_mail',  # İKİNCİL mail → OPP üzerinden
+    )
+    def _compute_backlight_ids(self):
+        for rec in self:
+            cmds = [(5, 0, 0)]
+
+            if not (getattr(rec, 'photo_drone', False) or getattr(rec, 'home_exit', False)):
+                rec.backlight_ids = cmds
+                continue
+
+            event_date = rec.invitation_date or rec.demo_date or rec.project_id.event_date
+            if event_date:
+                event_date = fields.Date.to_date(event_date)
+
+            opp = rec.project_id.so_opportunity_id
+            couple_name = (opp.name or '').strip() if opp else ''
+            first_phone = (opp.phone or '').strip() if opp else ''
+            second_phone = (getattr(opp, 'second_phone', '') or '').strip() if opp else ''
+
+            # MAİLLER
+            first_mail = (rec.project_id.email_from or '').strip()  # birincil mail (proje related)
+            second_mail = (getattr(opp, 'second_mail', '') or '').strip() if opp else ''  # İKİNCİL mail → OPP
+
+            drone_str = "Var" if getattr(rec, 'photo_drone', False) else "Yok"
+            home_exit_str = "Var" if getattr(rec, 'home_exit', False) else "Yok"
+
+            name_val = (rec.invitation_owner or '').strip()
+            if not name_val:
+                bits = [b for b in [couple_name, "Backlight"] if b]
+                name_val = " - ".join(bits) or "Backlight"
+
+            cmds.append((0, 0, {
+                'name': name_val,
+                'date': event_date,
+                'opportunity_name': couple_name,
+                'first_phone': first_phone,
+                'second_phone': second_phone,
+                'project_id': rec.id,
+                'first_mail': first_mail,
+                'second_mail': second_mail,
+                'drone': drone_str,
+                'home_exit': home_exit_str,
+            }))
+
+            rec.backlight_ids = cmds
+
+    def action_recompute_all(self):
+        """Seçili kayıt(lar) için tüm compute fonksiyonlarını tek yerden çalıştırır.
+        Server Action bu metodu çağıracak.
+        """
+        method_names = [
+            '_compute_wedding_trio_ids',
+            '_compute_blue_marmara_ids',
+            '_compute_studio_345',
+            '_compute_garage_caddebostan',
+            '_compute_partner_vedan',
+            '_compute_backlight_ids',
+        ]
+
+        errors = []
+        updated = 0
+
+        # sudo(): bazı compute'lar sudo erişimle partner/opportunity okuyor
+        for rec in self.sudo():
+            for mname in method_names:
+                try:
+                    # Her adımı savepoint içinde çalıştır: birinde hata olsa da diğerleri devam etsin
+                    with self.env.cr.savepoint():
+                        getattr(rec, mname)()
+                except Exception as e:
+                    _logger.exception("Recompute error on %s.%s", rec, mname)
+                    errors.append(f"{rec.display_name or rec.id}: {mname} -> {e}")
+            updated += 1
+
+        # UI'da bildirim dön (Server Action direkt bunu return edebilir)
+        msg = f'{updated} kayıt güncellendi.'
+        if errors:
+            preview = '\n'.join(errors[:3])
+            msg += f"\n{len(errors)} hata (ilkleri):\n{preview}"
+
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Recompute tamamlandı',
+                'message': msg,
+                'type': 'success' if not errors else 'warning',
+                'sticky': False,
+            }
+        }
     @api.onchange('confirmed_demo_form_plan')
     def _onchange_confirmed_contract_security(self):
         for rec in self:

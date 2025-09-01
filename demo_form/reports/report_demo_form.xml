@@ -595,6 +595,24 @@
                                                     )
                                                 </span>
                                             </td>
+                                             <td style="padding:4px 8px; font-weight:600;">Fog + Laser:</td>
+                                            <td style="padding:4px 8px;">
+                                                <span style="margin-right:6px;">Yes (
+                                                    <t t-if="o.afterparty_fog_laser">
+                                                        <strong>x</strong>
+                                                    </t>
+                                                    <t t-if="not o.afterparty_fog_laser"/>
+                                                    )
+                                                </span>
+                                                -
+                                                <span style="margin-left:6px;">No (
+                                                    <t t-if="not o.afterparty_fog_laser">
+                                                        <strong>x</strong>
+                                                    </t>
+                                                    <t t-if="o.afterparty_fog_laser"/>
+                                                    )
+                                                </span>
+                                            </td>
                                         </tr>
                                         <t t-if="o.sale_template_id.name.lower()=='ultra'">
                                             <tr>
@@ -674,27 +692,7 @@
                                                 </span>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td style="padding:4px 8px; font-weight:600;">Fog + Laser:</td>
-                                            <td style="padding:4px 8px;">
-                                                <span style="margin-right:6px;">Yes (
-                                                    <t t-if="o.afterparty_fog_laser">
-                                                        <strong>x</strong>
-                                                    </t>
-                                                    <t t-if="not o.afterparty_fog_laser"/>
-                                                    )
-                                                </span>
-                                                -
-                                                <span style="margin-left:6px;">No (
-                                                    <t t-if="not o.afterparty_fog_laser">
-                                                        <strong>x</strong>
-                                                    </t>
-                                                    <t t-if="o.afterparty_fog_laser"/>
-                                                    )
-                                                </span>
-                                            </td>
-                                            <td colspan="2"/>
-                                        </tr>
+
                                         <t t-if="o.additional_services_description">
                                             <td style="padding:4px 8px; font-style:italic;">
                                                 <span t-field="o.additional_services_description"/>

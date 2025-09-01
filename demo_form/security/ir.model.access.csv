@@ -28,3 +28,8 @@ access_sale_order_update_tasks_wizard_line_user,sale.order.update.tasks.wizard.l
 access_project_demo_extra_protocol_wizard_user,project.demo.extra.protocol.wizard,model_project_demo_extra_protocol_wizard,base.group_user,1,1,1,1
 access_wedding_trio_user,wedding.trio user,model_wedding_trio,base.group_user,1,1,1,1
 access_blue_marmara_user,blue.marmara user,model_blue_marmara,base.group_user,1,1,1,1
+access_backlight_user,backlight user,model_backlight,base.group_user,1,1,1,1
+access_partner_vedans_user,partner.vedans user,model_partner_vedans,base.group_user,1,1,1,1
+access_blue_marmara_user,blue.marmara user,model_blue_marmara,base.group_user,1,1,1,1
+access_studio_345_user,studio.345 user,model_studio_345,base.group_user,1,1,1,1
+access_garage_caddebostan_user,garage.caddebostan user,model_garage_caddebostan,base.group_user,1,1,1,1

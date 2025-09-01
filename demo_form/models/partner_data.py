@@ -44,6 +44,7 @@ class PartnerVedans(models.Model):
 
     name = fields.Char(string='Name', required=True)
     date = fields.Date(string='Event Date')
+    opportunity_name=fields.Char(string='İsim')
     first_phone = fields.Char(string='First Phone')
     second_phone = fields.Char(string='Second Phone')
     project_id = fields.Many2one(
@@ -53,3 +54,59 @@ class PartnerVedans(models.Model):
         ondelete='cascade',
         index=True,
     )
+class Studio345(models.Model):
+    _name = 'studio.345'
+    _description = 'Studio 345'
+
+    name = fields.Char(string='Name', required=True)
+    date = fields.Date(string='Tarih')
+    opportunity_name=fields.Char(string='İsim')
+    first_phone = fields.Char(string='Birincil Telefon')
+    second_phone = fields.Char(string='İkincil Telefon')
+    project_id = fields.Many2one(
+        'project.demo.form',
+        string='Project',
+        required=True,
+        ondelete='cascade',
+        index=True,
+    )
+    photo_studio=fields.Char('Ekip')
+
+class GarageCaddebostan(models.Model):
+    _name = 'garage.caddebostan'
+    _description = 'Garage Caddebostan'
+
+    name = fields.Char(string='Name', required=True)
+    date = fields.Date(string='Tarih')
+    opportunity_name=fields.Char(string='İsim')
+    first_phone = fields.Char(string='Birincil Telefon')
+    second_phone = fields.Char(string='İkincil Telefon')
+    project_id = fields.Many2one(
+        'project.demo.form',
+        string='Project',
+        required=True,
+        ondelete='cascade',
+        index=True,
+    )
+    photo_studio=fields.Char('Ekip')
+
+class Backlight(models.Model):
+    _name = 'backlight'
+    _description = 'backlight'
+
+    name = fields.Char(string='Name', required=True)
+    date = fields.Date(string='Tarih')
+    opportunity_name=fields.Char(string='İsim')
+    first_phone = fields.Char(string='Birincil Telefon')
+    second_phone = fields.Char(string='İkincil Telefon')
+    project_id = fields.Many2one(
+        'project.demo.form',
+        string='Project',
+        required=True,
+        ondelete='cascade',
+        index=True,
+    )
+    first_mail = fields.Char(string='Birincil Mail')
+    second_mail = fields.Char(string='Birincil Mail')
+    drone=fields.Char('Drone')
+    home_exit=fields.Char('Evden Çıkış')

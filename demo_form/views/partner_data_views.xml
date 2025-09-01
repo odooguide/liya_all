@@ -51,6 +51,112 @@
             </list>
         </field>
     </record>
+        <record id="action_studio_345" model="ir.actions.act_window">
+        <field name="name">Studio 345</field>
+        <field name="res_model">studio.345</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Studio 345 kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_studio_345_list" model="ir.ui.view">
+        <field name="name">studio.345.list</field>
+        <field name="model">studio.345</field>
+        <field name="arch" type="xml">
+            <list string="Studio 345" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="opportunity_name"/>
+                <field name="first_phone"/>
+                <field name="second_phone"/>
+                <field name="photo_studio"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_garage_caddebostan" model="ir.actions.act_window">
+        <field name="name">Garage Caddebostan</field>
+        <field name="res_model">garage.caddebostan</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Garage Caddebostan kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_garage_caddebostan_list" model="ir.ui.view">
+        <field name="name">garage.caddebostan.list</field>
+        <field name="model">garage.caddebostan</field>
+        <field name="arch" type="xml">
+            <list string="Garage Caddebostan" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="opportunity_name"/>
+                <field name="first_phone"/>
+                <field name="second_phone"/>
+                <field name="photo_studio"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_partner_vedans" model="ir.actions.act_window">
+        <field name="name">Partner vedans</field>
+        <field name="res_model">partner.vedans</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Partner vedans kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_partner_vedans_list" model="ir.ui.view">
+        <field name="name">partner.vedans.list</field>
+        <field name="model">partner.vedans</field>
+        <field name="arch" type="xml">
+            <list string="Partner vedans" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="opportunity_name"/>
+                <field name="first_phone"/>
+                <field name="second_phone"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_backlight" model="ir.actions.act_window">
+        <field name="name">Backlight</field>
+        <field name="res_model">backlight</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Backlight kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_backlight_list" model="ir.ui.view">
+        <field name="name">backlight.list</field>
+        <field name="model">backlight</field>
+        <field name="arch" type="xml">
+            <list string="Garage Caddebostan" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="opportunity_name"/>
+                <field name="first_phone"/>
+                <field name="second_phone"/>
+                <field name="first_mail"/>
+                <field name="second_mail"/>
+                <field name="drone"/>
+                <field name="home_exit"/>
+            </list>
+        </field>
+    </record>
 
     <menuitem id="menu_partner_info_root"
             name="Partner Info"
@@ -67,5 +173,25 @@
             name="Blue Marmara"
             parent="demo_form.menu_partner_info_root"
             action="action_blue_marmara"
+            sequence="20"/>
+    <menuitem id="menu_studio_345_root"
+            name="Studio 345"
+            parent="demo_form.menu_partner_info_root"
+            action="action_studio_345"
+            sequence="20"/>
+    <menuitem id="menu_garage_caddebostan_root"
+            name="Garage Caddebostan"
+            parent="demo_form.menu_partner_info_root"
+            action="action_garage_caddebostan"
+            sequence="20"/>
+    <menuitem id="menu_partner_vedans_root"
+            name="Partner vedans"
+            parent="demo_form.menu_partner_info_root"
+            action="action_partner_vedans"
+            sequence="20"/>
+    <menuitem id="menu_backlight_root"
+            name="Backlight"
+            parent="demo_form.menu_partner_info_root"
+            action="action_backlight"
             sequence="20"/>
 </odoo>

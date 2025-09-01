@@ -57,6 +57,10 @@
                     <group col="2">
                         <group>
                             <field name="wedding_trio_ids" invisible="1"/>
+                            <field name="studio_345" invisible="1"/>
+                            <field name="vedan_ids" invisible="1"/>
+                            <field name="garage_caddebostan" invisible="1"/>
+                            <field name="backlight_ids" invisible="1"/>
                             <field name="project_id" invisible="1"/>
                             <field name="invitation_owner"/>
                             <field name="invitation_date" readonly="1"/>
