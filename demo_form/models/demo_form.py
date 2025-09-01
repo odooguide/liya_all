@@ -845,11 +845,9 @@ class ProjectDemoForm(models.Model):
                     with self.env.cr.savepoint():
                         getattr(rec, mname)()
                 except Exception as e:
-                    _logger.exception("Recompute error on %s.%s", rec, mname)
                     errors.append(f"{rec.display_name or rec.id}: {mname} -> {e}")
             updated += 1
 
-        # UI'da bildirim dön (Server Action direkt bunu return edebilir)
         msg = f'{updated} kayıt güncellendi.'
         if errors:
             preview = '\n'.join(errors[:3])
