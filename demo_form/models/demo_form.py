@@ -418,6 +418,86 @@ class ProjectDemoForm(models.Model):
     )
     minutes = fields.Integer(string='Adjust Time')
     demo_seat_plan=fields.Many2one('demo.seat.plan', string='Oturma Planı')
+    wedding_trio_ids = fields.One2many(
+        comodel_name='wedding.trio',
+        inverse_name='project_id',
+        string='Wedding Trios',
+        compute='_compute_wedding_trio_ids',
+        readonly=True,
+        store=True,
+    )
+    blue_marmara_ids = fields.One2many(
+        comodel_name='blue.marmara',
+        inverse_name='project_id',
+        string='Blue Marmara',
+        compute='_compute_blue_marmara_ids',
+        readonly=True,
+        store=True,
+    )
+
+    @api.depends(
+        'transport_line_ids',
+        'transport_line_ids.label',
+        'transport_line_ids.time',
+        'transport_line_ids.port_ids',
+        'project_id',
+        'project_id.event_date', 
+    )
+    def _compute_wedding_trio_ids(self):
+        for rec in self:
+            commands = [(5, 0, 0)]
+
+            event_date = (
+                getattr(rec.project_id, 'event_date', False)
+            )
+
+            gg_lines = rec.transport_line_ids.filtered(
+                lambda l: (l.label or '').strip().lower() == 'genel geliş'
+            )
+            for line in gg_lines:
+                commands.append((
+                    0, 0, {
+                        'name': line.label or 'Genel Geliş',
+                        'time': line.time,
+                        'date': event_date,                         
+                        'port_ids': [(6, 0, line.port_ids.ids)],
+                    }
+                ))
+            rec.wedding_trio_ids = commands
+
+    @api.depends(
+        'invitation_owner',
+        'guest_count',                 # related alan olsa da ekledik
+        'project_id',
+        'project_id.so_people_count',  # güvence için kaynağı da dinliyoruz
+        'project_id.event_date',       # etkinlik tarihi alanın buysa
+        # 'project_id.date_start', 'project_id.date',  # alternatif alanlar varsa aç
+    )
+    def _compute_blue_marmara_ids(self):
+        for rec in self:
+            # Etkinlik tarihi (hangi alan varsa onu kullan)
+            event_date = (
+                getattr(rec.project_id, 'event_date', False)
+                or getattr(rec.project_id, 'date_start', False)
+                or getattr(rec.project_id, 'date', False)
+            )
+            if event_date:
+                event_date = fields.Date.to_date(event_date)
+
+            gc = rec.guest_count or 0
+            boat = '36m' if gc > 250 else '25m'
+
+            name_val = (rec.invitation_owner or 'Blue Marmara').strip()
+
+            rec.blue_marmara_ids = [
+                (5, 0, 0),
+                (0, 0, {
+                    'name': name_val,
+                    'guest_count': str(gc), 
+                    'date': event_date,
+                    'boat': boat,
+                })
+            ]
 
     PRODUCT_REQUIREMENTS = {
         'photo_video_plus': ['Photo & Video Plus'],

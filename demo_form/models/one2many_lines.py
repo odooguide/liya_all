@@ -11,10 +11,10 @@ class DemoTransportLine(models.Model):
     label = fields.Char(string="Notes")
     time = fields.Char(string="Time", )
     port_ids = fields.Many2many(
-        'project.transport.port',  # the Port model
-        'demo_line_port_rel',  # the join table name
-        'line_id',  # column in that table → project.demo.transport.line
-        'port_id',  # column in that table → project.transport.port
+        'project.transport.port',
+        'demo_line_port_rel', 
+        'line_id', 
+        'port_id',  
         string="Ports",
     )
     other_port = fields.Char(string="If Other, specify")
@@ -27,7 +27,6 @@ class DemoWitnessLine(models.Model):
     demo_form_id = fields.Many2one(
         'project.demo.form', required=True, ondelete='cascade')
     name = fields.Char(string="Name", required=True)
-    # phone = fields.Char(string="Phone")
 
 
 class DemoScheduleLine(models.Model):

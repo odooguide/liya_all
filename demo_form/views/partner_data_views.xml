@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_wedding_trio_list" model="ir.ui.view">
+        <field name="name">wedding.trio.list</field>
+        <field name="model">wedding.trio</field>
+        <field name="arch" type="xml">
+            <list string="Wedding Trios" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="name"/>
+                <field name="time"/>
+                <field name="port_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_wedding_trio" model="ir.actions.act_window">
+        <field name="name">Wedding Trios</field>
+        <field name="res_model">wedding.trio</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Wedding Trio kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_blue_marmara" model="ir.actions.act_window">
+        <field name="name">Blue Marmara</field>
+        <field name="res_model">blue.marmara</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Blue Marmara kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_wedding_trio_list" model="ir.ui.view">
+        <field name="name">blue.marmara.list</field>
+        <field name="model">blue.marmara</field>
+        <field name="arch" type="xml">
+            <list string="Wedding Trios" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="name"/>
+                <field name="guest_count"/>
+                <field name="boat"/>
+            </list>
+        </field>
+    </record>
+
+    <menuitem id="menu_partner_info_root"
+            name="Partner Info"
+            parent="project.menu_main_pm"
+            sequence="80"/>
+
+    <menuitem id="menu_wedding_trio_root"
+            name="Wedding Trios"
+            parent="demo_form.menu_partner_info_root"
+            action="action_wedding_trio"
+            sequence="10"/>
+
+    <menuitem id="menu_blue_marmara_root"
+            name="Blue Marmara"
+            parent="demo_form.menu_partner_info_root"
+            action="action_blue_marmara"
+            sequence="20"/>
+</odoo>

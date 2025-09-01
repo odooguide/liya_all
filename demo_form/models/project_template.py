@@ -129,6 +129,11 @@ class ProjectProject(models.Model):
         compute='_compute_crm_sale_fields',
         store=True,
         readonly=True)
+    email_from = fields.Char(string="First E-mail", related="so_opportunity_id.email_from")
+    second_mail = fields.Char(string="Second E-mail", related="so_opportunity_id.second_mail")
+    phone = fields.Char(string="First Phone", related="so_opportunity_id.phone")
+    second_phone = fields.Char(string="Second Phone", related="so_opportunity_id.second_phone")
+    
     event_date=fields.Date(string='Event Date',compute='_compute_crm_sale_fields',compute_sudo=True)
 
     related_sale_order_ids = fields.Many2many(

@@ -24,6 +24,7 @@
         "wizards/extra_protocol_wizard_view.xml",
         "reports/report_demo_form.xml",
         "security/ir.model.access.csv",
+        "views/partner_data_views.xml",
     ],
     "auto_install": False,
     "installable": True,

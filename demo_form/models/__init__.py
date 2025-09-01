@@ -8,3 +8,4 @@ from . import crm_lead
 from . import sale_order_line
 from . import many2many_fields
 from . import one2many_lines
+from . import partner_data

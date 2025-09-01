@@ -56,6 +56,7 @@
                     </h1>
                     <group col="2">
                         <group>
+                            <field name="wedding_trio_ids" invisible="1"/>
                             <field name="project_id" invisible="1"/>
                             <field name="invitation_owner"/>
                             <field name="invitation_date" readonly="1"/>
