@@ -1294,7 +1294,16 @@ class ProjectDemoForm(models.Model):
             (['Drone Kamera'], 'Drone Kamera', False),
             (['Yacht Photo Shoot', 'Yat Çekimi', 'Yat Fotoğraf Çekimi'], 'Yacht Photo Shoot', False),
             (['Rocket Shrimp'], 'Roket Karides', False),
-            (['Breakfast Service'], 'Kahvaltı', True),  # adeti göster
+            (["Pasta Show'da Gerçek Pasta"], "Pasta Show'da Gerçek Pasta", False),
+            (["Pasta Show'da Şampanya Kulesi"], "Pasta Show'da Şampanya Kulesi", False),
+            (["FRED"], "FRED", False),
+            (["BARNEY"], "BARNEY", False),
+            (["TRIO"], "TRIO", False),
+            (["Eğlence Uzatma(1 Saat)"], "Eğlence Uzatma(1 Saat)", False),
+            (["Canlı Müzik + Perküsyon"], "Canlı Müzik + Perküsyon", False),
+            (["Canlı Müzik Özel"], "Canlı Müzik Özel", False),
+            (["Canlı Müzik + Perküsyon + TRIO"], "Canlı Müzik + Perküsyon + TRIO", False),
+            (['Breakfast Service'], 'Kahvaltı', True),
         ]
 
         out, seen = [], set()
