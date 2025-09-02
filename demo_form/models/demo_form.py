@@ -816,10 +816,6 @@ class ProjectDemoForm(models.Model):
         for rec in self:
             cmds = [(5, 0, 0)]
 
-            if not (getattr(rec, 'photo_drone', False) or getattr(rec, 'home_exit', False)):
-                rec.backlight_ids = cmds
-                continue
-
             event_date = rec.invitation_date or rec.demo_date or rec.project_id.event_date
             if event_date:
                 event_date = fields.Date.to_date(event_date)
