@@ -934,41 +934,6 @@ class ProjectDemoForm(models.Model):
             ('state', 'in', ('sale', 'done')),
         ])
 
-    def _first_missing_for_changed_fields(self, vals: dict):
-        """
-        Bu write çağrısında değiştirilen TRACKED_FIELDS içinden,
-        *yalnızca True yönüne geçenleri* kontrol eder.
-        Şablonun dahil ettiği alanlar için kontrol yapılmaz.
-        İlk eksik ürünü (field, label) döndürür; yoksa (None, None).
-        """
-        self.ensure_one()
-        purchased = self._get_purchased_product_names()
-        included_fields = self._template_included_fields()
-
-        for f in self.TRACKED_FIELDS:
-            if f not in vals:
-                continue
-            if f in included_fields:
-                continue
-
-            new_val = vals[f]
-            old_val = getattr(self, f)
-
-            # yalın boolean/selection olmayan özel durumlar yoksa tek akış yeter
-            if not bool(new_val):  # OFF’a geçişte sorma
-                continue
-            if bool(old_val):  # zaten ON idiyse sorma
-                continue
-
-            labels = self._required_labels_for_field(f)
-            for lbl in labels:
-                if lbl not in purchased:
-                    return f, lbl
-
-        return None, None
-
-
-
     def _required_labels_for_field(self, field_name):
         """Bir alan için beklenen ürün etiket(ler)i; seçim alanı için prospective_val kullanılabilir."""
         mapping = self.PRODUCT_REQUIREMENTS.get(field_name)
@@ -1256,6 +1221,40 @@ class ProjectDemoForm(models.Model):
                 qty = int(line.product_uom_qty or 0)
                 counter[name] = counter.get(name, 0) + qty
         return counter
+
+
+    def _first_missing_for_changed_fields(self, vals: dict):
+        """
+        Bu write çağrısında değiştirilen TRACKED_FIELDS içinden,
+        *yalnızca True yönüne geçenleri* kontrol eder.
+        Şablonun dahil ettiği alanlar için kontrol yapılmaz.
+        İlk eksik ürünü (field, label) döndürür; yoksa (None, None).
+        """
+        self.ensure_one()
+        purchased = self._get_purchased_product_names()
+        included_fields = self._template_included_fields()
+
+        for f in self.TRACKED_FIELDS:
+            if f not in vals:
+                continue
+            if f in included_fields:
+                continue
+
+            new_val = vals[f]
+            old_val = getattr(self, f)
+
+            if not bool(new_val):  # OFF’a geçişte sorma
+                continue
+            if bool(old_val):  # zaten ON idiyse sorma
+                continue
+
+            labels = self._required_labels_for_field(f)
+            for lbl in labels:
+                if lbl not in purchased:
+                    return f, lbl
+
+        return None, None
+
 
     def _collect_coordinators(self):
         """Projeye bağlı ana siparişteki koordinatör isimlerini topla (varsa)."""
