@@ -242,7 +242,7 @@
                                     <field name="hair_garage_caddebostan" invisible="hair_studio_3435!=False or hair_other!=False" widget="boolean_toggle"/>
                                 </group>
                                 <group col="2">
-                                    <field name="hair_other" widget="boolean_toggle"/>
+                                    <field name="hair_other" invisible="hair_studio_3435==False and hair_garage_caddebostan==False" widget="boolean_toggle"/>
                                     <field name="hair_other_company" invisible="hair_other==False"/>
                                     <field name="hair_other_responsible" invisible="hair_other==False"/>
                                     <field name="hair_other_phone" invisible="hair_other==False"/>
