@@ -797,7 +797,7 @@ class ProjectDemoForm(models.Model):
                 'project_id': rec.id,
             }))
 
-            rec.live_usic_ids = cmds
+            rec.live_music_ids = cmds
 
     @api.depends(
         'photo_drone', 'home_exit',
