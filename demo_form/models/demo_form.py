@@ -1590,8 +1590,8 @@ class ProjectDemoForm(models.Model):
             notes.append(self.bar_description)
 
         if getattr(self, "prehost_breakfast", False):
-            cnt = f" (x{int(self.prehost_breakfast_count)})" if self.prehost_breakfast_count else ""
-            lines.append(f"➖Kahvaltı Servisi {cnt}px")
+            cnt = f" ({int(self.prehost_breakfast_count)}px)" if self.prehost_breakfast_count else ""
+            lines.append(f"➖Kahvaltı Servisi {cnt}")
 
         # After Party F&B
         af_items = []
