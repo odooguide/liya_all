@@ -997,9 +997,9 @@ class ProjectDemoForm(models.Model):
     @api.onchange('afterparty_service')
     def _onchange_afterparty_service_open(self):
         if self.afterparty_service:
-            self.afterparty_bbq_wraps = True
+            self.afterparty_street_food = True
         else:
-            self.afterparty_bbq_wraps = False
+            self.afterparty_street_food = False
 
 
     def _onchange_start_end_time(self):
