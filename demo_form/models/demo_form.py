@@ -982,7 +982,7 @@ class ProjectDemoForm(models.Model):
                 rec.duration_days = False
 
     @api.onchange('afterparty_ultra')
-    def _onchange_afterparty_ultra(self):
+    def _onchange_afterparty_ultra_open(self):
         if self.afterparty_ultra:
             self.afterparty_shot_service = True
             self.afterparty_sushi = True
@@ -995,7 +995,7 @@ class ProjectDemoForm(models.Model):
             self.afterparty_bbq_wraps = False
 
     @api.onchange('afterparty_service')
-    def _onchange_afterparty_ultra(self):
+    def _onchange_afterparty_service_open(self):
         if self.afterparty_service:
             self.afterparty_bbq_wraps = True
         else:
@@ -1743,6 +1743,8 @@ class ProjectDemoForm(models.Model):
 
         for rec in self:
             if any(f in vals for f in ('afterparty_service', 'afterparty_ultra', 'afterparty_dance_show')):
+                rec._onchange_afterparty_ultra_open()
+                rec._onchange_afterparty_service_open()
                 rec._onchange_start_end_time()
             if 'prehost_breakfast' in vals:
                 rec._onchange_breakfast()
