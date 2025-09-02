@@ -967,16 +967,7 @@ class ProjectDemoForm(models.Model):
 
         return None, None
 
-    def _get_purchased_product_names(self):
-        """İlgili sipariş satırlarından ürün adlarını topla + şablonun dahil ettiklerini ekle."""
-        names = set()
-        for so in self._get_related_confirmed_sale_orders():
-            for l in so.sudo().order_line:
-                n = (l.product_id.name or '').strip()
-                if n:
-                    names.add(n)
-        names |= self._template_included_labels()
-        return names
+
 
     def _required_labels_for_field(self, field_name):
         """Bir alan için beklenen ürün etiket(ler)i; seçim alanı için prospective_val kullanılabilir."""
@@ -1254,6 +1245,18 @@ class ProjectDemoForm(models.Model):
         except Exception:
             return re.sub(r'<[^>]+>', '', raw_html).strip()
 
+    def _get_purchased_products_counter(self):
+        """İlgili (sale/done) siparişlerdeki ürün adlarını ve toplam adetlerini döndürür."""
+        counter = {}
+        for so in self._get_related_confirmed_sale_orders():
+            for line in so.sudo().order_line:
+                name = (line.product_id.name or '').strip()
+                if not name:
+                    continue
+                qty = int(line.product_uom_qty or 0)
+                counter[name] = counter.get(name, 0) + qty
+        return counter
+
     def _collect_coordinators(self):
         """Projeye bağlı ana siparişteki koordinatör isimlerini topla (varsa)."""
         self.ensure_one()
@@ -1274,49 +1277,34 @@ class ProjectDemoForm(models.Model):
         return "-".join(dict.fromkeys(names))  # uniq + sırayı koru
 
     def _collect_packages(self):
-        """Ek paket/opsiyon etiketleri.
-        - Form bayraklarından (Barney/Fred hariç) + satıştan alınan opsiyoneller (örn. Yacht).
         """
-        flag_labels = [
-            ('afterparty_service', 'After Party'),
-            ('afterparty_ultra', 'After Party Ultra'),
-            ('afterparty_shot_service', 'Shot Servisi (After Party)'),
-            ('afterparty_sushi', 'Sushi Bar'),
-            ('afterparty_fog_laser', 'Sis & Lazer'),
-            ('afterparty_bbq_wraps', 'BBQ Dürümler'),
-            ('photo_video_plus', 'Photo & Video Plus'),
-            ('photo_drone', 'Drone Kamera'),
-            ('photo_yacht_shoot', 'Yacht Photo Shoot'),
-            ('menu_hot_appetizer_ultra', 'Roket Karides'),
-            ('bar_alcohol_service', 'Yabancı İçki Servisi'),
-            ('prehost_breakfast', 'Kahvaltı Çekimi'),
-        ]
-        out = []
-        for f, label in flag_labels:
-            if getattr(self, f):
-                if f == 'prehost_breakfast' and self.prehost_breakfast_count:
-                    out.append(f"{label} (x{int(self.prehost_breakfast_count)})")
-                else:
-                    out.append(label)
+        Sadece satışlardan satın alınmış opsiyonları listeler.
+        Demo formundaki alanlara bakmaz.
+        """
+        purchased = self._get_purchased_products_counter()
 
-        purchased = self._get_purchased_product_names()
-        sold_to_label = {
-            'Yat Çekimi': 'Yat Çekimi',
-            'Yat Fotoğraf Çekimi': 'Yat Fotoğraf Çekimi',
-            'Fog + Laser Show': 'Sis & Lazer',
-            'After Party Shot Servisi': 'Shot Servisi (After Party)',
-            'Sushi Bar': 'Sushi Bar',
-            'Photo & Video Plus': 'Photo & Video Plus',
-            'Drone Kamera': 'Drone Kamera',
-            'Yabancı İçki Servisi': 'Yabancı İçki Servisi',
-            'Breakfast Service': 'Kahvaltı',
-            'After Party Ultra': 'After Party Ultra',
-            'After Party': 'After Party',
-            'Rocket Shrimp': 'Rocket Karides',
-        }
-        for name, label in sold_to_label.items():
-            if name in purchased and label not in out:
-                out.append(label)
+        MAPPING = [
+            (['After Party Ultra'], 'After Party Ultra', False),
+            (['After Party'], 'After Party', False),
+            (['After Party Shot Servisi'], 'Shot Servisi (After Party)', False),
+            (['Fog + Laser Show'], 'Sis & Lazer', False),
+            (['Sushi Bar'], 'Sushi Bar', False),
+            (['Yabancı İçki Servisi'], 'Yabancı İçki Servisi', False),
+            (['Photo & Video Plus'], 'Photo & Video Plus', False),
+            (['Drone Kamera'], 'Drone Kamera', False),
+            (['Yacht Photo Shoot', 'Yat Çekimi', 'Yat Fotoğraf Çekimi'], 'Yacht Photo Shoot', False),
+            (['Rocket Shrimp'], 'Roket Karides', False),
+            (['Breakfast Service'], 'Kahvaltı', True),  # adeti göster
+        ]
+
+        out, seen = [], set()
+        for names, label, show_qty in MAPPING:
+            total = sum(purchased.get(n, 0) for n in names)
+            if total:
+                text = f"{label} (x{int(total)})" if show_qty else label
+                if text not in seen:
+                    out.append(text)
+                    seen.add(text)
 
         return out
 
