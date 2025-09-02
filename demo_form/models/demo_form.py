@@ -1231,7 +1231,7 @@ class ProjectDemoForm(models.Model):
         İlk eksik ürünü (field, label) döndürür; yoksa (None, None).
         """
         self.ensure_one()
-        purchased = self._get_purchased_product_names()
+        purchased = self._get_purchased_products_counter()
         included_fields = self._template_included_fields()
 
         for f in self.TRACKED_FIELDS:
