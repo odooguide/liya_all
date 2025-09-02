@@ -158,6 +158,30 @@
         </field>
     </record>
 
+    <record id="action_live_music" model="ir.actions.act_window">
+        <field name="name">Live Music</field>
+        <field name="res_model">live.music</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Canlı Müzik kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_live_msuic_list" model="ir.ui.view">
+        <field name="name">live.music.list</field>
+        <field name="model">live.music</field>
+        <field name="arch" type="xml">
+            <list string="Live Music" default_order="project_id,name">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
     <menuitem id="menu_partner_info_root"
             name="Partner Info"
             parent="project.menu_main_pm"
@@ -193,5 +217,10 @@
             name="Backlight"
             parent="demo_form.menu_partner_info_root"
             action="action_backlight"
+            sequence="20"/>
+    <menuitem id="menu_live_music_root"
+            name="Live Music"
+            parent="demo_form.menu_partner_info_root"
+            action="action_live_music"
             sequence="20"/>
 </odoo>

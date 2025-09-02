@@ -110,3 +110,17 @@ class Backlight(models.Model):
     second_mail = fields.Char(string='Birincil Mail')
     drone=fields.Char('Drone')
     home_exit=fields.Char('Evden Çıkış')
+
+class LiveMusic(models.Model):
+    _name='live.music'
+
+    name = fields.Char(string='Name', required=True)
+    date = fields.Date(string='Tarih')
+    project_id = fields.Many2one(
+        'project.demo.form',
+        string='Project',
+        required=True,
+        ondelete='cascade',
+        index=True,
+    )
+

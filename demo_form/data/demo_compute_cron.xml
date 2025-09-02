@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_project_demo_form_recompute" model="ir.cron">
+            <field name="name">Recompute Demo Forms (compute’lar)</field>
+            <field name="model_id" ref="model_project_demo_form"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_recompute_all_compute_fields()</field>
+
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="active">False</field>
+            <field name="user_id" ref="base.user_admin"/>
+        </record>
+    </data>
+</odoo>

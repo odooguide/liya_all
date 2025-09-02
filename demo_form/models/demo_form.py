@@ -6,7 +6,8 @@ from odoo.tools import html2plaintext, plaintext2html
 import re
 import json
 from markupsafe import escape as E, Markup
-
+import logging
+_logger = logging.getLogger(__name__)
 
 TIME_PATTERN = re.compile(r'(\d{1,2}):([0-5]\d)')
 TEMPLATE_INCLUDED_FIELDS = {
@@ -476,6 +477,14 @@ class ProjectDemoForm(models.Model):
         readonly=True,
         store=True,
     )
+    live_music_ids = fields.One2many(
+        comodel_name='live.music',
+        inverse_name='project_id',
+        string='Live Music',
+        compute='_compute_live_music',
+        readonly=True,
+        store=True,
+    )
     backlight_ids = fields.One2many(
         comodel_name='backlight',
         inverse_name='project_id',
@@ -763,6 +772,32 @@ class ProjectDemoForm(models.Model):
             }))
 
             rec.vedan_ids = cmds
+    @api.depends(
+        'demo_date',
+        'sale_template_id'
+    )
+    def _compute_live_music(self):
+        for rec in self:
+            cmds = [(5, 0, 0)]
+            event_date = rec.invitation_date or rec.demo_date
+            if not event_date and rec.project_id:
+                event_date = (
+                        getattr(rec.project_id, 'event_date', False)
+                        or getattr(rec.project_id, 'date_start', False)
+                        or getattr(rec.project_id, 'date', False)
+                )
+            if event_date:
+                event_date = fields.Date.to_date(event_date)
+
+            tmpl_name=self.sudo().sale_template_id.name or ''
+
+            cmds.append((0, 0, {
+                'name': tmpl_name,
+                'date': event_date,
+                'project_id': rec.id,
+            }))
+
+            rec.live_usic_ids = cmds
 
     @api.depends(
         'photo_drone', 'home_exit',
@@ -821,48 +856,41 @@ class ProjectDemoForm(models.Model):
 
             rec.backlight_ids = cmds
 
-    def action_recompute_all(self):
-        """Seçili kayıt(lar) için tüm compute fonksiyonlarını tek yerden çalıştırır.
-        Server Action bu metodu çağıracak.
+    @api.model
+    def cron_recompute_all_compute_fields(self, batch_size=500):
         """
-        method_names = [
-            '_compute_wedding_trio_ids',
-            '_compute_blue_marmara_ids',
-            '_compute_studio_345',
-            '_compute_garage_caddebostan',
-            '_compute_partner_vedan',
-            '_compute_backlight_ids',
-        ]
+        Tüm project.demo.form kayıtları için ilgili compute fonksiyonlarını çağırır.
+        Büyük setlerde bellek kullanımını azaltmak için batch ile ilerler.
+        """
 
-        errors = []
-        updated = 0
+        DemoForm = self.env["project.demo.form"].sudo()
+        domain = []
 
-        # sudo(): bazı compute'lar sudo erişimle partner/opportunity okuyor
-        for rec in self.sudo():
-            for mname in method_names:
-                try:
-                    # Her adımı savepoint içinde çalıştır: birinde hata olsa da diğerleri devam etsin
-                    with self.env.cr.savepoint():
-                        getattr(rec, mname)()
-                except Exception as e:
-                    errors.append(f"{rec.display_name or rec.id}: {mname} -> {e}")
-            updated += 1
+        ids = DemoForm.search(domain).ids
+        total = len(ids)
+        _logger.info("[Cron] project.demo.form compute taraması başlıyor. Kayıt sayısı: %s", total)
 
-        msg = f'{updated} kayıt güncellendi.'
-        if errors:
-            preview = '\n'.join(errors[:3])
-            msg += f"\n{len(errors)} hata (ilkleri):\n{preview}"
+        for start in range(0, total, batch_size):
+            chunk_ids = ids[start:start + batch_size]
+            recs = DemoForm.browse(chunk_ids)
+            try:
+                recs._compute_wedding_trio_ids()
+                recs._compute_blue_marmara_ids()
+                recs._compute_studio_345()
+                recs._compute_garage_caddebostan()
+                recs._compute_partner_vedan()
+                recs._compute_live_music()
+                recs._compute_backlight_ids()
 
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'Recompute tamamlandı',
-                'message': msg,
-                'type': 'success' if not errors else 'warning',
-                'sticky': False,
-            }
-        }
+                # İsteğe bağlı: cache temizliği
+                recs.invalidate_cache()
+            except Exception:
+                _logger.exception(
+                    "[Cron] Compute çağrısı sırasında hata oluştu (ids: %s)", chunk_ids
+                )
+
+        _logger.info("[Cron] project.demo.form compute taraması tamamlandı. Toplam: %s", total)
+
     @api.onchange('confirmed_demo_form_plan')
     def _onchange_confirmed_contract_security(self):
         for rec in self:

@@ -19,6 +19,7 @@
         "views/many2many_list_views.xml",
         "data/project_task_menu_views.xml",
         "data/check_project_stage_cron.xml",
+        "data/demo_compute_cron.xml",
         "wizards/sale_order_project_wizard_view.xml",
         "wizards/update_project_wizard.xml",
         "wizards/extra_protocol_wizard_view.xml",
