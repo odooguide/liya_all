@@ -1334,15 +1334,6 @@ class ProjectDemoForm(models.Model):
             base = f"➖{ev_tr}:  {tm}" if tm else f"➖{ev_tr}"
             lines.append(base)
 
-            note_html = (
-                    getattr(ln, 'notes_html', '') or getattr(ln, 'notes', '') or
-                    getattr(ln, 'note', '') or getattr(ln, 'description', '') or
-                    getattr(ln, 'location_notes', '')
-            )
-            if note_html and str(note_html).strip():
-                lines.append(note_html)
-                lines.append("&nbsp;")
-
         header = (self.start_end_time or '').replace(' ', '')
         return header, lines
 
@@ -1374,26 +1365,17 @@ class ProjectDemoForm(models.Model):
                         ports.append(p)
 
             # HAM HTML not
-            note_html = getattr(t, 'notes_html', '') or getattr(t, 'notes', '') or getattr(t, 'note', '') or getattr(t,
-                                                                                                                     'description',
-                                                                                                                     '')
             is_return = 'dönüş' in label.lower() or 'dönüşü' in label.lower()
 
             if is_return and len(ports) > 1:
                 for p in ports:
                     line = f"{i}/ {label}: {tm} {p}".rstrip()
                     out.append(line)
-                    if note_html and str(note_html).strip():
-                        out.append(note_html)  # HAM HTML
-                        out.append("&nbsp;")
                     i += 1
             else:
                 suffix = f" {', '.join(ports)}" if ports else ""
                 line = f"{i}/ {label}: {tm}{suffix}".rstrip()
                 out.append(line)
-                if note_html and str(note_html).strip():
-                    out.append(note_html)  # HAM HTML
-                    out.append("&nbsp;")
                 i += 1
 
         if not found_next_day:
