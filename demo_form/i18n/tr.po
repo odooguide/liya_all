@@ -3736,7 +3736,7 @@ msgstr ""
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__photo_yacht_shoot
 msgid "Yacht Photo Shoot"
-msgstr ""
+msgstr "Yat Fotoğraf Çekimi"
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout

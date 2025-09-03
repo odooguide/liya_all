@@ -239,7 +239,6 @@ class SaleOrder(models.Model):
 
         res = {'domain': {'sale_order_template_id': [('id', 'in', list(allowed_ids) or [0])]}}
         if self.sale_order_template_id and self.sale_order_template_id.id not in allowed_ids:
-            prev_name = existing.sale_order_template_id.display_name or '—'
             addendum_names = ', '.join(
                 self.env['sale.order.template'].browse(list(addendum_ids)).mapped('display_name')
             ) or ', '.join(ADDENDUM_NAMES)
@@ -247,7 +246,6 @@ class SaleOrder(models.Model):
                 'title': "Şablon Kısıtı",
                 'message': (
                     "Bu fırsatta zaten bir satış var. Yeni satış yalnızca şu şablonlarla açılabilir:\n"
-                    f"- Önceki satışın şablonu: {prev_name}\n"
                     f"- Ek protokol şablonları: {addendum_names}"
                 )
             }

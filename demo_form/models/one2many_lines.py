@@ -8,7 +8,7 @@ class DemoTransportLine(models.Model):
     demo_form_id = fields.Many2one(
         'project.demo.form', ondelete='cascade')
     sequence = fields.Integer(string="Step")
-    label = fields.Char(string="Notes")
+    label = fields.Char(string="Notes",translate=True)
     time = fields.Char(string="Time", )
     port_ids = fields.Many2many(
         'project.transport.port',
@@ -36,7 +36,7 @@ class DemoScheduleLine(models.Model):
     demo_form_id = fields.Many2one(
         'project.demo.form', ondelete='cascade')
     sequence = fields.Integer(string="Step")
-    event = fields.Char(string="Event")
+    event = fields.Char(string="Event",translate=True)
     time = fields.Char(string="Time")
     location_type = fields.Selection(
         [('restaurant', 'Restaurant'), ('beach', 'Beach')],

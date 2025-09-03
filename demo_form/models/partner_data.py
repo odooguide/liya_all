@@ -44,7 +44,9 @@ class PartnerVedans(models.Model):
 
     name = fields.Char(string='Name', required=True)
     date = fields.Date(string='Event Date')
-    opportunity_name=fields.Char(string='İsim')
+    opportunity_name=fields.Char(string='Isim')
+    first_name=fields.Char(string='First Contact')
+    second_name=fields.Char(string='Second Contact')
     first_phone = fields.Char(string='First Phone')
     second_phone = fields.Char(string='Second Phone')
     project_id = fields.Many2one(
@@ -61,6 +63,8 @@ class Studio345(models.Model):
     name = fields.Char(string='Name', required=True)
     date = fields.Date(string='Tarih')
     opportunity_name=fields.Char(string='İsim')
+    first_name=fields.Char(string='First Contact')
+    second_name=fields.Char(string='Second Contact')
     first_phone = fields.Char(string='Birincil Telefon')
     second_phone = fields.Char(string='İkincil Telefon')
     project_id = fields.Many2one(
@@ -79,6 +83,8 @@ class GarageCaddebostan(models.Model):
     name = fields.Char(string='Name', required=True)
     date = fields.Date(string='Tarih')
     opportunity_name=fields.Char(string='İsim')
+    first_name=fields.Char(string='First Contact')
+    second_name=fields.Char(string='Second Contact')
     first_phone = fields.Char(string='Birincil Telefon')
     second_phone = fields.Char(string='İkincil Telefon')
     project_id = fields.Many2one(
@@ -97,6 +103,8 @@ class Backlight(models.Model):
     name = fields.Char(string='Name', required=True)
     date = fields.Date(string='Tarih')
     opportunity_name=fields.Char(string='İsim')
+    first_name=fields.Char(string='First Contact')
+    second_name=fields.Char(string='Second Contact')
     first_phone = fields.Char(string='Birincil Telefon')
     second_phone = fields.Char(string='İkincil Telefon')
     project_id = fields.Many2one(
@@ -110,6 +118,11 @@ class Backlight(models.Model):
     second_mail = fields.Char(string='Birincil Mail')
     drone=fields.Char('Drone')
     home_exit=fields.Char('Evden Çıkış')
+    photo_service=fields.Char('Photo Service')
+    sale_template_name=fields.Char('Package')
+    yacht_shoot=fields.Char('Yacht Shoot')
+    photo_print_service=fields.Char('Photo Print Service')
+
 
 class LiveMusic(models.Model):
     _name='live.music'
@@ -123,4 +136,18 @@ class LiveMusic(models.Model):
         ondelete='cascade',
         index=True,
     )
+class ConfirmedForm(models.Model):
+    _name='confirmed.form'
 
+    name = fields.Char(string='Name', required=True)
+    date = fields.Date(string='Tarih')
+    project_id = fields.Many2one(
+        'project.demo.form',
+        string='Project',
+        required=True,
+        ondelete='cascade',
+        index=True,
+    )
+    confirmed_demo_form=fields.Binary(string='Confirmed Demo Form')
+    form_name=fields.Char('Form Name')
+#TODO: burada kaldin eksik alanlari tamamla.

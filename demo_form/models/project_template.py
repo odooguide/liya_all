@@ -207,7 +207,7 @@ class ProjectProject(models.Model):
         if is_admin or is_org_manager or self.user_id.id == user.id:
             return True
 
-        raise UserError(_("Bu işlemi yalnızca Proje Yöneticisi, Organizasyon Müdürü "
+        raise UserError(_("Bu işlemi yalnızca Koordinatör, Organizasyon Müdürü "
                           "veya 'Demo Randevu Oluşturma' görevinin atanan kullanıcısı yapabilir."))
 
 
@@ -347,6 +347,7 @@ class ProjectProject(models.Model):
             lines = lines.sorted(key=lambda l: (l.order_id.id, l.sequence or 0))
 
             html += """
+            <span> Etkinlik İçeriği </span>
             <table style="width:100%; border-collapse:collapse;">
               <thead>
                 <tr>
@@ -484,7 +485,6 @@ class ProjectProject(models.Model):
 
         order = self.sudo().reinvoiced_sale_order_id
         if order:
-            # --- Güvenli davetiye adı ---
             partner = (order.partner_id.name or '').strip()
             second = (getattr(order.opportunity_id, 'second_contact', '') or '').strip()
             inv_name = f'{partner}-{second}'.strip('-').strip()
@@ -492,7 +492,7 @@ class ProjectProject(models.Model):
             vals.update({
                 'name': f'{inv_name} Demo Formu' if inv_name else 'Demo Formu',
                 'invitation_owner': inv_name or partner or False,
-                'invitation_date': order.wedding_date,  # Date obj veya 'YYYY-MM-DD'
+                'invitation_date': order.wedding_date,
                 'guest_count': order.people_count,
                 'sale_template_id': order.sale_order_template_id.id or False,
                 'demo_date': (
@@ -502,28 +502,27 @@ class ProjectProject(models.Model):
                 ),
             })
 
-            sched_cmds = [
-                (0, 0, {
+            sched_cmds = []
+            for line in order.sale_order_template_id.schedule_line_ids:
+                sched_cmds.append((0, 0, {
                     'sequence': line.sequence,
-                    'event': line.event,
+                    'event': line.with_context(lang='en_US').event or '',
                     'time': line.time,
                     'location_type': line.location_type,
                     'location_notes': line.location_notes,
-                })
-                for line in order.sale_order_template_id.schedule_line_ids
-            ]
-            vals['schedule_line_ids'] = sched_cmds
+                }))
 
-            trans_cmds = [
-                (0, 0, {
+            trans_cmds = []
+            for line in order.sale_order_template_id.transport_line_ids:
+                trans_cmds.append((0, 0, {
                     'sequence': line.sequence,
-                    'label': line.label,
+                    'label': line.with_context(lang='en_US').label or '',
                     'time': line.time,
                     'port_ids': [(6, 0, line.port_ids.ids)],
                     'other_port': line.other_port,
-                })
-                for line in order.sale_order_template_id.transport_line_ids
-            ]
+                }))
+
+            vals['schedule_line_ids'] = sched_cmds
             vals['transport_line_ids'] = trans_cmds
 
             def _apply_hair_choice(_vals):
@@ -642,6 +641,40 @@ class ProjectProject(models.Model):
             demo = self.env['project.demo.form'].sudo().create(vals)
         else:
             demo = self.env['project.demo.form'].create(vals)
+
+        src_sched = order.sale_order_template_id.schedule_line_ids.sorted(
+            key=lambda r: (r.sequence, r.id)
+        )
+        tgt_sched = demo.schedule_line_ids.sorted(
+            key=lambda r: (r.sequence, r.id)
+        )
+
+        src_trans = order.sale_order_template_id.transport_line_ids.sorted(
+            key=lambda r: (r.sequence, r.id)
+        )
+        tgt_trans = demo.transport_line_ids.sorted(
+            key=lambda r: (r.sequence, r.id)
+        )
+
+        for s, t in zip(src_sched, tgt_sched):
+            t.with_context(lang='en_US').write({
+                'event': s.with_context(lang='en_US').event or ''
+            })
+
+        for s, t in zip(src_trans, tgt_trans):
+            t.with_context(lang='en_US').write({
+                'label': s.with_context(lang='en_US').label or ''
+            })
+
+        for s, t in zip(src_sched, tgt_sched):
+            t.with_context(lang='tr_TR').write({
+                'event': s.with_context(lang='tr_TR').event or ''
+            })
+
+        for s, t in zip(src_trans, tgt_trans):
+            t.with_context(lang='tr_TR').write({
+                'label': s.with_context(lang='tr_TR').label or ''
+            })
 
         return {
             'type': 'ir.actions.act_window',

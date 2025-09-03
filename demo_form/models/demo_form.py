@@ -25,10 +25,9 @@ TEMPLATE_INCLUDED_FIELDS = {
             'afterparty_service', 'afterparty_shot_service',
             'accommodation_service', 'dance_lesson',
             'afterparty_street_food',
-            'afterparty_sushi', 'bar_alcohol_service', 'photo_drone',
+            'bar_alcohol_service', 'photo_drone',
             'afterparty_fog_laser', 'afterparty_bbq_wraps',
             'music_live', 'music_percussion', 'music_trio',
-            'cake_real', 'cake_champagne_tower',
             'prehost_barney',
 
         },
@@ -47,6 +46,7 @@ class ProjectDemoForm(models.Model):
     name = fields.Char(
         string="Reference",
         default=lambda self: _('New Demo Form'))
+    partner_id=fields.Many2one('res.partner',related='project_id.partner_id',string='Customer')
     invitation_owner = fields.Char(string="Invitation Owner")
     invitation_date = fields.Date(string="Invitation Date")
     duration_days = fields.Char(string="Day", compute='_compute_day')
@@ -455,7 +455,7 @@ class ProjectDemoForm(models.Model):
     studio_345 = fields.One2many(
         comodel_name='studio.345',
         inverse_name='project_id',
-        string='Studio 345',
+        string='Studio 3435',
         compute='_compute_studio_345',
         readonly=True,
         store=True,
@@ -490,6 +490,14 @@ class ProjectDemoForm(models.Model):
         inverse_name='project_id',
         string='Backlight',
         compute='_compute_backlight_ids',
+        readonly=True,
+        store=True,
+    )
+    confirmed_demo_ids = fields.One2many(
+        comodel_name='confirmed.form',
+        inverse_name='project_id',
+        string='Confirmed Demo Forms',
+        compute='_compute_confirmed_demo_form_ids',
         readonly=True,
         store=True,
     )
@@ -528,7 +536,9 @@ class ProjectDemoForm(models.Model):
     def _compute_wedding_trio_ids(self):
         for rec in self:
             commands = [(5, 0, 0)]
-
+            if not rec.music_trio:
+                rec.wedding_trio_ids=commands
+                continue
             event_date = (
                 getattr(rec.project_id, 'event_date', False)
             )
@@ -610,16 +620,18 @@ class ProjectDemoForm(models.Model):
             if event_date:
                 event_date = fields.Date.to_date(event_date)
 
-            # CRM fırsat + partner bilgileri (sudo ile güvenli)
             order = rec.project_id.sudo().reinvoiced_sale_order_id if rec.project_id else False
             opp = order.sudo().opportunity_id if order else False
             partner = order.sudo().partner_id if order else False
 
             couple = (opp.name or '').strip() if opp else ''
             # 1. telefon: partner.mobile > partner.phone > opp.mobile > opp.phone
+            first_name=''
+            second_name=''
             first_phone = ''
             if partner:
                 first_phone = (partner.mobile or partner.phone or '') or ''
+                first_name=partner.name or ''
             if not first_phone and opp:
                 first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
 
@@ -631,6 +643,7 @@ class ProjectDemoForm(models.Model):
                     if val:
                         second_phone = val
                         break
+                second_name=opp.second_contact
 
             # Satır adı: davet sahibi varsa onu, yoksa "Çift - Studio 3435"
             name_val = (rec.invitation_owner or '').strip()
@@ -645,6 +658,8 @@ class ProjectDemoForm(models.Model):
                 'name': name_val,
                 'date': event_date,
                 'opportunity_name': couple,
+                'first_name':first_name,
+                'second_name':second_name,
                 'first_phone': first_phone,
                 'second_phone': second_phone,
                 'photo_studio': studio_name,
@@ -686,12 +701,16 @@ class ProjectDemoForm(models.Model):
             partner = order.sudo().partner_id if order else False
 
             couple = (opp.name or '').strip() if opp else ''
+            first_name = ''
+            second_name = ''
             first_phone = ''
             if partner:
                 first_phone = (partner.mobile or partner.phone or '') or ''
+                first_name = partner.name or ''
             if not first_phone and opp:
                 first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
 
+            # 2. telefon: olası özel alanlar
             second_phone = ''
             if opp:
                 for attr in ('second_phone', 'second_contact_phone', 'x_second_phone', 'x_phone2'):
@@ -699,6 +718,7 @@ class ProjectDemoForm(models.Model):
                     if val:
                         second_phone = val
                         break
+                second_name = opp.second_contact
 
             name_val = (rec.invitation_owner or '').strip()
             if not name_val:
@@ -711,6 +731,8 @@ class ProjectDemoForm(models.Model):
                 'name': name_val,
                 'date': event_date,
                 'opportunity_name': couple,
+                'first_name':first_name,
+                'second_name':second_name,
                 'first_phone': first_phone,
                 'second_phone': second_phone,
                 'photo_studio': studio_name,
@@ -746,12 +768,16 @@ class ProjectDemoForm(models.Model):
             partner = order.sudo().partner_id if order else False
 
             couple = (opp.name or '').strip() if opp else ''
+            first_name = ''
+            second_name = ''
             first_phone = ''
             if partner:
                 first_phone = (partner.mobile or partner.phone or '') or ''
+                first_name = partner.name or ''
             if not first_phone and opp:
                 first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
 
+            # 2. telefon: olası özel alanlar
             second_phone = ''
             if opp:
                 for attr in ('second_phone', 'second_contact_phone', 'x_second_phone', 'x_phone2'):
@@ -759,6 +785,7 @@ class ProjectDemoForm(models.Model):
                     if val:
                         second_phone = val
                         break
+                second_name = opp.second_contact
 
             name_val = (rec.invitation_owner or '').strip()
 
@@ -766,6 +793,8 @@ class ProjectDemoForm(models.Model):
                 'name': name_val,
                 'date': event_date,
                 'opportunity_name': couple,
+                'first_name':first_name,
+                'second_name':second_name,
                 'first_phone': first_phone,
                 'second_phone': second_phone,
                 'project_id': rec.id,
@@ -779,6 +808,9 @@ class ProjectDemoForm(models.Model):
     def _compute_live_music(self):
         for rec in self:
             cmds = [(5, 0, 0)]
+            if not rec.music_live:
+                rec.live_music_ids=cmds
+                continue
             event_date = rec.invitation_date or rec.demo_date
             if not event_date and rec.project_id:
                 event_date = (
@@ -820,10 +852,28 @@ class ProjectDemoForm(models.Model):
             if event_date:
                 event_date = fields.Date.to_date(event_date)
 
-            opp = rec.project_id.so_opportunity_id
+            order = rec.project_id.sudo().reinvoiced_sale_order_id if rec.project_id else False
+            opp = order.sudo().opportunity_id if order else False
+            partner = order.sudo().partner_id if order else False
             couple_name = (opp.name or '').strip() if opp else ''
-            first_phone = (opp.phone or '').strip() if opp else ''
-            second_phone = (getattr(opp, 'second_phone', '') or '').strip() if opp else ''
+            first_name = ''
+            second_name = ''
+            first_phone = ''
+            if partner:
+                first_phone = (partner.mobile or partner.phone or '') or ''
+                first_name = partner.name or ''
+            if not first_phone and opp:
+                first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
+
+            # 2. telefon: olası özel alanlar
+            second_phone = ''
+            if opp:
+                for attr in ('second_phone', 'second_contact_phone', 'x_second_phone', 'x_phone2'):
+                    val = getattr(opp, attr, '') or ''
+                    if val:
+                        second_phone = val
+                        break
+                second_name = opp.second_contact
 
             # MAİLLER
             first_mail = (rec.project_id.email_from or '').strip()  # birincil mail (proje related)
@@ -837,10 +887,24 @@ class ProjectDemoForm(models.Model):
                 bits = [b for b in [couple_name, "Backlight"] if b]
                 name_val = " - ".join(bits) or "Backlight"
 
+            if rec.photo_standard:
+                photo_service='Standart Fotoğraf Servisi'
+            elif rec.photo_video_plus:
+                photo_service='Photo & Video Plus'
+            else:
+                photo_service=''
+
+            sale_template_name=rec.sale_template_id.name or ''
+
+            yacht_shoot='VAR' if rec.photo_yacht_shoot else 'YOK'
+            photo_print_service='VAR' if rec.photo_print_service else 'YOK'
+
             cmds.append((0, 0, {
                 'name': name_val,
                 'date': event_date,
                 'opportunity_name': couple_name,
+                'first_name':first_name,
+                'second_name':second_name,
                 'first_phone': first_phone,
                 'second_phone': second_phone,
                 'project_id': rec.id,
@@ -848,9 +912,41 @@ class ProjectDemoForm(models.Model):
                 'second_mail': second_mail,
                 'drone': drone_str,
                 'home_exit': home_exit_str,
+                'photo_service':photo_service,
+                'sale_template_name':sale_template_name,
+                'yacht_shoot':yacht_shoot,
+                'photo_print_service':photo_print_service,
             }))
 
             rec.backlight_ids = cmds
+
+    @api.depends(
+        'project_id',
+        'confirmed_demo_form_plan',
+        'invitation_date'
+    )
+    def _compute_confirmed_demo_form_ids(self):
+        for rec in self:
+            cmds=[(5,0,0)]
+            if not rec.confirmed_demo_form_plan:
+                rec.confirmed_demo_ids=cmds
+                continue
+
+            event_date = rec.invitation_date or rec.demo_date or rec.project_id.event_date
+            if event_date:
+                event_date = fields.Date.to_date(event_date)
+            name=rec.invitation_owner or ''
+            confirmed_demo_form=rec.confirmed_demo_form_plan or False
+            form_name=rec.confirmed_demo_form_plan_name or ''
+
+            cmds.append((0, 0, {
+                'name': name,
+                'date': event_date,
+                'project_id': rec.id,
+                'confirmed_demo_form':confirmed_demo_form,
+                'form_name':form_name,
+            }))
+            rec.confirmed_demo_ids=cmds
 
     @api.model
     def cron_recompute_all_compute_fields(self, batch_size=500):
@@ -984,13 +1080,9 @@ class ProjectDemoForm(models.Model):
     @api.onchange('afterparty_ultra')
     def _onchange_afterparty_ultra_open(self):
         if self.afterparty_ultra:
-            self.afterparty_shot_service = True
-            self.afterparty_sushi = True
             self.afterparty_fog_laser = True
             self.afterparty_bbq_wraps = True
         else:
-            self.afterparty_shot_service = False
-            self.afterparty_sushi = False
             self.afterparty_fog_laser = False
             self.afterparty_bbq_wraps = False
 
@@ -1427,22 +1519,22 @@ class ProjectDemoForm(models.Model):
             bits.append("After Party Ultra var")
         elif self.afterparty_service:
             bits.append("After Party var")
-        if self.afterparty_bbq_wraps: bits.append("BBQ Wraps")
+        if self.afterparty_bbq_wraps: bits.append("BBQ Dürümleri")
+        if self.afterparty_shot_service: bits.append("Shot Servisi")
         if self.afterparty_fog_laser: bits.append("Sis & Laser")
         if self.afterparty_sushi:     bits.append("Sushi")
-        if self.local_music:          bits.append("Yöresel şarkılar planlandı")
-        if self.music_other and self.music_other_details:
-            bits.append(f"Özel: {self.music_other_details}")
-        if self.cocktail_request:
-            bits.append("Kokteyl istek listesi mevcut")
-        if self.dinner_request:
-            bits.append("Yemek istek listesi mevcut")
-        if self.party_request:
-            bits.append("Parti istek listesi mevcut")
-        if self.afterparty_request:
-            bits.append("After Party istek listesi mevcut")
-        if self.ban_songs:
-            bits.append("Yasaklı şarkı listesi mevcut")
+        #if self.music_other and self.music_other_details:
+        #     bits.append(f"Özel: {self.music_other_details}")
+        # if self.cocktail_request:
+        #     bits.append("Kokteyl istek listesi mevcut")
+        # if self.dinner_request:
+        #     bits.append("Yemek istek listesi mevcut")
+        # if self.party_request:
+        #     bits.append("Parti istek listesi mevcut")
+        # if self.afterparty_request:
+        #     bits.append("After Party istek listesi mevcut")
+        # if self.ban_songs:
+        #     bits.append("Yasaklı şarkı listesi mevcut")
 
         out = []
         if bits:
@@ -1469,12 +1561,12 @@ class ProjectDemoForm(models.Model):
         ceremony = 'VAR' if getattr(self, 'is_ceremony', False) else 'YOK'
         lines.append(f'➖Seremoni Düzeni : {ceremony}')
 
-        # Pre-host (Barney/Fred) genel notlara
+
         pre = []
         if getattr(self, 'prehost_barney', False): pre.append('Barney')
         if getattr(self, 'prehost_fred', False):   pre.append('Fred')
         if pre:
-            lines.append("➖Pre-host : " + ", ".join(pre))
+            lines.append("➖Pre-hosting : " + ", ".join(pre))
 
         # Sosyal medya tag
         if getattr(self, 'other_social_media_tag', False):
@@ -1516,7 +1608,7 @@ class ProjectDemoForm(models.Model):
             # Raki markası (seçiliyse)
             RAKI = dict(self._fields['bar_raki_brand']._description_selection(self.env))
             raki = RAKI.get(self.bar_raki_brand) if self.bar_raki_brand else ""
-            lines.append("➖Alkollü içecek servisi" + (f" – {raki}" if raki else ""))
+            lines.append("➖Alkol servisi" + (f" – {raki}" if raki else ""))
         return lines
 
     def _display_wedding_type(self):
@@ -1562,11 +1654,15 @@ class ProjectDemoForm(models.Model):
         raki_map = dict(
             self.with_context(lang=self.env.user.lang).fields_get(['bar_raki_brand'])['bar_raki_brand']['selection'])
         if self.bar_alcohol_service:
-            lines.append("➖Alkollü içecek servisi : Var")
+            lines.append("➖Yabancı İçecek Servisi : Var")
         else:
-            lines.append("➖Alkollü içecek servisi : Yok")
+            lines.append("➖Yabancı İçecek Servisi : Yok")
             if self.bar_purchase_advice:
                 notes.append(f"{self.bar_purchase_advice}")  # ham HTML olabilir
+        if self.alcohol_service:
+            lines.append("➖Alkol Servisi : Var")
+        else:
+            lines.append("➖ALkol Servisi : Yok")
 
         if self.bar_raki_brand:
             lines.append(f"➖Rakı Markası : {raki_map.get(self.bar_raki_brand, self.bar_raki_brand)}")
@@ -1595,7 +1691,6 @@ class ProjectDemoForm(models.Model):
             lines.append("➖After Party İçecekleri : Daha fazla çeşit içki")
 
         if notes:
-            lines.append("&nbsp;")
             lines.extend(notes)
 
         return lines

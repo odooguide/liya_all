@@ -5,7 +5,7 @@ from odoo.exceptions import UserError
 class CalendarEvent(models.Model):
     _inherit = 'calendar.event'
 
-    event_place=fields.Selection([('online','Online'),('on_field','On Field'),('none','Yok')], string='Event Place')
+    event_place=fields.Selection([('online','Online'),('on_field','Venue'),('none','Yok')], string='Event Place')
     categ_name=fields.Char('Event Name',compute='_compute_categ_name')
     meeting_date=fields.Date(string='Meeting Date',compute='_compute_meeting_date',store=True)
 

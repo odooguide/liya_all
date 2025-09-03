@@ -38,8 +38,11 @@
     </record>
 
     <template id="demo_form_report_layout">
-        <t t-call="web.html_container">
-            <t t-call="web.external_layout">
+
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+          <t t-call="web.external_layout" t-lang="o.partner_id.lang">
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
                 <style>
                     .liya-static-page{
                     page-break-before: always; page-break-after: always;
@@ -71,7 +74,7 @@
 
                     /* Linkler ve kalın vurgular */
                     .liya-theme a { color:#2D7F97; }
-                    .liya-theme strong { color:#2D7F97; }
+                    .liya-theme strong { color:#2D7F97; font-size:12pt !important }
                     .liya-theme table {line-height:10pt; font-size:11pt;}
 
                     .seat-plan-page {
@@ -102,7 +105,6 @@
                      "/>
 
                 <main>
-                    <t t-foreach="docs" t-as="o">
                         <div t-attf-class="o_company_#{o.company_id.id}_layout header"
                              style="text-align:center;padding-top:35mm;padding-left:180mm">
                             <img t-if="docs.company_id.logo" style="width:100px"
@@ -169,7 +171,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="padding:4px 6px; font-weight:600;">Start - End Time:</td>
+                                                <td style="padding:4px 6px; font-weight:600;width:150px;">Start - End Time:</td>
                                                 <td style="padding:4px 6px;">
                                                     <span t-esc="o.start_end_time or ''"/>
                                                 </td>
@@ -281,7 +283,7 @@
                                         </t>
                                     </tbody>
                                 </table>
-                                <div style="padding:4px 8px; width:100%">
+                                <div style="padding-left:4px; width:100%">
                                     <span t-field="o.schedule_description"
                                           t-options="{&quot;widget&quot;:&quot;html&quot;}"
                                           style="word-break:break-word;font-style:italic;"/>
@@ -337,7 +339,7 @@
                                     </tbody>
 
                                 </table>
-                                <div style="padding:4px 8px;width:100%">
+                                <div style="padding-left:4px;width:100%">
                                     <span t-field="o.transportation_description"
                                           t-options="{&quot;widget&quot;:&quot;html&quot;}"
                                           style="word-break:break-word;font-style:italic;"/>
@@ -399,31 +401,31 @@
                                             </td>
                                         </tr>
                                         <tr t-if="o.menu_meze_notes">
-                                            <td style="padding:4px 8px; font-weight:600; vertical-align:top;font-style:italic;">
+                                            <td style="padding:4px 8px; font-weight:600; vertical-align:top;">
                                                 Menu
                                                 Notes:
                                             </td>
                                             <td style="padding:4px 8px;">
                                                 <span t-field="o.menu_description"
                                                       t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                                      style="word-break:break-word;"/>
+                                                      style="word-break:break-word;font-style:italic;"/>
 
                                             </td>
                                         </tr>
-                                        <t t-if="o.sale_template_id.name.lower()=='ultra'">
-                                            <tr>
-                                                <td style="padding:4px 8px; font-weight:600;">Meze:</td>
-                                                <td style="padding:4px 8px;">
-                                                    <t t-if="o.menu_meze_ids">
-                                                        <t t-foreach="o.menu_meze_ids" t-as="m">
-                                                            <span t-esc="m.name"/>
-                                                            ,
-                                                        </t>
-                                                    </t>
-                                                    <t t-if="not o.menu_meze_ids">-</t>
-                                                </td>
-                                            </tr>
-                                        </t>
+<!--                                        <t t-if="o.sale_template_id.name.lower()=='ultra'">-->
+<!--                                            <tr>-->
+<!--                                                <td style="padding:4px 8px; font-weight:600;">Meze:</td>-->
+<!--                                                <td style="padding:4px 8px;">-->
+<!--                                                    <t t-if="o.menu_meze_ids">-->
+<!--                                                        <t t-foreach="o.menu_meze_ids" t-as="m">-->
+<!--                                                            <span t-esc="m.name"/>-->
+<!--                                                            ,-->
+<!--                                                        </t>-->
+<!--                                                    </t>-->
+<!--                                                    <t t-if="not o.menu_meze_ids">-</t>-->
+<!--                                                </td>-->
+<!--                                            </tr>-->
+<!--                                        </t>-->
                                         <tr t-if="o.menu_meze_notes">
                                             <td style="padding:4px 8px; font-weight:600; vertical-align:top;">Meze
                                                 Notes:
@@ -523,7 +525,7 @@
                                         <td style="padding:4px 8px;">
                                             <span t-field="o.bar_description"
                                                   t-options="{&quot;widget&quot;:&quot;html&quot;}"
-                                                  style="word-break:break-word; font-style:italic;"/>
+                                                  style="word-break:break-word; font-style:italic;width:500px"/>
                                         </td>
 
                                     </tbody>
@@ -955,9 +957,8 @@
                                             <t t-if="o.home_exit">
                                                 <td style="padding:4px 8px; font-weight:600;">Address:</td>
                                                 <td style="padding:4px 8px;">
-                                                    <span style="display:inline-block; min-width:100px;">
+                                                    <span style="display:inline-block; max-width:200px;word-break:always">
                                                         <span t-esc="o.photo_homesession_address or ''"/>
-                                                        / ISTANBUL
                                                     </span>
                                                 </td>
                                             </t>
@@ -2185,9 +2186,10 @@
                                 </tr>
                             </table>
                         </div>
-                    </t>
-                </main>
+                    </main>
+                </t>
             </t>
+
         </t>
     </template>
     <!-- report entry point -->

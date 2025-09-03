@@ -477,7 +477,7 @@ class CrmLead(models.Model):
             'view_mode': 'list,form',
             'views': [(self.env.ref('sale.view_order_tree').id, 'list'), (False, 'form')],
             'domain': [('opportunity_id', '=', self.id), ('state', 'in', ['draft', 'sent'])],
-            'context': {'default_opportunity_id': self.id},
+            'context': {'default_opportunity_id': self.id,'create':False},
             'target': 'current',
         }
 
@@ -490,7 +490,7 @@ class CrmLead(models.Model):
             'view_mode': 'list,form',
             'views': [(self.env.ref('sale.view_order_tree').id, 'list'), (False, 'form')],
             'domain': [('opportunity_id', '=', self.id), ('state', 'in', ['sale', 'done'])],
-            'context': {'default_opportunity_id': self.id},
+            'context': {'default_opportunity_id': self.id,'create':False},
             'target': 'current',
         }
 
