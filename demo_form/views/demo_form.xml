@@ -71,6 +71,7 @@
                             <field name="ceremony" required="1"/>
                             <field name="is_ceremony" widget="boolean_toggle"/>
                             <field name="merasim"/>
+                            <field name="ceremony_call" widget="boolean_toggle"/>
                             <field name="start_end_time"/>
                             <field name="company_id" invisible="1"/>
                             <div class="oe_edit_only" style="display:flex; align-items:center; gap:4px;">
@@ -273,7 +274,7 @@
                             <group>
                                 <group col="2">
                                     <field name="photo_standard" widget="boolean_toggle"
-                                           invisible="sale_template_id==3"/>
+                                           invisible="photo_video_plus"/>
                                     <field name="photo_video_plus" widget="boolean_toggle"/>
                                     <field name="photo_drone" widget="boolean_toggle"/>
 

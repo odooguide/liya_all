@@ -48,10 +48,11 @@ class ProjectDemoForm(models.Model):
         default=lambda self: _('New Demo Form'))
     partner_id=fields.Many2one('res.partner',related='project_id.partner_id',string='Customer')
     invitation_owner = fields.Char(string="Invitation Owner")
-    invitation_date = fields.Date(string="Invitation Date")
-    duration_days = fields.Char(string="Day", compute='_compute_day')
+    invitation_date = fields.Date(string="Invitation Date",)
+    duration_days = fields.Char(string="Day", compute='_compute_day',translate=True)
     demo_date = fields.Date(string="Demo Date")
     special_notes = fields.Html(string="Special Notes")
+    ceremony_call=fields.Boolean(string='Ceremony Call')
 
     wedding_type = fields.Selection([
         ('mini', "Mini Elite"),
@@ -61,9 +62,9 @@ class ProjectDemoForm(models.Model):
         string="Wedding Type")
     guest_count = fields.Integer(related='project_id.so_people_count',string="Guest Count")
     ceremony = fields.Selection([
-        ('actual', "Actual"),
-        ('staged', "Staged")],
-        string="Ceremony Type")
+        ('actual', "Official"),
+        ('staged', "Non-Official")],
+        string="Ceremony ")
     start_end_time = fields.Char(string="Start-End Time")
 
     # ── Schedule page ─────────────────────────────────────────────────────────
@@ -1043,10 +1044,8 @@ class ProjectDemoForm(models.Model):
         for rec in self:
             raw_html = rec.special_notes or ''
 
-            # HTML → düz metin (satır sonları korunur)
             notes = html2plaintext(raw_html or '')
 
-            # Satır sonlarını normalize et, gereksiz boşlukları toparla
             notes = notes.replace('\r\n', '\n').replace('\r', '\n')
             notes = re.sub(r'[ \t\u00A0]+', ' ', notes)  # ardışık boşlukları tek boşluk yap
             notes = re.sub(r'\n{3,}', '\n\n', notes)  # fazla boş satırları azalt
@@ -1082,9 +1081,11 @@ class ProjectDemoForm(models.Model):
         if self.afterparty_ultra:
             self.afterparty_fog_laser = True
             self.afterparty_bbq_wraps = True
+            self.afterparty_shot_service = True
         else:
             self.afterparty_fog_laser = False
             self.afterparty_bbq_wraps = False
+            self.afterparty_shot_service = False
 
     @api.onchange('afterparty_service')
     def _onchange_afterparty_service_open(self):
@@ -1096,7 +1097,6 @@ class ProjectDemoForm(models.Model):
 
     def _onchange_start_end_time(self):
         for rec in self:
-            # 1) Orijinal base end time
             if rec.afterparty_ultra:
                 base_end_dt = datetime.strptime('02:00', '%H:%M')
             elif rec.afterparty_service:
@@ -1557,7 +1557,8 @@ class ProjectDemoForm(models.Model):
             sel = self.with_context(lang=self.env.user.lang).fields_get(['merasim'])['merasim']['selection']
             merasim_label = dict(sel).get(self.merasim, self.merasim)
             lines.append(f"➖Merasim : {merasim_label}")
-
+        ceremony_call='➖Takı Anonsu: VAR' if self.ceremony_call else '➖Takı Anonsu: YOK'
+        lines.append(ceremony_call)
         ceremony = 'VAR' if getattr(self, 'is_ceremony', False) else 'YOK'
         lines.append(f'➖Seremoni Düzeni : {ceremony}')
 
@@ -1576,6 +1577,11 @@ class ProjectDemoForm(models.Model):
         else:
             sm = "Yok"
         lines.append(f"➖Sosyal Medya Tag : {sm}")
+        lines.append(", ".join([
+            f"➖Canlı Müzik: {'VAR' if self.music_live else 'YOK'}",
+            f"Trio: {'VAR' if self.music_trio else 'YOK'}",
+            f"Perküsyon: {'VAR' if self.music_percussion else 'YOK'}",
+        ]))
 
         for html in [getattr(self, 'other_description', '') or '',
                      getattr(self, 'additional_services_description', '') or '']:

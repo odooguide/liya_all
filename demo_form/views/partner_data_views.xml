@@ -37,6 +37,20 @@
             </p>
         </field>
     </record>
+    <record id="view_blue_marmara_list" model="ir.ui.view">
+        <field name="name">blue.marmara.list</field>
+        <field name="model">blue.marmara</field>
+        <field name="arch" type="xml">
+            <list string="Blue Marmara" default_order="project_id,name">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="guest_count"/>
+                <field name="boat" />
+            </list>
+        </field>
+    </record>
+
 
     <record id="action_studio_345" model="ir.actions.act_window">
         <field name="name">Studio 3435</field>
@@ -222,9 +236,9 @@
 
         <!-- Üst bilgi alanları -->
         <group col="4">
-          <field name="date"/>
+          <field name="date" readonly="1"/>
           <field name="project_id" invisible="1"/>
-          <field name="form_name" invisible="1"/>
+          <field name="form_name" invisible="1" readonly="1"/>
         </group>
 
         <separator string="Form Önizleme" colspan="4"/>
@@ -236,11 +250,10 @@
                  nolabel="1"
                  colspan="4"
                  class="o_pdf_card"
-                 style="min-height:78vh;"/>
+                 style="min-height:78vh;"
+          readonly="1"/>
         </group>
-
       </sheet>
-
     </form>
   </field>
 </record>
