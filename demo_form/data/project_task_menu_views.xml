@@ -4,7 +4,6 @@
     <record id="project.act_project_project_2_project_task_all" model="ir.actions.act_window">
       <field name="view_ids" eval="[
         (5, 0, 0),
-        (0, 0, {'sequence': 1, 'view_mode': 'kanban'}),
         (0, 0, {'sequence': 2, 'view_mode': 'list'}),
         (0, 0, {'sequence': 3, 'view_mode': 'form'}),
         (0, 0, {'sequence': 4, 'view_mode': 'calendar'}),
