@@ -93,7 +93,7 @@ class SaleOrderProjectWizard(models.TransientModel):
                 stage_env.create({
                     'name': name,
                     'sequence': seq,
-                    'company_id': order.company_id.id,
+
                 })
 
         order.project_id = project.id
