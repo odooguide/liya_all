@@ -1151,7 +1151,7 @@ class ProjectDemoForm(models.Model):
             notes = html2plaintext(raw_html or '')
 
             notes = notes.replace('\r\n', '\n').replace('\r', '\n')
-            notes = re.sub(r'[ \t\u00A0]+', ' ', notes)  # ardışık boşlukları tek boşluk yap
+            notes = re.sub(r'[ \t\u00A0]+', ', ', notes)  # ardışık boşlukları tek boşluk yap
             notes = re.sub(r'\n{3,}', '\n\n', notes)  # fazla boş satırları azalt
             notes = notes.strip()
 
