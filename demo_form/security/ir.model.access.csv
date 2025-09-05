@@ -35,3 +35,4 @@ access_studio_345_user,studio.345 user,model_studio_345,base.group_user,1,1,1,1
 access_garage_caddebostan_user,garage.caddebostan user,model_garage_caddebostan,base.group_user,1,1,1,1
 access_live_music_user,live.music user,model_live_music,base.group_user,1,1,1,1
 access_confirmed_form_user,confirmed.form user,model_confirmed_form,base.group_user,1,1,1,1
+access_demo_menu_user,demo.menu user,model_demo_menu,base.group_user,1,1,1,1

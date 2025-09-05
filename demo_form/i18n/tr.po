@@ -1227,8 +1227,8 @@ msgstr "Mezeler"
 
 #. module: demo_form
 #: model:ir.actions.act_window,name:demo_form.action_project_demo_menu_meze
-msgid "Demo Menu Appetizers"
-msgstr "Sıcak Yemekler"
+msgid "Demo Meze Appetizers"
+msgstr "Meze"
 
 #. module: demo_form
 #: model:ir.model,name:demo_form.model_project_demo_menu_dessert

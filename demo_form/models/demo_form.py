@@ -502,6 +502,14 @@ class ProjectDemoForm(models.Model):
         readonly=True,
         store=True,
     )
+    demo_menu_ids = fields.One2many(
+        comodel_name='demo.menu',
+        inverse_name='project_id',
+        string='Demo Menu',
+        compute='_compute_demo_menu_ids',
+        readonly=True,
+        store=True,
+    )
 
     PRODUCT_REQUIREMENTS = {
         'photo_video_plus': ['Photo & Video Plus'],
@@ -948,6 +956,102 @@ class ProjectDemoForm(models.Model):
                 'form_name':form_name,
             }))
             rec.confirmed_demo_ids=cmds
+
+    @api.depends(
+        'invitation_owner', 'invitation_date', 'demo_date',
+        'project_id', 'project_id.event_date',
+        'menu_description',
+        'menu_hot_appetizer', 'menu_hot_appetizer_ultra',
+        'menu_dessert_ids', 'menu_dessert_ultra_ids',
+        'menu_meze_ids', 'menu_meze_notes',
+        'afterparty_street_food', 'afterparty_bbq_wraps', 'afterparty_sushi',
+    )
+    def _compute_demo_menu_ids(self):
+        def to_text(rec, html):
+            """HTML alanlarını düz metne çevir (sende zaten _html_to_text varsa onu kullan)."""
+            if not html:
+                return ""
+            if hasattr(rec, '_html_to_text'):
+                return rec._html_to_text(html)
+            import re
+            return re.sub(r'<[^>]+>', '', html or '').strip()
+
+        for rec in self:
+            commands = [(5, 0, 0)]
+
+            # tarih: davetiye > demo > proje
+            event_date = rec.invitation_date or rec.demo_date or getattr(rec.project_id, 'event_date', False)
+            if event_date:
+                event_date = fields.Date.to_date(event_date)
+
+            # başlık
+            name_val = (rec.invitation_owner or 'Demo Menü').strip()
+
+            hot_label = ""
+            try:
+                hot_map = dict(rec._fields['menu_hot_appetizer']._description_selection(rec.env))
+                hot_label = hot_map.get(rec.menu_hot_appetizer, "") if rec.menu_hot_appetizer else ""
+            except Exception:
+                hot_label = rec.menu_hot_appetizer or ""
+
+            def names(m2m):
+                return ", ".join(m2m.mapped('name')) if m2m else ""
+
+            lines = []
+            lines.append(f'➖ Kişi Sayısı: {rec.guest_count}px')
+
+            if hot_label:
+                lines.append(f"➖ Sıcak Başlangıç: {hot_label}")
+            if rec.menu_hot_appetizer_ultra:
+                lines.append("➖ Sıcak Ekstra: Rocket Shrimp")
+
+            meze_txt = names(rec.menu_meze_ids)
+            if meze_txt:
+                lines.append(f"➖ Mezeler: {meze_txt}")
+
+            meze_note_txt = to_text(rec, rec.menu_meze_notes)
+            if meze_note_txt:
+                lines.append(f"➖ Meze Notu: {meze_note_txt}")
+
+            dessert_txt = names(rec.menu_dessert_ids)
+            if dessert_txt:
+                lines.append(f"➖ Tatlı: {dessert_txt}")
+
+            dessert_ultra_txt = names(rec.menu_dessert_ultra_ids)
+            if dessert_ultra_txt:
+                lines.append(f"➖ Ultra Tatlı: {dessert_ultra_txt}")
+
+            af_bits = []
+            if rec.afterparty_sushi:
+                af_bits.append("Sushi")
+            if rec.afterparty_street_food:
+                af_bits.append("Street Food Atıştırmalık")
+            if rec.afterparty_bbq_wraps:
+                af_bits.append("Barbeque Wraps")
+            if af_bits:
+                lines.append("➖ After Party: " + ", ".join(af_bits))
+            if rec.prehost_breakfast:
+                lines.append(f'➖ Kahvaltı: {rec.prehost_breakfast_count}px')
+            menu_note_txt = to_text(rec, rec.menu_description)
+            if menu_note_txt:
+                if lines:
+                    lines.append("")
+                lines.append(menu_note_txt)
+
+
+
+            menu_notes = "\n".join(lines).strip()
+
+
+            if menu_notes or name_val or event_date:
+                commands.append((0, 0, {
+                    'name': name_val,
+                    'date': event_date,
+                    'project_id': rec.id,
+                    'menu_info': menu_notes,
+                }))
+
+            rec.demo_menu_ids = commands
 
     @api.model
     def cron_recompute_all_compute_fields(self, batch_size=500):

@@ -159,6 +159,9 @@ class ProjectProject(models.Model):
 
     @api.depends(
         'related_sale_order_ids.people_count', 'related_sale_order_ids.state',
+        'related_sale_order_ids.opportunity_id.sale_order_count',
+        'related_sale_order_ids.opportunity_id.quotation_count',
+
     )
     def _compute_so_people_count(self):
         for project in self:
@@ -182,22 +185,16 @@ class ProjectProject(models.Model):
                 rec.related_sale_order_ids = [(5, 0, 0)]
                 continue
 
-            domains = []
+            domain = [('state', 'in', ['done', 'sale'])]
+
             if so.opportunity_id:
-                domains.append([('opportunity_id', '=', so.opportunity_id.id)])
-
-            commercial = so.partner_id.commercial_partner_id if so.partner_id else False
-            if commercial:
-                domains.append([('partner_id', 'child_of', commercial.id)])
-
-            if domains:
-                domain = AND([OR(domains), [('state', 'in', ['done','sale'])]])
+                domain.append(('opportunity_id', '=', so.opportunity_id.id))
             else:
-                domain = [('id', '=', so.id)]
+                domain.append(('id', '=', so.id))
 
             orders = SaleOrder.search(domain)
             rec.related_sale_order_ids = [(6, 0, orders.ids)]
-            
+
     def _check_project_rights(self):
         self.ensure_one()
         user = self.env.user

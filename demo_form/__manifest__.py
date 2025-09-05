@@ -17,7 +17,7 @@
         "views/crm_lead_view_inherit.xml",
         "views/project_task_view_inherit.xml",
         "views/many2many_list_views.xml",
-        "data/project_task_menu_views.xml",
+        #"data/project_task_menu_views.xml",
         "data/check_project_stage_cron.xml",
         "data/demo_compute_cron.xml",
         "wizards/sale_order_project_wizard_view.xml",

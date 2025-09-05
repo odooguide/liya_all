@@ -150,4 +150,19 @@ class ConfirmedForm(models.Model):
     )
     confirmed_demo_form=fields.Binary(string='Confirmed Demo Form')
     form_name=fields.Char('Form Name')
+
+class DemoMenu(models.Model):
+    _name = 'demo.menu'
+
+    name = fields.Char(string='Name', required=True)
+    date = fields.Date(string='Event Date')
+    project_id = fields.Many2one(
+        'project.demo.form',
+        string='Project',
+        required=True,
+        ondelete='cascade',
+        index=True,
+    )
+    menu_info=fields.Text(string='Menu Info')
+
 #TODO: burada kaldin eksik alanlari tamamla.

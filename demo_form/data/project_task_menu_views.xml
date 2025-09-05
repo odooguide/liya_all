@@ -1,6 +1,5 @@
 <odoo>
-
-
+    <data noupdate="1">
     <record id="project.act_project_project_2_project_task_all" model="ir.actions.act_window">
       <field name="view_ids" eval="[
         (5, 0, 0),
@@ -29,4 +28,5 @@
 <!--        (0, 0, {'sequence': 1, 'view_mode':'list','view_id':ref('project.open_view_my_task_list_tree')})-->
 <!--      ]"/>-->
     </record>
+    </data>
 </odoo>
