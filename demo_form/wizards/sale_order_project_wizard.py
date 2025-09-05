@@ -77,7 +77,6 @@ class SaleOrderProjectWizard(models.TransientModel):
 
 
         stage_env = self.env['project.task.type'].sudo()
-        company_domain = ['|', ('company_id', '=', order.company_id.id), ('company_id', '=', False)]
 
         wanted_stages = [
             ('Cancel', 0),
@@ -87,7 +86,7 @@ class SaleOrderProjectWizard(models.TransientModel):
 
         for name, seq in wanted_stages:
             stage = stage_env.search(
-                [('name', '=', name), ('project_ids', '=', False)] + company_domain,
+                [('name', '=', name), ('project_ids', '=', False)],
                 limit=1
             )
             if not stage:
