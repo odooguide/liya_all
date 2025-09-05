@@ -60,44 +60,43 @@ class SaleOrderProjectWizard(models.TransientModel):
         project_name = f"D{seq_num}-{date_str}-{partner_slug}"
 
         user_recs = order.coordinator_ids.sudo().mapped('employee_ids.user_id')
-
-        users = self.env['res.users'].sudo().search([
-            ('id', 'in', user_recs.ids)
-        ])
+        users = self.env['res.users'].sudo().search([('id', 'in', user_recs.ids)])
 
         vals = {
             'name': project_name,
             'partner_id': order.partner_id.id,
             'company_id': order.company_id.id,
-            'user_id':  users[0].id,
+            'user_id': users and users[0].id or self.env.user.id,  # güvenli fallback
             'allow_billable': True,
             'privacy_visibility': 'portal',
             'reinvoiced_sale_order_id': order.id,
-            'sale_line_id': order.order_line and order.order_line[0].id or False
-
+            'sale_line_id': order.order_line and order.order_line[0].id or False,
         }
 
         project = self.env['project.project'].sudo().create(vals)
-        done_stage = self.env['project.task.type'].search([
-            ('project_ids', 'in', project.id),
-            ('name', '=', 'Done')
-        ], limit=1)
-        if not done_stage:
-            done_stage = self.env['project.task.type'].sudo().create({
-                'name': 'Done',
-                'sequence': 10,
-                'project_ids': [(4, project.id)],
-            })
-        cancel_stage = self.env['project.task.type'].search([
-            ('project_ids', 'in', project.id),
-            ('name', '=', 'Cancel')
-        ], limit=1)
-        if not cancel_stage:
-            cancel_stage = self.env['project.task.type'].sudo().create({
-                'name': 'Cancel',
-                'sequence': 0,
-                'project_ids': [(4, project.id)],
-            })
+
+
+        stage_env = self.env['project.task.type'].sudo()
+        company_domain = ['|', ('company_id', '=', order.company_id.id), ('company_id', '=', False)]
+
+        wanted_stages = [
+            ('Cancel', 0),
+            ('To Do', 1),
+            ('Done', 99),
+        ]
+
+        for name, seq in wanted_stages:
+            stage = stage_env.search(
+                [('name', '=', name), ('project_ids', '=', False)] + company_domain,
+                limit=1
+            )
+            if not stage:
+                stage_env.create({
+                    'name': name,
+                    'sequence': seq,
+                    'company_id': order.company_id.id,
+                })
+
         order.project_id = project.id
 
         lcv_subtasks = [
@@ -131,6 +130,7 @@ class SaleOrderProjectWizard(models.TransientModel):
                 'communication_type': tmpl.communication_type,
                 'sale_line_id': sale_line_id,
                 'task_tags': tmpl.name,
+                'opportunity_name':order.opportunity_id.name or ''
             })
             if tmpl.communication_type == 'phone' and tmpl.email_template_id:
                 template = tmpl.email_template_id

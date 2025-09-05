@@ -159,6 +159,9 @@ class ProjectProject(models.Model):
 
     @api.depends(
         'related_sale_order_ids.people_count', 'related_sale_order_ids.state',
+        'related_sale_order_ids.opportunity_id.sale_order_count',
+        'related_sale_order_ids.opportunity_id.quotation_count',
+
     )
     def _compute_so_people_count(self):
         for project in self:
@@ -182,22 +185,16 @@ class ProjectProject(models.Model):
                 rec.related_sale_order_ids = [(5, 0, 0)]
                 continue
 
-            domains = []
+            domain = [('state', 'in', ['done', 'sale'])]
+
             if so.opportunity_id:
-                domains.append([('opportunity_id', '=', so.opportunity_id.id)])
-
-            commercial = so.partner_id.commercial_partner_id if so.partner_id else False
-            if commercial:
-                domains.append([('partner_id', 'child_of', commercial.id)])
-
-            if domains:
-                domain = AND([OR(domains), [('state', 'in', ['done','sale'])]])
+                domain.append(('opportunity_id', '=', so.opportunity_id.id))
             else:
-                domain = [('id', '=', so.id)]
+                domain.append(('id', '=', so.id))
 
             orders = SaleOrder.search(domain)
             rec.related_sale_order_ids = [(6, 0, orders.ids)]
-            
+
     def _check_project_rights(self):
         self.ensure_one()
         user = self.env.user
@@ -207,7 +204,7 @@ class ProjectProject(models.Model):
         if is_admin or is_org_manager or self.user_id.id == user.id:
             return True
 
-        raise UserError(_("Bu işlemi yalnızca Proje Yöneticisi, Organizasyon Müdürü "
+        raise UserError(_("Bu işlemi yalnızca Koordinatör, Organizasyon Müdürü "
                           "veya 'Demo Randevu Oluşturma' görevinin atanan kullanıcısı yapabilir."))
 
 
@@ -347,6 +344,7 @@ class ProjectProject(models.Model):
             lines = lines.sorted(key=lambda l: (l.order_id.id, l.sequence or 0))
 
             html += """
+            <span> Etkinlik İçeriği </span>
             <table style="width:100%; border-collapse:collapse;">
               <thead>
                 <tr>
@@ -385,9 +383,9 @@ class ProjectProject(models.Model):
     
     def action_schedule_meeting(self):
         self.ensure_one()
-        if 'duygu' not in (self.env.user.name or '').lower():
+        demo_task=self._get_demo_task()
+        if not (demo_task.user_ids and demo_task.user_ids[0] == self.env.user):
             self._check_project_rights()
-
         demo_cat = self.env['calendar.event.type'].sudo().search([('name', 'ilike', 'demo')], limit=1)
 
         ctx = dict(
@@ -484,7 +482,6 @@ class ProjectProject(models.Model):
 
         order = self.sudo().reinvoiced_sale_order_id
         if order:
-            # --- Güvenli davetiye adı ---
             partner = (order.partner_id.name or '').strip()
             second = (getattr(order.opportunity_id, 'second_contact', '') or '').strip()
             inv_name = f'{partner}-{second}'.strip('-').strip()
@@ -492,7 +489,7 @@ class ProjectProject(models.Model):
             vals.update({
                 'name': f'{inv_name} Demo Formu' if inv_name else 'Demo Formu',
                 'invitation_owner': inv_name or partner or False,
-                'invitation_date': order.wedding_date,  # Date obj veya 'YYYY-MM-DD'
+                'invitation_date': order.wedding_date,
                 'guest_count': order.people_count,
                 'sale_template_id': order.sale_order_template_id.id or False,
                 'demo_date': (
@@ -502,28 +499,27 @@ class ProjectProject(models.Model):
                 ),
             })
 
-            sched_cmds = [
-                (0, 0, {
+            sched_cmds = []
+            for line in order.sale_order_template_id.schedule_line_ids:
+                sched_cmds.append((0, 0, {
                     'sequence': line.sequence,
-                    'event': line.event,
+                    'event': line.with_context(lang='en_US').event or '',
                     'time': line.time,
                     'location_type': line.location_type,
                     'location_notes': line.location_notes,
-                })
-                for line in order.sale_order_template_id.schedule_line_ids
-            ]
-            vals['schedule_line_ids'] = sched_cmds
+                }))
 
-            trans_cmds = [
-                (0, 0, {
+            trans_cmds = []
+            for line in order.sale_order_template_id.transport_line_ids:
+                trans_cmds.append((0, 0, {
                     'sequence': line.sequence,
-                    'label': line.label,
+                    'label': line.with_context(lang='en_US').label or '',
                     'time': line.time,
                     'port_ids': [(6, 0, line.port_ids.ids)],
                     'other_port': line.other_port,
-                })
-                for line in order.sale_order_template_id.transport_line_ids
-            ]
+                }))
+
+            vals['schedule_line_ids'] = sched_cmds
             vals['transport_line_ids'] = trans_cmds
 
             def _apply_hair_choice(_vals):
@@ -616,7 +612,7 @@ class ProjectProject(models.Model):
             ]
             ultra_extra = [
                 'music_live', 'music_percussion', 'music_trio',
-                'photo_yacht_shoot', 'bar_alcohol_service','afterparty_sushi',
+                'photo_yacht_shoot', 'bar_alcohol_service',
                 'photo_drone', 'afterparty_fog_laser', 'prehost_barney','afterparty_bbq_wraps'
             ]
             ultra_fields = elite_fields + ultra_extra
@@ -630,6 +626,11 @@ class ProjectProject(models.Model):
 
             elif tmpl == 'ultra':
                 _apply_hair_choice(vals)
+                DEFAULT_MEZE_NOTE = (
+                    'Standart mezelere ilave olarak Kayısı Yahnisi, Lakerda ve '
+                    'Ahtapot soğuk deniz mezeleri de servis edilir.'
+                )
+                vals['menu_meze_notes']=DEFAULT_MEZE_NOTE
                 for f in ultra_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True
@@ -637,6 +638,40 @@ class ProjectProject(models.Model):
             demo = self.env['project.demo.form'].sudo().create(vals)
         else:
             demo = self.env['project.demo.form'].create(vals)
+
+        src_sched = order.sale_order_template_id.schedule_line_ids.sorted(
+            key=lambda r: (r.sequence, r.id)
+        )
+        tgt_sched = demo.schedule_line_ids.sorted(
+            key=lambda r: (r.sequence, r.id)
+        )
+
+        src_trans = order.sale_order_template_id.transport_line_ids.sorted(
+            key=lambda r: (r.sequence, r.id)
+        )
+        tgt_trans = demo.transport_line_ids.sorted(
+            key=lambda r: (r.sequence, r.id)
+        )
+
+        for s, t in zip(src_sched, tgt_sched):
+            t.with_context(lang='en_US').write({
+                'event': s.with_context(lang='en_US').event or ''
+            })
+
+        for s, t in zip(src_trans, tgt_trans):
+            t.with_context(lang='en_US').write({
+                'label': s.with_context(lang='en_US').label or ''
+            })
+
+        for s, t in zip(src_sched, tgt_sched):
+            t.with_context(lang='tr_TR').write({
+                'event': s.with_context(lang='tr_TR').event or ''
+            })
+
+        for s, t in zip(src_trans, tgt_trans):
+            t.with_context(lang='tr_TR').write({
+                'label': s.with_context(lang='tr_TR').label or ''
+            })
 
         return {
             'type': 'ir.actions.act_window',

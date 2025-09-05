@@ -86,7 +86,7 @@ class SaleOrderTemplateScheduleLine(models.Model):
     sale_template_id = fields.Many2one(
         'sale.order.template', ondelete='cascade')
     sequence = fields.Integer(string="Step")
-    event = fields.Char(string="Event")
+    event = fields.Char(string="Event",translate=True)
     time = fields.Char(string="Time")
     location_type = fields.Selection(
         [('restaurant', 'Restaurant'), ('beach', 'Beach')],
@@ -101,7 +101,7 @@ class SaleOrderTemplateTransportLine(models.Model):
     sale_template_id = fields.Many2one(
         'sale.order.template', ondelete='cascade')
     sequence = fields.Integer(string="Step")
-    label = fields.Char(string="Description")
+    label = fields.Char(string="Description",translate=True)
     time = fields.Char(string="Time")
     port_ids = fields.Many2many(
         'project.transport.port',  # the shared Port model

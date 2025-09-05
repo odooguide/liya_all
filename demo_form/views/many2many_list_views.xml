@@ -46,7 +46,7 @@
 
     <!-- Demo Menu Meze -->
     <record id="action_project_demo_menu_meze" model="ir.actions.act_window">
-        <field name="name">Demo Menu Appetizers</field>
+        <field name="name">Demo Meze Appetizers</field>
         <field name="res_model">project.demo.menu.meze</field>
         <field name="view_mode">list,form</field>
         <field name="target">current</field>
