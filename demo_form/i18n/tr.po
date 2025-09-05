@@ -814,7 +814,7 @@ msgstr "Seramoni Türü"
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__ceremony_call
 msgid "Ceremony Call"
-msgstr ""
+msgstr "Takı Anonsu"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_ceremony_tag__name

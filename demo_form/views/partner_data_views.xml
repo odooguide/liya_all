@@ -72,7 +72,9 @@
                 <field name="date"/>
                 <field name="project_id" optional="hide"/>
                 <field name="opportunity_name"/>
+                <field name="first_name"/>
                 <field name="first_phone"/>
+                <field name="second_name"/>
                 <field name="second_phone"/>
                 <field name="photo_studio"/>
             </list>
