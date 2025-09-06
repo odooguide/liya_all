@@ -420,7 +420,7 @@ class ProjectDemoForm(models.Model):
     special_notes_remaining = fields.Html(string="Special Notes Remaining", compute='_compute_split_notes')
 
     is_ceremony=fields.Boolean(string="Seramoni Düzeni")
-    merasim=fields.Selection([('nostaljik','Nostaljik Kapı'),('yemek','Yemek Sırasında'),('none','Yok')],string='Merasim')
+    merasim=fields.Selection([('nostaljik','Beach'),('yemek','Restaurant'),('none','None')],string='Presents Accepting Area')
 
     demo_part_ids = fields.Many2many(
         'demo.form.print',
@@ -531,6 +531,9 @@ class ProjectDemoForm(models.Model):
         'dance_lesson': ['Dans Dersi'],
         'prehost_breakfast': ['Kahvaltı'],
         'home_exit': ['Ev Çıkış Fotoğraf Çekimi'],
+        'music_live': ['Canlı Müzik'],
+        'music_trio': ['Trio'],
+        'music_percussion': ['Perküsyon'],
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
 
@@ -540,7 +543,7 @@ class ProjectDemoForm(models.Model):
         'transport_line_ids.time',
         'transport_line_ids.port_ids',
         'project_id',
-        'project_id.event_date', 
+        'project_id.event_date',
     )
     def _compute_wedding_trio_ids(self):
         for rec in self:
@@ -560,7 +563,7 @@ class ProjectDemoForm(models.Model):
                     0, 0, {
                         'name': line.label or 'Genel Geliş',
                         'time': line.time,
-                        'date': event_date,                         
+                        'date': event_date,
                         'port_ids': [(6, 0, line.port_ids.ids)],
                     }
                 ))
@@ -592,7 +595,7 @@ class ProjectDemoForm(models.Model):
                 (5, 0, 0),
                 (0, 0, {
                     'name': name_val,
-                    'guest_count': str(gc), 
+                    'guest_count': str(gc),
                     'date': event_date,
                     'boat': boat,
                 })
@@ -1151,7 +1154,7 @@ class ProjectDemoForm(models.Model):
             notes = html2plaintext(raw_html or '')
 
             notes = notes.replace('\r\n', '\n').replace('\r', '\n')
-            notes = re.sub(r'[ \t\u00A0]+', ', ', notes)  # ardışık boşlukları tek boşluk yap
+            notes = re.sub(r'[ \t\u00A0]+', ' ', notes)  # ardışık boşlukları tek boşluk yap
             notes = re.sub(r'\n{3,}', '\n\n', notes)  # fazla boş satırları azalt
             notes = notes.strip()
 
@@ -1184,6 +1187,8 @@ class ProjectDemoForm(models.Model):
     def _onchange_afterparty_ultra_open(self):
         if self.afterparty_ultra:
             self.afterparty_fog_laser = True
+            self.afterparty_service = False
+            self.afterparty_street_food = False
             self.afterparty_bbq_wraps = True
             self.afterparty_shot_service = True
         else:
@@ -1498,6 +1503,8 @@ class ProjectDemoForm(models.Model):
             (["Canlı Müzik + Perküsyon"], "Canlı Müzik + Perküsyon", False),
             (["Canlı Müzik Özel"], "Canlı Müzik Özel", False),
             (["Canlı Müzik + Perküsyon + TRIO"], "Canlı Müzik + Perküsyon + TRIO", False),
+            (['Saç & Makyaj'], 'Saç & Makyaj', True),
+            (['Davetiye Baskı ve Zarflama'], 'Davetiye Baskı ve Zarflama', True),
             (['Breakfast Service'], 'Kahvaltı', True),
         ]
 

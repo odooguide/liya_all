@@ -404,7 +404,7 @@ class ProjectProject(models.Model):
 
         return {
             'type': 'ir.actions.act_window',
-            'name': _('Meetings – %s') % self.display_name,
+            'name': _('%s - Demo Toplantısı') % self.so_opportunity_id.name  ,
             'res_model': 'calendar.event',
             'view_mode': 'calendar,list,form',
             'views': views,
