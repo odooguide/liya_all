@@ -1147,23 +1147,68 @@ class ProjectDemoForm(models.Model):
 
     @api.depends('special_notes')
     def _compute_split_notes(self):
+        import re
+
+        def _smart_join_breaks(html: str) -> str:
+            # 1) HTML'deki satır kırıcılarını tek bir yer tutucuya çevir
+            html = re.sub(r'(<\s*br\s*/?\s*>|</\s*(?:p|div|li|tr|h[1-6])\s*>)',
+                          '[[BR]]', html, flags=re.I)
+            # Çoklu kırıcıyı tekine indir
+            html = re.sub(r'(\s*\[\[BR\]\]\s*)+', '[[BR]]', html)
+
+            # 2) Yer tutucuyu akıllı şekilde değiştir:
+            # - Etrafında virgül/nokta varsa: sadece bir boşluk
+            # - Yoksa: ", "
+            def repl(m):
+                s = m.string
+                start, end = m.span()
+                # önceki boşlukları atlayıp karakteri yakala
+                i = start - 1
+                while i >= 0 and s[i].isspace():
+                    i -= 1
+                prev = s[i] if i >= 0 else None
+                # sonraki boşlukları atlayıp karakteri yakala
+                j, L = end, len(s)
+                while j < L and s[j].isspace():
+                    j += 1
+                nxt = s[j] if j < L else None
+
+                if (prev in ',.!') or (nxt in ',.!'):
+                    return ' '
+                return ', '
+
+            html = re.sub(r'\s*\[\[BR\]\]\s*', repl, html)
+
+            html = re.sub(r'[ \t\u00A0]+', ' ', html)
+            html = re.sub(r'\s+,', ', ', html)
+            html = re.sub(r'(,\s*){2,}', ', ', html)
+            html = html.strip(' ,')
+            return html
+
         limit = 300
         for rec in self:
             raw_html = rec.special_notes or ''
 
-            notes = html2plaintext(raw_html or '')
+            # HTML seviyesinde akıllı birleştirme
+            prepped_html = _smart_join_breaks(raw_html)
 
+            # Plain text'e çevir
+            notes = html2plaintext(prepped_html or '')
+
+            # Plain text normalizasyonu (virgül eklemiyoruz, newline'ları boşluğa indiriyoruz)
             notes = notes.replace('\r\n', '\n').replace('\r', '\n')
-            notes = re.sub(r'[ \t\u00A0]+', ' ', notes)  # ardışık boşlukları tek boşluk yap
-            notes = re.sub(r'\n{3,}', '\n\n', notes)  # fazla boş satırları azalt
-            notes = notes.strip()
+            notes = re.sub(r'[ \t\u00A0]+', ' ', notes)
+            notes = re.sub(r'\s*\n+\s*', ' ', notes)
+            notes = re.sub(r'\s{2,}', ' ', notes).strip()
 
+            # 300 karakterlik önizleme / kalan
             if len(notes) <= limit:
                 preview, remaining = notes, ''
             else:
                 cut = notes[:limit]
-                last_ws = max(cut.rfind(' '), cut.rfind('\n'), cut.rfind('\t'))
-                split_at = last_ws if last_ws != -1 else limit
+                # tercihen virgülde, yoksa boşlukta kes
+                last_break = max(cut.rfind(', '), cut.rfind(' '))
+                split_at = last_break if last_break != -1 else limit
                 preview = cut[:split_at]
                 remaining = notes[split_at:].lstrip()
 

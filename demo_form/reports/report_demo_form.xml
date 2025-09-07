@@ -277,9 +277,9 @@
                                                 </t>
                                             </td>
                                             <td style="padding:6px 8px; vertical-align:top">
-                                                <t t-if="o.merasim">
+
                                                     <span t-field="o.merasim" t-options='{"widget": "selection"}'/>
-                                                </t>
+
                                             </td>
                                             <td style="padding:6px 8px; vertical-align:top;font-style:italic;">
                                                 <t t-if="line.location_notes">
