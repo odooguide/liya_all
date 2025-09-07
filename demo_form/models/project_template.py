@@ -392,7 +392,7 @@ class ProjectProject(models.Model):
             self.env.context,
             default_res_model=self._name,
             default_res_id=self.id,
-            default_name=self.name,
+            default_name=_('%s - Demo Toplantısı') % self.so_opportunity_id.name,
             default_start=fields.Datetime.now(),
             default_categ_ids=[(6, 0, demo_cat.ids)] if demo_cat else False,
             search_default_mymeetings=1,
