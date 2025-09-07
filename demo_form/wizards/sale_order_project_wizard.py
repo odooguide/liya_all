@@ -75,26 +75,30 @@ class SaleOrderProjectWizard(models.TransientModel):
 
         project = self.env['project.project'].sudo().create(vals)
 
+        Stage = self.env['project.task.type'].sudo()
 
-        stage_env = self.env['project.task.type'].sudo()
-
-        wanted_stages = [
-            ('Cancel', 0),
-            ('To Do', 1),
-            ('Done', 99),
-        ]
-
-        for name, seq in wanted_stages:
-            stage = stage_env.search(
-                [('name', '=', name), ('project_ids', '=', False)],
-                limit=1
-            )
-            if not stage:
-                stage_env.create({
+        def _ensure_stage(project, name, sequence, fold=False):
+            # Bu projeye zaten bağlı aynı isimde stage var mı?
+            st = Stage.search([
+                ('name', '=', name),
+                ('project_ids', 'in', project.id),
+            ], limit=1)
+            if st:
+                st.write({'sequence': sequence, 'fold': fold})
+            else:
+                st = Stage.create({
                     'name': name,
-                    'sequence': seq,
-
+                    'sequence': sequence,
+                    'fold': fold,
+                    'company_id': project.company_id.id,
+                    'project_ids': [(4, project.id)],
                 })
+            return st
+
+        cancel = _ensure_stage(project, 'Cancel', 0, fold=True)
+        todo = _ensure_stage(project, 'To Do', 10, fold=False)
+        done = _ensure_stage(project, 'Done', 99, fold=True)
+
 
         order.project_id = project.id
 
