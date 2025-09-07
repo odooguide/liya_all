@@ -173,7 +173,7 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
 
             if vals:
                 demo.sudo().write(vals)
-                order.state = 'sale'
+                order.super().action_confirm()
 
         return {'type': 'ir.actions.act_window_close'}
 

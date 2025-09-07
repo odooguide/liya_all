@@ -134,7 +134,6 @@ class SaleOrder(models.Model):
         }
 
     def action_confirm(self):
-
         res = super().action_confirm()
         for order in self:
             if order.sale_order_template_id.name.lower() in ['ek protokol', 'extra protocol']:
