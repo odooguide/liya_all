@@ -154,7 +154,7 @@ class SaleOrder(models.Model):
                 raise UserError(_("Koordinatör seçilmeden bu teklifi onaylayamazsınız. Lütfen koordinatör seçin."))
             if not order.wedding_date:
                 raise UserError(_("Etkinlik tarihi seçilmeden satışı onaylayamazsınız."))
-            if not order.people_count > 0:
+            if not order.people_count > 0 and not order.sale_order_template_id.name == 'Ek Protokol':
                 raise UserError(_("Kişi sayısı girmeden satışı onaylayamazsınız."))
         return res
 

@@ -420,7 +420,7 @@ class ProjectDemoForm(models.Model):
     special_notes_remaining = fields.Html(string="Special Notes Remaining", compute='_compute_split_notes')
 
     is_ceremony=fields.Boolean(string="Seramoni Düzeni")
-    merasim=fields.Selection([('nostaljik','Nostaljik Kapı'),('yemek','Yemek Sırasında'),('none','Yok')],string='Merasim')
+    merasim=fields.Selection([('nostaljik','Beach'),('yemek','Restaurant'),('none','None')],string='Presents Accepting Area')
 
     demo_part_ids = fields.Many2many(
         'demo.form.print',
@@ -437,6 +437,7 @@ class ProjectDemoForm(models.Model):
     minutes = fields.Integer(string='Adjust Time')
     demo_seat_plan=fields.Many2one('demo.seat.plan', string='Oturma Planı')
     home_exit=fields.Boolean(string='Ev Çıkış Fotoğraf Çekimi')
+    lang=fields.Selection([('tr_TR','Türkçe'),('en_US','English')],default='tr_TR')
     wedding_trio_ids = fields.One2many(
         comodel_name='wedding.trio',
         inverse_name='project_id',
@@ -531,6 +532,9 @@ class ProjectDemoForm(models.Model):
         'dance_lesson': ['Dans Dersi'],
         'prehost_breakfast': ['Kahvaltı'],
         'home_exit': ['Ev Çıkış Fotoğraf Çekimi'],
+        'music_live': ['Canlı Müzik'],
+        'music_trio': ['Trio'],
+        'music_percussion': ['Perküsyon'],
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
 
@@ -540,7 +544,7 @@ class ProjectDemoForm(models.Model):
         'transport_line_ids.time',
         'transport_line_ids.port_ids',
         'project_id',
-        'project_id.event_date', 
+        'project_id.event_date',
     )
     def _compute_wedding_trio_ids(self):
         for rec in self:
@@ -560,7 +564,7 @@ class ProjectDemoForm(models.Model):
                     0, 0, {
                         'name': line.label or 'Genel Geliş',
                         'time': line.time,
-                        'date': event_date,                         
+                        'date': event_date,
                         'port_ids': [(6, 0, line.port_ids.ids)],
                     }
                 ))
@@ -592,7 +596,7 @@ class ProjectDemoForm(models.Model):
                 (5, 0, 0),
                 (0, 0, {
                     'name': name_val,
-                    'guest_count': str(gc), 
+                    'guest_count': str(gc),
                     'date': event_date,
                     'boat': boat,
                 })
@@ -929,6 +933,8 @@ class ProjectDemoForm(models.Model):
 
             rec.backlight_ids = cmds
 
+   # >>> base64'e DOKUNMA <<<
+
     @api.depends(
         'project_id',
         'confirmed_demo_form_plan',
@@ -937,7 +943,8 @@ class ProjectDemoForm(models.Model):
     def _compute_confirmed_demo_form_ids(self):
         for rec in self:
             cmds=[(5,0,0)]
-            if not rec.confirmed_demo_form_plan:
+            payload = rec.with_context(bin_size=False).confirmed_demo_form_plan
+            if not payload:
                 rec.confirmed_demo_ids=cmds
                 continue
 
@@ -945,17 +952,17 @@ class ProjectDemoForm(models.Model):
             if event_date:
                 event_date = fields.Date.to_date(event_date)
             name=rec.invitation_owner or ''
-            confirmed_demo_form=rec.confirmed_demo_form_plan or False
             form_name=rec.confirmed_demo_form_plan_name or ''
 
             cmds.append((0, 0, {
                 'name': name,
                 'date': event_date,
                 'project_id': rec.id,
-                'confirmed_demo_form':confirmed_demo_form,
+                'confirmed_demo_form':payload,
                 'form_name':form_name,
             }))
             rec.confirmed_demo_ids=cmds
+
 
     @api.depends(
         'invitation_owner', 'invitation_date', 'demo_date',
@@ -1144,23 +1151,48 @@ class ProjectDemoForm(models.Model):
 
     @api.depends('special_notes')
     def _compute_split_notes(self):
+        import re
+
+        def _smart_join_breaks(html: str, punct=',.'):
+            # 1) HTML kırıcılarını yer tutucuya çevir
+            html = re.sub(r'(<\s*br\s*/?\s*>|</\s*(?:p|div|li|tr|h[1-6])\s*>)',
+                          '[[BR]]', html, flags=re.I)
+            html = re.sub(r'(\s*\[\[BR\]\]\s*)+', '[[BR]]', html)
+
+            # 2) Etrafında noktalama varsa -> sadece boşluk
+            html = re.sub(rf'([{re.escape(punct)}])\s*\[\[BR\]\]\s*', r'\1 ', html)  # önce varsa
+            html = re.sub(rf'\s*\[\[BR\]\]\s*([{re.escape(punct)}])', r' \1', html)  # sonra varsa
+
+            # 3) Kalan kırıcılar -> ", "
+            html = re.sub(r'\s*\[\[BR\]\]\s*', ', ', html)
+
+            # 4) Temizlik
+            html = re.sub(r'[ \t\u00A0]+', ' ', html)
+            html = re.sub(r'\s+,', ', ', html)
+            html = re.sub(r'(,\s*){2,}', ', ', html)
+            return html.strip(' ,')
+
         limit = 300
         for rec in self:
             raw_html = rec.special_notes or ''
 
-            notes = html2plaintext(raw_html or '')
+            # HTML seviyesinde akıllı birleştirme (yalnızca virgül/nokta kuralı)
+            prepped_html = _smart_join_breaks(raw_html, punct=',.')
+
+            # Plain text'e çevir
+            notes = html2plaintext(prepped_html or '')
 
             notes = notes.replace('\r\n', '\n').replace('\r', '\n')
-            notes = re.sub(r'[ \t\u00A0]+', ' ', notes)  # ardışık boşlukları tek boşluk yap
-            notes = re.sub(r'\n{3,}', '\n\n', notes)  # fazla boş satırları azalt
-            notes = notes.strip()
+            notes = re.sub(r'[ \t\u00A0]+', ' ', notes)
+            notes = re.sub(r'\s*\n+\s*', ' ', notes)
+            notes = re.sub(r'\s{2,}', ' ', notes).strip()
 
             if len(notes) <= limit:
                 preview, remaining = notes, ''
             else:
                 cut = notes[:limit]
-                last_ws = max(cut.rfind(' '), cut.rfind('\n'), cut.rfind('\t'))
-                split_at = last_ws if last_ws != -1 else limit
+                last_break = max(cut.rfind(', '), cut.rfind(' '))
+                split_at = last_break if last_break != -1 else limit
                 preview = cut[:split_at]
                 remaining = notes[split_at:].lstrip()
 
@@ -1184,6 +1216,8 @@ class ProjectDemoForm(models.Model):
     def _onchange_afterparty_ultra_open(self):
         if self.afterparty_ultra:
             self.afterparty_fog_laser = True
+            self.afterparty_service = False
+            self.afterparty_street_food = False
             self.afterparty_bbq_wraps = True
             self.afterparty_shot_service = True
         else:
@@ -1498,6 +1532,8 @@ class ProjectDemoForm(models.Model):
             (["Canlı Müzik + Perküsyon"], "Canlı Müzik + Perküsyon", False),
             (["Canlı Müzik Özel"], "Canlı Müzik Özel", False),
             (["Canlı Müzik + Perküsyon + TRIO"], "Canlı Müzik + Perküsyon + TRIO", False),
+            (['Saç & Makyaj'], 'Saç & Makyaj', True),
+            (['Davetiye Baskı ve Zarflama'], 'Davetiye Baskı ve Zarflama', True),
             (['Breakfast Service'], 'Kahvaltı', True),
         ]
 

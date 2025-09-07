@@ -176,34 +176,31 @@ class SaleOrder(models.Model):
         return set(Template.search(dom).ids)
 
     def _ensure_template_policy(self, candidate_template_id):
-        """Mevcut fırsatta zaten bir satış varsa,
-        candidate_template_id yalnızca:
-          - önceki satışın template'i
-          - veya 'Ek Protokol' / 'Extra Protocol'
-        olabilir. Değilse ValidationError fırlatır."""
+        """Aynı fırsata bağlı mevcut bir satış varsa,
+        yeni satış için SADECE 'Ek Protokol' / 'Extra Protocol' şablonlarına izin ver."""
         self.ensure_one()
         existing = self._get_existing_order_in_same_opportunity()
         if not existing:
             return
 
-        prev_tmpl_id = existing.sale_order_template_id.id or False
         addendum_ids = self._get_addendum_template_ids()
 
-        allowed_ids = set(addendum_ids)
-        if prev_tmpl_id:
-            allowed_ids.add(prev_tmpl_id)
+        if not addendum_ids:
+            raise ValidationError(
+                "Bu fırsata zaten bir satış bağlı; ancak sistemde 'Ek Protokol' şablonu bulunamadı. "
+                "Lütfen 'Ek Protokol' / 'Extra Protocol' şablonlarını oluşturun."
+            )
 
-        if not candidate_template_id and not prev_tmpl_id:
-            return
+        cid = getattr(candidate_template_id, "id", candidate_template_id) or False
 
-        if candidate_template_id not in allowed_ids:
+        if cid not in addendum_ids:
             addendum_names = ', '.join(
                 self.env['sale.order.template'].browse(list(addendum_ids)).mapped('display_name')
             ) or ', '.join(ADDENDUM_NAMES)
 
             raise ValidationError(
-                "Bu fırsata zaten bir satış bağlı. Yeni satış için yalnızca şu şablonlara izin var:\n"
-                f"- Ek protokol şablonları: {addendum_names}"
+                "Bu fırsata zaten bir satış bağlı. Yeni satış için yalnızca şu ek protokol şablonlarına izin var:\n"
+                f"- {addendum_names}"
             )
 
     @api.model_create_multi

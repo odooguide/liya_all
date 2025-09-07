@@ -24,11 +24,9 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
             return res
 
         order = self.env['sale.order'].browse(order_id)
-        # Mevcut proje: siparişin kendi projesi yoksa CRM lead projesini kullan
         project = order.project_id or order.opportunity_id.project_id
         res['project_id'] = project.id if project else False
 
-        # Order üzerindeki "hazır görevler" (order.project_task_ids) kopyalanır
         if 'line_ids' in fields_list:
             lines = [
                 (0, 0, {
@@ -175,8 +173,8 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
 
             if vals:
                 demo.sudo().write(vals)
+                order.state = 'sale'
 
-        order.state='sale'
         return {'type': 'ir.actions.act_window_close'}
 
 
