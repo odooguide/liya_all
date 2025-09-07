@@ -437,6 +437,7 @@ class ProjectDemoForm(models.Model):
     minutes = fields.Integer(string='Adjust Time')
     demo_seat_plan=fields.Many2one('demo.seat.plan', string='Oturma Planı')
     home_exit=fields.Boolean(string='Ev Çıkış Fotoğraf Çekimi')
+    lang=fields.Selection(('tr_TR','Türkçe'),('en_US','English'),default='tr_TR')
     wedding_trio_ids = fields.One2many(
         comodel_name='wedding.trio',
         inverse_name='project_id',
@@ -932,6 +933,8 @@ class ProjectDemoForm(models.Model):
 
             rec.backlight_ids = cmds
 
+   # >>> base64'e DOKUNMA <<<
+
     @api.depends(
         'project_id',
         'confirmed_demo_form_plan',
@@ -940,7 +943,8 @@ class ProjectDemoForm(models.Model):
     def _compute_confirmed_demo_form_ids(self):
         for rec in self:
             cmds=[(5,0,0)]
-            if not rec.confirmed_demo_form_plan:
+            payload = rec.with_context(bin_size=False).confirmed_demo_form_plan
+            if not payload:
                 rec.confirmed_demo_ids=cmds
                 continue
 
@@ -955,7 +959,7 @@ class ProjectDemoForm(models.Model):
                 'name': name,
                 'date': event_date,
                 'project_id': rec.id,
-                'confirmed_demo_form':confirmed_demo_form,
+                'confirmed_demo_form':payload,
                 'form_name':form_name,
             }))
             rec.confirmed_demo_ids=cmds

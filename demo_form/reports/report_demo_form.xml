@@ -39,9 +39,9 @@
     <template id="demo_form_report_layout">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-set="o" t-value="o.with_context(lang=(o.partner_id.lang or env.user.lang))"/>
+                <t t-set="o" t-value="o.with_context(lang=(o.lang)"/>
                 <t t-call="demo_form.demo_form_report_document"
-                   t-lang="o.partner_id.lang or env.user.lang"/>
+                   t-lang="olang"/>
             </t>
         </t>
     </template>
@@ -256,11 +256,7 @@
                                                     </t>
                                                 </t>
                                             </td>
-                                            <td style="padding:6px 8px; vertical-align:top">
-                                                <t t-if="o.merasim">
-                                                    <span t-field="o.merasim" t-options="{&quot;widget&quot;: &quot;selection&quot;}"/>
-                                                </t>
-                                            </td>
+
                                             <td style="padding:6px 8px; vertical-align:top;font-style:italic;">
                                                 <t t-if="line.location_notes">
                                                     <div t-field="line.location_notes" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;"/>
@@ -271,6 +267,11 @@
                                     </t>
                                 </tbody>
                             </table>
+                             <div style="padding-left:4px;vertical-align:top">
+                                                <t t-if="o.merasim">
+                                                    <span t-field="o.merasim"/>
+                                                </t>
+                                        </div>
                             <div style="padding-left:4px; width:100%">
                                 <span t-field="o.schedule_description" t-options="{&quot;widget&quot;:&quot;html&quot;}" style="word-break:break-word;font-style:italic;"/>
                             </div>
