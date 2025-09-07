@@ -78,7 +78,6 @@ class SaleOrderProjectWizard(models.TransientModel):
         Stage = self.env['project.task.type'].sudo()
 
         def _ensure_stage(project, name, sequence, fold=False):
-            # Bu projeye zaten bağlı aynı isimde stage var mı?
             st = Stage.search([
                 ('name', '=', name),
                 ('project_ids', 'in', project.id),
@@ -90,7 +89,6 @@ class SaleOrderProjectWizard(models.TransientModel):
                     'name': name,
                     'sequence': sequence,
                     'fold': fold,
-                    'company_id': project.company_id.id,
                     'project_ids': [(4, project.id)],
                 })
             return st
