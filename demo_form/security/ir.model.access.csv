@@ -7,7 +7,7 @@ access_project_demo_form_system,access_project_demo_form_system,model_project_de
 access_project_demo_schedule,access_project_demo_schedule_line,model_project_demo_schedule_line,base.group_user,1,1,1,1
 access_project_demo_transport,access_project_demo_transport_access,model_project_demo_transport_line,base.group_user,1,1,1,1
 access_project_transport_port,access_project_transport_port_access,model_project_transport_port,base.group_user,1,1,1,1
-access_project_demo_form_coordinator,access_project_demo_form_coordinator,model_project_demo_form,__export__.res_groups_101_9be46a0a,1,1,0,0
+access_project_demo_form_coordinator,access_project_demo_form_coordinator,model_project_demo_form,__export__.res_groups_101_9be46a0a,1,1,1,0
 access_project_demo_form_manager,access_project_demo_form_manager,model_project_demo_form,__export__.res_groups_102_8eb2392b,1,1,1,0
 access_project_demo_menu_dessert,access_project_demo_menu_dessert_access,model_project_demo_menu_dessert,base.group_user,1,1,1,1
 access_project_demo_menu_dessert_ultra,access_project_demo_menu_dessert_ultra_access,model_project_demo_menu_dessert_ultra,base.group_user,1,1,1,1
@@ -21,4 +21,18 @@ access_project_demo_runner_design,project.demo.runner.design_access,model_projec
 access_project_demo_table_color,project.demo.table.color_access,model_project_demo_table_color,base.group_user,1,1,1,1
 access_project_demo_ceremony_tag,project.demo.ceremony.tag_access,model_project_demo_ceremony_tag,base.group_user,1,1,1,1
 access_project_demo_cake_choice,project.demo.cake.choice_access,model_project_demo_cake_choice,base.group_user,1,1,1,1
-
+access_project_demo_form_print,project.demo.form.print,model_demo_form_print,base.group_user,1,1,1,1
+access_project_demo_seat_plan,project.demo.seat.plan,model_demo_seat_plan,base.group_user,1,1,1,1
+access_sale_order_update_tasks_wizard_user,sale.order.update.tasks.wizard,model_sale_order_update_tasks_wizard,base.group_user,1,1,1,1
+access_sale_order_update_tasks_wizard_line_user,sale.order.update.tasks.wizard.line,model_sale_order_update_tasks_wizard_line,base.group_user,1,1,1,1
+access_project_demo_extra_protocol_wizard_user,project.demo.extra.protocol.wizard,model_project_demo_extra_protocol_wizard,base.group_user,1,1,1,1
+access_wedding_trio_user,wedding.trio user,model_wedding_trio,base.group_user,1,1,1,1
+access_blue_marmara_user,blue.marmara user,model_blue_marmara,base.group_user,1,1,1,1
+access_backlight_user,backlight user,model_backlight,base.group_user,1,1,1,1
+access_partner_vedans_user,partner.vedans user,model_partner_vedans,base.group_user,1,1,1,1
+access_blue_marmara_user,blue.marmara user,model_blue_marmara,base.group_user,1,1,1,1
+access_studio_345_user,studio.345 user,model_studio_345,base.group_user,1,1,1,1
+access_garage_caddebostan_user,garage.caddebostan user,model_garage_caddebostan,base.group_user,1,1,1,1
+access_live_music_user,live.music user,model_live_music,base.group_user,1,1,1,1
+access_confirmed_form_user,confirmed.form user,model_confirmed_form,base.group_user,1,1,1,1
+access_demo_menu_user,demo.menu user,model_demo_menu,base.group_user,1,1,1,1

@@ -10,7 +10,7 @@
                         <list editable="bottom">
                             <field name="name"/>
                             <field name="description"/>
-                            <field name="stage_id"/>
+                            <field name="stage_id" />
                             <field name="planned_date"/>
                             <field name="date_line"/>
                             <field name="days"/>
@@ -76,4 +76,5 @@
             </xpath>
         </field>
     </record>
+
 </odoo>

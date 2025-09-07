@@ -17,6 +17,7 @@ class ProjectTask(models.Model):
         string='Communication Type',
     )
     task_tags = fields.Char('Task Tag')
+    opportunity_name=fields.Char('Çift Adı')
 
     def action_send_task_email(self):
         self.ensure_one()

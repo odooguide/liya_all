@@ -9,7 +9,6 @@
                     <field name="is_project_true" invisible="1"/>
                     <field name="project_task_ids">
                         <list editable="bottom" creatable="true">
-
                             <field name="sale_order_id" column_invisible="1"/>
                             <field name="name"/>
                             <field name="event_date" column_invisible="1"/>

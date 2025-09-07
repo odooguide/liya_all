@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-07 13:06+0000\n"
-"PO-Revision-Date: 2025-08-07 13:06+0000\n"
+"POT-Creation-Date: 2025-09-04 22:45+0000\n"
+"PO-Revision-Date: 2025-09-04 22:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,80 +16,173 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/demo_form.py:0
+msgid ""
+"%s ürünü onaylı tekliflerde bulunamadı.\n"
+"\n"
+"Ek Protokol görevi açılsın mı? \n"
+"\n"
+"“Görevi açmadan devam etmek isterseniz bu uyarıyı kapattıktan sonra sol üstten çarpıya (Discard) basın."
+msgstr ""
+
+#. module: demo_form
 #: model:ir.actions.report,print_report_name:demo_form.action_demo_form_report
-msgid "'Demo Form - %s' % (object.name,)"
+msgid "'Demo Form - %s - %s' % (object.invitation_owner,object.demo_date)"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 ")\n"
-"                                            ,\n"
-"                                            Fred ("
+"                                                    ,\n"
+"                                                    <strong>Fred</strong>\n"
+"                                                    ("
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 ")\n"
-"                                            -\n"
-"                                            No ("
-msgstr ""
+"                                                    -\n"
+"                                                    No ("
+msgstr ") - Yok ("
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 ")\n"
-"                                        <span style=\"font-style:italic; color:#555;\">(Between Wed-Str Weddings)</span>"
-msgstr ""
+"                                                <span style=\"color:#555;\">Company:</span>"
+msgstr ") <span style=\"color:#555;\">Firma:</span>"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 ")\n"
-"                                        <span style=\"font-style:italic; color:#555;\">(Sun,Mon,Tue Weddings)</span>"
+"                                                <span style=\"font-style:italic; color:#555;\">(Between Wed-Str Weddings)\n"
+"                                                </span>"
 msgstr ""
+") <span style=\"font-style:italic; color:#555;\">(Çrş-Cmt arası düğünler) "
+"</span>"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 ")\n"
-"                                        <span style=\"font-style:italic; color:#555;\">Company:</span>"
+"                                                <span style=\"font-style:italic; color:#555;\">(Sun,Mon,Tue Weddings)\n"
+"                                                </span>"
+msgstr ""
+") <span style=\"font-style:italic; color:#555;\">(Paz,Pzt,Sal düğünler) "
+"</span>"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+")\n"
+"                                                <span style=\"margin-left:16px;\">/</span>"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 ") -\n"
-"                                        No ("
-msgstr ""
+"                                                                No ("
+msgstr ") - Yok ("
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+") -\n"
+"                                                            No ("
+msgstr ") - Yok ("
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+") -\n"
+"                                                No ("
+msgstr ") - Yok ("
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ") - No ("
+msgstr ") - Yok ("
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 ") /\n"
-"                                        Engin Sadiki ("
-msgstr ""
+"                                                            Will Deliver Later ("
+msgstr ") / Sonra teslim edilecek ("
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid ""
-") /\n"
-"                                        Will Deliver Later ("
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 ",\n"
-"                                        <span style=\"font-style:italic; color:#555;\">Phone:</span>"
+"                                                <span style=\" color:#555;\">Phone:</span>"
+msgstr ", <span style=\" color:#555;\">Telefon:</span>"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+",\n"
+"                                                <span style=\" color:#555;\">Responsible:</span>"
+msgstr ", <span style=\" color:#555;\">Sorumlu:</span>"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"1) SIGNIFICANT\n"
+"                                        SONGS"
+msgstr "1) ÖNEMLİ ŞARKILARIN SEÇİMİ"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "2) LANGUAGE RATIO"
+msgstr "2) DİL ORANI"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"2B) TYPE OF MUSIC —\n"
+"                                        BY\n"
+"                                        PART"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
-",\n"
-"                                        <span style=\"font-style:italic; color:#555;\">Responsible:</span>"
+"3) LOCAL MUSIC DURING\n"
+"                                        THE PARTY"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "4) REQUEST SONGS"
+msgstr "4) İSTEK ŞARKILAR"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"5) BAN ANY SONGS OR\n"
+"                                        ARTISTS"
+msgstr "5) İSTENMEYEN ŞARKILAR VEYA SANATÇILAR"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"6) OTHER NOTES ABOUT\n"
+"                                        MUSIC"
+msgstr "6) DİĞER MÜZİK NOTLARI"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"6698 sayılı Kişisel Verilerin Korunması Kanunu’nun (“KVKK”) 5 ve 6’ncı maddeleri\n"
+"                                        kapsamında ve kanundan\n"
+"                                        kaynaklanan hukuki sebeplere dayanarak; <strong>“Liya Müşteri Aydınlatma\n"
+"                                            Metni”</strong>’ni okuduğunuzu\n"
+"                                        ve anladığınızı beyan edersiniz."
 msgstr ""
 
 #. module: demo_form
@@ -99,76 +192,170 @@ msgid "90’s 2000’s Hits"
 msgstr ""
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "90’s 2000’s Hits ("
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "<em>Due to our principles, DJs do not accept tips from guests.</em>"
+msgstr ""
+"<em>Kurallarımız gereği DJ'lerimiz Davet Sahibi ve ailesi dışında "
+"misafirlerden bahşiş kabul etmemektedir.</em>"
+
+#. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_project_project_demo_inherit
 msgid "<span class=\"o_stat_text\">Demo Tarihi:</span>"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"<span style=\"color:#2D7F97;\">Beach</span>\n"
+"                                                                (<strong/>)"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"<span style=\"color:#2D7F97;\">Beach</span>\n"
+"                                                                (<strong>x</strong>)"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "<span style=\"color:#2D7F97;\">Docks:</span>"
+msgstr "<span style=\"color:#2D7F97;\">Limanlar:</span>"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "<span style=\"color:#999;\">-</span>"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "<span style=\"color:#999;\">—</span>"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"<span style=\"color:#C86A00;\">Restaurant</span>\n"
+"                                                                (<strong/>) -"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"<span style=\"color:#C86A00;\">Restaurant</span>\n"
+"                                                                (<strong>x</strong>) -"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 "<span style=\"font-weight:600;\">Garage Caddebostan</span>\n"
-"                                        ("
+"                                                ("
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "<span style=\"font-weight:600;\">Hotel:</span>"
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 "<span style=\"font-weight:600;\">Other:</span>\n"
-"                                        ("
-msgstr ""
+"                                                ("
+msgstr "<span style=\"font-weight:600;\">Diğer:</span> ("
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 "<span style=\"font-weight:600;\">Studio 3435 Nişantaşı</span>\n"
-"                                        ("
+"                                                ("
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid ""
-"<span style=\"margin-left:4px; font-size:9pt; color:#555;\">/ "
-"ISTANBUL</span>"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "<span style=\"margin-right:14px;\">//</span>"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "<span style=\"margin-right:6px;\">|</span>"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "<strong>Special Notes (continued):</strong>"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"<strong>Barney</strong>\n"
+"                                                    ("
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"<strong>Breakfast:</strong>\n"
+"                                                    Yes ("
+msgstr "<strong>Kahvaltı:</strong> Var ("
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"<strong>DJ Signature</strong>\n"
+"                                                <span style=\"display:inline-block; margin-left:8px; min-width:160px; height:14px; border-bottom:1px dotted #444; vertical-align:middle;\"/>"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"<strong>Engin Sadiki</strong>\n"
+"                                                <span style=\"display:inline-block; margin-left:8px;\">+90 533 644 64 74\n"
+"                                                </span>\n"
+"                                                <span style=\"display:inline-block; margin-left:8px;\">\n"
+"                                                    diengin@liya-all.com\n"
+"                                                </span>"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"<strong>Fatih Aşçı</strong>\n"
+"                                                <span style=\"display:inline-block; margin-left:8px;\">+90 539 215 53 75\n"
+"                                                </span>\n"
+"                                                <span style=\"display:inline-block; margin-left:8px;\">\n"
+"                                                    difatih@liya-all.com\n"
+"                                                </span>"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "<strong>Hotel:</strong>"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "<strong>Special Notes (continued):</strong>"
+msgstr "<strong>Özel Notlar (Devamı):</strong>"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "<strong>x</strong>"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "A) PROGRAM SCHEDULE"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"A — Entrance\n"
+"                                                Song:"
+msgstr "A — Giriş Şarkısı:"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "A) TRANSPORT SCHEDULE"
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
-msgid "Accommodation"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "A) TIME FLOW"
+msgstr "A) SAAT AKIŞI"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__accommodation_service
-msgid "Accommodation Provided"
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Accommodation"
 msgstr "Konaklama"
 
 #. module: demo_form
@@ -202,9 +389,11 @@ msgid "Activity Type Icon"
 msgstr ""
 
 #. module: demo_form
-#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__ceremony__actual
-msgid "Actual"
-msgstr "Nikah"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Additional\n"
+"                                                Notes:"
+msgstr "Ek Notlar"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__afterparty_more_drinks
@@ -232,8 +421,18 @@ msgid "Address"
 msgstr "Adres"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Address:"
+msgstr "Adres"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__minutes
+msgid "Adjust Time"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Adı Soyadı:"
 msgstr ""
 
 #. module: demo_form
@@ -258,13 +457,15 @@ msgid "After Party Ultra"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "After Party Ultra:"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"After Party request\n"
+"                                                    songs:"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "After Party:"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "After party mevcut değildir."
 msgstr ""
 
 #. module: demo_form
@@ -273,9 +474,24 @@ msgid "Afterparty Request Musics"
 msgstr "Afterparty İstenen Müzikler"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Alcohol Service:"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Alcohol\n"
+"                                                    Beverage\n"
+"                                                    Service:"
+msgstr "Yabancı İçki Servisi:"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Alcohol\n"
+"                                                    Service:"
+msgstr "Alkol Servisi"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__alcohol_service
+msgid "Alcohol Service"
+msgstr "Alkol Servisi"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__bar_alcohol_service
@@ -303,13 +519,47 @@ msgid "Appetizers (Meze)"
 msgstr "Meze"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_project_demo_inherit
+msgid "Assing Demo Date"
+msgstr "Demo Tarihi Ata"
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "BBQ Wraps:"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "AÇIK RIZA METNİ"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Açık rızanın kapsamı"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "B — First Dance Song:"
+msgstr "B — İlk Dans Şarkısı:"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"B) TRANSPORTATION\n"
+"                                        <small>(Time, Port)</small>"
+msgstr "B) ULAŞIM <small>(Zaman, Liman)</small>"
+
+#. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_backlight
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__backlight_ids
+#: model:ir.ui.menu,name:demo_form.menu_backlight_root
+msgid "Backlight"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.actions.act_window,help:demo_form.action_backlight
+msgid "Backlight kayıtlarını burada yönetin."
 msgstr ""
 
 #. module: demo_form
@@ -358,8 +608,8 @@ msgid "Barney"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Barney ("
+#: model:ir.model.fields,field_description:demo_form.field_project_project__related_sale_order_ids
+msgid "Bağlı Satışlar"
 msgstr ""
 
 #. module: demo_form
@@ -369,18 +619,9 @@ msgid "Beach"
 msgstr "Sahil"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Beach (<strong/>)"
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Beach (<strong>x</strong>)"
-msgstr ""
-
-#. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_order_project_wizard_line__planned_date__before_wedding
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_order_template_task__planned_date__before_wedding
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_update_tasks_wizard_line__planned_date__before_wedding
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_project_task__planned_date__before_wedding
 msgid "Before Wedding"
 msgstr "Düğünden Önce"
@@ -391,7 +632,7 @@ msgid "Beylerbeyi Göbek"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Beylerbeyi Göbek ("
 msgstr ""
 
@@ -401,21 +642,55 @@ msgid "Birden fazla kullanıcıyı atayabilirsiniz."
 msgstr ""
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__first_mail
+#: model:ir.model.fields,field_description:demo_form.field_backlight__second_mail
+msgid "Birincil Mail"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__first_phone
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__first_phone
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__first_phone
+msgid "Birincil Telefon"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_blue_marmara
+#: model:ir.model,name:demo_form.model_blue_marmara
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__blue_marmara_ids
+#: model:ir.ui.menu,name:demo_form.menu_blue_marmara_root
+#: model_terms:ir.ui.view,arch_db:demo_form.view_blue_marmara_list
+msgid "Blue Marmara"
+msgstr "Mavi Marmara"
+
+#. module: demo_form
+#: model_terms:ir.actions.act_window,help:demo_form.action_blue_marmara
+msgid "Blue Marmara kayıtlarını burada yönetin."
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__boat
+msgid "Boat"
+msgstr "Tekne"
+
+#. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_order_project_wizard_line__planned_date__border
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_order_template_task__planned_date__border
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_update_tasks_wizard_line__planned_date__border
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_project_task__planned_date__border
 msgid "Border Date"
 msgstr "Sınır Tarihi"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__date_line
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__date_line
 msgid "Border Date Line"
 msgstr "Sınır Tarihi (gün.ay)"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__bouquet_toss_song
 msgid "Bouquet Toss Song"
-msgstr "Buket Atma Şarkısı"
+msgstr "Çiçek Atma Şarkısı"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__prehost_breakfast_count
@@ -428,7 +703,69 @@ msgid "Breakfast Service"
 msgstr "Kahvaltı Servisi"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Bu aydınlatma metninde yazılı kişisel verilerin veri saklama süresi\n"
+"                                                davet\n"
+"                                                günü ile sınırlıdır. Davetin bitimi\n"
+"                                                ile beraber davetlilere ait tüm kişisel veriler yok edilir."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Bu açık rıza metni size, tarafınıza aydınlatma yapıldıktan sonra sunulmuştur.\n"
+"                                        Lütfen\n"
+"                                        önce aydınlatma metnini\n"
+"                                        okuduğunuzdan ve bu metne özgür iradenizle onay verdiğinizden emin olunuz. Bu\n"
+"                                        metne\n"
+"                                        konu kişisel verilerin\n"
+"                                        işlenmesine açık rızanızı dilediğiniz zaman geri alabilirsiniz. Kişisel\n"
+"                                        verilerinizi\n"
+"                                        önemsiyor ve koruyoruz."
+msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/project_template.py:0
+msgid ""
+"Bu işlemi yalnızca Koordinatör, Organizasyon Müdürü veya 'Demo Randevu "
+"Oluşturma' görevinin atanan kullanıcısı yapabilir."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Bu kapsamda, yalnızca açık rıza gerektiren işleme, muhafaza ve aktarma\n"
+"                                        faaliyetleri\n"
+"                                        için rızanız talep\n"
+"                                        edilmektedir. Kişisel verileriniz, belirtilen amaçlarla gerekli olduğu ölçüde\n"
+"                                        işlenecektir."
+msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/project_template.py:0
+msgid "Bu projeye bağlı mesaj kaynağı (demo form) bulunamadı."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Buraya yazın"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_demo_form_print__name
+msgid "Bölüm Adı"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "C — Wedding Cake Song:"
+msgstr "C — Pasta Kesme Şarkısı:"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "C) MENU"
 msgstr ""
 
@@ -455,9 +792,29 @@ msgid "Cake Choices"
 msgstr "Pasta Tercihleri"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Cake Selection:"
+msgstr "Pasta Seçimi"
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_project__event_ids
 msgid "Calendar Events"
 msgstr "Takvim Etkinliği"
+
+#. module: demo_form
+#: model_terms:ir.actions.act_window,help:demo_form.action_live_music
+msgid "Canlı Müzik kayıtlarını burada yönetin."
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__ceremony
+msgid "Ceremony "
+msgstr "Seramoni Türü"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__ceremony_call
+msgid "Ceremony Call"
+msgstr "Takı Anonsu"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_ceremony_tag__name
@@ -470,6 +827,11 @@ msgid "Ceremony Tag Option"
 msgstr "Nikah Tagi"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Ceremony Tag:"
+msgstr "Nikah Tagi:"
+
+#. module: demo_form
 #: model:ir.actions.act_window,name:demo_form.action_project_demo_ceremony_tag
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__table_tag_ids
 #: model:ir.ui.menu,name:demo_form.menu_project_demo_ceremony_tag
@@ -477,19 +839,19 @@ msgid "Ceremony Tags"
 msgstr "Nikah Tagi"
 
 #. module: demo_form
-#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__ceremony
-msgid "Ceremony Type"
-msgstr "Seramoni Türü"
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Ceremony Type:"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Ceremony:"
+msgstr "Nikah:"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__cake_champagne_tower
 msgid "Champagne Tower"
 msgstr "Şampanya Kulesi"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Champagne Tower ("
+msgstr "Şampanya Kulesi ("
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_table_charger__name
@@ -500,6 +862,11 @@ msgstr "Supla Tipi"
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__table_charger_ids
 msgid "Charger Types"
 msgstr "Supla"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Charger:"
+msgstr "Supla:"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_runner_design__name
@@ -522,29 +889,37 @@ msgid "Cocktail Request Songs"
 msgstr "Kokteyl İstek Şarkılar"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Cocktail request songs:"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_table_color__name
 msgid "Color Choice"
-msgstr "Masa Örtüsü Renk Tercihi"
+msgstr "Renk Tercihi"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__table_color_ids
 msgid "Color Choices"
-msgstr "Masa Örtüsü Renk Tercihleri"
+msgstr "Renk Tercihleri"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_task__communication_type
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__communication_type
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__communication_type
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__communication_type
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__communication_type
 msgid "Communication Type"
 msgstr "İletişim Türü"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__company_id
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__hair_other_company
 msgid "Company"
 msgstr "Firma"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__confirmed_demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__confirmed_demo_form_plan
 msgid "Confirmed Demo Form"
 msgstr "Onaylı Demo Formu"
@@ -555,9 +930,24 @@ msgid "Confirmed Demo Form Name"
 msgstr ""
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__confirmed_demo_ids
+msgid "Confirmed Demo Forms"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_confirmed_form_list
+msgid "Confirmed Form"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Couple's Name:"
+msgstr "Davetiye Sahibi:"
+
+#. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.project_view_form_inherit_demo
 msgid "Create Demo Form"
-msgstr ""
+msgstr "Demo Form Oluştur"
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_crm_lead_form_inherit_wedding
@@ -565,8 +955,17 @@ msgid "Create Project"
 msgstr "Proje Oluştur"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_demo_form_print__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_demo_seat_plan__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_live_music__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__create_uid
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_cake_choice__create_uid
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_ceremony_tag__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_extra_protocol_wizard__create_uid
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__create_uid
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert__create_uid
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert_ultra__create_uid
@@ -584,13 +983,26 @@ msgstr "Proje Oluştur"
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_schedule_line__create_uid
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__create_uid
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_transport_line__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__create_uid
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__create_uid
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__create_date
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__create_date
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__create_date
+#: model:ir.model.fields,field_description:demo_form.field_demo_form_print__create_date
+#: model:ir.model.fields,field_description:demo_form.field_demo_seat_plan__create_date
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__create_date
+#: model:ir.model.fields,field_description:demo_form.field_live_music__create_date
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__create_date
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_cake_choice__create_date
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_ceremony_tag__create_date
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_extra_protocol_wizard__create_date
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__create_date
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert__create_date
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert_ultra__create_date
@@ -608,19 +1020,40 @@ msgstr ""
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_schedule_line__create_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__create_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_transport_line__create_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard__create_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__create_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__create_date
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__create_date
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__create_date
 msgid "Created on"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Customer Buy Advice:"
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__partner_id
+msgid "Customer"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Customer Buy Advice:"
+msgstr "Yok ise misafirlerin satın alması uygun mudur?"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "D — Bouquet Toss Song:"
+msgstr "D — Çiçek Atma Şarkısı:"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "D) BAR"
 msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"DATE of\n"
+"                                                        DEMO:"
+msgstr "DEMO TARİHİ:"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__dj_person
@@ -630,20 +1063,16 @@ msgid "DJ"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "DJ:"
 msgstr ""
 
 #. module: demo_form
-#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__music_dj_engin
-#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__dj_person__engin
 #: model:ir.model.fields.selection,name:demo_form.selection__project_project__dj_person__engin
 msgid "DJ: Engin Sadiki"
 msgstr ""
 
 #. module: demo_form
-#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__music_dj_fatih
-#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__dj_person__fatih
 #: model:ir.model.fields.selection,name:demo_form.selection__project_project__dj_person__fatih
 msgid "DJ: Fatih Aşçı"
 msgstr ""
@@ -665,15 +1094,37 @@ msgid "Dance Show"
 msgstr "Dans Şovu"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Dance Show:"
-msgstr ""
-
-#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__date_line
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__date_line
 msgid "Date Line"
 msgstr "Tarih Çizgisi"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Date:"
+msgstr "Davet Tarihi:"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Davet sahipleri, öncesinde rızasını aldıkları davetli listesindeki\n"
+"                                                davetlilerinin davet organizasyonuna\n"
+"                                                katılmalarına kolaylık sağlamaları açısından ad-soyad ve telefon\n"
+"                                                numaralarını işleme ile paylaşır. İlgili\n"
+"                                                davetlilerin telefonları yalnızca davet öncesi LCV aramalarının\n"
+"                                                yapılması ve\n"
+"                                                organizasyon ile ilgili SMS\n"
+"                                                bildirimleri için kullanılır. Veri sorumlusu LİYA hem davetliden hem\n"
+"                                                kendi\n"
+"                                                işletmesinin hem de davet sahibinin\n"
+"                                                menfaatleri için veri işlemesi zorunludur. LCV aramaları işletme\n"
+"                                                bünyesinde\n"
+"                                                misafirlerin daha iyi hizmet alması\n"
+"                                                için onlara yardımcı olmaktadır. Aynı zamanda bu aramalar ile işletme\n"
+"                                                LİYA\n"
+"                                                organizasyonlarındaki olası pürüzler\n"
+"                                                giderilmektedir."
+msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__duration_days
@@ -681,13 +1132,9 @@ msgid "Day"
 msgstr "Gün"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Day:"
-msgstr ""
-
-#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__days
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__days
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__days
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__days
 msgid "Days"
 msgstr "Gün"
@@ -695,6 +1142,7 @@ msgstr "Gün"
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__deadline_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__deadline_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__deadline_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__deadline_date
 msgid "Deadline Date"
 msgstr "Zaman Sınırı"
@@ -710,19 +1158,19 @@ msgid "Delivered"
 msgstr "Teslim Edildi"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Delivered ("
+msgstr "Teslim Edildi ("
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_extra_protocol_wizard__demo_id
+msgid "Demo"
 msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__demo_date
 msgid "Demo Date"
 msgstr "Demo Tarihi"
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Demo Date:"
-msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_project__demo_state
@@ -748,13 +1196,24 @@ msgstr ""
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form_inherit_report_button
 msgid "Demo Form Print"
-msgstr ""
+msgstr "Demo Formu Çıktısı"
 
 #. module: demo_form
 #: model:ir.actions.act_window,name:demo_form.action_project_demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_project__demo_form_ids
 msgid "Demo Forms"
 msgstr ""
+
+#. module: demo_form
+#: model:ir.ui.menu,name:demo_form.menu_demo_info_root
+msgid "Demo Info"
+msgstr "Demo Bilgileri"
+
+#. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_confirmed_demo
+#: model:ir.ui.menu,name:demo_form.menu_confirmed_demos_root
+msgid "Demo Infos"
+msgstr "Demo Bilgileri"
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_project_project_demo_inherit
@@ -768,8 +1227,8 @@ msgstr "Mezeler"
 
 #. module: demo_form
 #: model:ir.actions.act_window,name:demo_form.action_project_demo_menu_meze
-msgid "Demo Menu Appetizers"
-msgstr "Sıcak Yemekler"
+msgid "Demo Meze Appetizers"
+msgstr "Meze"
 
 #. module: demo_form
 #: model:ir.model,name:demo_form.model_project_demo_menu_dessert
@@ -792,6 +1251,11 @@ msgid "Demo Menu Desserts Ultra"
 msgstr "Ultra Tatlı Seçenekleri"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__demo_part_ids
+msgid "Demo Parts"
+msgstr "Çıktı Sayfaları"
+
+#. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_project__demo_state__planned
 msgid "Demo Planlandı"
 msgstr ""
@@ -804,6 +1268,11 @@ msgstr "Demo Programı"
 #. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_project__demo_state__completed
 msgid "Demo Tamamlandı"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.inherit_project_list_view_crm_inherit
+msgid "Demo Tarihi"
 msgstr ""
 
 #. module: demo_form
@@ -827,12 +1296,20 @@ msgid "Demo Wedding Witness Line"
 msgstr "Şahitler"
 
 #. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_project_demo_form_pages
+#: model:ir.ui.menu,name:demo_form.menu_demo_form_print
+msgid "Demo Çıktı Bölümleri"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_extra_protocol_wizard__description
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__description
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__description
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_transport_line__label
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__description
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__description
 msgid "Description"
-msgstr "Açıklama"
+msgstr "Açıklama (Opsiyonel)"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__menu_dessert_ids
@@ -846,9 +1323,9 @@ msgid "Dessert Name"
 msgstr "Tatlı Adı"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Desserts:"
-msgstr ""
+msgstr "Tatlılar"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_schedule_line__location_notes
@@ -867,8 +1344,22 @@ msgid "Dinner Request Songs"
 msgstr "Yemek İstek Şarkılar"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Dinner request songs:"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__display_name
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__display_name
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__display_name
+#: model:ir.model.fields,field_description:demo_form.field_demo_form_print__display_name
+#: model:ir.model.fields,field_description:demo_form.field_demo_seat_plan__display_name
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__display_name
+#: model:ir.model.fields,field_description:demo_form.field_live_music__display_name
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__display_name
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_cake_choice__display_name
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_ceremony_tag__display_name
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_extra_protocol_wizard__display_name
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__display_name
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert__display_name
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert_ultra__display_name
@@ -886,13 +1377,18 @@ msgstr "Yemek İstek Şarkılar"
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_schedule_line__display_name
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__display_name
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_transport_line__display_name
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard__display_name
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__display_name
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__display_name
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__display_name
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__display_name
 msgid "Display Name"
 msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__dj_person__other
 #: model:ir.model.fields.selection,name:demo_form.selection__project_project__dj_person__other
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Diğer"
 msgstr ""
 
@@ -912,17 +1408,22 @@ msgid "Dried Flowers"
 msgstr "Kuru Çiçekler"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Dried Flowers: Yes ("
+msgstr "Kuru Çiçekler: Var ("
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__drone
+msgid "Drone"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__photo_drone
 msgid "Drone Camera"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Drone Camera:"
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "E) AFTER PARTY"
 msgstr ""
 
@@ -930,12 +1431,14 @@ msgstr ""
 #: model:ir.model.fields.selection,name:demo_form.selection__project_task__communication_type__mail
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_order_project_wizard_line__communication_type__mail
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_order_template_task__communication_type__mail
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_update_tasks_wizard_line__communication_type__mail
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_project_task__communication_type__mail
 msgid "E-Mail"
 msgstr "E-Posta"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__email_template_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__email_template_id
 msgid "E-Mail Template"
 msgstr "E-Posta Şablonu"
 
@@ -958,6 +1461,43 @@ msgid "Easy Listening & Bossa"
 msgstr ""
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Easy Listening &amp; Bossa ("
+msgstr ""
+
+#. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_project_demo_extra_protocol_wizard
+msgid "Ek Protokol"
+msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/wizards/extra_protocol_wizard.py:0
+msgid "Ek Protokol - %s"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_project_demo_extra_protocol_wizard
+msgid "Ek Protokol Görevi Onayı"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_demo_extra_protocol_wizard_form
+msgid "Ek Protokol Onayı"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__photo_studio
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__photo_studio
+msgid "Ekip"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_update_tasks_wizard_form
+msgid "Eklenecek Görevler"
+msgstr ""
+
+#. module: demo_form
 #. odoo-python
 #: code:addons/demo_form/models/demo_form.py:0
 msgid "Eksik Paket!"
@@ -966,6 +1506,12 @@ msgstr ""
 #. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__wedding_type__elite
 msgid "Elite"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__dj_person__engin
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Engin Sadiki"
 msgstr ""
 
 #. module: demo_form
@@ -979,14 +1525,28 @@ msgid "Entrance Song"
 msgstr "Giriş Şarkısı"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__home_exit
+msgid "Ev Çıkış Fotoğraf Çekimi"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__home_exit
+msgid "Evden Çıkış"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_schedule_line__event
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_schedule_line__event
 msgid "Event"
 msgstr "Etkinlik"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__date
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__date
+#: model:ir.model.fields,field_description:demo_form.field_project_project__event_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__event_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__event_date
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__date
 msgid "Event Date"
 msgstr "Etkinlik Tarihi"
 
@@ -996,33 +1556,44 @@ msgid "Event Type"
 msgstr "Etkinlik Türü"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Extra Alcohol Service:"
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard__project_id
+msgid "Existing Project"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 "F)\n"
-"                                            PRE-HOSTING:"
+"                                                    PRE-HOSTING:"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "F2) Accommodation"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"F2)\n"
+"                                                    ACCOMMODATION*"
+msgstr "F2) KONAKLAMA*"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 "F3) DANCE\n"
-"                                            LESSON"
+"                                                    COURSE"
+msgstr "F3) DANS DERSİ"
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__dj_person__fatih
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Fatih Aşçı"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Fatih Aşçı ("
-msgstr ""
+#: model:ir.model.fields,field_description:demo_form.field_backlight__first_name
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__first_name
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__first_name
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__first_name
+msgid "First Contact"
+msgstr "Birincil Kontak"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__first_dance_song
@@ -1030,14 +1601,25 @@ msgid "First Dance Song"
 msgstr "İlk Dans Şarkısı"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_project__email_from
+msgid "First E-mail"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__first_phone
+#: model:ir.model.fields,field_description:demo_form.field_project_project__phone
+msgid "First Phone"
+msgstr "Birincil Telefon"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Flowers:"
+msgstr "Çiçekler"
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__afterparty_fog_laser
 msgid "Fog + Laser Show"
 msgstr "Sis + Lazer Şovu"
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Fog + Laser:"
-msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__message_follower_ids
@@ -1056,8 +1638,24 @@ msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__ratio_foreign
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Foreign %"
 msgstr "Yabancı %"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__form_name
+msgid "Form Name"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_confirmed_form_form
+msgid "Form adı"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_confirmed_form_form
+msgid "Form Önizleme"
+msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__prehost_fred
@@ -1070,9 +1668,24 @@ msgid "French"
 msgstr ""
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "French ("
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__table_fresh_flowers
 msgid "Fresh Flowers"
 msgstr "Canlı Çiçekler"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Fresh Flowers: Yes ("
+msgstr "Canlı Çiçekler: Var ("
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_project__so_opportunity_id
+msgid "Fırsat"
+msgstr ""
 
 #. module: demo_form
 #. odoo-python
@@ -1081,18 +1694,24 @@ msgid "Fırsat kazanıldı olmadan proje oluşturamazsın."
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "G) Hair and Makeup:"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "G) Hair &amp; Makeup:"
+msgstr "G) Saç &amp; Makyaj:"
 
 #. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_garage_caddebostan
+#: model:ir.model,name:demo_form.model_garage_caddebostan
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__garage_caddebostan
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__hair_garage_caddebostan
+#: model:ir.ui.menu,name:demo_form.menu_garage_caddebostan_root
+#: model_terms:ir.ui.view,arch_db:demo_form.view_backlight_list
+#: model_terms:ir.ui.view,arch_db:demo_form.view_garage_caddebostan_list
 msgid "Garage Caddebostan"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Generated on"
+#: model_terms:ir.actions.act_window,help:demo_form.action_garage_caddebostan
+msgid "Garage Caddebostan kayıtlarını burada yönetin."
 msgstr ""
 
 #. module: demo_form
@@ -1101,14 +1720,15 @@ msgid "Greek"
 msgstr ""
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Greek ("
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__guest_count
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__guest_count
 msgid "Guest Count"
 msgstr "Misafir Sayısı"
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Guest Count:"
-msgstr ""
 
 #. module: demo_form
 #. odoo-python
@@ -1117,9 +1737,43 @@ msgid "Görev girmeden proje oluşturamazsın.."
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "H) Witnesses:"
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_demo_extra_protocol_wizard_form
+msgid "Görev için kısa not ekleyin (opsiyonel)"
 msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/demo_form.py:0
+msgid "Görevi Aç"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_demo_extra_protocol_wizard_form
+msgid "Görevi Oluştur"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_project_task_pivot
+#: model:ir.ui.menu,name:demo_form.menu_project_task_pivot
+msgid "Görevler Pivot"
+msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/sale_order.py:0
+#: model_terms:ir.ui.view,arch_db:demo_form.view_update_tasks_wizard_form
+msgid "Görevleri Güncelle"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_demo_seat_plan__picture
+msgid "Görsel"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "H) Best Men &amp; Brides Maids:"
+msgstr "H) Nikah Şahitleri:"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__hair_description
@@ -1137,7 +1791,7 @@ msgid "Hard Disk 1TB"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Hard disk 1 TB:"
 msgstr ""
 
@@ -1158,14 +1812,21 @@ msgid "Hip Hop & R&B"
 msgstr ""
 
 #. module: demo_form
-#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__photo_homesession
-msgid "Home Session"
-msgstr "Ev Çekimi"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Hip Hop &amp; R&amp;B ("
+msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Home Session:"
-msgstr ""
+msgstr "Ev Çekimi:"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Hot\n"
+"                                                    Appetizer:"
+msgstr "Arasıcak Seçimi:"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__menu_hot_appetizer
@@ -1173,17 +1834,13 @@ msgid "Hot Appetizer"
 msgstr "Sıcak Başlangıçlar"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Hot Appetizer Ultra:"
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Hot Appetizer:"
-msgstr ""
+msgstr "Ara Sıcak Ultra:"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__accommodation_hotel
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
 msgid "Hotel"
 msgstr ""
 
@@ -1199,13 +1856,32 @@ msgid "House & Electronic"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "I) PHOTOGRAPHY"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "House &amp; Electronic ("
 msgstr ""
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "House ("
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "I) PHOTOGRAPHY"
+msgstr "I) FOTOĞRAF"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__id
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__id
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__id
+#: model:ir.model.fields,field_description:demo_form.field_demo_form_print__id
+#: model:ir.model.fields,field_description:demo_form.field_demo_seat_plan__id
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__id
+#: model:ir.model.fields,field_description:demo_form.field_live_music__id
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__id
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_cake_choice__id
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_ceremony_tag__id
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_extra_protocol_wizard__id
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__id
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert__id
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert_ultra__id
@@ -1223,7 +1899,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_schedule_line__id
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__id
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_transport_line__id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard__id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__id
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__id
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__id
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__id
 msgid "ID"
 msgstr ""
 
@@ -1276,9 +1956,26 @@ msgid "If no service, should guests purchase their own?"
 msgstr "Yok ise misafirlerin alması uygun mudur?"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"If yes, please specify\n"
+"                                        the\n"
+"                                        songs:"
+msgstr "Evet ise hangi yöreler veya şarkılar?"
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__local_music_songs
 msgid "If yes, specify songs"
-msgstr "Evet ise şarkıları belirtin."
+msgstr "Parti sırasında yöresel şarkı çalınmasını ister misiniz?"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"If you have further needs of your DJ after DEMO, you may use the following\n"
+"                                        communication info."
+msgstr ""
+"DEMO sonrasında ihtiyacınız olur ise DJ'iniz ile aşağıda belirtildiği "
+"şekilde iletişim kurabilirsiniz."
 
 #. module: demo_form
 #: model:ir.model.fields,help:demo_form.field_project_demo_form__afterparty_bbq_wraps
@@ -1351,21 +2048,9 @@ msgid "Instructions or options for hair & makeup"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid ""
-"Invitation\n"
-"                                                    Owner:"
-msgstr ""
-
-#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__invitation_date
 msgid "Invitation Date"
 msgstr "Etkinlik Tarihi"
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Invitation Date:"
-msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__invitation_owner
@@ -1383,8 +2068,18 @@ msgid "Is There Any Project?"
 msgstr "Proje Var mı?"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_project__is_confirmed_demo_form
+msgid "Is There Confirmed Demo Form"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,help:demo_form.field_project_demo_form__accommodation_service
 msgid "Is accommodation provided?"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__opportunity_name
+msgid "Isim"
 msgstr ""
 
 #. module: demo_form
@@ -1398,20 +2093,33 @@ msgid "Italian & French & Greek"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Italian &amp; French &amp; Greek ("
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Italian ("
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "J) MUSIC"
+msgstr "J) Müzik"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "K) TABLE DECORATION"
+msgstr "K) MASA DEKORU"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Kabul ediyorum."
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid ""
-"Kahvaltı:\n"
-"                                            Yes ("
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Kişi"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Kabul etmiyorum."
 msgstr ""
 
 #. module: demo_form
@@ -1420,9 +2128,82 @@ msgid "Kişi Sayısı"
 msgstr ""
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_project__so_people_count_char
+msgid "Kişi Sayısı (M)"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Kişisel veri işlenip işlenmediğini\n"
+"                                                    öğrenme,"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Kişisel verileri işlenmişse buna ilişkin\n"
+"                                                    bilgi talep etme,"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Kişisel verilerin işlenme amacını ve\n"
+"                                                    bunların\n"
+"                                                    amacına uygun kullanılıp\n"
+"                                                    kullanılmadığını öğrenme,"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Kişisel verilerin silinmesini veya yok\n"
+"                                                    edilmesini isteme,"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Kişisel verileriniz, veri sorumlusu sıfatıyla\n"
+"                                                <strong>LİYA ETKİNLİK YÖNETİMİ VE RESTAURANT İŞLETMECİLİĞİ A.Ş.</strong>\n"
+"                                                tarafından aşağıda açıklanan kapsamda işlenebilecektir."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Kişisel verisi işlenen gerçek kişi, ilgili kişi olarak tanımlanır ve\n"
+"                                                işverine başvurarak kendisiyle ilgili\n"
+"                                                aşağıdaki haklara sahiptir:"
+msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/sale_order.py:0
+msgid "Kontrat olmadan satışı onaylayamazsınız."
+msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/sale_order.py:0
+msgid "Kontrat tarihi olmadan satışı onaylayamazsınız."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Koordinatör İsim &amp; İmza"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_project__so_coordinator_ids
 msgid "Koordinatörler"
 msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "L) OTHER NOTES"
+msgstr "L) DİĞER NOTLAR"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__other_lcv
@@ -1435,8 +2216,8 @@ msgid "LCV required?"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "LIYA ALL-WEDDING PLAN 2025"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "LIYA ALL - WEDDING PLAN"
 msgstr ""
 
 #. module: demo_form
@@ -1456,18 +2237,27 @@ msgid "Lasagna (Vegan)"
 msgstr "Lazanya (Vegan)"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Lasagna Meat ("
-msgstr ""
+msgstr "Lazanya Etli ("
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Lasagna Vegan ("
-msgstr ""
+msgstr "Lazanya Vegan ("
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_demo_form_print__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_demo_seat_plan__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_live_music__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__write_uid
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_cake_choice__write_uid
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_ceremony_tag__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_extra_protocol_wizard__write_uid
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__write_uid
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert__write_uid
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert_ultra__write_uid
@@ -1485,13 +2275,26 @@ msgstr ""
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_schedule_line__write_uid
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__write_uid
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_transport_line__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__write_uid
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__write_uid
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__write_date
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__write_date
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__write_date
+#: model:ir.model.fields,field_description:demo_form.field_demo_form_print__write_date
+#: model:ir.model.fields,field_description:demo_form.field_demo_seat_plan__write_date
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__write_date
+#: model:ir.model.fields,field_description:demo_form.field_live_music__write_date
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__write_date
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_cake_choice__write_date
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_ceremony_tag__write_date
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_extra_protocol_wizard__write_date
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__write_date
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert__write_date
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_menu_dessert_ultra__write_date
@@ -1509,7 +2312,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_schedule_line__write_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__write_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_transport_line__write_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard__write_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__write_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__write_date
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__write_date
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__write_date
 msgid "Last Updated on"
 msgstr ""
 
@@ -1517,6 +2324,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__after_latin_salsa
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__party_latin_salsa
 msgid "Latin & Salsa & Reggaeton"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Latin &amp; Salsa &amp; Reggaeton ("
 msgstr ""
 
 #. module: demo_form
@@ -1530,19 +2342,28 @@ msgid "List the witnesses (name & phone)"
 msgstr "Şahitlerin listesi"
 
 #. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_live_music
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__live_music_ids
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__music_live
+#: model:ir.ui.menu,name:demo_form.menu_live_music_root
+#: model_terms:ir.ui.view,arch_db:demo_form.view_live_music_list
 msgid "Live Music"
 msgstr "Canlı Müzik"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Live Music:"
-msgstr ""
+msgstr "Canlı Müzik:"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Local ("
+msgstr "Yöresel ("
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
 msgid "Local Music"
-msgstr ""
+msgstr "Yöresel İstek Şarkılar"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__local_music
@@ -1556,10 +2377,30 @@ msgid "Location Type"
 msgstr "Lokasyon Yeri"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Logo"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__cocktail_lounge
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__dinner_lounge
 msgid "Lounge"
 msgstr "Salon"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Lounge ("
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Lütfen Belirtiniz"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Lütfen Seçiniz..."
+msgstr ""
 
 #. module: demo_form
 #. odoo-python
@@ -1569,8 +2410,107 @@ msgstr ""
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Lütfen buraya belirtin."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Lütfen buraya yazın."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Lütfen notlarınızı buraya yazın."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"LİYA\n"
+"                                        MÜŞTERİ\n"
+"                                        AYDINLATMA METNİ"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"LİYA ETKİNLİK YÖNETİMİ VE\n"
+"                                        RESTAURANT\n"
+"                                        İŞLETMECİLİĞİ A.Ş."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "LİYA ETKİNLİK YÖNETİMİ VE RESTAURANT İŞLETMECİLİĞİ A.Ş."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"LİYA, yalnızca davet sahiplerinin ve davet sahiplerinin icazetlerini\n"
+"                                                alarak\n"
+"                                                oluşturdukları davetli listesindeki\n"
+"                                                davetlilerin <strong>ad-soyad</strong> ve <strong>telefon numaralarını\n"
+"                                            </strong> işler."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "M) MUSIC CHOICES"
+msgstr "M) MÜZİK SEÇİMLERİ"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "MADDE 1: VERİ SORUMLUSU"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"MADDE 2: İŞLENEN KİŞİSEL\n"
+"                                                VERİLER\n"
+"                                                VE KİŞİSEL VERİLERİN İŞLEME AMACI"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"MADDE 3: KİŞİSEL VERİ TOPLAMA\n"
+"                                                YÖNTEMLERİ VE HUKUKİ SEBEPLERİ"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"MADDE 4: KİŞİSEL VERİLERİN\n"
+"                                                SAKLAMA\n"
+"                                                SÜRESİ"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"MADDE 5: İLGİLİ KİŞİNİN\n"
+"                                                HAKLARI"
+msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/project_template.py:0
+msgid "Meetings – %s"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
 msgid "Menu"
 msgstr "Menü"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Menu\n"
+"                                                    Notes:"
+msgstr "Menü Notları:"
 
 #. module: demo_form
 #: model:ir.ui.menu,name:demo_form.menu_project_demo_menu_meze
@@ -1603,12 +2543,17 @@ msgid "Menu and Bar"
 msgstr "Menü ve Bar"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__merasim
+msgid "Merasim"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__bar_raki_brand__mercan
 msgid "Mercan"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Mercan ("
 msgstr ""
 
@@ -1623,16 +2568,11 @@ msgid "Messages"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
 "Meze\n"
-"                                            Notes:"
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Meze:"
-msgstr ""
+"                                                    Notes:"
+msgstr "Meze Notları:"
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
@@ -1665,7 +2605,15 @@ msgid "Müşteri"
 msgstr ""
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__name
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__name
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__name
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__name
+#: model:ir.model.fields,field_description:demo_form.field_live_music__name
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__name
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_witness_line__name
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__name
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__name
 msgid "Name"
 msgstr "İsim"
 
@@ -1711,8 +2659,18 @@ msgid "Next Event Date"
 msgstr "Sonraki Etkinlik Tarihi"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "No ("
+msgstr "Yok ("
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__ceremony__staged
+msgid "Non-Official"
+msgstr "Mizansen"
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__merasim__nostaljik
+msgid "Nostaljik Kapı"
 msgstr ""
 
 #. module: demo_form
@@ -1729,6 +2687,11 @@ msgstr "After Party için notlar veya özel talimatlar."
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__message_needaction_counter
 msgid "Number of Actions"
 msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Number of Guests:"
+msgstr "Kişi Sayısı:"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__message_has_error_counter
@@ -1751,10 +2714,25 @@ msgid "Offer additional drink varieties?"
 msgstr "Ek içecek çeşitleri sunalım mı?"
 
 #. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__ceremony__actual
+msgid "Official"
+msgstr "Nikah"
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__after_oldies
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__dinner_oldies
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__party_oldies
 msgid "Oldies & Goldies"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Oldies &amp; Goldies ("
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_update_tasks_wizard_form
+msgid "Oluştur"
 msgstr ""
 
 #. module: demo_form
@@ -1763,7 +2741,26 @@ msgid "Onayla ve Oluştur"
 msgstr ""
 
 #. module: demo_form
+#: model_terms:ir.actions.act_window,help:demo_form.action_confirmed_demo
+msgid "Onaylanmış Demoların kayıtlarını burada yönetin."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_confirmed_form_form
+msgid "Onaylı Form"
+msgstr ""
+
+#. module: demo_form
+#. odoo-python
+#: code:addons/demo_form/models/demo_form.py:0
+msgid ""
+"Only administrators can modify or delete the Confirmed Demo Form once "
+"uploaded."
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__optional_product_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__optional_product_id
 msgid "Optional Product"
 msgstr "Opsiyonel Hizmet"
 
@@ -1772,6 +2769,23 @@ msgstr "Opsiyonel Hizmet"
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__optional_product_id
 msgid "Optional Products"
 msgstr "Opsiyonel Hizmetler"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_crm_lead_form_inherit_project_button
+msgid "Organizasyon"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Organizasyon/hizmet süreçlerinin yürütülmesi, iletişim faaliyetlerinin\n"
+"                                            yürütülmesi, izinli iletişim ve LCV\n"
+"                                            aramalarının yapılması amacıyla <strong>iletişim bilgilerimin işlenmesi ve\n"
+"                                            aktarılmasına</strong>; ayrıca\n"
+"                                            listemi verdiğim misafirlerimin ilgili bilgilendirme arama ve SMS’lerinden\n"
+"                                            faydalanabilmeleri için verilerinin\n"
+"                                            işlenmesine açık rıza veriyorum."
+msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__hair_other
@@ -1793,13 +2807,63 @@ msgid "Other Notes about Music"
 msgstr "Müzik Diğer Notlar"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Other:"
+msgstr "Diğer"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__demo_seat_plan
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Oturma Planı"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_project_demo_seat_plan
+#: model:ir.ui.menu,name:demo_form.menu_demo_form_seat_plan
+msgid "Oturma Planı Şablonları"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__sale_template_name
+msgid "Package"
+msgstr "Paket"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_project__so_sale_template_id
+msgid "Paket"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.ui.menu,name:demo_form.menu_partner_info_root
+msgid "Partner Info"
+msgstr "İş Ortakları"
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_partner_vedans
+msgid "Partner Vedans"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_partner_vedans
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__vedan_ids
+#: model:ir.ui.menu,name:demo_form.menu_partner_vedans_root
+#: model_terms:ir.ui.view,arch_db:demo_form.view_partner_vedans_list
+msgid "Partner vedans"
+msgstr "Vedans"
+
+#. module: demo_form
+#: model_terms:ir.actions.act_window,help:demo_form.action_partner_vedans
+msgid "Partner vedans kayıtlarını burada yönetin."
 msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__after_party_hits
 msgid "Party Hits"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Party Hits ("
 msgstr ""
 
 #. module: demo_form
@@ -1813,14 +2877,29 @@ msgid "Party Request Songs"
 msgstr "Parti İstek Şarkılar"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Party request songs:"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_extra_protocol_wizard__pending_vals_json
+msgid "Pending Vals Json"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "People"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__music_percussion
 msgid "Percussion"
 msgstr "Perküsyon"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Percussion:"
-msgstr ""
+msgstr "Perküsyon"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__hair_other_phone
@@ -1828,19 +2907,15 @@ msgid "Phone"
 msgstr "Telefon"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Photo And Video Plus:"
-msgstr ""
-
-#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__photo_print_service
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__photo_print_service
 msgid "Photo Print Service"
 msgstr "Fotoğraf Çıktı Servisi"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Photo Print Service:"
-msgstr ""
+#: model:ir.model.fields,field_description:demo_form.field_backlight__photo_service
+msgid "Photo Service"
+msgstr "Fotoğraf Servisi"
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
@@ -1853,6 +2928,11 @@ msgid "Photography Notes"
 msgstr "Fotoğraf Notları"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Photography hizmeti mevcut değildir."
+msgstr "Fotoğraf hizmeti mevcut değildir."
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__photo_video_plus
 msgid "Photo & Video Plus"
 msgstr ""
@@ -1860,6 +2940,7 @@ msgstr ""
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__planned_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__planned_date
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__planned_date
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__planned_date
 msgid "Planned Type"
 msgstr "Planlama Tipi"
@@ -1877,6 +2958,7 @@ msgstr "Liman Adı"
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_transport_line__port_ids
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_transport_line__port_ids
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__port_ids
 msgid "Ports"
 msgstr "Limanlar"
 
@@ -1888,7 +2970,12 @@ msgstr "Ağırlama Notları"
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
 msgid "Pre‑Hosting"
-msgstr ""
+msgstr "Ön Ağırlama"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_extra_protocol_wizard__product_label
+msgid "Product Label"
+msgstr "Ürün Adı"
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_sale_order_project_wizard_form
@@ -1898,16 +2985,17 @@ msgstr ""
 #. module: demo_form
 #. odoo-python
 #: code:addons/demo_form/models/crm_lead.py:0
-msgid "Proje atanmadan Kazanıldı/Won aşamasına geçemezsiniz."
-msgstr ""
-
-#. module: demo_form
-#. odoo-python
-#: code:addons/demo_form/models/crm_lead.py:0
 #: model:ir.model,name:demo_form.model_project_project
+#: model:ir.model.fields,field_description:demo_form.field_backlight__project_id
+#: model:ir.model.fields,field_description:demo_form.field_blue_marmara__project_id
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__project_id
 #: model:ir.model.fields,field_description:demo_form.field_crm_lead__project_id
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__project_id
+#: model:ir.model.fields,field_description:demo_form.field_live_music__project_id
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__project_id
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__project_id
-#: model_terms:ir.ui.view,arch_db:demo_form.view_crm_lead_form_inherit_project_button
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__project_id
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__project_id
 msgid "Project"
 msgstr "Proje"
 
@@ -1926,8 +3014,14 @@ msgstr "Projedeki Görevler"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__task_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__task_id
 msgid "Project Template"
 msgstr "Proje Şablonu"
+
+#. module: demo_form
+#: model:ir.actions.server,name:demo_form.ir_cron_project_template_wedding_done_ir_actions_server
+msgid "Project Template: Wedding Date Past → Done"
+msgstr ""
 
 #. module: demo_form
 #: model:ir.model,name:demo_form.model_sale_order_project_wizard_line
@@ -1938,7 +3032,6 @@ msgstr ""
 #: model:ir.model.fields,help:demo_form.field_project_demo_form__accomodation_notes
 #: model:ir.model.fields,help:demo_form.field_project_demo_form__dance_lesson_notes
 #: model:ir.model.fields,help:demo_form.field_project_demo_form__menu_description
-#: model:ir.model.fields,help:demo_form.field_project_demo_form__menu_meze_notes
 #: model:ir.model.fields,help:demo_form.field_project_demo_form__prehost_notes
 msgid "Provide notes or instructions for the Menu page."
 msgstr "Menü sayfası için notlar veya talimatlar sağlayın."
@@ -1959,6 +3052,16 @@ msgid "Quotation Template"
 msgstr "Teklif Şablonu"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "RSVP:"
+msgstr "LCV:"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Radio Top 50 ("
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__after_radio_top50
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__party_radio_top50
 msgid "Radio Top 50"
@@ -1970,9 +3073,9 @@ msgid "Rakı Brand"
 msgstr "Rakı Markası"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Rakı Brand:"
-msgstr ""
+msgstr "Rakı Markası:"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__rating_ids
@@ -1980,9 +3083,19 @@ msgid "Ratings"
 msgstr ""
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Real ("
+msgstr "Gerçek ("
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__cake_real
 msgid "Real Cake"
 msgstr "Gerçek Pasta"
+
+#. module: demo_form
+#: model:ir.actions.server,name:demo_form.ir_cron_project_demo_form_recompute_ir_actions_server
+msgid "Recompute Demo Forms (compute’lar)"
+msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__name
@@ -2002,6 +3115,7 @@ msgstr ""
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__user_ids
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__user_ids
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__user_ids
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__user_ids
 msgid "Responsibles"
 msgstr "Sorumlular"
@@ -2013,28 +3127,14 @@ msgid "Restaurant"
 msgstr "Restoran"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid ""
-"Restaurant\n"
-"                                                    (<strong/>) -"
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid ""
-"Restaurant (<strong>\n"
-"                                                    x</strong>) -"
-msgstr ""
-
-#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__menu_hot_appetizer_ultra
 msgid "Rocket Shrimp"
 msgstr "Roket Karides"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Rocket Shrimp ("
-msgstr ""
+msgstr "Roket Karides ("
 
 #. module: demo_form
 #: model:ir.model,name:demo_form.model_project_demo_runner_design
@@ -2060,22 +3160,20 @@ msgstr "Satış Seçenekleri"
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard__sale_order_id
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__sale_order_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard__sale_order_id
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__sale_order_id
 msgid "Sale Order"
 msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__sale_order_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__sale_order_id
 msgid "Sale Order Id"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.project_project_form_inherit_so_summary
-msgid "Sale Order Infos"
-msgstr "Düğün Satış Bilgileri"
-
-#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_project__sale_order_summary
+#: model:ir.model.fields,field_description:demo_form.field_project_project__som
 msgid "Sale Order Summary"
 msgstr ""
 
@@ -2096,6 +3194,7 @@ msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields,help:demo_form.field_project_project__sale_order_summary
+#: model:ir.model.fields,help:demo_form.field_project_project__som
 msgid "Sale Order'dan (indirim satırları hariç) çekilen özet bilgi."
 msgstr ""
 
@@ -2121,13 +3220,18 @@ msgid "Sales Order"
 msgstr "Satış Siparişi"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.project_project_form_inherit_so_summary
+msgid "Sales Order Infos"
+msgstr "Düğün Satış Bilgileri"
+
+#. module: demo_form
 #: model:ir.model,name:demo_form.model_sale_order_line
 msgid "Sales Order Line"
 msgstr "Satış Sipariş Satırı"
 
 #. module: demo_form
-#: model:ir.model.fields,field_description:demo_form.field_project_project__so_sale_template_id
-msgid "Satış Şablonu"
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Saygılarımızla;"
 msgstr ""
 
 #. module: demo_form
@@ -2168,6 +3272,25 @@ msgid "Seat Plan Name"
 msgstr ""
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__second_name
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__second_name
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__second_name
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__second_name
+msgid "Second Contact"
+msgstr "İkincil Kontak"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_project__second_mail
+msgid "Second E-mail"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_partner_vedans__second_phone
+#: model:ir.model.fields,field_description:demo_form.field_project_project__second_phone
+msgid "Second Phone"
+msgstr "İkincil Telefon"
+
+#. module: demo_form
 #: model:ir.model.fields,help:demo_form.field_project_demo_form__menu_dessert_ids
 #: model:ir.model.fields,help:demo_form.field_project_demo_form__menu_dessert_ultra_ids
 msgid "Select one or more dessert options"
@@ -2189,19 +3312,29 @@ msgid "Send E-mail"
 msgstr "E-Posta Gönder"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__is_ceremony
+msgid "Seramoni Düzeni"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_project_demo_inherit
+msgid "Seçiniz..."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Seçiniz…"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__afterparty_shot_service
 msgid "Shot Service"
 msgstr "Shot Servisi"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Shot Service:"
-msgstr ""
-
-#. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
 msgid "Significant Songs"
-msgstr ""
+msgstr "Önemli Şarkılar"
 
 #. module: demo_form
 #. odoo-python
@@ -2219,6 +3352,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__other_social_media_tag
 msgid "Social Media Tag Me"
 msgstr "Sosyal Medya Tagi"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Social Media Tag Me:"
+msgstr ""
 
 #. module: demo_form
 #. odoo-python
@@ -2248,13 +3386,14 @@ msgid "Special Notes Remaining"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Special Notes:"
-msgstr ""
+msgstr "ÖZEL NOTLAR:"
 
 #. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_order_project_wizard_line__planned_date__casual_date
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_order_template_task__planned_date__casual_date
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_update_tasks_wizard_line__planned_date__casual_date
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_project_task__planned_date__casual_date
 msgid "Stable Date"
 msgstr "Sabit Tarih"
@@ -2262,14 +3401,10 @@ msgstr "Sabit Tarih"
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__stage_id
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__stage_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__stage_id
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__stage_id
 msgid "Stage"
 msgstr "Aşama"
-
-#. module: demo_form
-#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__ceremony__staged
-msgid "Staged"
-msgstr "Mizansen"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__photo_standard
@@ -2277,21 +3412,11 @@ msgid "Standard Photo Service"
 msgstr "Standart Fotoğraf Servisi"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Standard Photography Service:"
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid ""
-"Standart mezelere ilave olarak Kayısı Yahnisi,\n"
-"                                    Karides ve Ahtapot soğuk deniz mezeleri de servis edilir."
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Start - End Time:"
-msgstr ""
+"Start -\n"
+"                                                        End Time:"
+msgstr "Başlangıç - Bitiş:"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__start_end_time
@@ -2317,12 +3442,15 @@ msgstr "Adımlar"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__afterparty_street_food
-msgid "Street Food"
+msgid "Street Food Atıştırmalık"
 msgstr "Sokak Yemekleri"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Street Food:"
+#: model:ir.actions.act_window,name:demo_form.action_studio_345
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__studio_345
+#: model:ir.ui.menu,name:demo_form.menu_studio_345_root
+#: model_terms:ir.ui.view,arch_db:demo_form.view_studio_345_list
+msgid "Studio 3435"
 msgstr ""
 
 #. module: demo_form
@@ -2331,14 +3459,33 @@ msgid "Studio 3435 Nişantaşı"
 msgstr ""
 
 #. module: demo_form
+#: model_terms:ir.actions.act_window,help:demo_form.action_studio_345
+msgid "Studio 3435 kayıtlarını burada yönetin."
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_studio_345
+msgid "Studio 345"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__afterparty_sushi
 msgid "Sushi"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Sushi:"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Table\n"
+"                                                Decoration Notes:"
+msgstr "Masa Dekoru için var ise notlar:"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Table\n"
+"                                                Theme:"
+msgstr "Masa Teması:"
 
 #. module: demo_form
 #: model:ir.model,name:demo_form.model_project_demo_table_charger
@@ -2385,6 +3532,18 @@ msgid "Table Themes"
 msgstr "Masa Teması"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Tablecloth &amp; Runner\n"
+"                                                Design:"
+msgstr "Masa Örtüsü &amp; Runner Dizaynı:"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Tablecloth Color Selection:"
+msgstr "Renk Seçimi:"
+
+#. module: demo_form
 #: model:ir.model.fields,help:demo_form.field_project_demo_form__other_social_media_tag
 msgid "Tag me on social media?"
 msgstr "Sosyal medyada taglensin mi?"
@@ -2395,6 +3554,20 @@ msgid "Talep Tarihi"
 msgstr ""
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__date
+#: model:ir.model.fields,field_description:demo_form.field_confirmed_form__date
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__date
+#: model:ir.model.fields,field_description:demo_form.field_live_music__date
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__date
+msgid "Tarih"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Tarih:"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model,name:demo_form.model_project_task
 msgid "Task"
 msgstr "Görev"
@@ -2402,6 +3575,7 @@ msgstr "Görev"
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__name
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_task__name
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__name
 #: model:ir.model.fields,field_description:demo_form.field_sale_project_task__name
 msgid "Task Name"
 msgstr "Görev Adı"
@@ -2417,12 +3591,17 @@ msgid "Tasks Which Will Be Add to Project"
 msgstr "Projeye Eklenecek Görevler"
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard__line_ids
+msgid "Tasks to Add"
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__bar_raki_brand__tekirdag_altin_seri
 msgid "Tekirdağ Altın Seri"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Tekirdağ Altın Seri ("
 msgstr ""
 
@@ -2432,15 +3611,18 @@ msgid "Theme"
 msgstr "Tema"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "There is no witness information."
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"There is no brides and best men\n"
+"                                            information."
+msgstr "Nikah şahidi bilgisi bulunamadı."
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_schedule_line__time
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_transport_line__time
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_schedule_line__time
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_template_transport_line__time
+#: model:ir.model.fields,field_description:demo_form.field_wedding_trio__time
 msgid "Time"
 msgstr "Süre"
 
@@ -2470,7 +3652,7 @@ msgstr ""
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
 msgid "Transportation Infos"
-msgstr ""
+msgstr "Ulaşım Bilgileri"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__transportation_description
@@ -2483,7 +3665,7 @@ msgid "Trio"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Trio:"
 msgstr ""
 
@@ -2495,8 +3677,14 @@ msgstr "Türkçe"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__ratio_turkish
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Turkish %"
 msgstr "Türk %"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Turkish ("
+msgstr "Türkçe ("
 
 #. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__ratio_choice__25_75
@@ -2504,9 +3692,19 @@ msgid "Turkish 25 / Foreign 75"
 msgstr "Türk 25 / Yabancı 75"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Turkish 25 / Foreign 75 ("
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__ratio_choice__50_50
 msgid "Turkish 50 / Foreign 50"
 msgstr "Türk 50 / Yabancı 50"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Turkish 50 / Foreign 50 ("
+msgstr ""
 
 #. module: demo_form
 #: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__ratio_choice__75_25
@@ -2514,13 +3712,33 @@ msgid "Turkish 75 / Foreign 25"
 msgstr "Türk 75 / Yabancı 25"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Turkish 75 / Foreign 25 ("
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Turkish 80’s 90’s ("
+msgstr "Türkçe 80's 90's ("
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__dinner_turkish_acoustic
 msgid "Turkish Acoustic"
 msgstr ""
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Turkish Acoustic ("
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__dinner_turkish_retro
 msgid "Turkish Retro"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Turkish Retro ("
 msgstr ""
 
 #. module: demo_form
@@ -2530,6 +3748,11 @@ msgid "Turkish Rock"
 msgstr ""
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Turkish Rock ("
+msgstr "Türkçe Rock ("
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__after_turkish_80s_90s
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__party_turkish_80s_90s
 msgid "Turkish 80’s 90’s"
@@ -2537,7 +3760,56 @@ msgstr ""
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Type Of Music at the After Party"
+msgstr "After Parti Müzikleri"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Type Of Music at the Cocktail"
+msgstr "Kokteyl müzikleri"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Type Of Music at the Dinner"
+msgstr "Yemek Müzikleri"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
+msgid "Type Of Music at the Party"
+msgstr "Parti Müzikleri"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
 msgid "Type of Music"
+msgstr "Müzik Tipi"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Type of Music at the\n"
+"                                                    After\n"
+"                                                    Party"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Type of Music at the\n"
+"                                                    Cocktail"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Type of Music at the\n"
+"                                                    Dinner"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Type of Music at the\n"
+"                                                    Party"
 msgstr ""
 
 #. module: demo_form
@@ -2562,6 +3834,27 @@ msgid "Ultra Dessert Choices"
 msgstr "Ultra Tatlı Seçenekleri"
 
 #. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_demo_extra_protocol_wizard_form
+msgid "Vazgeç"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Veri Sahibi"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Veri sorumlusu <strong>LİYA ETKİNLİK YÖNETİMİ VE RESTAURANT İŞLETMECİLİĞİ A.Ş.\n"
+"                                    </strong> olarak; KVKK’da yer alan\n"
+"                                        istisnalar saklı kalmak kaydıyla aşağıdaki hususlarda kişisel verilerinizin\n"
+"                                        işlenmesi ve aktarılması için\n"
+"                                        açık rızanızı talep ediyoruz. Detaylar için <strong>Liya Müşteri Aydınlatma\n"
+"                                            Metni</strong>’ne başvurabilirsiniz."
+msgstr ""
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__website_message_ids
 msgid "Website Messages"
 msgstr ""
@@ -2577,14 +3870,32 @@ msgid "Wedding Cake Song"
 msgstr "Düğün Pastası Şarkısı"
 
 #. module: demo_form
+#: model:ir.model,name:demo_form.model_wedding_trio
+msgid "Wedding Trio"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.actions.act_window,help:demo_form.action_wedding_trio
+msgid "Wedding Trio kayıtlarını burada yönetin."
+msgstr ""
+
+#. module: demo_form
+#: model:ir.actions.act_window,name:demo_form.action_wedding_trio
+#: model:ir.model.fields,field_description:demo_form.field_project_demo_form__wedding_trio_ids
+#: model:ir.ui.menu,name:demo_form.menu_wedding_trio_root
+#: model_terms:ir.ui.view,arch_db:demo_form.view_wedding_trio_list
+msgid "Wedding Trios"
+msgstr "Trio"
+
+#. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__wedding_type
 msgid "Wedding Type"
 msgstr "Düğün Türü"
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Wedding Type:"
-msgstr ""
+msgstr "Düğün Tipi:"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__witness_line_ids
@@ -2595,8 +3906,14 @@ msgstr "Şahitler"
 #: model:ir.model.fields.selection,name:demo_form.selection__project_task__communication_type__phone
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_order_project_wizard_line__communication_type__phone
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_order_template_task__communication_type__phone
+#: model:ir.model.fields.selection,name:demo_form.selection__sale_order_update_tasks_wizard_line__communication_type__phone
 #: model:ir.model.fields.selection,name:demo_form.selection__sale_project_task__communication_type__phone
 msgid "Whatsapp"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_project_project_demo_inherit
+msgid "Whatsapp Mesajı Oluştur"
 msgstr ""
 
 #. module: demo_form
@@ -2616,13 +3933,31 @@ msgstr "Şahit Notları"
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_sale_order_project_wizard_line__wizard_id
+#: model:ir.model.fields,field_description:demo_form.field_sale_order_update_tasks_wizard_line__wizard_id
 msgid "Wizard"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_sale_order_update_tasks_wizard_line
+msgid "Wizard Line: Tasks to Add into Existing Project"
 msgstr ""
 
 #. module: demo_form
 #: model:ir.model,name:demo_form.model_sale_order_project_wizard
 msgid "Wizard for creating project from Sale Order"
 msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_sale_order_update_tasks_wizard
+msgid "Wizard: Existing Project – Add Tasks from Sale Order"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"Would you like local music during the Party?\n"
+"                                        Yes ("
+msgstr "Party sırasında Yöresel Şarkılar çalınmasını ister misiniz? Evet ("
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
@@ -2632,7 +3967,7 @@ msgstr "Konaklama notlarınızı buraya yazabilirsiniz."
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
 msgid "Write your after party notes in here"
-msgstr ""
+msgstr "After Parti Notlarınızı Yazın"
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
@@ -2642,7 +3977,7 @@ msgstr "Bar notlarınızı buraya yazabilirsiniz."
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
 msgid "Write your dance notes in here"
-msgstr "Dans notlarınızı buraya yazabilirsiniz."
+msgstr "Dnas notlarınızı buraya yazabilirsiniz."
 
 #. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_demo_form_form
@@ -2712,17 +4047,41 @@ msgstr ""
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__photo_yacht_shoot
 msgid "Yacht Photo Shoot"
+msgstr "Yat Fotoğraf Çekimi"
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__yacht_shoot
+msgid "Yacht Shoot"
+msgstr "Yat Çekimi"
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__merasim__yemek
+msgid "Yemek Sırasında"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
-msgid "Yacht Shoot:"
-msgstr ""
-
-#. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "Yes ("
+msgstr "Var ("
+
+#. module: demo_form
+#: model:ir.model.fields.selection,name:demo_form.selection__project_demo_form__merasim__none
+msgid "Yok"
 msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"You may choose the ratio of the language of songs throughout your wedding."
+msgstr "Düğün genelinde çalınacak şarkıların dil oranını seçebilirsiniz."
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"You may choose the type of music for the four different parts of your "
+"wedding."
+msgstr ""
+"Düğününüzde yer alan 4 farklı bölüm için müzik türü belirleyebilirsiniz."
 
 #. module: demo_form
 #: model:ir.model.fields,field_description:demo_form.field_project_demo_form__party_local
@@ -2730,8 +4089,43 @@ msgid "Yöresel / Local"
 msgstr ""
 
 #. module: demo_form
-#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_layout
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
 msgid "__ : __"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_backlight
+msgid "backlight"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_confirmed_form
+msgid "confirmed.form"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_demo_form_print
+msgid "demo.form.print"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_demo_seat_plan
+msgid "demo.seat.plan"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model,name:demo_form.model_live_music
+msgid "live.music"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_project_task__opportunity_name
+msgid "Çift Adı"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "Çiftimiz İsim &amp; İmza"
 msgstr ""
 
 #. module: demo_form
@@ -2746,8 +4140,55 @@ msgid "İkincil Kontak"
 msgstr ""
 
 #. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__second_phone
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__second_phone
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__second_phone
+msgid "İkincil Telefon"
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid "İmza:"
+msgstr ""
+
+#. module: demo_form
 #: model_terms:ir.ui.view,arch_db:demo_form.view_sale_order_project_wizard_form
+#: model_terms:ir.ui.view,arch_db:demo_form.view_update_tasks_wizard_form
 msgid "İptal"
+msgstr ""
+
+#. module: demo_form
+#: model:ir.model.fields,field_description:demo_form.field_backlight__opportunity_name
+#: model:ir.model.fields,field_description:demo_form.field_demo_seat_plan__name
+#: model:ir.model.fields,field_description:demo_form.field_garage_caddebostan__opportunity_name
+#: model:ir.model.fields,field_description:demo_form.field_studio_345__opportunity_name
+msgid "İsim"
+msgstr "Çift İsmi"
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"İşbu aydınlatma metni; veri sorumlusu tarafından hangi kişisel verilerinizin\n"
+"                                        hangi\n"
+"                                        amaçla, nasıl ve hangi\n"
+"                                        hukuki sebebe dayanılarak işlendiği, kimlerle paylaşıldığı ve ne kadar süreyle\n"
+"                                        saklandığı konusunda sizi\n"
+"                                        bilgilendirmek amacıyla hazırlanmıştır. Bilgilendirme, 6698 sayılı Kişisel\n"
+"                                        Verilerin\n"
+"                                        Korunması Kanunu’nun\n"
+"                                        10’uncu maddesi kapsamında yapılmaktadır."
+msgstr ""
+
+#. module: demo_form
+#: model_terms:ir.ui.view,arch_db:demo_form.demo_form_report_document
+msgid ""
+"İşbu açık rıza metni; belirli bir konuya ilişkin, bilgilendirmeye dayanan ve\n"
+"                                        özgür\n"
+"                                        iradeyle açıklanan rızayı\n"
+"                                        ifade etmekte olup; aşağıda belirtilen konulara ilişkin bilgilendirme\n"
+"                                        içermektedir\n"
+"                                        ve bu metne onay verip\n"
+"                                        vermeme konusunda özgür olduğunuzu hatırlatır."
 msgstr ""
 
 #. module: demo_form

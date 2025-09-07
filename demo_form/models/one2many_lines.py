@@ -8,13 +8,13 @@ class DemoTransportLine(models.Model):
     demo_form_id = fields.Many2one(
         'project.demo.form', ondelete='cascade')
     sequence = fields.Integer(string="Step")
-    label = fields.Char(string="Notes")
+    label = fields.Char(string="Notes",translate=True)
     time = fields.Char(string="Time", )
     port_ids = fields.Many2many(
-        'project.transport.port',  # the Port model
-        'demo_line_port_rel',  # the join table name
-        'line_id',  # column in that table → project.demo.transport.line
-        'port_id',  # column in that table → project.transport.port
+        'project.transport.port',
+        'demo_line_port_rel', 
+        'line_id', 
+        'port_id',  
         string="Ports",
     )
     other_port = fields.Char(string="If Other, specify")
@@ -27,7 +27,6 @@ class DemoWitnessLine(models.Model):
     demo_form_id = fields.Many2one(
         'project.demo.form', required=True, ondelete='cascade')
     name = fields.Char(string="Name", required=True)
-    # phone = fields.Char(string="Phone")
 
 
 class DemoScheduleLine(models.Model):
@@ -37,7 +36,7 @@ class DemoScheduleLine(models.Model):
     demo_form_id = fields.Many2one(
         'project.demo.form', ondelete='cascade')
     sequence = fields.Integer(string="Step")
-    event = fields.Char(string="Event")
+    event = fields.Char(string="Event",translate=True)
     time = fields.Char(string="Time")
     location_type = fields.Selection(
         [('restaurant', 'Restaurant'), ('beach', 'Beach')],

@@ -1,5 +1,7 @@
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError,ValidationError
+
+ADDENDUM_NAMES = ['Ek Protokol', 'Extra Protocol']
 
 
 class SaleOrder(models.Model):
@@ -105,11 +107,147 @@ class SaleOrder(models.Model):
             },
         }
 
+    def _should_open_extra_protocol_wizard_on_confirm(self):
+        """Ek Protokol siparişini onaylarken wizard açalım mı?"""
+        self.ensure_one()
+        tmpl = (self.sale_order_template_id.name or '').strip().lower()
+        return (
+            tmpl == 'ek protokol'
+            and self.opportunity_id
+            and self.opportunity_id.project_id
+            and not self.project_id
+        )
+
+    def _action_open_update_tasks_wizard_from_confirm(self):
+        """Confirm akışından wizard'ı açacak action dict."""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _("Görevleri Güncelle"),
+            'res_model': 'sale.order.update.tasks.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_sale_order_id': self.id,
+                'confirm_sale_on_wizard_ok': True,
+            }
+        }
+
+    def action_confirm(self):
+
+        res = super().action_confirm()
+        for order in self:
+            if order.sale_order_template_id.name.lower() in ['ek protokol', 'extra protocol']:
+                if not order.confirmed_contract:
+                    raise UserError(_("Kontrat olmadan satışı onaylayamazsınız."))
+                if not order.contract_date:
+                    raise UserError(_("Kontrat tarihi olmadan satışı onaylayamazsınız."))
+
+        if not self.env.context.get('skip_extra_protocol_on_confirm'):
+            for order in self:
+                if order.sale_order_template_id.name.lower()=='ek protokol':
+                    return order._action_open_update_tasks_wizard_from_confirm()
+
+        return res
+
     @api.onchange('wedding_date')
     def _onchange_wedding_date(self):
         for rec in self:
             if rec.project_task_ids:
                 rec.project_task_ids._onchange_deadline_date()
+
+
+    def _get_existing_order_in_same_opportunity(self):
+        """Aynı fırsattaki (cancel hariç) mevcut siparişlerden birini getirir.
+        Genelde tek olduğundan bu yeterli."""
+        self.ensure_one()
+        if not self.opportunity_id:
+            return self.env['sale.order']
+        domain = [
+            ('opportunity_id', '=', self.opportunity_id.id),
+            ('id', '!=', self.id or 0),
+            ('state', 'in', ['sale','done']),
+        ]
+        return self.env['sale.order'].search(domain, order='create_date desc, id desc', limit=1)
+
+    def _get_addendum_template_ids(self):
+        Template = self.env['sale.order.template']
+        dom = ['|', ('name', 'ilike', ADDENDUM_NAMES[0]), ('name', 'ilike', ADDENDUM_NAMES[1])]
+        return set(Template.search(dom).ids)
+
+    def _ensure_template_policy(self, candidate_template_id):
+        """Aynı fırsata bağlı mevcut bir satış varsa,
+        yeni satış için SADECE 'Ek Protokol' / 'Extra Protocol' şablonlarına izin ver."""
+        self.ensure_one()
+        existing = self._get_existing_order_in_same_opportunity()
+        if not existing:
+            return
+
+        addendum_ids = self._get_addendum_template_ids()
+
+        if not addendum_ids:
+            raise ValidationError(
+                "Bu fırsata zaten bir satış bağlı; ancak sistemde 'Ek Protokol' şablonu bulunamadı. "
+                "Lütfen 'Ek Protokol' / 'Extra Protocol' şablonlarını oluşturun."
+            )
+
+        cid = getattr(candidate_template_id, "id", candidate_template_id) or False
+
+        if cid not in addendum_ids:
+            addendum_names = ', '.join(
+                self.env['sale.order.template'].browse(list(addendum_ids)).mapped('display_name')
+            ) or ', '.join(ADDENDUM_NAMES)
+
+            raise ValidationError(
+                "Bu fırsata zaten bir satış bağlı. Yeni satış için yalnızca şu ek protokol şablonlarına izin var:\n"
+                f"- {addendum_names}"
+            )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        orders = super().create(vals_list)
+        for order, vals in zip(orders, vals_list):
+            if vals.get('opportunity_id') and 'sale_order_template_id' in vals:
+                order._ensure_template_policy(vals.get('sale_order_template_id'))
+            elif vals.get('opportunity_id'):
+                pass
+        return orders
+
+    def write(self, vals):
+        res = super().write(vals)
+        if {'sale_order_template_id', 'opportunity_id'} & set(vals.keys()):
+            for order in self:
+                order._ensure_template_policy(order.sale_order_template_id.id)
+        return res
+
+    @api.onchange('opportunity_id', 'sale_order_template_id')
+    def _onchange_template_policy(self):
+        if not self.opportunity_id:
+            return
+
+        existing = self._get_existing_order_in_same_opportunity()
+        if not existing:
+            return
+
+        addendum_ids = self._get_addendum_template_ids()
+        allowed_ids = set(addendum_ids)
+        if existing.sale_order_template_id:
+            allowed_ids.add(existing.sale_order_template_id.id)
+
+        res = {'domain': {'sale_order_template_id': [('id', 'in', list(allowed_ids) or [0])]}}
+        if self.sale_order_template_id and self.sale_order_template_id.id not in allowed_ids:
+            addendum_names = ', '.join(
+                self.env['sale.order.template'].browse(list(addendum_ids)).mapped('display_name')
+            ) or ', '.join(ADDENDUM_NAMES)
+            res['warning'] = {
+                'title': "Şablon Kısıtı",
+                'message': (
+                    "Bu fırsatta zaten bir satış var. Yeni satış yalnızca şu şablonlarla açılabilir:\n"
+                    f"- Ek protokol şablonları: {addendum_names}"
+                )
+            }
+        return res
+
 
 
 class SaleOrderOption(models.Model):

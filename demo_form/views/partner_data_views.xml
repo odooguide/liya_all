@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_wedding_trio_list" model="ir.ui.view">
+        <field name="name">wedding.trio.list</field>
+        <field name="model">wedding.trio</field>
+        <field name="arch" type="xml">
+            <list string="Wedding Trios" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="name"/>
+                <field name="time"/>
+                <field name="port_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_wedding_trio" model="ir.actions.act_window">
+        <field name="name">Wedding Trios</field>
+        <field name="res_model">wedding.trio</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Wedding Trio kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_blue_marmara" model="ir.actions.act_window">
+        <field name="name">Blue Marmara</field>
+        <field name="res_model">blue.marmara</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Blue Marmara kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+    <record id="view_blue_marmara_list" model="ir.ui.view">
+        <field name="name">blue.marmara.list</field>
+        <field name="model">blue.marmara</field>
+        <field name="arch" type="xml">
+            <list string="Blue Marmara" default_order="project_id,name">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="guest_count"/>
+                <field name="boat" />
+            </list>
+        </field>
+    </record>
+
+
+    <record id="action_studio_345" model="ir.actions.act_window">
+        <field name="name">Studio 3435</field>
+        <field name="res_model">studio.345</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Studio 3435 kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_studio_345_list" model="ir.ui.view">
+        <field name="name">studio.345.list</field>
+        <field name="model">studio.345</field>
+        <field name="arch" type="xml">
+            <list string="Studio 3435" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="opportunity_name"/>
+                <field name="first_name"/>
+                <field name="first_phone"/>
+                <field name="second_name"/>
+                <field name="second_phone"/>
+                <field name="photo_studio"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_garage_caddebostan" model="ir.actions.act_window">
+        <field name="name">Garage Caddebostan</field>
+        <field name="res_model">garage.caddebostan</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Garage Caddebostan kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_garage_caddebostan_list" model="ir.ui.view">
+        <field name="name">garage.caddebostan.list</field>
+        <field name="model">garage.caddebostan</field>
+        <field name="arch" type="xml">
+            <list string="Garage Caddebostan" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="opportunity_name"/>
+                <field name="first_name"/>
+                <field name="first_phone"/>
+                <field name="second_name"/>
+                <field name="second_phone"/>
+                <field name="photo_studio"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_partner_vedans" model="ir.actions.act_window">
+        <field name="name">Partner vedans</field>
+        <field name="res_model">partner.vedans</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Partner vedans kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_partner_vedans_list" model="ir.ui.view">
+        <field name="name">partner.vedans.list</field>
+        <field name="model">partner.vedans</field>
+        <field name="arch" type="xml">
+            <list string="Partner vedans" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="opportunity_name"/>
+                   <field name="first_name"/>
+                <field name="first_phone"/>
+                <field name="second_name"/>
+                <field name="second_phone"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_backlight" model="ir.actions.act_window">
+        <field name="name">Backlight</field>
+        <field name="res_model">backlight</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Backlight kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_backlight_list" model="ir.ui.view">
+        <field name="name">backlight.list</field>
+        <field name="model">backlight</field>
+        <field name="arch" type="xml">
+            <list string="Garage Caddebostan" default_order="project_id,name">
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="opportunity_name"/>
+                <field name="first_name"/>
+                <field name="first_phone"/>
+                <field name="second_name"/>
+                <field name="second_phone"/>
+                <field name="first_mail"/>
+                <field name="second_mail"/>
+                <field name="drone"/>
+                <field name="home_exit"/>
+                <field name="photo_service"/>
+                <field name="sale_template_name"/>
+                <field name="yacht_shoot"/>
+                <field name="photo_print_service"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_live_music" model="ir.actions.act_window">
+        <field name="name">Live Music</field>
+        <field name="res_model">live.music</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Canlı Müzik kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+       <record id="view_live_music_list" model="ir.ui.view">
+        <field name="name">live.music.list</field>
+        <field name="model">live.music</field>
+        <field name="arch" type="xml">
+            <list string="Live Music" default_order="project_id,name">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+  <record id="action_demo_menu" model="ir.actions.act_window">
+        <field name="name">Demo Menu</field>
+        <field name="res_model">demo.menu</field>
+        <field name="view_mode">list</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Demo Menu kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+       <record id="view_demo_menu_list" model="ir.ui.view">
+        <field name="name">demo.menu.list</field>
+        <field name="model">demo.menu</field>
+        <field name="arch" type="xml">
+            <list string="Live Music" default_order="project_id,name">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="menu_info"/>
+            </list>
+        </field>
+    </record>
+
+        <record id="action_confirmed_demo" model="ir.actions.act_window">
+        <field name="name">Demo Infos</field>
+        <field name="res_model">confirmed.form</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Onaylanmış Demoların kayıtlarını burada yönetin.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_confirmed_form_list" model="ir.ui.view">
+        <field name="name">confirmed.form.list</field>
+        <field name="model">confirmed.form</field>
+        <field name="arch" type="xml">
+            <list string="Confirmed Form" default_order="project_id,name">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="project_id" optional="hide"/>
+                <field name="form_name" column_invisible="1"/>
+                <field name="confirmed_demo_form" widget="binary" filename="form_name"/>
+            </list>
+        </field>
+    </record>
+
+<record id="view_confirmed_form_form" model="ir.ui.view">
+  <field name="name">confirmed.form.form</field>
+  <field name="model">confirmed.form</field>
+  <field name="arch" type="xml">
+    <form string="Onaylı Form">
+      <sheet class="o_form_sheet_bg">
+
+        <!-- Başlık -->
+        <div class="oe_title">
+          <label for="name" class="oe_edit_only"/>
+          <h1>
+            <field name="name" placeholder="Form adı"/>
+          </h1>
+        </div>
+
+        <!-- Üst bilgi alanları -->
+        <group col="4">
+          <field name="date" readonly="1"/>
+          <field name="project_id" invisible="1"/>
+          <field name="form_name" invisible="1" readonly="1"/>
+        </group>
+
+        <separator string="Form Önizleme" colspan="4"/>
+
+        <group col="4">
+          <field name="confirmed_demo_form"
+                 widget="pdf_viewer"
+                 filename="form_name"
+                 nolabel="1"
+                 colspan="4"
+                 class="o_pdf_card"
+                 style="min-height:78vh;"
+          readonly="1"/>
+        </group>
+      </sheet>
+    </form>
+  </field>
+</record>
+
+
+
+
+
+    <menuitem id="menu_partner_info_root"
+            name="Partner Info"
+            parent="project.menu_main_pm"
+            sequence="80"/>
+    <menuitem id="menu_demo_info_root"
+            name="Demo Info"
+            parent="project.menu_main_pm"
+            sequence="90"/>
+    <menuitem id="menu_confirmed_demos_root"
+            name="Demo Infos"
+            parent="demo_form.menu_demo_info_root"
+            action="action_confirmed_demo"
+            sequence="10"/>
+
+    <menuitem id="menu_wedding_trio_root"
+            name="Wedding Trios"
+            parent="demo_form.menu_partner_info_root"
+            action="action_wedding_trio"
+            sequence="10"/>
+    <menuitem id="menu_blue_marmara_root"
+            name="Blue Marmara"
+            parent="demo_form.menu_partner_info_root"
+            action="action_blue_marmara"
+            sequence="20"/>
+    <menuitem id="menu_studio_345_root"
+            name="Studio 3435"
+            parent="demo_form.menu_partner_info_root"
+            action="action_studio_345"
+            sequence="20"/>
+    <menuitem id="menu_garage_caddebostan_root"
+            name="Garage Caddebostan"
+            parent="demo_form.menu_partner_info_root"
+            action="action_garage_caddebostan"
+            sequence="20"/>
+    <menuitem id="menu_partner_vedans_root"
+            name="Partner vedans"
+            parent="demo_form.menu_partner_info_root"
+            action="action_partner_vedans"
+            sequence="20"/>
+    <menuitem id="menu_backlight_root"
+            name="Backlight"
+            parent="demo_form.menu_partner_info_root"
+            action="action_backlight"
+            sequence="20"/>
+    <menuitem id="menu_live_music_root"
+            name="Live Music"
+            parent="demo_form.menu_partner_info_root"
+            action="action_live_music"
+            sequence="20"/>
+    <menuitem id="menu_demo_menu_root"
+            name="Demo Menu"
+            parent="demo_form.menu_partner_info_root"
+            action="action_demo_menu"
+            sequence="20"/>
+</odoo>

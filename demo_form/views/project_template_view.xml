@@ -9,7 +9,13 @@
                         string="Assing Demo Date"
                         type="object"
                         class="btn-secondary"
+                        invisible="next_event_date!=False"
                 />
+                <button name="action_compose_whatsapp_message"
+                        type="object"
+                        string="Whatsapp Mesajı Oluştur"
+                        invisible="is_confirmed_demo_form==False"
+                       />
             </header>
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="next_event_date" invisible="1"/>
@@ -45,6 +51,9 @@
             <xpath expr="//button[@name='action_customer_preview']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
+            <xpath expr="//button[@name='action_view_sos']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
         </field>
     </record>
 
@@ -54,9 +63,13 @@
         <field name="inherit_id" ref="project.edit_project"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='description']" position="before">
-                <page string="Sale Order Infos">
+                <page string="Sales Order Infos">
                     <field name="sale_order_summary" widget="html" readonly="1" colspan="2"/>
+                    <field name="related_sale_order_ids"  invisible="1"/>
                 </page>
+            </xpath>
+             <xpath expr="//page[@name='settings']" position="attributes">
+              <attribute name="groups">base.group_system</attribute>
             </xpath>
         </field>
     </record>
@@ -73,9 +86,9 @@
                 <field name="dj_person"/>
                 <field name="event_date"/>
                 <field name="crm_yabanci_turk"/>
-                <field name="so_people_count"/>
+                <field name="so_people_count" column_invisible="1"/>
+                <field name="so_people_count_char"/>
                 <field name="so_sale_template_id"/>
-                <field name="so_coordinator_ids" widget="many2many_tags"/>
             </xpath>
             <xpath expr="//field[@name='stage_id']" position="replace">
                 <field name="demo_state"/>

@@ -7,6 +7,7 @@ from odoo.exceptions import ValidationError, UserError
 
 class CrmLead(models.Model):
     _inherit = "crm.lead"
+    expected_revenue = fields.Monetary('Expected Revenue', currency_field='company_currency', tracking=False, default=0.0)
 
     date_conversion = fields.Datetime('Conversion Date', readonly=False)
     option1 = fields.Date(string="Optional Date 1")
@@ -476,7 +477,7 @@ class CrmLead(models.Model):
             'view_mode': 'list,form',
             'views': [(self.env.ref('sale.view_order_tree').id, 'list'), (False, 'form')],
             'domain': [('opportunity_id', '=', self.id), ('state', 'in', ['draft', 'sent'])],
-            'context': {'default_opportunity_id': self.id},
+            'context': {'default_opportunity_id': self.id,'create':False},
             'target': 'current',
         }
 
@@ -489,7 +490,7 @@ class CrmLead(models.Model):
             'view_mode': 'list,form',
             'views': [(self.env.ref('sale.view_order_tree').id, 'list'), (False, 'form')],
             'domain': [('opportunity_id', '=', self.id), ('state', 'in', ['sale', 'done'])],
-            'context': {'default_opportunity_id': self.id},
+            'context': {'default_opportunity_id': self.id,'create':False},
             'target': 'current',
         }
 

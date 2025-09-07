@@ -48,18 +48,30 @@
         <field name="model">project.demo.form</field>
         <field name="arch" type="xml">
             <form string="Demo Form">
-                <header/>
-                <sheet>
+                <header>
+                </header>
+                <sheet >
                     <h1>
                         <field name="name"/>
                     </h1>
                     <group col="2">
                         <group>
+                            <field name="wedding_trio_ids" invisible="1"/>
+                            <field name="studio_345" invisible="1"/>
+                            <field name="vedan_ids" invisible="1"/>
+                            <field name="garage_caddebostan" invisible="1"/>
+                            <field name="backlight_ids" invisible="1"/>
+                            <field name="live_music_ids" invisible="1"/>
+                            <field name="confirmed_demo_ids" invisible="1"/>
+                            <field name="partner_id" invisible="1"/>
                             <field name="project_id" invisible="1"/>
                             <field name="invitation_owner"/>
                             <field name="invitation_date" readonly="1"/>
                             <field name="duration_days"/>
                             <field name="ceremony" required="1"/>
+                            <field name="is_ceremony" widget="boolean_toggle"/>
+                            <field name="merasim"/>
+                            <field name="ceremony_call" widget="boolean_toggle"/>
                             <field name="start_end_time"/>
                             <field name="company_id" invisible="1"/>
                             <div class="oe_edit_only" style="display:flex; align-items:center; gap:4px;">
@@ -81,7 +93,7 @@
                             <field name="special_notes_remaining" widget="html" invisible="1"/>
                             <field name="confirmed_demo_form_plan" widget="binary"
                                    filename="confirmed_demo_form_plan_name"
-                                   context="{'bin_size': True}"/>
+                                   context="{'bin_size': True}" force_save="1"/>
                             <field name="confirmed_demo_form_plan_name" invisible="1"/>
                         </group>
                     </group>
@@ -150,14 +162,9 @@
                             </group>
                             <group string="Mezeler ">
 
-                                <group col="2">
-                                    <field name="menu_meze_ids" widget="many2many_checkboxes"/>
-                                </group>
-                                <div class="o_form_label"
-                                     invisible="sale_template_id!=3">
-                                    Standart mezelere ilave olarak Kayısı Yahnisi,
-                                    Karides ve Ahtapot soğuk deniz mezeleri de servis edilir.
-                                </div>
+<!--                                <group col="2">-->
+<!--                                    <field name="menu_meze_ids" widget="many2many_checkboxes"/>-->
+<!--                                </group>-->
                                 <field name="menu_meze_notes" placeholder="Write your meze notes in here" widget="html"
                                        colspan="1" nolabel="1"/>
                             </group>
@@ -165,7 +172,8 @@
                             <group>
                                 <group col="2">
                                     <field name="bar_alcohol_service" widget="boolean_toggle"/>
-                                    <field name="bar_purchase_advice"/>
+                                    <field name="alcohol_service" widget="boolean_toggle"/>
+                                    <field name="bar_purchase_advice" placeholder="Buraya yazın" invisible="alcohol_service!=False"/>
                                 </group>
                                 <group col="2">
                                     <field name="bar_raki_brand" widget="radio"/>
@@ -216,7 +224,7 @@
                                     <separator string="Accommodation" colspan="2"/>
                                     <group col="2">
                                         <field name="accommodation_service" widget="boolean_toggle"/>
-                                        <field name="accommodation_hotel" invisible="accommodation_service==False"/>
+                                        <field name="accommodation_hotel" invisible="accommodation_service==False" placeholder="Hotel"/>
                                         <field name="accomodation_notes"
                                                placeholder="Write your accommodation notes in here" widget="html"
                                                colspan="2" nolabel="1"/>
@@ -233,11 +241,11 @@
                         <page string="Hair And Makeup" name="hair">
                             <group>
                                 <group col="2">
-                                    <field name="hair_studio_3435" widget="boolean_toggle"/>
-                                    <field name="hair_garage_caddebostan" widget="boolean_toggle"/>
+                                    <field name="hair_studio_3435" invisible="hair_garage_caddebostan!=False or hair_other!=False" widget="boolean_toggle"/>
+                                    <field name="hair_garage_caddebostan" invisible="hair_studio_3435!=False or hair_other!=False" widget="boolean_toggle"/>
                                 </group>
                                 <group col="2">
-                                    <field name="hair_other" widget="boolean_toggle"/>
+                                    <field name="hair_other" invisible="hair_studio_3435==False and hair_garage_caddebostan==False" widget="boolean_toggle"/>
                                     <field name="hair_other_company" invisible="hair_other==False"/>
                                     <field name="hair_other_responsible" invisible="hair_other==False"/>
                                     <field name="hair_other_phone" invisible="hair_other==False"/>
@@ -266,16 +274,16 @@
                             <group>
                                 <group col="2">
                                     <field name="photo_standard" widget="boolean_toggle"
-                                           invisible="sale_template_id==3"/>
+                                           invisible="photo_video_plus"/>
                                     <field name="photo_video_plus" widget="boolean_toggle"/>
                                     <field name="photo_drone" widget="boolean_toggle"/>
 
                                 </group>
                                 <group col="2">
                                     <field name="photo_print_service" widget="boolean_toggle"/>
-                                    <field name="photo_homesession" widget="boolean_toggle"/>
+                                    <field name="home_exit" widget="boolean_toggle"/>
                                     <field name="photo_homesession_address"
-                                           invisible="photo_homesession==False"/>
+                                           invisible="home_exit==False"/>
                                     <field name="photo_yacht_shoot" widget="boolean_toggle"
                                            invisible="sale_template_id!=3"/>
                                     <field name="photo_harddisk_delivered" placeholder="Seçiniz…"/>
@@ -307,7 +315,59 @@
 
                         </page>
 
-                        <page string="DJ" name="dj">
+
+
+                        <page string="Table Decoration" name="table_decoration">
+                            <group>
+                                <group>
+                                    <field name="table_theme_ids"
+                                           widget="many2many_checkboxes"/>
+                                    <field name="table_charger_ids"
+                                           widget="many2many_checkboxes"/>
+                                    <field name="table_runner_design_ids"
+                                           widget="many2many_checkboxes"/>
+                                    <field name="table_color_ids"
+                                           widget="many2many_checkboxes"/>
+                                    <field name="table_tag_ids" placeholder="Seçiniz…"/>
+                                    <field name="cake_choice_ids"
+                                           widget="many2many_checkboxes"/>
+                                    <field name="cake_real" widget="boolean_toggle"/>
+                                    <field name="cake_champagne_tower" widget="boolean_toggle"/>
+                                </group>
+
+                                <group>
+                                    <field name="table_fresh_flowers"
+                                           widget="boolean_toggle"/>
+                                    <field name="table_dried_flowers"
+                                           widget="boolean_toggle"/>
+                                </group>
+
+                            </group>
+                            <group>
+                                <field name="table_description" widget="html"
+                                       placeholder="Write your table decoration notes in here" colspan="2" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Other Notes" name="other_notes">
+
+                            <group col="3">
+                                <field name="other_lcv" widget="boolean_toggle"/>
+                                <field name="other_social_media_tag" widget="boolean_toggle"/>
+                                <field name="other_social_media_details"
+                                       invisible="other_social_media_tag==False" placeholder="Lütfen Belirtiniz"/>
+
+                            </group>
+                            <group>
+                                <field name="other_description" placeholder="Write your other notes in here"
+                                       widget="html" colspan="2" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="lang" widget="radio"/>
+                                <field name="demo_part_ids" widget="many2many_checkboxes"/>
+                                <field name="demo_seat_plan" placeholder="Lütfen Seçiniz..."/>
+                            </group>
+                        </page>
+                          <page string="DJ" name="dj">
 
                             <group string="Significant Songs" col="2">
                                 <field name="entrance_song" placeholder="Lütfen buraya belirtin."/>
@@ -408,51 +468,6 @@
                             <group string="Other Notes about Music">
                                 <field name="other_music_notes" widget="html"
                                        placeholder="Lütfen notlarınızı buraya yazın."/>
-                            </group>
-                        </page>
-
-                        <page string="Table Decoration" name="table_decoration">
-                            <group>
-                                <group>
-                                    <field name="table_theme_ids"
-                                           widget="many2many_checkboxes"/>
-                                    <field name="table_charger_ids"
-                                           widget="many2many_checkboxes"/>
-                                    <field name="table_runner_design_ids"
-                                           widget="many2many_checkboxes"/>
-                                    <field name="table_color_ids"
-                                           widget="many2many_checkboxes"/>
-                                    <field name="table_tag_ids" placeholder="Seçiniz…"/>
-                                    <field name="cake_choice_ids"
-                                           widget="many2many_checkboxes"/>
-                                    <field name="cake_real" widget="boolean_toggle"/>
-                                    <field name="cake_champagne_tower" widget="boolean_toggle"/>
-                                </group>
-
-                                <group>
-                                    <field name="table_fresh_flowers"
-                                           widget="boolean_toggle"/>
-                                    <field name="table_dried_flowers"
-                                           widget="boolean_toggle"/>
-                                </group>
-
-                            </group>
-                            <group>
-                                <field name="table_description" widget="html"
-                                       placeholder="Write your table decoration notes in here" colspan="2" nolabel="1"/>
-                            </group>
-                        </page>
-                        <page string="Other Notes" name="other_notes">
-
-                            <group col="3">
-                                <field name="other_lcv" widget="boolean_toggle"/>
-                                <field name="other_social_media_tag" widget="boolean_toggle"/>
-                                <field name="other_social_media_details"
-                                       invisible="other_social_media_tag==False" placeholder="Lütfen Belirtiniz"/>
-                            </group>
-                            <group>
-                                <field name="other_description" placeholder="Write your other notes in here"
-                                       widget="html" colspan="2" nolabel="1"/>
                             </group>
                         </page>
 
