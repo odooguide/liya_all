@@ -93,7 +93,7 @@
                             <field name="special_notes_remaining" widget="html" invisible="1"/>
                             <field name="confirmed_demo_form_plan" widget="binary"
                                    filename="confirmed_demo_form_plan_name"
-                                   context="{'bin_size': True}"/>
+                                   context="{'bin_size': True}" force_save="1"/>
                             <field name="confirmed_demo_form_plan_name" invisible="1"/>
                         </group>
                     </group>

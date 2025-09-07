@@ -437,7 +437,7 @@ class ProjectDemoForm(models.Model):
     minutes = fields.Integer(string='Adjust Time')
     demo_seat_plan=fields.Many2one('demo.seat.plan', string='Oturma Planı')
     home_exit=fields.Boolean(string='Ev Çıkış Fotoğraf Çekimi')
-    lang=fields.Selection(('tr_TR','Türkçe'),('en_US','English'),default='tr_TR')
+    lang=fields.Selection([('tr_TR','Türkçe'),('en_US','English')],default='tr_TR')
     wedding_trio_ids = fields.One2many(
         comodel_name='wedding.trio',
         inverse_name='project_id',
@@ -952,7 +952,6 @@ class ProjectDemoForm(models.Model):
             if event_date:
                 event_date = fields.Date.to_date(event_date)
             name=rec.invitation_owner or ''
-            confirmed_demo_form=rec.confirmed_demo_form_plan or False
             form_name=rec.confirmed_demo_form_plan_name or ''
 
             cmds.append((0, 0, {
@@ -963,6 +962,7 @@ class ProjectDemoForm(models.Model):
                 'form_name':form_name,
             }))
             rec.confirmed_demo_ids=cmds
+
 
     @api.depends(
         'invitation_owner', 'invitation_date', 'demo_date',
