@@ -56,6 +56,9 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
         if not project:
             return {'type': 'ir.actions.act_window_close'}
         order.project_id=order.opportunity_id.project_id
+        project.write({
+            'related_sale_order_ids': [(4, order.id)],
+        })
 
         def _resolve_responsibles(tmpl_line):
             if tmpl_line.user_ids:
