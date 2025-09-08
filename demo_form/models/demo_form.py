@@ -1131,16 +1131,12 @@ class ProjectDemoForm(models.Model):
         return labels
 
     def _get_related_confirmed_sale_orders(self):
-        """Bu projenin bağlı olduğu CRM fırsatındaki onaylı (sale/done) siparişler."""
+        """Bu projenin M2M 'Bağlı Satışlar'ındaki TÜM siparişler (durum süzmeden)."""
         self.ensure_one()
-        base_order = self.project_id and self.project_id.sudo().reinvoiced_sale_order_id
-        opp = base_order.sudo().opportunity_id if base_order else False
-        if not opp:
+        project = self.project_id
+        if not project:
             return self.env['sale.order']
-        return self.env['sale.order'].sudo().search([
-            ('opportunity_id', '=', opp.id),
-            ('state', 'in', ('sale', 'done')),
-        ])
+        return project.sudo().related_sale_order_ids
 
     def _required_labels_for_field(self, field_name):
         """Bir alan için beklenen ürün etiket(ler)i; seçim alanı için prospective_val kullanılabilir."""
