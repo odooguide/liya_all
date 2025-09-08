@@ -274,7 +274,7 @@ class ProjectProject(models.Model):
             return True
         return False
 
-    @api.depends('reinvoiced_sale_order_id')  # sadece header bazı alanlar için gerekli
+    @api.depends('reinvoiced_sale_order_id','related_sale_order_ids')  # sadece header bazı alanlar için gerekli
     def _compute_sale_order_summary(self):
         for rec in self:
             so = rec.reinvoiced_sale_order_id
@@ -338,8 +338,8 @@ class ProjectProject(models.Model):
             <hr style="margin:10px 0;"/>
             """
 
-            orders = rec.related_sale_order_ids.exists()
-            lines = orders.mapped('order_line').exists()
+            orders = rec.related_sale_order_ids.sudo().exists()
+            lines = orders.mapped('order_line').sudo().exists()
             lines = lines.filtered(lambda l: not rec._is_discount_line(l))
             lines = lines.sorted(key=lambda l: (l.order_id.id, l.sequence or 0))
 
@@ -635,6 +635,8 @@ class ProjectProject(models.Model):
                 for f in ultra_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True
+                vals['afterparty_service'] = False
+                vals['afterparty_street_food'] = False
         if self.user_id == self.env.user:
             demo = self.env['project.demo.form'].sudo().create(vals)
         else:
