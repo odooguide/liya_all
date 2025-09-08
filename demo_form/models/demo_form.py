@@ -1212,7 +1212,6 @@ class ProjectDemoForm(models.Model):
     def _onchange_afterparty_ultra_open(self):
         if self.afterparty_ultra:
             self.afterparty_fog_laser = True
-            self.afterparty_service = False
             self.afterparty_street_food = False
             self.afterparty_bbq_wraps = True
             self.afterparty_shot_service = True
