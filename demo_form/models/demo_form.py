@@ -7,6 +7,7 @@ import re
 import json
 from markupsafe import escape as E, Markup
 import logging
+from babel.dates import format_date
 _logger = logging.getLogger(__name__)
 
 TIME_PATTERN = re.compile(r'(\d{1,2}):([0-5]\d)')
@@ -1195,18 +1196,25 @@ class ProjectDemoForm(models.Model):
             rec.special_notes_preview = plaintext2html(preview)
             rec.special_notes_remaining = plaintext2html(remaining) if remaining else ''
 
-    @api.depends('invitation_date')
+    @api.depends('invitation_date', 'lang')
     def _compute_day(self):
-        turkish_days = [
-            'Pazartesi', 'Salı', 'Çarşamba',
-            'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'
-        ]
+        tr_days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar']
+        en_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
         for rec in self:
-            if rec.invitation_date:
-                dt = fields.Date.from_string(rec.invitation_date)
-                rec.duration_days = turkish_days[dt.weekday()]
-            else:
+            if not rec.invitation_date:
                 rec.duration_days = False
+                continue
+
+            dt = fields.Date.to_date(rec.invitation_date)
+
+            try:
+                locale = rec.lang or 'tr_TR'
+                rec.duration_days = format_date(dt, format='EEEE', locale=locale)
+            except Exception:
+                # Yedek: basit dizi eşlemesi
+                idx = dt.weekday()  # 0=Monday .. 6=Sunday
+                rec.duration_days = (tr_days if rec.lang == 'tr_TR' else en_days)[idx]
 
     @api.onchange('afterparty_ultra')
     def _onchange_afterparty_ultra_open(self):
