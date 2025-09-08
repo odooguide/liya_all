@@ -56,7 +56,7 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
         if not project:
             return {'type': 'ir.actions.act_window_close'}
         order.project_id=order.opportunity_id.project_id
-        project.write({
+        project.sudo().write({
             'related_sale_order_ids': [(4, order.id)],
         })
 
