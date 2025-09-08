@@ -1165,7 +1165,7 @@
                                 <tr>
                                     <td style="padding:4px 8px; font-weight:600;">Tablecloth Color Selection:
                                     </td>
-                                    <td style="padding:4px 8px;">
+                                    <td style="padding:4px 8px;padding-right:25px;">
                                         <t t-set="colors" t-value="o.env['project.demo.table.color'].search([])"/>
                                         <t t-if="colors">
                                             <t t-foreach="colors" t-as="it">
