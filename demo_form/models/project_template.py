@@ -396,6 +396,7 @@ class ProjectProject(models.Model):
             default_start=fields.Datetime.now(),
             default_categ_ids=[(6, 0, demo_cat.ids)] if demo_cat else False,
             search_default_mymeetings=1,
+            skip_demo_meeting_activity=True,
         )
 
         cal_view = self.env.ref('calendar.view_calendar_event_calendar', raise_if_not_found=False)
