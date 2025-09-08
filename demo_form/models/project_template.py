@@ -533,13 +533,16 @@ class ProjectProject(models.Model):
                     _vals['hair_studio_3435'] = True
                 else:
                     _vals['hair_garage_caddebostan'] = True
+            tmpl = (order.sale_order_template_id.name or '').strip().lower()
 
             for sol in order.order_line:
                 pname = (sol.product_id.name or '').strip()
                 up = pname.upper()
+                vals['photo_standard'] = (tmpl == 'elite')
 
                 if pname == "Photo & Video Plus":
                     vals['photo_video_plus'] = True
+                    vals['photo_standard'] = False
                 if pname == "Drone Kamera":
                     vals['photo_drone'] = True
 
@@ -605,7 +608,6 @@ class ProjectProject(models.Model):
                     vals['prehost_breakfast'] = True
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty or 0)
 
-            tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
                 'photo_video_plus',
                 'afterparty_service', 'afterparty_shot_service',
@@ -618,7 +620,7 @@ class ProjectProject(models.Model):
             ]
             ultra_fields = elite_fields + ultra_extra
 
-            vals['photo_standard'] = (tmpl == 'elite')
+
 
             if tmpl == 'plus':
                 _apply_hair_choice(vals)
