@@ -136,19 +136,18 @@ class SaleOrder(models.Model):
     def action_confirm(self):
         for order in self:
             name = (order.sale_order_template_id.name or '').strip().lower()
-            if name in ('ek protokol', 'extra protocol'):
-                if not order.confirmed_contract:
-                    raise UserError(_("Kontrat olmadan satışı onaylayamazsınız."))
-                if not order.contract_date:
-                    raise UserError(_("Kontrat tarihi olmadan satışı onaylayamazsınız."))
-
-        for order in self:
-            name = (order.sale_order_template_id.name or '').strip().lower()
             needs_extra = name in ('ek protokol', 'extra protocol')
             if needs_extra and not self.env.context.get('skip_extra_protocol_on_confirm'):
                 if not order.confirmed_contract or not order.contract_date:
                     return order._action_open_update_tasks_wizard_from_confirm()
 
+        for order in self:
+            name = (order.sale_order_template_id.name or '').strip().lower()
+            if name in ('ek protokol', 'extra protocol'):
+                if not order.confirmed_contract:
+                    raise UserError(_("Kontrat olmadan satışı onaylayamazsınız."))
+                if not order.contract_date:
+                    raise UserError(_("Kontrat tarihi olmadan satışı onaylayamazsınız."))
 
         return super().action_confirm()
 
