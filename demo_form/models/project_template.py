@@ -614,7 +614,7 @@ class ProjectProject(models.Model):
             ultra_extra = [
                 'music_live', 'music_percussion', 'music_trio',
                 'photo_yacht_shoot', 'bar_alcohol_service',
-                'photo_drone', 'afterparty_fog_laser', 'prehost_barney','afterparty_bbq_wraps'
+                'photo_drone', 'afterparty_fog_laser', 'prehost_barney','afterparty_bbq_wraps','afterparty_ultra'
             ]
             ultra_fields = elite_fields + ultra_extra
 
@@ -634,7 +634,7 @@ class ProjectProject(models.Model):
                 vals['menu_meze_notes']=DEFAULT_MEZE_NOTE
                 for f in ultra_fields:
                     vals[f] = True
-                vals['afterparty_ultra'] = True
+                vals['afterparty_street_food'] = False
         if self.user_id == self.env.user:
             demo = self.env['project.demo.form'].sudo().create(vals)
         else:
