@@ -635,8 +635,6 @@ class ProjectProject(models.Model):
                 for f in ultra_fields:
                     vals[f] = True
                 vals['afterparty_ultra'] = True
-                vals['afterparty_service'] = False
-                vals['afterparty_street_food'] = False
         if self.user_id == self.env.user:
             demo = self.env['project.demo.form'].sudo().create(vals)
         else:

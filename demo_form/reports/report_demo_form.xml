@@ -314,7 +314,7 @@
                                             </td>
                                             <td style="padding:6px 8px; vertical-align:top;">
                                                 <t t-if="line.port_ids">
-                                                    <span style="color:#2D7F97;">Docks:</span>
+                                                    <span style="color:#2D7F97;">Ports:</span>
                                                     <t t-foreach="line.port_ids" t-as="p">
                                                         <span t-esc="p.name"/>
                                                         <t t-if="not p_last">,</t>
