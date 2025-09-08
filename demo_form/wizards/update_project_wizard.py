@@ -176,8 +176,8 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
 
             if vals:
                 demo.sudo().write(vals)
-                order.super().action_confirm()
 
+            order.with_context(skip_extra_protocol_on_confirm=True).action_confirm()
         return {'type': 'ir.actions.act_window_close'}
 
 
