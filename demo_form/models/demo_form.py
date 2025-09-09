@@ -440,62 +440,26 @@ class ProjectDemoForm(models.Model):
     home_exit=fields.Boolean(string='Ev Çıkış Fotoğraf Çekimi')
     lang=fields.Selection([('tr_TR','Türkçe'),('en_US','English')],default='tr_TR')
     wedding_trio_ids = fields.One2many(
-        comodel_name='wedding.trio',
-        inverse_name='project_id',
-        string='Wedding Trios',
-        compute='_compute_wedding_trio_ids',
-        readonly=True,
-        store=True,
-    )
+        'wedding.trio', 'project_id', string='Wedding Trios',
+        compute='_mirror_wedding_trio', store=False, readonly=True)
     blue_marmara_ids = fields.One2many(
-        comodel_name='blue.marmara',
-        inverse_name='project_id',
-        string='Blue Marmara',
-        compute='_compute_blue_marmara_ids',
-        readonly=True,
-        store=True,
-    )
+        'blue.marmara', 'project_id', string='Blue Marmara',
+        compute='_mirror_blue_marmara', store=False, readonly=True)
     studio_345 = fields.One2many(
-        comodel_name='studio.345',
-        inverse_name='project_id',
-        string='Studio 3435',
-        compute='_compute_studio_345',
-        readonly=True,
-        store=True,
-    )
-    vedan_ids = fields.One2many(
-        comodel_name='partner.vedans',
-        inverse_name='project_id',
-        string='Partner vedans',
-        compute='_compute_partner_vedan',
-        readonly=True,
-        store=True,
-    )
-
+        'studio.345', 'project_id', string='Studio 3435',
+        compute='_mirror_studio_345', store=False, readonly=True)
     garage_caddebostan = fields.One2many(
-        comodel_name='garage.caddebostan',
-        inverse_name='project_id',
-        string='Garage Caddebostan',
-        compute='_compute_garage_caddebostan',
-        readonly=True,
-        store=True,
-    )
+        'garage.caddebostan', 'project_id', string='Garage Caddebostan',
+        compute='_mirror_garage_caddebostan', store=False, readonly=True)
+    vedan_ids = fields.One2many(
+        'partner.vedans', 'project_id', string='Partner Vedans',
+        compute='_mirror_partner_vedans', store=False, readonly=True)
     live_music_ids = fields.One2many(
-        comodel_name='live.music',
-        inverse_name='project_id',
-        string='Live Music',
-        compute='_compute_live_music',
-        readonly=True,
-        store=True,
-    )
+        'live.music', 'project_id', string='Live Music',
+        compute='_mirror_live_music', store=False, readonly=True)
     backlight_ids = fields.One2many(
-        comodel_name='backlight',
-        inverse_name='project_id',
-        string='Backlight',
-        compute='_compute_backlight_ids',
-        readonly=True,
-        store=True,
-    )
+        'backlight', 'project_id', string='Backlight',
+        compute='_mirror_backlight', store=False, readonly=True)
     confirmed_demo_ids = fields.One2many(
         comodel_name='confirmed.form',
         inverse_name='project_id',
@@ -539,402 +503,42 @@ class ProjectDemoForm(models.Model):
     }
     TRACKED_FIELDS = list(PRODUCT_REQUIREMENTS.keys())
 
-    @api.depends(
-        'transport_line_ids',
-        'transport_line_ids.label',
-        'transport_line_ids.time',
-        'transport_line_ids.port_ids',
-        'project_id',
-        'project_id.event_date',
-    )
-    def _compute_wedding_trio_ids(self):
+    @api.depends('project_id.wedding_trio_ids')
+    def _mirror_wedding_trio(self):
         for rec in self:
-            commands = [(5, 0, 0)]
-            if not rec.music_trio:
-                rec.wedding_trio_ids=commands
-                continue
-            event_date = (
-                getattr(rec.project_id, 'event_date', False)
-            )
+            rec.wedding_trio_ids = [(6, 0, rec.project_id.wedding_trio_ids.ids)] if rec.project_id else [(5, 0, 0)]
 
-            gg_lines = rec.transport_line_ids.filtered(
-                lambda l: (l.label or '').strip().lower() == 'genel geliş'
-            )
-            for line in gg_lines:
-                commands.append((
-                    0, 0, {
-                        'name': line.label or 'Genel Geliş',
-                        'time': line.time,
-                        'date': event_date,
-                        'port_ids': [(6, 0, line.port_ids.ids)],
-                    }
-                ))
-            rec.wedding_trio_ids = commands
-
-    @api.depends(
-        'invitation_owner',
-        'guest_count',                 # related alan olsa da ekledik
-        'project_id',
-        'project_id.so_people_count',  # güvence için kaynağı da dinliyoruz
-        'project_id.event_date',       # etkinlik tarihi alanın buysa
-    )
-    def _compute_blue_marmara_ids(self):
+    @api.depends('project_id.blue_marmara_ids')
+    def _mirror_blue_marmara(self):
         for rec in self:
-            event_date = (
-                getattr(rec.project_id, 'event_date', False)
-                or getattr(rec.project_id, 'date_start', False)
-                or getattr(rec.project_id, 'date', False)
-            )
-            if event_date:
-                event_date = fields.Date.to_date(event_date)
+            rec.blue_marmara_ids = [(6, 0, rec.project_id.blue_marmara_ids.ids)] if rec.project_id else [(5, 0, 0)]
 
-            gc = rec.guest_count or 0
-            boat = '36m' if gc > 250 else '25m'
-
-            name_val = (rec.invitation_owner or 'Blue Marmara').strip()
-
-            rec.blue_marmara_ids = [
-                (5, 0, 0),
-                (0, 0, {
-                    'name': name_val,
-                    'guest_count': str(gc),
-                    'date': event_date,
-                    'boat': boat,
-                })
-            ]
-
-    @api.depends(
-        'hair_studio_3435',  # yalnızca Studio 3435 seçildiyse satır üret
-        'invitation_owner',
-        'invitation_date', 'demo_date',
-        'project_id',
-        'project_id.reinvoiced_sale_order_id',
-        'project_id.reinvoiced_sale_order_id.opportunity_id',
-        'project_id.reinvoiced_sale_order_id.partner_id',
-    )
-    def _compute_studio_345(self):
+    @api.depends('project_id.studio_345_ids')
+    def _mirror_studio_345(self):
         for rec in self:
-            # önce temizle
-            cmds = [(5, 0, 0)]
+            rec.studio_345 = [(6, 0, rec.project_id.studio_345_ids.ids)] if rec.project_id else [(5, 0, 0)]
 
-            # Studio 3435 seçili değilse hiç satır üretme
-            if not rec.hair_studio_3435:
-                rec.studio_345 = cmds
-                continue
-
-            # Etkinlik tarihi: davetiye > demo > (gerekirse proje alanları)
-            event_date = rec.invitation_date or rec.demo_date
-            if not event_date and rec.project_id:
-                # varsa muhtemel proje tarih alanları
-                event_date = (
-                        getattr(rec.project_id, 'event_date', False)
-                        or getattr(rec.project_id, 'date_start', False)
-                        or getattr(rec.project_id, 'date', False)
-                )
-            if event_date:
-                event_date = fields.Date.to_date(event_date)
-
-            order = rec.project_id.sudo().reinvoiced_sale_order_id if rec.project_id else False
-            opp = order.sudo().opportunity_id if order else False
-            partner = order.sudo().partner_id if order else False
-
-            couple = (opp.name or '').strip() if opp else ''
-            # 1. telefon: partner.mobile > partner.phone > opp.mobile > opp.phone
-            first_name=''
-            second_name=''
-            first_phone = ''
-            if partner:
-                first_phone = (partner.mobile or partner.phone or '') or ''
-                first_name=partner.name or ''
-            if not first_phone and opp:
-                first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
-
-            # 2. telefon: olası özel alanlar
-            second_phone = ''
-            if opp:
-                for attr in ('second_phone', 'second_contact_phone', 'x_second_phone', 'x_phone2'):
-                    val = getattr(opp, attr, '') or ''
-                    if val:
-                        second_phone = val
-                        break
-                second_name=opp.second_contact
-
-            # Satır adı: davet sahibi varsa onu, yoksa "Çift - Studio 3435"
-            name_val = (rec.invitation_owner or '').strip()
-            if not name_val:
-                bits = [b for b in [couple, "Studio 3435 Nişantaşı"] if b]
-                name_val = " - ".join(bits) or "Studio 3435"
-
-            # Studio adı sabit
-            studio_name = "Studio 3435 Nişantaşı"
-
-            cmds.append((0, 0, {
-                'name': name_val,
-                'date': event_date,
-                'opportunity_name': couple,
-                'first_name':first_name,
-                'second_name':second_name,
-                'first_phone': first_phone,
-                'second_phone': second_phone,
-                'photo_studio': studio_name,
-                'project_id': rec.id,
-            }))
-
-            rec.studio_345 = cmds
-
-    @api.depends(
-        'hair_garage_caddebostan',  # yalnızca Studio 3435 seçildiyse satır üret
-        'invitation_owner',
-        'invitation_date', 'demo_date',
-        'project_id',
-        'project_id.reinvoiced_sale_order_id',
-        'project_id.reinvoiced_sale_order_id.opportunity_id',
-        'project_id.reinvoiced_sale_order_id.partner_id',
-    )
-    def _compute_garage_caddebostan(self):
+    @api.depends('project_id.garage_caddebostan_ids')
+    def _mirror_garage_caddebostan(self):
         for rec in self:
-            cmds = [(5, 0, 0)]
+            rec.garage_caddebostan = [(6, 0, rec.project_id.garage_caddebostan_ids.ids)] if rec.project_id else [
+                (5, 0, 0)]
 
-            if not rec.hair_garage_caddebostan:
-                rec.garage_caddebostan = cmds
-                continue
-
-            event_date = rec.invitation_date or rec.demo_date
-            if not event_date and rec.project_id:
-                event_date = (
-                        getattr(rec.project_id, 'event_date', False)
-                        or getattr(rec.project_id, 'date_start', False)
-                        or getattr(rec.project_id, 'date', False)
-                )
-            if event_date:
-                event_date = fields.Date.to_date(event_date)
-
-            # CRM fırsat + partner bilgileri (sudo ile güvenli)
-            order = rec.project_id.sudo().reinvoiced_sale_order_id if rec.project_id else False
-            opp = order.sudo().opportunity_id if order else False
-            partner = order.sudo().partner_id if order else False
-
-            couple = (opp.name or '').strip() if opp else ''
-            first_name = ''
-            second_name = ''
-            first_phone = ''
-            if partner:
-                first_phone = (partner.mobile or partner.phone or '') or ''
-                first_name = partner.name or ''
-            if not first_phone and opp:
-                first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
-
-            # 2. telefon: olası özel alanlar
-            second_phone = ''
-            if opp:
-                for attr in ('second_phone', 'second_contact_phone', 'x_second_phone', 'x_phone2'):
-                    val = getattr(opp, attr, '') or ''
-                    if val:
-                        second_phone = val
-                        break
-                second_name = opp.second_contact
-
-            name_val = (rec.invitation_owner or '').strip()
-            if not name_val:
-                bits = [b for b in [couple, "Garage Caddebostan"] if b]
-                name_val = " - ".join(bits) or "Garage Caddebostan"
-
-            studio_name = "Garage Caddebostan"
-
-            cmds.append((0, 0, {
-                'name': name_val,
-                'date': event_date,
-                'opportunity_name': couple,
-                'first_name':first_name,
-                'second_name':second_name,
-                'first_phone': first_phone,
-                'second_phone': second_phone,
-                'photo_studio': studio_name,
-                'project_id': rec.id,
-            }))
-
-            rec.garage_caddebostan = cmds
-
-    @api.depends(
-        'invitation_owner',
-        'invitation_date', 'demo_date',
-        'project_id',
-        'project_id.reinvoiced_sale_order_id',
-        'project_id.reinvoiced_sale_order_id.opportunity_id',
-        'project_id.reinvoiced_sale_order_id.partner_id',
-    )
-    def _compute_partner_vedan(self):
+    @api.depends('project_id.vedan_ids')
+    def _mirror_partner_vedans(self):
         for rec in self:
-            cmds = [(5, 0, 0)]
+            rec.vedan_ids = [(6, 0, rec.project_id.vedan_ids.ids)] if rec.project_id else [(5, 0, 0)]
 
-            event_date = rec.invitation_date or rec.demo_date
-            if not event_date and rec.project_id:
-                event_date = (
-                        getattr(rec.project_id, 'event_date', False)
-                        or getattr(rec.project_id, 'date_start', False)
-                        or getattr(rec.project_id, 'date', False)
-                )
-            if event_date:
-                event_date = fields.Date.to_date(event_date)
-
-            order = rec.project_id.sudo().reinvoiced_sale_order_id if rec.project_id else False
-            opp = order.sudo().opportunity_id if order else False
-            partner = order.sudo().partner_id if order else False
-
-            couple = (opp.name or '').strip() if opp else ''
-            first_name = ''
-            second_name = ''
-            first_phone = ''
-            if partner:
-                first_phone = (partner.mobile or partner.phone or '') or ''
-                first_name = partner.name or ''
-            if not first_phone and opp:
-                first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
-
-            # 2. telefon: olası özel alanlar
-            second_phone = ''
-            if opp:
-                for attr in ('second_phone', 'second_contact_phone', 'x_second_phone', 'x_phone2'):
-                    val = getattr(opp, attr, '') or ''
-                    if val:
-                        second_phone = val
-                        break
-                second_name = opp.second_contact
-
-            name_val = (rec.invitation_owner or '').strip()
-
-            cmds.append((0, 0, {
-                'name': name_val,
-                'date': event_date,
-                'opportunity_name': couple,
-                'first_name':first_name,
-                'second_name':second_name,
-                'first_phone': first_phone,
-                'second_phone': second_phone,
-                'project_id': rec.id,
-            }))
-
-            rec.vedan_ids = cmds
-    @api.depends(
-        'demo_date',
-        'sale_template_id'
-    )
-    def _compute_live_music(self):
+    @api.depends('project_id.live_music_ids')
+    def _mirror_live_music(self):
         for rec in self:
-            cmds = [(5, 0, 0)]
-            if not rec.music_live:
-                rec.live_music_ids=cmds
-                continue
-            event_date = rec.invitation_date or rec.demo_date
-            if not event_date and rec.project_id:
-                event_date = (
-                        getattr(rec.project_id, 'event_date', False)
-                        or getattr(rec.project_id, 'date_start', False)
-                        or getattr(rec.project_id, 'date', False)
-                )
-            if event_date:
-                event_date = fields.Date.to_date(event_date)
+            rec.live_music_ids = [(6, 0, rec.project_id.live_music_ids.ids)] if rec.project_id else [(5, 0, 0)]
 
-            tmpl_name=self.sudo().sale_template_id.name or ''
-
-            cmds.append((0, 0, {
-                'name': tmpl_name,
-                'date': event_date,
-                'project_id': rec.id,
-            }))
-
-            rec.live_music_ids = cmds
-
-    @api.depends(
-        'photo_drone', 'home_exit',
-        'invitation_owner',
-        'invitation_date', 'demo_date',
-        'project_id',
-        'project_id.event_date',
-        'project_id.so_opportunity_id',
-        'project_id.so_opportunity_id.name',
-        'project_id.so_opportunity_id.phone',
-        'project_id.so_opportunity_id.second_phone',
-        'project_id.email_from',  # birincil mail (istersen opp.email_from'a da çekebilirsin)
-        'project_id.so_opportunity_id.second_mail',  # İKİNCİL mail → OPP üzerinden
-    )
-    def _compute_backlight_ids(self):
+    @api.depends('project_id.backlight_ids')
+    def _mirror_backlight(self):
         for rec in self:
-            cmds = [(5, 0, 0)]
+            rec.backlight_ids = [(6, 0, rec.project_id.backlight_ids.ids)] if rec.project_id else [(5, 0, 0)]
 
-            event_date = rec.invitation_date or rec.demo_date or rec.project_id.event_date
-            if event_date:
-                event_date = fields.Date.to_date(event_date)
-
-            order = rec.project_id.sudo().reinvoiced_sale_order_id if rec.project_id else False
-            opp = order.sudo().opportunity_id if order else False
-            partner = order.sudo().partner_id if order else False
-            couple_name = (opp.name or '').strip() if opp else ''
-            first_name = ''
-            second_name = ''
-            first_phone = ''
-            if partner:
-                first_phone = (partner.mobile or partner.phone or '') or ''
-                first_name = partner.name or ''
-            if not first_phone and opp:
-                first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
-
-            # 2. telefon: olası özel alanlar
-            second_phone = ''
-            if opp:
-                for attr in ('second_phone', 'second_contact_phone', 'x_second_phone', 'x_phone2'):
-                    val = getattr(opp, attr, '') or ''
-                    if val:
-                        second_phone = val
-                        break
-                second_name = opp.second_contact
-
-            # MAİLLER
-            first_mail = (rec.project_id.email_from or '').strip()  # birincil mail (proje related)
-            second_mail = (getattr(opp, 'second_mail', '') or '').strip() if opp else ''  # İKİNCİL mail → OPP
-
-            drone_str = "Var" if getattr(rec, 'photo_drone', False) else "Yok"
-            home_exit_str = "Var" if getattr(rec, 'home_exit', False) else "Yok"
-
-            name_val = (rec.invitation_owner or '').strip()
-            if not name_val:
-                bits = [b for b in [couple_name, "Backlight"] if b]
-                name_val = " - ".join(bits) or "Backlight"
-
-            if rec.photo_standard:
-                photo_service='Standart Fotoğraf Servisi'
-            elif rec.photo_video_plus:
-                photo_service='Photo & Video Plus'
-            else:
-                photo_service=''
-
-            sale_template_name=rec.sale_template_id.name or ''
-
-            yacht_shoot='VAR' if rec.photo_yacht_shoot else 'YOK'
-            photo_print_service='VAR' if rec.photo_print_service else 'YOK'
-
-            cmds.append((0, 0, {
-                'name': name_val,
-                'date': event_date,
-                'opportunity_name': couple_name,
-                'first_name':first_name,
-                'second_name':second_name,
-                'first_phone': first_phone,
-                'second_phone': second_phone,
-                'project_id': rec.id,
-                'first_mail': first_mail,
-                'second_mail': second_mail,
-                'drone': drone_str,
-                'home_exit': home_exit_str,
-                'photo_service':photo_service,
-                'sale_template_name':sale_template_name,
-                'yacht_shoot':yacht_shoot,
-                'photo_print_service':photo_print_service,
-            }))
-
-            rec.backlight_ids = cmds
-
-   # >>> base64'e DOKUNMA <<<
 
     @api.depends(
         'project_id',
@@ -1476,9 +1080,9 @@ class ProjectDemoForm(models.Model):
             new_val = vals[f]
             old_val = getattr(self, f)
 
-            if not bool(new_val):  # OFF’a geçişte sorma
+            if not bool(new_val):
                 continue
-            if bool(old_val):  # zaten ON idiyse sorma
+            if bool(old_val):
                 continue
 
             labels = self._required_labels_for_field(f)
@@ -1495,10 +1099,8 @@ class ProjectDemoForm(models.Model):
         order = self.project_id.sudo().reinvoiced_sale_order_id if self.project_id else False
         if not order:
             return ""
-        # Farklı kurulumlar için sağlam toplama
         names = []
         try:
-            # Çoğu kurulumda department/role üstünden employee_ids.user_id olur
             emps = order.coordinator_ids.mapped('employee_ids')
             if emps:
                 names = [e.name for e in emps if e.name]
@@ -1508,48 +1110,154 @@ class ProjectDemoForm(models.Model):
             pass
         return "-".join(dict.fromkeys(names))  # uniq + sırayı koru
 
+    def _collect_demo_flag_packages(self):
+        """
+        Demo formundaki bayrak/seçimlerden paket etiketlerini üretir.
+        Artık Barney, Fred, Saç&Makyaj, Konaklama, Dans Dersi, Müzik vb. hepsi dahil.
+        """
+        flag_labels = [
+            # After Party ailesi
+            ('afterparty_service', 'After Party'),
+            ('afterparty_ultra', 'After Party Ultra'),
+            ('afterparty_shot_service', 'Shot Servisi (After Party)'),
+            ('afterparty_sushi', 'Sushi Bar'),
+            ('afterparty_street_food', 'Street Food Atıştırmalık'),
+            ('afterparty_fog_laser', 'Sis & Lazer'),
+            ('afterparty_bbq_wraps', 'BBQ Dürümler'),
+
+            # Foto/Video
+            ('photo_video_plus', 'Photo & Video Plus'),
+            ('photo_drone', 'Drone Kamera'),
+            ('photo_yacht_shoot', 'Yacht Photo Shoot'),
+
+            # Menü/Bar
+            ('menu_hot_appetizer_ultra', 'Roket Karides'),
+            ('bar_alcohol_service', 'Yabancı İçecek Servisi'),
+
+            # Pre-hosting
+            ('prehost_barney', 'Barney'),
+            ('prehost_fred', 'Fred'),
+
+            # Diğer hizmetler
+            ('accommodation_service', 'Konaklama'),
+            ('dance_lesson', 'Dans Dersi'),
+
+            # Müzik (paketlerde de görmek istiyoruz)
+            ('music_live', 'Canlı Müzik'),
+            ('music_percussion', 'Perküsyon'),
+            ('music_trio', 'TRIO'),
+
+            # Demo içi “daha fazla içki” seçeneği
+            ('afterparty_more_drinks', 'Daha Fazla Çeşit İçki (After party zamanı)'),
+        ]
+
+        out = []
+        for f, label in flag_labels:
+            if getattr(self, f):
+                out.append(label)
+
+        # Saç & Makyaj (hangi stüdyo olduğundan bağımsız)
+        if getattr(self, 'hair_studio_3435', False) or getattr(self, 'hair_garage_caddebostan', False):
+            out.append('Saç & Makyaj')
+
+        # Kahvaltı (adetli olabilir)
+        if getattr(self, 'prehost_breakfast', False):
+            cnt = int(getattr(self, 'prehost_breakfast_count', 0) or 0)
+            out.append("Kahvaltı" + (f" (x{cnt})" if cnt else ""))
+
+        # Pasta opsiyonları (demodan da görünmesini istiyoruz)
+        if getattr(self, 'cake_real', False):
+            out.append("Pasta Show'da Gerçek Pasta")
+        if getattr(self, 'cake_champagne_tower', False):
+            out.append("Pasta Show'da Şampanya Kulesi")
+
+        return list(dict.fromkeys(out))  # uniq + sırayı koru
+
     def _collect_packages(self):
         """
-        Sadece satışlardan satın alınmış opsiyonları listeler.
-        Demo formundaki alanlara bakmaz.
+        Paketleri DEMO (öncelik) + SATIŞ (ekle) şeklinde birleştirir.
+        Demo’da olanlar mutlaka görünür; satışta olup demoda olmayanlar sonradan eklenir.
+        Kahvaltı satışta adetliyse (xN) ile yükseltilir.
         """
+        demo_labels = list(dict.fromkeys(self._collect_demo_flag_packages()))
+
         purchased = self._get_purchased_products_counter()
 
+        # Satış ürün adlarını etiketlere map’liyoruz
         MAPPING = [
+            # After Party ailesi
             (['After Party Ultra'], 'After Party Ultra', False),
             (['After Party'], 'After Party', False),
             (['After Party Shot Servisi'], 'Shot Servisi (After Party)', False),
-            (['Fog + Laser Show'], 'Sis & Lazer', False),
             (['Sushi Bar'], 'Sushi Bar', False),
-            (['Yabancı İçki Servisi'], 'Yabancı İçki Servisi', False),
+            (['Fog + Laser Show'], 'Sis & Lazer', False),
+            (['Street Food Atıştırmalık'], 'Street Food Atıştırmalık', False),
+            (['BBQ Dürümler', 'BBQ Wraps'], 'BBQ Dürümler', False),
+            (['Daha Fazla Çeşit İçki (After party zamanı)'], 'Daha Fazla Çeşit İçki (After party zamanı)', False),
+
+            # Foto/Video
             (['Photo & Video Plus'], 'Photo & Video Plus', False),
             (['Drone Kamera'], 'Drone Kamera', False),
             (['Yacht Photo Shoot', 'Yat Çekimi', 'Yat Fotoğraf Çekimi'], 'Yacht Photo Shoot', False),
-            (['Rocket Shrimp'], 'Roket Karides', False),
+
+            # Menü/Bar
+            (['Rocket Shrimp', 'Roket Karides'], 'Roket Karides', False),
+            (['Yabancı İçecek Servisi', 'Yabancı İçki Servisi'], 'Yabancı İçecek Servisi', False),
+
+            # Pre-hosting
+            (['BARNEY', 'Barney'], 'Barney', False),
+            (['FRED', 'Fred'], 'Fred', False),
+            (['Breakfast Service', 'Kahvaltı'], 'Kahvaltı', True),  # adetli
+
+            # Diğer hizmetler
+            (['Konaklama'], 'Konaklama', False),
+            (['Dans Dersi'], 'Dans Dersi', False),
+
+            # Müzik
+            (['Canlı Müzik'], 'Canlı Müzik', False),
+            (['Perküsyon'], 'Perküsyon', False),
+            (['TRIO', 'Trio'], 'TRIO', False),
+
+            # Pasta opsiyonları
             (["Pasta Show'da Gerçek Pasta"], "Pasta Show'da Gerçek Pasta", False),
             (["Pasta Show'da Şampanya Kulesi"], "Pasta Show'da Şampanya Kulesi", False),
-            (["FRED"], "FRED", False),
-            (["BARNEY"], "BARNEY", False),
-            (["TRIO"], "TRIO", False),
-            (["Eğlence Uzatma(1 Saat)"], "Eğlence Uzatma(1 Saat)", False),
-            (["Canlı Müzik + Perküsyon"], "Canlı Müzik + Perküsyon", False),
-            (["Canlı Müzik Özel"], "Canlı Müzik Özel", False),
-            (["Canlı Müzik + Perküsyon + TRIO"], "Canlı Müzik + Perküsyon + TRIO", False),
-            (['Saç & Makyaj'], 'Saç & Makyaj', True),
-            (['Davetiye Baskı ve Zarflama'], 'Davetiye Baskı ve Zarflama', True),
-            (['Breakfast Service'], 'Kahvaltı', True),
+
+            # Ek örnekler (satışta kullanıyorsan)
+            (['Eğlence Uzatma(1 Saat)'], 'Eğlence Uzatma(1 Saat)', False),
+            (['Canlı Müzik + Perküsyon'], 'Canlı Müzik + Perküsyon', False),
+            (['Canlı Müzik Özel'], 'Canlı Müzik Özel', False),
+            (['Canlı Müzik + Perküsyon + TRIO'], 'Canlı Müzik + Perküsyon + TRIO', False),
         ]
 
-        out, seen = [], set()
+        merged, seen = list(demo_labels), set(demo_labels)
+
         for names, label, show_qty in MAPPING:
             total = sum(purchased.get(n, 0) for n in names)
-            if total:
-                text = f"{label}" if show_qty else label
-                if text not in seen:
-                    out.append(text)
-                    seen.add(text)
+            if not total:
+                continue
 
-        return out
+            # Demo’da zaten varsa ve adet gerekmiyorsa tekrar eklemeyelim
+            if label in seen and not show_qty:
+                continue
+
+            text = f"{label} (x{int(total)})" if show_qty else label
+
+            # Kahvaltı gibi adetli etikette demoda adetsiz varsa → yükselt
+            if show_qty and label in seen:
+                try:
+                    idx = merged.index(label)  # demoda "Kahvaltı" var (adetsiz)
+                    merged[idx] = text  # satış adediyle güncelle
+                except ValueError:
+                    if text not in seen:
+                        merged.append(text)
+                        seen.add(text)
+                continue
+
+            if text not in seen:
+                merged.append(text)
+                seen.add(text)
+
+        return merged
 
     def _collect_program(self):
         """Program akışı başlığı ve satırları (schedule_line_ids) + satır notları (HAM HTML)."""

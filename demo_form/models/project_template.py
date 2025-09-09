@@ -149,6 +149,127 @@ class ProjectProject(models.Model):
     is_confirmed_demo_form=fields.Boolean(string='Is There Confirmed Demo Form', compute='_compute_confirmed_form',
                                           compute_sudo=True,store=True)
 
+    wedding_trio_ids = fields.One2many(
+        'wedding.trio', 'project_id', string='Wedding Trios',
+        compute='_compute_wedding_trio_ids', store=True)
+    blue_marmara_ids = fields.One2many(
+        'blue.marmara', 'project_id', string='Blue Marmara',
+        compute='_compute_blue_marmara_ids', store=True)
+    studio_345_ids = fields.One2many(
+        'studio.345', 'project_id', string='Studio 3435',
+        compute='_compute_studio_3435_ids', store=True)
+    garage_caddebostan_ids = fields.One2many(
+        'garage.caddebostan', 'project_id', string='Garage Caddebostan',
+        compute='_compute_garage_caddebostan_ids', store=True)
+    vedan_ids = fields.One2many(
+        'partner.vedans', 'project_id', string='Partner Vedans',
+        compute='_compute_partner_vedans_ids', store=True)
+    live_music_ids = fields.One2many(
+        'live.music', 'project_id', string='Live Music',
+        compute='_compute_live_music_ids', store=True)
+    backlight_ids = fields.One2many(
+        'backlight', 'project_id', string='Backlight',
+        compute='_compute_backlight_ids', store=True)
+
+    # ---- Wedding Trio ----
+    @api.depends(
+        'reinvoiced_sale_order_id.order_line.product_id',
+        'event_date',
+        'demo_form_ids',
+        'demo_form_ids.transport_line_ids',
+        'demo_form_ids.transport_line_ids.label',
+        'demo_form_ids.transport_line_ids.time',
+        'demo_form_ids.transport_line_ids.port_ids',
+        'demo_form_ids.music_trio',
+    )
+    def _compute_wedding_trio_ids(self):
+        helper = self.env['demo.project.shared.compute']
+        for proj in self:
+            proj.wedding_trio_ids = helper.commands_wedding_trio(proj)
+
+    # ---- Blue Marmara ----
+    @api.depends(
+        'so_people_count', 'event_date',
+        'demo_form_ids', 'demo_form_ids.invitation_owner', 'demo_form_ids.guest_count'
+    )
+    def _compute_blue_marmara_ids(self):
+        helper = self.env['demo.project.shared.compute']
+        for proj in self:
+            proj.blue_marmara_ids = helper.commands_blue_marmara(proj)
+
+    # ---- Studio 3435 ----
+    @api.depends(
+        'reinvoiced_sale_order_id.order_line.product_id',
+        'event_date',
+        'demo_form_ids',
+        'demo_form_ids.hair_studio_3435',
+        'demo_form_ids.invitation_owner',
+        'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    )
+    def _compute_studio_3435_ids(self):
+        helper = self.env['demo.project.shared.compute']
+        for proj in self:
+            proj.studio_345_ids = helper.commands_studio_3435(proj)
+
+    # ---- Garage Caddebostan ----
+    @api.depends(
+        'reinvoiced_sale_order_id.order_line.product_id',
+        'event_date',
+        'demo_form_ids',
+        'demo_form_ids.hair_garage_caddebostan',
+        'demo_form_ids.invitation_owner',
+        'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    )
+    def _compute_garage_caddebostan_ids(self):
+        helper = self.env['demo.project.shared.compute']
+        for proj in self:
+            proj.garage_caddebostan_ids = helper.commands_garage_caddebostan(proj)
+
+    # ---- Partner Vedans ----
+    @api.depends(
+        'reinvoiced_sale_order_id.order_line.product_id',
+        'event_date',
+        'demo_form_ids', 'demo_form_ids.afterparty_dance_show',
+        'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    )
+    def _compute_partner_vedans_ids(self):
+        helper = self.env['demo.project.shared.compute']
+        for proj in self:
+            proj.vedan_ids = helper.commands_partner_vedans(proj)
+
+    # ---- Live Music ----
+    @api.depends(
+        'reinvoiced_sale_order_id.order_line.product_id',
+        'event_date',
+        'demo_form_ids', 'demo_form_ids.music_live',
+        'so_sale_template_id',
+    )
+    def _compute_live_music_ids(self):
+        helper = self.env['demo.project.shared.compute']
+        for proj in self:
+            proj.live_music_ids = helper.commands_live_music(proj)
+
+    # ---- Backlight ----
+    @api.depends(
+        'reinvoiced_sale_order_id.order_line.product_id',
+        'event_date',
+        'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+        'email_from', 'so_opportunity_id.second_mail',
+        'demo_form_ids',
+        'demo_form_ids.photo_drone',
+        'demo_form_ids.home_exit',
+        'demo_form_ids.photo_standard',
+        'demo_form_ids.photo_video_plus',
+        'demo_form_ids.photo_yacht_shoot',
+        'demo_form_ids.photo_print_service',
+        'demo_form_ids.invitation_owner',
+        'so_sale_template_id',
+    )
+    def _compute_backlight_ids(self):
+        helper = self.env['demo.project.shared.compute']
+        for proj in self:
+            proj.backlight_ids = helper.commands_backlight(proj)
+
     @api.onchange('user_id')
     def _onchange_project_manager(self):
         self.ensure_one()
@@ -349,10 +470,23 @@ class ProjectProject(models.Model):
             """
 
             orders = rec.related_sale_order_ids.sudo().exists()
-            lines = orders.mapped('order_line').sudo().exists()
-            lines = lines.filtered(lambda l: not rec._is_discount_line(l))
-            lines = lines.sorted(key=lambda l: (l.order_id.id, l.sequence or 0))
 
+            # Ek Protokol ve normal siparişleri ayır
+            ek_protokol_orders = orders.filtered(
+                lambda o: o.sale_order_template_id and o.sale_order_template_id.name == "Ek Protokol")
+            normal_orders = orders - ek_protokol_orders
+
+            # Normal sipariş satırları
+            normal_lines = normal_orders.mapped('order_line').sudo().exists()
+            normal_lines = normal_lines.filtered(lambda l: not rec._is_discount_line(l))
+            normal_lines = normal_lines.sorted(key=lambda l: (l.order_id.id, l.sequence or 0))
+
+            # Ek Protokol satırları
+            ek_lines = ek_protokol_orders.mapped('order_line').sudo().exists()
+            ek_lines = ek_lines.filtered(lambda l: not rec._is_discount_line(l))
+            ek_lines = ek_lines.sorted(key=lambda l: (l.order_id.id, l.sequence or 0))
+
+            # Etkinlik İçeriği tablosu
             html += """
             <span> Etkinlik İçeriği </span>
             <table style="width:100%; border-collapse:collapse;">
@@ -365,7 +499,7 @@ class ProjectProject(models.Model):
               </thead>
               <tbody>
             """
-            for l in lines:
+            for l in normal_lines:
                 prod = l.product_id.display_name or ''
                 qty = l.product_uom_qty or 0
                 uom = l.product_uom.display_name or ''
@@ -377,6 +511,33 @@ class ProjectProject(models.Model):
                 </tr>
                 """
             html += "</tbody></table>"
+
+            if ek_lines:
+                html += """
+                <br/>
+                <span><strong>Ek Protokol</strong></span>
+                <table style="width:100%; border-collapse:collapse; margin-top:5px;">
+                  <thead>
+                    <tr>
+                      <th style="border:1px solid #ccc;padding:4px;">Ürün</th>
+                      <th style="border:1px solid #ccc;padding:4px;">Adet</th>
+                      <th style="border:1px solid #ccc;padding:4px;">Birim</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                """
+                for l in ek_lines:
+                    prod = l.product_id.display_name or ''
+                    qty = l.product_uom_qty or 0
+                    uom = l.product_uom.display_name or ''
+                    html += f"""
+                    <tr>
+                      <td style="border:1px solid #ccc;padding:4px;">{prod}</td>
+                      <td style="border:1px solid #ccc;padding:4px;text-align:center;">{qty}</td>
+                      <td style="border:1px solid #ccc;padding:4px;">{uom}</td>
+                    </tr>
+                    """
+                html += "</tbody></table>"
 
             rec.sale_order_summary = html
             rec.som = html

@@ -89,3 +89,4 @@ class ProjectTask(models.Model):
                 elif name in canceled_names:
                     rec.state = '1_canceled'
         return res
+

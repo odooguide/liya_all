@@ -21,6 +21,13 @@
                 <field name="next_event_date" invisible="1"/>
                 <field name="next_event_id" invisible="1"/>
                 <field name="event_ids" invisible="1"/>
+                <field name="wedding_trio_ids" invisible="1"/>
+                <field name="blue_marmara_ids" invisible="1"/>
+                <field name="studio_345_ids" invisible="1"/>
+                <field name="vedan_ids" invisible="1"/>
+                <field name="garage_caddebostan_ids" invisible="1"/>
+                <field name="backlight_ids" invisible="1"/>
+                <field name="live_music_ids" invisible="1"/>
                 <field name="seat_plan" widget="binary"
                        filename="seat_plan_name"
                        context="{'bin_size': True}"/>
