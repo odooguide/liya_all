@@ -39,6 +39,12 @@
             <xpath expr="//field[@name='date_start']" position="replace">
                 <field name="event_date"/>
             </xpath>
+             <xpath expr="//field[@name='partner_id']" position="after">
+               <field name="so_opportunity_id"/>
+             </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
         </field>
     </record>
 

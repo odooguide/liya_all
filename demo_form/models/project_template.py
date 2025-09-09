@@ -149,6 +149,16 @@ class ProjectProject(models.Model):
     is_confirmed_demo_form=fields.Boolean(string='Is There Confirmed Demo Form', compute='_compute_confirmed_form',
                                           compute_sudo=True,store=True)
 
+    @api.onchange('user_id')
+    def _onchange_project_manager(self):
+        self.ensure_one()
+        user = self.env.user
+        is_org_manager = user.has_group('__export__.res_groups_102_8eb2392b')
+        is_admin = user.has_group('base.group_system')
+
+        if not is_admin or not is_org_manager:
+            raise UserError(_('Koordinatörü sadece Metin Can Çil değiştirebilir. Lütfen onunla iletişime geçiniz.'))
+
     @api.depends('demo_form_ids.confirmed_demo_form_plan')
     def _compute_confirmed_form(self):
         for rec in self:

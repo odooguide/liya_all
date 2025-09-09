@@ -20,6 +20,7 @@
         "data/project_task_menu_views.xml",
         "data/check_project_stage_cron.xml",
         "data/demo_compute_cron.xml",
+        "data/project_menu_restrict.xml",
         "wizards/sale_order_project_wizard_view.xml",
         "wizards/update_project_wizard.xml",
         "wizards/extra_protocol_wizard_view.xml",

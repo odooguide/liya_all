@@ -1264,13 +1264,13 @@ class ProjectDemoForm(models.Model):
                 else:
                     line.time = f'22:30 - {party_end_str}'
 
-            for t in rec.transport_line_ids.filtered(lambda l: l.label in ['After Party Dönüş','After Parti Dönüş','After Parti Dönüşü']):
+            for t in rec.transport_line_ids.filtered(lambda l: l.label in ['After Party Dönüş','After Parti Dönüş','After Parti Dönüşü','After Party Return']):
                 if rec.afterparty_ultra or rec.afterparty_service:
                     t.time = end_str
                 else:
                     t.time = ''
 
-            for t in rec.transport_line_ids.filtered(lambda l: l.label == 'Çift Dönüş'):
+            for t in rec.transport_line_ids.filtered(lambda l: l.label in ['Çift Dönüş','Çift Dönüşü',"Couple's Return",'Guests Return']):
                 if rec.afterparty_ultra or rec.afterparty_service:
                     later_dt = base_end_dt + timedelta(minutes=15)
                     t.time = later_dt.strftime('%H:%M')
@@ -1544,7 +1544,7 @@ class ProjectDemoForm(models.Model):
         for names, label, show_qty in MAPPING:
             total = sum(purchased.get(n, 0) for n in names)
             if total:
-                text = f"{label} (x{int(total)})" if show_qty else label
+                text = f"{label}" if show_qty else label
                 if text not in seen:
                     out.append(text)
                     seen.add(text)
@@ -1581,22 +1581,17 @@ class ProjectDemoForm(models.Model):
         out = []
         i = 1
 
-        found_next_day = any(
-            'ertesi gün çift dönüşü' in (t.label or '').lower()
-            for t in self.transport_line_ids
-        )
-
         for t in self.transport_line_ids.sorted('sequence'):
             label = (t.label or '').strip()
             tm = (t.time or '').strip()
 
             ports = [p.name.strip() for p in t.port_ids] if t.port_ids else []
-            other_port = (t.other_port or '').strip()
-            if other_port:
-                extra = [p.strip() for p in re.split(r'[,\-/;–—·•]+', other_port) if p.strip()]
-                for p in extra:
-                    if p not in ports:
-                        ports.append(p)
+            # other_port = (t.other_port or '').strip()
+            # if other_port:
+            #     extra = [p.strip() for p in re.split(r'[,\-/;–—·•]+', other_port) if p.strip()]
+            #     for p in extra:
+            #         if p not in ports:
+            #             ports.append(p)
 
             # HAM HTML not
             is_return = 'dönüş' in label.lower() or 'dönüşü' in label.lower()
@@ -1612,8 +1607,8 @@ class ProjectDemoForm(models.Model):
                 out.append(line)
                 i += 1
 
-        if not found_next_day:
-            out.append(f"{i}/ Ertesi gün çift dönüşü: haber vereceğim.")
+
+        out.append(f"{i}/ Ertesi gün çift dönüşü: haber vereceğim.")
 
         return out
 
@@ -1626,7 +1621,7 @@ class ProjectDemoForm(models.Model):
         runner = names(self.table_runner_design_ids)
         colors = names(self.table_color_ids)
         charger = names(self.table_charger_ids)
-        tag = getattr(self.table_tag_ids, 'name', '') or ''  # Many2one
+        tag = getattr(self.table_tag_ids, 'name', '') or ''
 
         cake = names(self.cake_choice_ids)
         cake_bits = []
@@ -1655,9 +1650,12 @@ class ProjectDemoForm(models.Model):
     def _collect_music_notes(self):
         """Eğlence başlıkları."""
         bits = []
-        if self.music_live:        bits.append("Canlı müzik")
-        if self.music_percussion:  bits.append("Perküsyon")
-        if self.music_trio:        bits.append("Trio")
+        if self.music_live:        bits.append("Canlı müzik Var")
+        else:        bits.append("Canlı müzik Yok")
+        if self.music_percussion:  bits.append("Perküsyon Var")
+        else:  bits.append("Perküsyon Yok")
+        if self.music_trio:        bits.append("Trio Var")
+        else: bits.append("Trio Yok")
         if self.afterparty_service and self.afterparty_ultra:
             bits.append("After Party Ultra var")
         elif self.afterparty_service:
@@ -1666,6 +1664,7 @@ class ProjectDemoForm(models.Model):
         if self.afterparty_shot_service: bits.append("Shot Servisi")
         if self.afterparty_fog_laser: bits.append("Sis & Laser")
         if self.afterparty_sushi:     bits.append("Sushi")
+        if self.afterparty_street_food:     bits.append("Street Food Atıştırmalık")
         #if self.music_other and self.music_other_details:
         #     bits.append(f"Özel: {self.music_other_details}")
         # if self.cocktail_request:
@@ -1811,7 +1810,7 @@ class ProjectDemoForm(models.Model):
         if self.alcohol_service:
             lines.append("➖Alkol Servisi : Var")
         else:
-            lines.append("➖ALkol Servisi : Yok")
+            lines.append("➖Alkol Servisi : Yok")
 
         if self.bar_raki_brand:
             lines.append(f"➖Rakı Markası : {raki_map.get(self.bar_raki_brand, self.bar_raki_brand)}")

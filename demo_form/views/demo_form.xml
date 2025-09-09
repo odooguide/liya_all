@@ -186,7 +186,7 @@
                         <page string="After Party" name="afterparty">
                             <group>
                                 <group col="2">
-                                    <field name="afterparty_service" widget="boolean_toggle"/>
+                                    <field name="afterparty_service" invisible='afterparty_ultra!=False' widget="boolean_toggle"/>
                                     <field name="afterparty_ultra" widget="boolean_toggle"/>
                                     <!--                                    <field name="afterparty_more_drinks" widget="boolean_toggle"/>-->
                                     <field name="afterparty_shot_service" widget="boolean_toggle"/>
