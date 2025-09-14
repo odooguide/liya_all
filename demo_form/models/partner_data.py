@@ -318,7 +318,7 @@ class DemoProjectSharedCompute(models.AbstractModel):
         studio_name = "Studio 3435 Nişantaşı"
 
         return [
-            (5, 0, 0),
+
             (0, 0, {
                 'name': name_val,
                 'date': snap['event_date'],
@@ -349,7 +349,7 @@ class DemoProjectSharedCompute(models.AbstractModel):
         studio_name = "Garage Caddebostan"
 
         return [
-            (5, 0, 0),
+
             (0, 0, {
                 'name': name_val,
                 'date': snap['event_date'],
@@ -379,7 +379,7 @@ class DemoProjectSharedCompute(models.AbstractModel):
         name_val = (getattr(demo, 'invitation_owner', '') or couple or 'Partner Vedans').strip()
 
         return [
-            (5, 0, 0),
+
             (0, 0, {
                 'name': name_val,
                 'date': snap['event_date'],
@@ -410,7 +410,7 @@ class DemoProjectSharedCompute(models.AbstractModel):
             tmpl_name = demo.sale_template_id.name or ''
 
         return [
-            (5, 0, 0),
+
             (0, 0, {
                 'name': tmpl_name or 'Live Music',
                 'date': snap['event_date'],
@@ -458,7 +458,7 @@ class DemoProjectSharedCompute(models.AbstractModel):
         name_val = invite_owner or " - ".join([b for b in [couple_name, "Backlight"] if b]) or "Backlight"
 
         return [
-            (5, 0, 0),
+
             (0, 0, {
                 'name': name_val,
                 'date': snap['event_date'],
