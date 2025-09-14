@@ -458,7 +458,7 @@ class ProjectDemoForm(models.Model):
         'live.music', 'project_id', string='Live Music',
         compute='_mirror_live_music', store=False, readonly=True)
     backlight_ids = fields.One2many(
-        'backlight', 'project_id', string='Backlight',
+        'backlight', 'demo_id', string='Backlight',
         compute='_mirror_backlight', store=False, readonly=True)
     confirmed_demo_ids = fields.One2many(
         comodel_name='confirmed.form',
