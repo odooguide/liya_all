@@ -21,6 +21,10 @@ class WeddingTrio(models.Model):
         'port_id',
         string='Ports',
     )
+    demo_id = fields.Many2one(
+        'project.demo.form', string='Demo Formu',
+        ondelete='cascade', index=True
+    )
 
 class BlueMarmara(models.Model):
     _name = 'blue.marmara'
@@ -36,6 +40,10 @@ class BlueMarmara(models.Model):
         required=True,
         ondelete='cascade',
         index=True,
+    )
+    demo_id = fields.Many2one(
+        'project.demo.form', string='Demo Formu',
+        ondelete='cascade', index=True
     )
 
 class PartnerVedans(models.Model):
@@ -56,6 +64,10 @@ class PartnerVedans(models.Model):
         ondelete='cascade',
         index=True,
     )
+    demo_id = fields.Many2one(
+        'project.demo.form', string='Demo Formu',
+        ondelete='cascade', index=True
+    )
 class Studio345(models.Model):
     _name = 'studio.345'
     _description = 'Studio 345'
@@ -73,6 +85,10 @@ class Studio345(models.Model):
         required=True,
         ondelete='cascade',
         index=True,
+    )
+    demo_id = fields.Many2one(
+        'project.demo.form', string='Demo Formu',
+        ondelete='cascade', index=True
     )
     photo_studio=fields.Char('Ekip')
 
@@ -94,6 +110,10 @@ class GarageCaddebostan(models.Model):
         ondelete='cascade',
         index=True,
     )
+    demo_id = fields.Many2one(
+        'project.demo.form', string='Demo Formu',
+        ondelete='cascade', index=True
+    )
     photo_studio=fields.Char('Ekip')
 
 class Backlight(models.Model):
@@ -113,6 +133,10 @@ class Backlight(models.Model):
         required=True,
         ondelete='cascade',
         index=True,
+    )
+    demo_id = fields.Many2one(
+        'project.demo.form', string='Demo Formu',
+        ondelete='cascade', index=True
     )
     first_mail = fields.Char(string='Birincil Mail')
     second_mail = fields.Char(string='Birincil Mail')
