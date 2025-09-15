@@ -151,224 +151,224 @@ class ProjectProject(models.Model):
 
     wedding_trio_ids = fields.One2many(
         'wedding.trio', 'project_id', string='Wedding Trios',
-        compute='_compute_wedding_trio_ids', store=True)
+        store=True)
     blue_marmara_ids = fields.One2many(
         'blue.marmara', 'project_id', string='Blue Marmara',
-        compute='_compute_blue_marmara_ids', store=True)
+         store=True)
     studio_345_ids = fields.One2many(
         'studio.345', 'project_id', string='Studio 3435',
-        compute='_compute_studio_3435_ids', store=True)
+         store=True)
     garage_caddebostan_ids = fields.One2many(
         'garage.caddebostan', 'project_id', string='Garage Caddebostan',
-        compute='_compute_garage_caddebostan_ids', store=True)
+        store=True)
     vedan_ids = fields.One2many(
         'partner.vedans', 'project_id', string='Partner Vedans',
-        compute='_compute_partner_vedans_ids', store=True)
+         store=True)
     live_music_ids = fields.One2many(
         'live.music', 'project_id', string='Live Music',
-        compute='_compute_live_music_ids', store=True)
+        store=True)
     backlight_ids = fields.One2many(
         'backlight', 'project_id', string='Backlight',
-        compute='_compute_backlight_ids', store=True)
+         store=True)
 
-    # ---- Wedding Trio ----
-    # ---- Wedding Trio ----
-    @api.depends(
-        'reinvoiced_sale_order_id.order_line.product_id',
-        'event_date',
-        'demo_form_ids',
-        'demo_form_ids.transport_line_ids',
-        'demo_form_ids.transport_line_ids.label',
-        'demo_form_ids.transport_line_ids.time',
-        'demo_form_ids.transport_line_ids.port_ids',
-        'demo_form_ids.music_trio',
-    )
-    def _compute_wedding_trio_ids(self):
-        helper = self.env['demo.project.shared.compute']
-        for proj in self:
-            # Mevcut kayıtları al
-            existing_records = proj.wedding_trio_ids
-
-            # Yeni değerleri hesapla
-            new_commands = helper.commands_wedding_trio(proj)
-
-            if existing_records and new_commands:
-                # Mevcut kaydı güncelle
-                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
-                proj.wedding_trio_ids = [(1, existing_records[0].id, new_data)]
-            elif new_commands:
-                # Yeni kayıt oluştur
-                proj.wedding_trio_ids = new_commands
-            else:
-                # Kayıt yok, temizle
-                proj.wedding_trio_ids = [(5,)]
-
-    # ---- Blue Marmara ----
-    @api.depends(
-        'so_people_count', 'event_date',
-        'demo_form_ids', 'demo_form_ids.invitation_owner', 'demo_form_ids.guest_count'
-    )
-    def _compute_blue_marmara_ids(self):
-        helper = self.env['demo.project.shared.compute']
-        for proj in self:
-            # Mevcut kayıtları al
-            existing_records = proj.blue_marmara_ids
-
-            # Yeni değerleri hesapla
-            new_commands = helper.commands_blue_marmara(proj)
-
-            if existing_records and new_commands:
-                # Mevcut kaydı güncelle
-                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
-                proj.blue_marmara_ids = [(1, existing_records[0].id, new_data)]
-            elif new_commands:
-                # Yeni kayıt oluştur
-                proj.blue_marmara_ids = new_commands
-            else:
-                # Kayıt yok, temizle
-                proj.blue_marmara_ids = [(5,)]
-
-    # ---- Studio 3435 ----
-    @api.depends(
-        'reinvoiced_sale_order_id.order_line.product_id',
-        'event_date',
-        'demo_form_ids',
-        'demo_form_ids.hair_studio_3435',
-        'demo_form_ids.invitation_owner',
-        'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
-    )
-    def _compute_studio_3435_ids(self):
-        helper = self.env['demo.project.shared.compute']
-        for proj in self:
-            # Mevcut kayıtları al
-            existing_records = proj.studio_345_ids  # Typo'yu koruduk (345 vs 3435)
-
-            # Yeni değerleri hesapla
-            new_commands = helper.commands_studio_3435(proj)
-
-            if existing_records and new_commands:
-                # Mevcut kaydı güncelle
-                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
-                proj.studio_345_ids = [(1, existing_records[0].id, new_data)]
-            elif new_commands:
-                # Yeni kayıt oluştur
-                proj.studio_345_ids = new_commands
-            else:
-                # Kayıt yok, temizle
-                proj.studio_345_ids = [(5,)]
-
-    # ---- Garage Caddebostan ----
-    @api.depends(
-        'reinvoiced_sale_order_id.order_line.product_id',
-        'event_date',
-        'demo_form_ids',
-        'demo_form_ids.hair_garage_caddebostan',
-        'demo_form_ids.invitation_owner',
-        'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
-    )
-    def _compute_garage_caddebostan_ids(self):
-        helper = self.env['demo.project.shared.compute']
-        for proj in self:
-            # Mevcut kayıtları al
-            existing_records = proj.garage_caddebostan_ids
-
-            # Yeni değerleri hesapla
-            new_commands = helper.commands_garage_caddebostan(proj)
-
-            if existing_records and new_commands:
-                # Mevcut kaydı güncelle
-                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
-                proj.garage_caddebostan_ids = [(1, existing_records[0].id, new_data)]
-            elif new_commands:
-                # Yeni kayıt oluştur
-                proj.garage_caddebostan_ids = new_commands
-            else:
-                # Kayıt yok, temizle
-                proj.garage_caddebostan_ids = [(5,)]
-
-    # ---- Partner Vedans ----
-    @api.depends(
-        'reinvoiced_sale_order_id.order_line.product_id',
-        'event_date',
-        'demo_form_ids', 'demo_form_ids.afterparty_dance_show',
-        'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
-    )
-    def _compute_partner_vedans_ids(self):
-        helper = self.env['demo.project.shared.compute']
-        for proj in self:
-            # Mevcut kayıtları al
-            existing_records = proj.vedan_ids
-
-            # Yeni değerleri hesapla
-            new_commands = helper.commands_partner_vedans(proj)
-
-            if existing_records and new_commands:
-                # Mevcut kaydı güncelle
-                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
-                proj.vedan_ids = [(1, existing_records[0].id, new_data)]
-            elif new_commands:
-                # Yeni kayıt oluştur
-                proj.vedan_ids = new_commands
-            else:
-                # Kayıt yok, temizle
-                proj.vedan_ids = [(5,)]
-
-    # ---- Live Music ----
-    @api.depends(
-        'reinvoiced_sale_order_id.order_line.product_id',
-        'event_date',
-        'demo_form_ids', 'demo_form_ids.music_live',
-        'so_sale_template_id',
-    )
-    def _compute_live_music_ids(self):
-        helper = self.env['demo.project.shared.compute']
-        for proj in self:
-            # Mevcut kayıtları al
-            existing_records = proj.live_music_ids
-
-            # Yeni değerleri hesapla
-            new_commands = helper.commands_live_music(proj)
-
-            if existing_records and new_commands:
-                # Mevcut kaydı güncelle
-                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
-                proj.live_music_ids = [(1, existing_records[0].id, new_data)]
-            elif new_commands:
-                # Yeni kayıt oluştur
-                proj.live_music_ids = new_commands
-            else:
-                # Kayıt yok, temizle
-                proj.live_music_ids = [(5,)]
-
-    @api.depends(
-        'reinvoiced_sale_order_id.order_line.product_id',
-        'event_date',
-        'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
-        'email_from', 'so_opportunity_id.second_mail',
-        'demo_form_ids',
-        'demo_form_ids.photo_drone',
-        'demo_form_ids.home_exit',
-        'demo_form_ids.photo_standard',
-        'demo_form_ids.photo_video_plus',
-        'demo_form_ids.photo_yacht_shoot',
-        'demo_form_ids.photo_print_service',
-        'demo_form_ids.invitation_owner',
-        'so_sale_template_id',
-    )
-    def _compute_backlight_ids(self):
-        helper = self.env['demo.project.shared.compute']
-        for proj in self:
-            # Mevcut kayıtları al
-            existing_backlights = proj.backlight_ids
-
-            # Yeni değerleri hesapla
-            new_commands = helper.commands_backlight(proj)
-
-            if existing_backlights and new_commands:
-                new_data = new_commands[0][2]
-                proj.backlight_ids = [(1, existing_backlights[0].id, new_data)]
-            else:
-                proj.backlight_ids = new_commands
+    # # ---- Wedding Trio ----
+    # # ---- Wedding Trio ----
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'demo_form_ids',
+    #     'demo_form_ids.transport_line_ids',
+    #     'demo_form_ids.transport_line_ids.label',
+    #     'demo_form_ids.transport_line_ids.time',
+    #     'demo_form_ids.transport_line_ids.port_ids',
+    #     'demo_form_ids.music_trio',
+    # )
+    # def _compute_wedding_trio_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.wedding_trio_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_wedding_trio(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.wedding_trio_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.wedding_trio_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.wedding_trio_ids = [(5,)]
+    #
+    # # ---- Blue Marmara ----
+    # @api.depends(
+    #     'so_people_count', 'event_date',
+    #     'demo_form_ids', 'demo_form_ids.invitation_owner', 'demo_form_ids.guest_count'
+    # )
+    # def _compute_blue_marmara_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.blue_marmara_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_blue_marmara(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.blue_marmara_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.blue_marmara_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.blue_marmara_ids = [(5,)]
+    #
+    # # ---- Studio 3435 ----
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'demo_form_ids',
+    #     'demo_form_ids.hair_studio_3435',
+    #     'demo_form_ids.invitation_owner',
+    #     'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    # )
+    # def _compute_studio_3435_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.studio_345_ids  # Typo'yu koruduk (345 vs 3435)
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_studio_3435(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.studio_345_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.studio_345_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.studio_345_ids = [(5,)]
+    #
+    # # ---- Garage Caddebostan ----
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'demo_form_ids',
+    #     'demo_form_ids.hair_garage_caddebostan',
+    #     'demo_form_ids.invitation_owner',
+    #     'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    # )
+    # def _compute_garage_caddebostan_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.garage_caddebostan_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_garage_caddebostan(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.garage_caddebostan_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.garage_caddebostan_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.garage_caddebostan_ids = [(5,)]
+    #
+    # # ---- Partner Vedans ----
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'demo_form_ids', 'demo_form_ids.afterparty_dance_show',
+    #     'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    # )
+    # def _compute_partner_vedans_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.vedan_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_partner_vedans(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.vedan_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.vedan_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.vedan_ids = [(5,)]
+    #
+    # # ---- Live Music ----
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'demo_form_ids', 'demo_form_ids.music_live',
+    #     'so_sale_template_id',
+    # )
+    # def _compute_live_music_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.live_music_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_live_music(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.live_music_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.live_music_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.live_music_ids = [(5,)]
+    #
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    #     'email_from', 'so_opportunity_id.second_mail',
+    #     'demo_form_ids',
+    #     'demo_form_ids.photo_drone',
+    #     'demo_form_ids.home_exit',
+    #     'demo_form_ids.photo_standard',
+    #     'demo_form_ids.photo_video_plus',
+    #     'demo_form_ids.photo_yacht_shoot',
+    #     'demo_form_ids.photo_print_service',
+    #     'demo_form_ids.invitation_owner',
+    #     'so_sale_template_id',
+    # )
+    # def _compute_backlight_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_backlights = proj.backlight_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_backlight(proj)
+    #
+    #         if existing_backlights and new_commands:
+    #             new_data = new_commands[0][2]
+    #             proj.backlight_ids = [(1, existing_backlights[0].id, new_data)]
+    #         else:
+    #             proj.backlight_ids = new_commands
 
     @api.onchange('user_id')
     def _onchange_project_manager(self):
