@@ -158,10 +158,9 @@ class SaleOrderProjectWizard(models.TransientModel):
 
                     })
 
-        order.is_project_true = True
-        order.opportunity_id.project_id = project.id
-        order.opportunity_id.action_set_won()
-
+        order.sudo().is_project_true = True
+        order.opportunity_id.sudo().project_id = project.id
+        order.opportunity_id.sudo().action_set_won()
         return {'type': 'ir.actions.act_window_close'}
 
 
