@@ -10,7 +10,7 @@ class WeddingTrio(models.Model):
     project_id = fields.Many2one(
         'project.demo.form',
         string='Project',
-        required=True,
+
         ondelete='cascade',
         index=True,
     )
@@ -33,7 +33,7 @@ class BlueMarmara(models.Model):
     project_id = fields.Many2one(
         'project.demo.form',
         string='Project',
-        required=True,
+
         ondelete='cascade',
         index=True,
     )
@@ -52,7 +52,7 @@ class PartnerVedans(models.Model):
     project_id = fields.Many2one(
         'project.demo.form',
         string='Project',
-        required=True,
+
         ondelete='cascade',
         index=True,
     )
@@ -70,7 +70,7 @@ class Studio345(models.Model):
     project_id = fields.Many2one(
         'project.demo.form',
         string='Project',
-        required=True,
+
         ondelete='cascade',
         index=True,
     )
@@ -110,7 +110,7 @@ class Backlight(models.Model):
     project_id = fields.Many2one(
         'project.demo.form',
         string='Project',
-        required=True,
+
         ondelete='cascade',
         index=True,
     )
@@ -132,7 +132,7 @@ class LiveMusic(models.Model):
     project_id = fields.Many2one(
         'project.demo.form',
         string='Project',
-        required=True,
+
         ondelete='cascade',
         index=True,
     )

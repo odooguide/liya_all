@@ -172,6 +172,7 @@ class ProjectProject(models.Model):
         compute='_compute_backlight_ids', store=True)
 
     # ---- Wedding Trio ----
+    # ---- Wedding Trio ----
     @api.depends(
         'reinvoiced_sale_order_id.order_line.product_id',
         'event_date',
@@ -185,7 +186,22 @@ class ProjectProject(models.Model):
     def _compute_wedding_trio_ids(self):
         helper = self.env['demo.project.shared.compute']
         for proj in self:
-            proj.wedding_trio_ids = helper.commands_wedding_trio(proj)
+            # Mevcut kayıtları al
+            existing_records = proj.wedding_trio_ids
+
+            # Yeni değerleri hesapla
+            new_commands = helper.commands_wedding_trio(proj)
+
+            if existing_records and new_commands:
+                # Mevcut kaydı güncelle
+                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+                proj.wedding_trio_ids = [(1, existing_records[0].id, new_data)]
+            elif new_commands:
+                # Yeni kayıt oluştur
+                proj.wedding_trio_ids = new_commands
+            else:
+                # Kayıt yok, temizle
+                proj.wedding_trio_ids = [(5,)]
 
     # ---- Blue Marmara ----
     @api.depends(
@@ -195,7 +211,22 @@ class ProjectProject(models.Model):
     def _compute_blue_marmara_ids(self):
         helper = self.env['demo.project.shared.compute']
         for proj in self:
-            proj.blue_marmara_ids = helper.commands_blue_marmara(proj)
+            # Mevcut kayıtları al
+            existing_records = proj.blue_marmara_ids
+
+            # Yeni değerleri hesapla
+            new_commands = helper.commands_blue_marmara(proj)
+
+            if existing_records and new_commands:
+                # Mevcut kaydı güncelle
+                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+                proj.blue_marmara_ids = [(1, existing_records[0].id, new_data)]
+            elif new_commands:
+                # Yeni kayıt oluştur
+                proj.blue_marmara_ids = new_commands
+            else:
+                # Kayıt yok, temizle
+                proj.blue_marmara_ids = [(5,)]
 
     # ---- Studio 3435 ----
     @api.depends(
@@ -209,7 +240,22 @@ class ProjectProject(models.Model):
     def _compute_studio_3435_ids(self):
         helper = self.env['demo.project.shared.compute']
         for proj in self:
-            proj.studio_345_ids = helper.commands_studio_3435(proj)
+            # Mevcut kayıtları al
+            existing_records = proj.studio_345_ids  # Typo'yu koruduk (345 vs 3435)
+
+            # Yeni değerleri hesapla
+            new_commands = helper.commands_studio_3435(proj)
+
+            if existing_records and new_commands:
+                # Mevcut kaydı güncelle
+                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+                proj.studio_345_ids = [(1, existing_records[0].id, new_data)]
+            elif new_commands:
+                # Yeni kayıt oluştur
+                proj.studio_345_ids = new_commands
+            else:
+                # Kayıt yok, temizle
+                proj.studio_345_ids = [(5,)]
 
     # ---- Garage Caddebostan ----
     @api.depends(
@@ -223,7 +269,22 @@ class ProjectProject(models.Model):
     def _compute_garage_caddebostan_ids(self):
         helper = self.env['demo.project.shared.compute']
         for proj in self:
-            proj.garage_caddebostan_ids = helper.commands_garage_caddebostan(proj)
+            # Mevcut kayıtları al
+            existing_records = proj.garage_caddebostan_ids
+
+            # Yeni değerleri hesapla
+            new_commands = helper.commands_garage_caddebostan(proj)
+
+            if existing_records and new_commands:
+                # Mevcut kaydı güncelle
+                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+                proj.garage_caddebostan_ids = [(1, existing_records[0].id, new_data)]
+            elif new_commands:
+                # Yeni kayıt oluştur
+                proj.garage_caddebostan_ids = new_commands
+            else:
+                # Kayıt yok, temizle
+                proj.garage_caddebostan_ids = [(5,)]
 
     # ---- Partner Vedans ----
     @api.depends(
@@ -235,7 +296,22 @@ class ProjectProject(models.Model):
     def _compute_partner_vedans_ids(self):
         helper = self.env['demo.project.shared.compute']
         for proj in self:
-            proj.vedan_ids = helper.commands_partner_vedans(proj)
+            # Mevcut kayıtları al
+            existing_records = proj.vedan_ids
+
+            # Yeni değerleri hesapla
+            new_commands = helper.commands_partner_vedans(proj)
+
+            if existing_records and new_commands:
+                # Mevcut kaydı güncelle
+                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+                proj.vedan_ids = [(1, existing_records[0].id, new_data)]
+            elif new_commands:
+                # Yeni kayıt oluştur
+                proj.vedan_ids = new_commands
+            else:
+                # Kayıt yok, temizle
+                proj.vedan_ids = [(5,)]
 
     # ---- Live Music ----
     @api.depends(
@@ -247,9 +323,23 @@ class ProjectProject(models.Model):
     def _compute_live_music_ids(self):
         helper = self.env['demo.project.shared.compute']
         for proj in self:
-            proj.live_music_ids = helper.commands_live_music(proj)
+            # Mevcut kayıtları al
+            existing_records = proj.live_music_ids
 
-    # ---- Backlight ----
+            # Yeni değerleri hesapla
+            new_commands = helper.commands_live_music(proj)
+
+            if existing_records and new_commands:
+                # Mevcut kaydı güncelle
+                new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+                proj.live_music_ids = [(1, existing_records[0].id, new_data)]
+            elif new_commands:
+                # Yeni kayıt oluştur
+                proj.live_music_ids = new_commands
+            else:
+                # Kayıt yok, temizle
+                proj.live_music_ids = [(5,)]
+
     @api.depends(
         'reinvoiced_sale_order_id.order_line.product_id',
         'event_date',
@@ -268,7 +358,17 @@ class ProjectProject(models.Model):
     def _compute_backlight_ids(self):
         helper = self.env['demo.project.shared.compute']
         for proj in self:
-            proj.backlight_ids = helper.commands_backlight(proj)
+            # Mevcut kayıtları al
+            existing_backlights = proj.backlight_ids
+
+            # Yeni değerleri hesapla
+            new_commands = helper.commands_backlight(proj)
+
+            if existing_backlights and new_commands:
+                new_data = new_commands[0][2]
+                proj.backlight_ids = [(1, existing_backlights[0].id, new_data)]
+            else:
+                proj.backlight_ids = new_commands
 
     @api.onchange('user_id')
     def _onchange_project_manager(self):
