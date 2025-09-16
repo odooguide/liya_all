@@ -1534,22 +1534,37 @@ class ProjectDemoForm(models.Model):
 
     def _collect_packages(self):
         """
-        Paketleri DEMO (öncelik) + SATIŞ (ekle) şeklinde birleştirir.
-        Demo’da olanlar mutlaka görünür; satışta olup demoda olmayanlar sonradan eklenir.
-        Kahvaltı satışta adetliyse (xN) ile yükseltilir.
+        SADECE satışlardan satın alınmış opsiyonları listeler.
+        Demo formundaki alanlara bakmaz.
+        - İlgili (sale/done) siparişlerin satırlarını toplar
+        - Eşanlamlı ürün adlarını tek etikete indirger
+        - Gerekli olanlarda adet (xN) gösterir
         """
-        demo_labels = list(dict.fromkeys(self._collect_demo_flag_packages()))
 
-        purchased = self._get_purchased_products_counter()
+        # --- yardımcılar ---
+        def norm(s):
+            return " ".join((s or "").split()).strip().casefold()
 
-        # Satış ürün adlarını etiketlere map’liyoruz
+        # Satın alınanların normalize edilmiş sayaçları
+        raw = self._get_purchased_products_counter()  # {"Drone Kamera": 1, ...}
+        purchased = {}
+        for name, qty in (raw or {}).items():
+            if not name:
+                continue
+            purchased[norm(name)] = purchased.get(norm(name), 0) + int(qty or 0)
+
+        def total(names):
+            """eşanlamlı listesi için toplam adet"""
+            return sum(purchased.get(norm(n), 0) for n in names)
+
+        # --- eşleştirme tablosu (satış isimleri -> tek etiket) ---
         MAPPING = [
             # After Party ailesi
             (['After Party Ultra'], 'After Party Ultra', False),
             (['After Party'], 'After Party', False),
             (['After Party Shot Servisi'], 'Shot Servisi (After Party)', False),
+            (['Fog + Laser Show', 'Sis & Lazer'], 'Sis & Lazer', False),
             (['Sushi Bar'], 'Sushi Bar', False),
-            (['Fog + Laser Show'], 'Sis & Lazer', False),
             (['Street Food Atıştırmalık'], 'Street Food Atıştırmalık', False),
             (['BBQ Dürümler', 'BBQ Wraps'], 'BBQ Dürümler', False),
             (['Daha Fazla Çeşit İçki (After party zamanı)'], 'Daha Fazla Çeşit İçki (After party zamanı)', False),
@@ -1566,11 +1581,12 @@ class ProjectDemoForm(models.Model):
             # Pre-hosting
             (['BARNEY', 'Barney'], 'Barney', False),
             (['FRED', 'Fred'], 'Fred', False),
-            (['Breakfast Service', 'Kahvaltı'], 'Kahvaltı', True),  # adetli
+            (['Breakfast Service', 'Kahvaltı'], 'Kahvaltı', True),  # adetli göster
 
             # Diğer hizmetler
             (['Konaklama'], 'Konaklama', False),
             (['Dans Dersi'], 'Dans Dersi', False),
+            (['Saç & Makyaj', 'Saç & Makyaj Hizmeti'], 'Saç & Makyaj', False),
 
             # Müzik
             (['Canlı Müzik'], 'Canlı Müzik', False),
@@ -1581,42 +1597,25 @@ class ProjectDemoForm(models.Model):
             (["Pasta Show'da Gerçek Pasta"], "Pasta Show'da Gerçek Pasta", False),
             (["Pasta Show'da Şampanya Kulesi"], "Pasta Show'da Şampanya Kulesi", False),
 
-            # Ek örnekler (satışta kullanıyorsan)
+            # Opsiyonel ilaveler (kullanıyorsan)
             (['Eğlence Uzatma(1 Saat)'], 'Eğlence Uzatma(1 Saat)', False),
             (['Canlı Müzik + Perküsyon'], 'Canlı Müzik + Perküsyon', False),
             (['Canlı Müzik Özel'], 'Canlı Müzik Özel', False),
             (['Canlı Müzik + Perküsyon + TRIO'], 'Canlı Müzik + Perküsyon + TRIO', False),
         ]
 
-        merged, seen = list(demo_labels), set(demo_labels)
-
+        out = []
+        seen = set()
         for names, label, show_qty in MAPPING:
-            total = sum(purchased.get(n, 0) for n in names)
-            if not total:
+            qty = total(names)
+            if qty <= 0:
                 continue
-
-            # Demo’da zaten varsa ve adet gerekmiyorsa tekrar eklemeyelim
-            if label in seen and not show_qty:
-                continue
-
-            text = f"{label} (x{int(total)})" if show_qty else label
-
-            # Kahvaltı gibi adetli etikette demoda adetsiz varsa → yükselt
-            if show_qty and label in seen:
-                try:
-                    idx = merged.index(label)  # demoda "Kahvaltı" var (adetsiz)
-                    merged[idx] = text  # satış adediyle güncelle
-                except ValueError:
-                    if text not in seen:
-                        merged.append(text)
-                        seen.add(text)
-                continue
-
+            text = f"{label} (x{int(qty)})" if show_qty else label
             if text not in seen:
-                merged.append(text)
+                out.append(text)
                 seen.add(text)
 
-        return merged
+        return out
 
     def _collect_program(self):
         """Program akışı başlığı ve satırları (schedule_line_ids) + satır notları (HAM HTML)."""
