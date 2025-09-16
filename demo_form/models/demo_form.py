@@ -873,7 +873,7 @@ class ProjectDemoForm(models.Model):
             else:
                 photo_service = ''
 
-            sale_template_name = rec.sale_template_id.name or ''
+            sale_template_name = rec.sudo().sale_template_id.name or ''
 
             yacht_shoot = 'VAR' if rec.photo_yacht_shoot else 'YOK'
             photo_print_service = 'VAR' if rec.photo_print_service else 'YOK'
@@ -1189,6 +1189,7 @@ class ProjectDemoForm(models.Model):
         else:
             self.afterparty_fog_laser = False
             self.afterparty_bbq_wraps = False
+            self.afterparty_street_food = False
             self.afterparty_shot_service = False
 
     @api.onchange('afterparty_service')
