@@ -441,10 +441,10 @@ class ProjectDemoForm(models.Model):
     lang=fields.Selection([('tr_TR','Türkçe'),('en_US','English')],default='tr_TR')
     wedding_trio_ids = fields.One2many(
         'wedding.trio', 'project_id', string='Wedding Trios',
-        compute='_compute_wedding_trio', store=False, readonly=True)
+        compute='_compute_wedding_trio_ids', store=False, readonly=True)
     blue_marmara_ids = fields.One2many(
         'blue.marmara', 'project_id', string='Blue Marmara',
-        compute='_compute_blue_marmara', store=False, readonly=True)
+        compute='_compute_blue_marmara_ids', store=False, readonly=True)
     studio_345 = fields.One2many(
         'studio.345', 'project_id', string='Studio 3435',
         compute='_compute_studio_345', store=False, readonly=True)
