@@ -441,25 +441,25 @@ class ProjectDemoForm(models.Model):
     lang=fields.Selection([('tr_TR','Türkçe'),('en_US','English')],default='tr_TR')
     wedding_trio_ids = fields.One2many(
         'wedding.trio', 'project_id', string='Wedding Trios',
-        compute='_mirror_wedding_trio', store=False, readonly=True)
+        compute='_compute_wedding_trio', store=False, readonly=True)
     blue_marmara_ids = fields.One2many(
         'blue.marmara', 'project_id', string='Blue Marmara',
-        compute='_mirror_blue_marmara', store=False, readonly=True)
+        compute='_compute_blue_marmara', store=False, readonly=True)
     studio_345 = fields.One2many(
         'studio.345', 'project_id', string='Studio 3435',
-        compute='_mirror_studio_345', store=False, readonly=True)
+        compute='_compute_studio_345', store=False, readonly=True)
     garage_caddebostan = fields.One2many(
         'garage.caddebostan', 'project_id', string='Garage Caddebostan',
-        compute='_mirror_garage_caddebostan', store=False, readonly=True)
+        compute='_compute_garage_caddebostan', store=False, readonly=True)
     vedan_ids = fields.One2many(
         'partner.vedans', 'project_id', string='Partner Vedans',
-        compute='_mirror_partner_vedans', store=False, readonly=True)
+        compute='_compute_partner_vedan', store=False, readonly=True)
     live_music_ids = fields.One2many(
         'live.music', 'project_id', string='Live Music',
-        compute='_mirror_live_music', store=False, readonly=True)
+        compute='_compute_live_music', store=False, readonly=True)
     backlight_ids = fields.One2many(
         'backlight', 'project_id', string='Backlight',
-        compute='_mirror_backlight', store=False, readonly=True)
+        compute='_compute_backlight_ids', store=False, readonly=True)
     confirmed_demo_ids = fields.One2many(
         comodel_name='confirmed.form',
         inverse_name='project_id',
