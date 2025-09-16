@@ -1587,6 +1587,7 @@ class ProjectDemoForm(models.Model):
             (['Konaklama'], 'Konaklama', False),
             (['Dans Dersi'], 'Dans Dersi', False),
             (['Saç & Makyaj', 'Saç & Makyaj Hizmeti'], 'Saç & Makyaj', False),
+            (['Ev Çıkış Fotoğraf Çekimi	', 'Ev Çıkış Fotoğraf Çekimi	'], 'Ev Çıkış Fotoğraf Çekimi', False),
 
             # Müzik
             (['Canlı Müzik'], 'Canlı Müzik', False),
