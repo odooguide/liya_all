@@ -504,7 +504,21 @@ class ProjectProject(models.Model):
         if 'discount' in name or 'indirim' in name:
             return True
         return False
-
+    
+    def get_related_sale_orders(self):
+        self.ensure_one()
+        so = self.sudo().reinvoiced_sale_order_id
+        if not so:
+            return self.env['sale.order']
+        
+        domain = [('state', 'in', ['done', 'sale'])]
+        if so.opportunity_id:
+            domain.append(('opportunity_id', '=', so.opportunity_id.id))
+        else:
+            domain.append(('id', '=', so.id))
+        
+        return self.env['sale.order'].sudo().search(domain)
+    
     @api.depends('reinvoiced_sale_order_id','related_sale_order_ids')  # sadece header bazı alanlar için gerekli
     def _compute_sale_order_summary(self):
         for rec in self:
@@ -569,7 +583,7 @@ class ProjectProject(models.Model):
             <hr style="margin:10px 0;"/>
             """
 
-            orders = rec.related_sale_order_ids.sudo().exists()
+            orders = rec.get_related_sale_orders()
 
             # Ek Protokol ve normal siparişleri ayır
             ek_protokol_orders = orders.filtered(
