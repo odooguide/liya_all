@@ -149,6 +149,237 @@ class ProjectProject(models.Model):
     is_confirmed_demo_form=fields.Boolean(string='Is There Confirmed Demo Form', compute='_compute_confirmed_form',
                                           compute_sudo=True,store=True)
 
+    wedding_trio_ids = fields.One2many(
+        'wedding.trio', 'project_id', string='Wedding Trios',
+        store=True)
+    blue_marmara_ids = fields.One2many(
+        'blue.marmara', 'project_id', string='Blue Marmara',
+         store=True)
+    studio_345_ids = fields.One2many(
+        'studio.345', 'project_id', string='Studio 3435',
+         store=True)
+    garage_caddebostan_ids = fields.One2many(
+        'garage.caddebostan', 'project_id', string='Garage Caddebostan',
+        store=True)
+    vedan_ids = fields.One2many(
+        'partner.vedans', 'project_id', string='Partner Vedans',
+         store=True)
+    live_music_ids = fields.One2many(
+        'live.music', 'project_id', string='Live Music',
+        store=True)
+    backlight_ids = fields.One2many(
+        'backlight', 'project_id', string='Backlight',
+         store=True)
+
+    # # ---- Wedding Trio ----
+    # # ---- Wedding Trio ----
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'demo_form_ids',
+    #     'demo_form_ids.transport_line_ids',
+    #     'demo_form_ids.transport_line_ids.label',
+    #     'demo_form_ids.transport_line_ids.time',
+    #     'demo_form_ids.transport_line_ids.port_ids',
+    #     'demo_form_ids.music_trio',
+    # )
+    # def _compute_wedding_trio_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.wedding_trio_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_wedding_trio(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.wedding_trio_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.wedding_trio_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.wedding_trio_ids = [(5,)]
+    #
+    # # ---- Blue Marmara ----
+    # @api.depends(
+    #     'so_people_count', 'event_date',
+    #     'demo_form_ids', 'demo_form_ids.invitation_owner', 'demo_form_ids.guest_count'
+    # )
+    # def _compute_blue_marmara_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.blue_marmara_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_blue_marmara(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.blue_marmara_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.blue_marmara_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.blue_marmara_ids = [(5,)]
+    #
+    # # ---- Studio 3435 ----
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'demo_form_ids',
+    #     'demo_form_ids.hair_studio_3435',
+    #     'demo_form_ids.invitation_owner',
+    #     'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    # )
+    # def _compute_studio_3435_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.studio_345_ids  # Typo'yu koruduk (345 vs 3435)
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_studio_3435(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.studio_345_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.studio_345_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.studio_345_ids = [(5,)]
+    #
+    # # ---- Garage Caddebostan ----
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'demo_form_ids',
+    #     'demo_form_ids.hair_garage_caddebostan',
+    #     'demo_form_ids.invitation_owner',
+    #     'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    # )
+    # def _compute_garage_caddebostan_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.garage_caddebostan_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_garage_caddebostan(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.garage_caddebostan_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.garage_caddebostan_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.garage_caddebostan_ids = [(5,)]
+    #
+    # # ---- Partner Vedans ----
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'demo_form_ids', 'demo_form_ids.afterparty_dance_show',
+    #     'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    # )
+    # def _compute_partner_vedans_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.vedan_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_partner_vedans(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.vedan_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.vedan_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.vedan_ids = [(5,)]
+    #
+    # # ---- Live Music ----
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'demo_form_ids', 'demo_form_ids.music_live',
+    #     'so_sale_template_id',
+    # )
+    # def _compute_live_music_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_records = proj.live_music_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_live_music(proj)
+    #
+    #         if existing_records and new_commands:
+    #             # Mevcut kaydı güncelle
+    #             new_data = new_commands[0][2]  # (0, 0, {...}) formatından data kısmını al
+    #             proj.live_music_ids = [(1, existing_records[0].id, new_data)]
+    #         elif new_commands:
+    #             # Yeni kayıt oluştur
+    #             proj.live_music_ids = new_commands
+    #         else:
+    #             # Kayıt yok, temizle
+    #             proj.live_music_ids = [(5,)]
+    #
+    # @api.depends(
+    #     'reinvoiced_sale_order_id.order_line.product_id',
+    #     'event_date',
+    #     'so_opportunity_id.name', 'so_opportunity_id.phone', 'so_opportunity_id.second_phone',
+    #     'email_from', 'so_opportunity_id.second_mail',
+    #     'demo_form_ids',
+    #     'demo_form_ids.photo_drone',
+    #     'demo_form_ids.home_exit',
+    #     'demo_form_ids.photo_standard',
+    #     'demo_form_ids.photo_video_plus',
+    #     'demo_form_ids.photo_yacht_shoot',
+    #     'demo_form_ids.photo_print_service',
+    #     'demo_form_ids.invitation_owner',
+    #     'so_sale_template_id',
+    # )
+    # def _compute_backlight_ids(self):
+    #     helper = self.env['demo.project.shared.compute']
+    #     for proj in self:
+    #         # Mevcut kayıtları al
+    #         existing_backlights = proj.backlight_ids
+    #
+    #         # Yeni değerleri hesapla
+    #         new_commands = helper.commands_backlight(proj)
+    #
+    #         if existing_backlights and new_commands:
+    #             new_data = new_commands[0][2]
+    #             proj.backlight_ids = [(1, existing_backlights[0].id, new_data)]
+    #         else:
+    #             proj.backlight_ids = new_commands
+
+    @api.onchange('user_id')
+    def _onchange_project_manager(self):
+        self.ensure_one()
+        user = self.env.user
+        is_org_manager = user.has_group('__export__.res_groups_102_8eb2392b')
+        is_admin = user.has_group('base.group_system')
+
+        if not is_admin or not is_org_manager:
+            raise UserError(_('Koordinatörü sadece Metin Can Çil değiştirebilir. Lütfen onunla iletişime geçiniz.'))
+
     @api.depends('demo_form_ids.confirmed_demo_form_plan')
     def _compute_confirmed_form(self):
         for rec in self:
@@ -273,8 +504,22 @@ class ProjectProject(models.Model):
         if 'discount' in name or 'indirim' in name:
             return True
         return False
-
-    @api.depends('reinvoiced_sale_order_id')  # sadece header bazı alanlar için gerekli
+    
+    def get_related_sale_orders(self):
+        self.ensure_one()
+        so = self.sudo().reinvoiced_sale_order_id
+        if not so:
+            return self.env['sale.order']
+        
+        domain = [('state', 'in', ['done', 'sale'])]
+        if so.opportunity_id:
+            domain.append(('opportunity_id', '=', so.opportunity_id.id))
+        else:
+            domain.append(('id', '=', so.id))
+        
+        return self.env['sale.order'].sudo().search(domain)
+    
+    @api.depends('reinvoiced_sale_order_id','related_sale_order_ids')  # sadece header bazı alanlar için gerekli
     def _compute_sale_order_summary(self):
         for rec in self:
             so = rec.reinvoiced_sale_order_id
@@ -338,11 +583,24 @@ class ProjectProject(models.Model):
             <hr style="margin:10px 0;"/>
             """
 
-            orders = rec.related_sale_order_ids.exists()
-            lines = orders.mapped('order_line').exists()
-            lines = lines.filtered(lambda l: not rec._is_discount_line(l))
-            lines = lines.sorted(key=lambda l: (l.order_id.id, l.sequence or 0))
+            orders = rec.get_related_sale_orders()
 
+            # Ek Protokol ve normal siparişleri ayır
+            ek_protokol_orders = orders.filtered(
+                lambda o: o.sale_order_template_id and o.sale_order_template_id.name == "Ek Protokol")
+            normal_orders = orders - ek_protokol_orders
+
+            # Normal sipariş satırları
+            normal_lines = normal_orders.mapped('order_line').sudo().exists()
+            normal_lines = normal_lines.filtered(lambda l: not rec._is_discount_line(l))
+            normal_lines = normal_lines.sorted(key=lambda l: (l.order_id.id, l.sequence or 0))
+
+            # Ek Protokol satırları
+            ek_lines = ek_protokol_orders.mapped('order_line').sudo().exists()
+            ek_lines = ek_lines.filtered(lambda l: not rec._is_discount_line(l))
+            ek_lines = ek_lines.sorted(key=lambda l: (l.order_id.id, l.sequence or 0))
+
+            # Etkinlik İçeriği tablosu
             html += """
             <span> Etkinlik İçeriği </span>
             <table style="width:100%; border-collapse:collapse;">
@@ -355,7 +613,7 @@ class ProjectProject(models.Model):
               </thead>
               <tbody>
             """
-            for l in lines:
+            for l in normal_lines:
                 prod = l.product_id.display_name or ''
                 qty = l.product_uom_qty or 0
                 uom = l.product_uom.display_name or ''
@@ -367,6 +625,33 @@ class ProjectProject(models.Model):
                 </tr>
                 """
             html += "</tbody></table>"
+
+            if ek_lines:
+                html += """
+                <br/>
+                <span><strong>Ek Protokol</strong></span>
+                <table style="width:100%; border-collapse:collapse; margin-top:5px;">
+                  <thead>
+                    <tr>
+                      <th style="border:1px solid #ccc;padding:4px;">Ürün</th>
+                      <th style="border:1px solid #ccc;padding:4px;">Adet</th>
+                      <th style="border:1px solid #ccc;padding:4px;">Birim</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                """
+                for l in ek_lines:
+                    prod = l.product_id.display_name or ''
+                    qty = l.product_uom_qty or 0
+                    uom = l.product_uom.display_name or ''
+                    html += f"""
+                    <tr>
+                      <td style="border:1px solid #ccc;padding:4px;">{prod}</td>
+                      <td style="border:1px solid #ccc;padding:4px;text-align:center;">{qty}</td>
+                      <td style="border:1px solid #ccc;padding:4px;">{uom}</td>
+                    </tr>
+                    """
+                html += "</tbody></table>"
 
             rec.sale_order_summary = html
             rec.som = html
@@ -392,10 +677,11 @@ class ProjectProject(models.Model):
             self.env.context,
             default_res_model=self._name,
             default_res_id=self.id,
-            default_name=_('%s - Demo Toplantısı') % self.so_opportunity_id.name,
+            default_name=_('%s - Demo Toplantısı') % self.sudo().so_opportunity_id.name,
             default_start=fields.Datetime.now(),
             default_categ_ids=[(6, 0, demo_cat.ids)] if demo_cat else False,
             search_default_mymeetings=1,
+            skip_demo_meeting_activity=True,
         )
 
         cal_view = self.env.ref('calendar.view_calendar_event_calendar', raise_if_not_found=False)
@@ -404,7 +690,7 @@ class ProjectProject(models.Model):
 
         return {
             'type': 'ir.actions.act_window',
-            'name': _('%s - Demo Toplantısı') % self.so_opportunity_id.name  ,
+            'name': _('%s - Demo Toplantısı') % self.sudo().so_opportunity_id.name  ,
             'res_model': 'calendar.event',
             'view_mode': 'calendar,list,form',
             'views': views,
@@ -532,13 +818,16 @@ class ProjectProject(models.Model):
                     _vals['hair_studio_3435'] = True
                 else:
                     _vals['hair_garage_caddebostan'] = True
+            tmpl = (order.sale_order_template_id.name or '').strip().lower()
 
             for sol in order.order_line:
                 pname = (sol.product_id.name or '').strip()
                 up = pname.upper()
+                vals['photo_standard'] = (tmpl == 'elite')
 
                 if pname == "Photo & Video Plus":
                     vals['photo_video_plus'] = True
+                    vals['photo_standard'] = False
                 if pname == "Drone Kamera":
                     vals['photo_drone'] = True
 
@@ -604,7 +893,6 @@ class ProjectProject(models.Model):
                     vals['prehost_breakfast'] = True
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty or 0)
 
-            tmpl = (order.sale_order_template_id.name or '').strip().lower()
             elite_fields = [
                 'photo_video_plus',
                 'afterparty_service', 'afterparty_shot_service',
@@ -613,11 +901,11 @@ class ProjectProject(models.Model):
             ultra_extra = [
                 'music_live', 'music_percussion', 'music_trio',
                 'photo_yacht_shoot', 'bar_alcohol_service',
-                'photo_drone', 'afterparty_fog_laser', 'prehost_barney','afterparty_bbq_wraps'
+                'photo_drone', 'afterparty_fog_laser', 'prehost_barney','afterparty_bbq_wraps','afterparty_ultra'
             ]
             ultra_fields = elite_fields + ultra_extra
 
-            vals['photo_standard'] = (tmpl == 'elite')
+
 
             if tmpl == 'plus':
                 _apply_hair_choice(vals)
@@ -633,7 +921,7 @@ class ProjectProject(models.Model):
                 vals['menu_meze_notes']=DEFAULT_MEZE_NOTE
                 for f in ultra_fields:
                     vals[f] = True
-                vals['afterparty_ultra'] = True
+                vals['afterparty_street_food'] = False
         if self.user_id == self.env.user:
             demo = self.env['project.demo.form'].sudo().create(vals)
         else:

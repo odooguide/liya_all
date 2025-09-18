@@ -150,12 +150,13 @@ class SaleOrder(models.Model):
     def action_confirm(self):
         res = super().action_confirm()
         for order in self:
-            if not order.coordinator_ids and order.team_id.wedding_team:
-                raise UserError(_("Koordinatör seçilmeden bu teklifi onaylayamazsınız. Lütfen koordinatör seçin."))
-            if not order.wedding_date:
-                raise UserError(_("Etkinlik tarihi seçilmeden satışı onaylayamazsınız."))
-            if not order.people_count > 0 and not order.sale_order_template_id.name == 'Ek Protokol':
-                raise UserError(_("Kişi sayısı girmeden satışı onaylayamazsınız."))
+            if not order.sale_order_template_id.name == 'Ek Protokol':
+                if not order.coordinator_ids and order.team_id.wedding_team:
+                    raise UserError(_("Koordinatör seçilmeden bu teklifi onaylayamazsınız. Lütfen koordinatör seçin."))
+                if not order.wedding_date:
+                    raise UserError(_("Etkinlik tarihi seçilmeden satışı onaylayamazsınız."))
+                if not order.people_count > 0:
+                    raise UserError(_("Kişi sayısı girmeden satışı onaylayamazsınız."))
         return res
 
     @api.model_create_multi

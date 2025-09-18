@@ -93,9 +93,8 @@ class SaleOrderProjectWizard(models.TransientModel):
                 })
             return st
 
-        cancel = _ensure_stage(project, 'Cancel', 0, fold=True)
-        todo = _ensure_stage(project, 'To Plan', 10, fold=False)
-        done = _ensure_stage(project, 'Done', 99, fold=True)
+        cancel = _ensure_stage(project, 'Cancel', 0, fold=False)
+        done = _ensure_stage(project, 'Done', 99, fold=False)
 
 
         order.project_id = project.id
@@ -159,10 +158,9 @@ class SaleOrderProjectWizard(models.TransientModel):
 
                     })
 
-        order.is_project_true = True
-        order.opportunity_id.project_id = project.id
-        order.opportunity_id.action_set_won()
-
+        order.sudo().is_project_true = True
+        order.opportunity_id.sudo().project_id = project.id
+        order.opportunity_id.sudo().action_set_won()
         return {'type': 'ir.actions.act_window_close'}
 
 

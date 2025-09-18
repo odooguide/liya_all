@@ -135,7 +135,6 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
 
-        res = super().action_confirm()
         for order in self:
             if order.sale_order_template_id.name.lower() in ['ek protokol', 'extra protocol']:
                 if not order.confirmed_contract:
@@ -148,7 +147,7 @@ class SaleOrder(models.Model):
                 if order.sale_order_template_id.name.lower()=='ek protokol':
                     return order._action_open_update_tasks_wizard_from_confirm()
 
-        return res
+        return super().action_confirm()
 
     @api.onchange('wedding_date')
     def _onchange_wedding_date(self):

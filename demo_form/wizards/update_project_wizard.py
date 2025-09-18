@@ -56,6 +56,9 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
         if not project:
             return {'type': 'ir.actions.act_window_close'}
         order.project_id=order.opportunity_id.project_id
+        project.sudo().write({
+            'related_sale_order_ids': [(4, order.id)],
+        })
 
         def _resolve_responsibles(tmpl_line):
             if tmpl_line.user_ids:
@@ -111,8 +114,8 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
                     })
 
         demo = self.env['project.demo.form'].search([('project_id', '=', project.id)], limit=1)
-        if demo:
-            vals = {}
+        vals = {}
+        if demo and not demo.confirmed_demo_form_plan:
             for sol in order.order_line:
                 pname = (sol.product_id.name or '').strip()
                 up = pname.upper()
@@ -171,10 +174,10 @@ class SaleOrderUpdateTasksWizard(models.TransientModel):
                     vals['prehost_breakfast'] = True
                     vals['prehost_breakfast_count'] = int(sol.product_uom_qty or 0)
 
-            if vals:
-                demo.sudo().write(vals)
-                order.state = 'sale'
+        if vals:
+            demo.sudo().write(vals)
 
+        order.with_context(skip_extra_protocol_on_confirm=True).action_confirm()
         return {'type': 'ir.actions.act_window_close'}
 
 

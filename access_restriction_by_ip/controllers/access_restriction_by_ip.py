@@ -1,24 +1,4 @@
 # -*- coding: utf-8 -*-
-################################################################################
-#
-#    Cybrosys Technologies Pvt. Ltd.
-#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
-#    Author: Bhagyadev KP (odoo@cybrosys.com)
-#
-#    This program is free software: you can modify
-#    it under the terms of the GNU Affero General Public License (AGPL) as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-################################################################################
 import odoo
 from odoo import http
 from odoo.addons.web.controllers import home
@@ -36,20 +16,9 @@ LOGIN_SUCCESSFUL_PARAMS = set()
 CREDENTIAL_PARAMS = ['login', 'password', 'type']
 
 class Home(home.Home):
-    """Custom Home class for handling web login and authentication.
-    Extends the base Home class.
-    Methods:
-        web_login(self, redirect=None, **kw): Handles web login and
-        authentication."""
 
     @route('/web/login', type='http', auth="none", readonly=False)
     def web_login(self, redirect=None, **kw):
-        """Handle web login and authentication.
-        Args:
-            redirect (str): URL to redirect after successful login.
-            **kw: Additional keyword arguments.
-        Returns:
-            http.Response: The HTTP response."""
         ensure_db()
         request.params['login_success'] = False
         if request.httprequest.method == 'GET' and redirect and request.session.uid:

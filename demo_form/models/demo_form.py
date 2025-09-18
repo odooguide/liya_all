@@ -7,6 +7,7 @@ import re
 import json
 from markupsafe import escape as E, Markup
 import logging
+from babel.dates import format_date
 _logger = logging.getLogger(__name__)
 
 TIME_PATTERN = re.compile(r'(\d{1,2}):([0-5]\d)')
@@ -439,62 +440,26 @@ class ProjectDemoForm(models.Model):
     home_exit=fields.Boolean(string='Ev Çıkış Fotoğraf Çekimi')
     lang=fields.Selection([('tr_TR','Türkçe'),('en_US','English')],default='tr_TR')
     wedding_trio_ids = fields.One2many(
-        comodel_name='wedding.trio',
-        inverse_name='project_id',
-        string='Wedding Trios',
-        compute='_compute_wedding_trio_ids',
-        readonly=True,
-        store=True,
-    )
+        'wedding.trio', 'project_id', string='Wedding Trios',
+        compute='_compute_wedding_trio_ids', store=False, readonly=True)
     blue_marmara_ids = fields.One2many(
-        comodel_name='blue.marmara',
-        inverse_name='project_id',
-        string='Blue Marmara',
-        compute='_compute_blue_marmara_ids',
-        readonly=True,
-        store=True,
-    )
+        'blue.marmara', 'project_id', string='Blue Marmara',
+        compute='_compute_blue_marmara_ids', store=False, readonly=True)
     studio_345 = fields.One2many(
-        comodel_name='studio.345',
-        inverse_name='project_id',
-        string='Studio 3435',
-        compute='_compute_studio_345',
-        readonly=True,
-        store=True,
-    )
-    vedan_ids = fields.One2many(
-        comodel_name='partner.vedans',
-        inverse_name='project_id',
-        string='Partner vedans',
-        compute='_compute_partner_vedan',
-        readonly=True,
-        store=True,
-    )
-
+        'studio.345', 'project_id', string='Studio 3435',
+        compute='_compute_studio_345', store=False, readonly=True)
     garage_caddebostan = fields.One2many(
-        comodel_name='garage.caddebostan',
-        inverse_name='project_id',
-        string='Garage Caddebostan',
-        compute='_compute_garage_caddebostan',
-        readonly=True,
-        store=True,
-    )
+        'garage.caddebostan', 'project_id', string='Garage Caddebostan',
+        compute='_compute_garage_caddebostan', store=False, readonly=True)
+    vedan_ids = fields.One2many(
+        'partner.vedans', 'project_id', string='Partner Vedans',
+        compute='_compute_partner_vedan', store=False, readonly=True)
     live_music_ids = fields.One2many(
-        comodel_name='live.music',
-        inverse_name='project_id',
-        string='Live Music',
-        compute='_compute_live_music',
-        readonly=True,
-        store=True,
-    )
+        'live.music', 'project_id', string='Live Music',
+        compute='_compute_live_music', store=False, readonly=True)
     backlight_ids = fields.One2many(
-        comodel_name='backlight',
-        inverse_name='project_id',
-        string='Backlight',
-        compute='_compute_backlight_ids',
-        readonly=True,
-        store=True,
-    )
+        'backlight', 'project_id', string='Backlight',
+        compute='_compute_backlight_ids', store=False, readonly=True)
     confirmed_demo_ids = fields.One2many(
         comodel_name='confirmed.form',
         inverse_name='project_id',
@@ -550,7 +515,7 @@ class ProjectDemoForm(models.Model):
         for rec in self:
             commands = [(5, 0, 0)]
             if not rec.music_trio:
-                rec.wedding_trio_ids=commands
+                rec.wedding_trio_ids = commands
                 continue
             event_date = (
                 getattr(rec.project_id, 'event_date', False)
@@ -562,27 +527,27 @@ class ProjectDemoForm(models.Model):
             for line in gg_lines:
                 commands.append((
                     0, 0, {
-                        'name': line.label or 'Genel Geliş',
-                        'time': line.time,
-                        'date': event_date,
-                        'port_ids': [(6, 0, line.port_ids.ids)],
-                    }
+                    'name': line.label or 'Genel Geliş',
+                    'time': line.time,
+                    'date': event_date,
+                    'port_ids': [(6, 0, line.port_ids.ids)],
+                }
                 ))
             rec.wedding_trio_ids = commands
 
     @api.depends(
         'invitation_owner',
-        'guest_count',                 # related alan olsa da ekledik
+        'guest_count',  # related alan olsa da ekledik
         'project_id',
         'project_id.so_people_count',  # güvence için kaynağı da dinliyoruz
-        'project_id.event_date',       # etkinlik tarihi alanın buysa
+        'project_id.event_date',  # etkinlik tarihi alanın buysa
     )
     def _compute_blue_marmara_ids(self):
         for rec in self:
             event_date = (
-                getattr(rec.project_id, 'event_date', False)
-                or getattr(rec.project_id, 'date_start', False)
-                or getattr(rec.project_id, 'date', False)
+                    getattr(rec.project_id, 'event_date', False)
+                    or getattr(rec.project_id, 'date_start', False)
+                    or getattr(rec.project_id, 'date', False)
             )
             if event_date:
                 event_date = fields.Date.to_date(event_date)
@@ -639,12 +604,12 @@ class ProjectDemoForm(models.Model):
 
             couple = (opp.name or '').strip() if opp else ''
             # 1. telefon: partner.mobile > partner.phone > opp.mobile > opp.phone
-            first_name=''
-            second_name=''
+            first_name = ''
+            second_name = ''
             first_phone = ''
             if partner:
                 first_phone = (partner.mobile or partner.phone or '') or ''
-                first_name=partner.name or ''
+                first_name = partner.name or ''
             if not first_phone and opp:
                 first_phone = (getattr(opp, 'mobile', '') or getattr(opp, 'phone', '') or '')
 
@@ -656,7 +621,7 @@ class ProjectDemoForm(models.Model):
                     if val:
                         second_phone = val
                         break
-                second_name=opp.second_contact
+                second_name = opp.second_contact
 
             # Satır adı: davet sahibi varsa onu, yoksa "Çift - Studio 3435"
             name_val = (rec.invitation_owner or '').strip()
@@ -671,8 +636,8 @@ class ProjectDemoForm(models.Model):
                 'name': name_val,
                 'date': event_date,
                 'opportunity_name': couple,
-                'first_name':first_name,
-                'second_name':second_name,
+                'first_name': first_name,
+                'second_name': second_name,
                 'first_phone': first_phone,
                 'second_phone': second_phone,
                 'photo_studio': studio_name,
@@ -744,8 +709,8 @@ class ProjectDemoForm(models.Model):
                 'name': name_val,
                 'date': event_date,
                 'opportunity_name': couple,
-                'first_name':first_name,
-                'second_name':second_name,
+                'first_name': first_name,
+                'second_name': second_name,
                 'first_phone': first_phone,
                 'second_phone': second_phone,
                 'photo_studio': studio_name,
@@ -806,14 +771,15 @@ class ProjectDemoForm(models.Model):
                 'name': name_val,
                 'date': event_date,
                 'opportunity_name': couple,
-                'first_name':first_name,
-                'second_name':second_name,
+                'first_name': first_name,
+                'second_name': second_name,
                 'first_phone': first_phone,
                 'second_phone': second_phone,
                 'project_id': rec.id,
             }))
 
             rec.vedan_ids = cmds
+
     @api.depends(
         'demo_date',
         'sale_template_id'
@@ -822,7 +788,7 @@ class ProjectDemoForm(models.Model):
         for rec in self:
             cmds = [(5, 0, 0)]
             if not rec.music_live:
-                rec.live_music_ids=cmds
+                rec.live_music_ids = cmds
                 continue
             event_date = rec.invitation_date or rec.demo_date
             if not event_date and rec.project_id:
@@ -834,7 +800,7 @@ class ProjectDemoForm(models.Model):
             if event_date:
                 event_date = fields.Date.to_date(event_date)
 
-            tmpl_name=self.sudo().sale_template_id.name or ''
+            tmpl_name = self.sudo().sale_template_id.name or ''
 
             cmds.append((0, 0, {
                 'name': tmpl_name,
@@ -901,23 +867,23 @@ class ProjectDemoForm(models.Model):
                 name_val = " - ".join(bits) or "Backlight"
 
             if rec.photo_standard:
-                photo_service='Standart Fotoğraf Servisi'
+                photo_service = 'Standart Fotoğraf Servisi'
             elif rec.photo_video_plus:
-                photo_service='Photo & Video Plus'
+                photo_service = 'Photo & Video Plus'
             else:
-                photo_service=''
+                photo_service = ''
 
-            sale_template_name=rec.sale_template_id.name or ''
+            sale_template_name = rec.sudo().sale_template_id.name or ''
 
-            yacht_shoot='VAR' if rec.photo_yacht_shoot else 'YOK'
-            photo_print_service='VAR' if rec.photo_print_service else 'YOK'
+            yacht_shoot = 'VAR' if rec.photo_yacht_shoot else 'YOK'
+            photo_print_service = 'VAR' if rec.photo_print_service else 'YOK'
 
             cmds.append((0, 0, {
                 'name': name_val,
                 'date': event_date,
                 'opportunity_name': couple_name,
-                'first_name':first_name,
-                'second_name':second_name,
+                'first_name': first_name,
+                'second_name': second_name,
                 'first_phone': first_phone,
                 'second_phone': second_phone,
                 'project_id': rec.id,
@@ -925,15 +891,13 @@ class ProjectDemoForm(models.Model):
                 'second_mail': second_mail,
                 'drone': drone_str,
                 'home_exit': home_exit_str,
-                'photo_service':photo_service,
-                'sale_template_name':sale_template_name,
-                'yacht_shoot':yacht_shoot,
-                'photo_print_service':photo_print_service,
+                'photo_service': photo_service,
+                'sale_template_name': sale_template_name,
+                'yacht_shoot': yacht_shoot,
+                'photo_print_service': photo_print_service,
             }))
 
             rec.backlight_ids = cmds
-
-   # >>> base64'e DOKUNMA <<<
 
     @api.depends(
         'project_id',
@@ -1131,16 +1095,12 @@ class ProjectDemoForm(models.Model):
         return labels
 
     def _get_related_confirmed_sale_orders(self):
-        """Bu projenin bağlı olduğu CRM fırsatındaki onaylı (sale/done) siparişler."""
+        """Bu projenin M2M 'Bağlı Satışlar'ındaki TÜM siparişler (durum süzmeden)."""
         self.ensure_one()
-        base_order = self.project_id and self.project_id.sudo().reinvoiced_sale_order_id
-        opp = base_order.sudo().opportunity_id if base_order else False
-        if not opp:
+        project = self.project_id
+        if not project:
             return self.env['sale.order']
-        return self.env['sale.order'].sudo().search([
-            ('opportunity_id', '=', opp.id),
-            ('state', 'in', ('sale', 'done')),
-        ])
+        return project.sudo().related_sale_order_ids
 
     def _required_labels_for_field(self, field_name):
         """Bir alan için beklenen ürün etiket(ler)i; seçim alanı için prospective_val kullanılabilir."""
@@ -1199,30 +1159,37 @@ class ProjectDemoForm(models.Model):
             rec.special_notes_preview = plaintext2html(preview)
             rec.special_notes_remaining = plaintext2html(remaining) if remaining else ''
 
-    @api.depends('invitation_date')
+    @api.depends('invitation_date', 'lang')
     def _compute_day(self):
-        turkish_days = [
-            'Pazartesi', 'Salı', 'Çarşamba',
-            'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'
-        ]
+        tr_days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar']
+        en_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
         for rec in self:
-            if rec.invitation_date:
-                dt = fields.Date.from_string(rec.invitation_date)
-                rec.duration_days = turkish_days[dt.weekday()]
-            else:
+            if not rec.invitation_date:
                 rec.duration_days = False
+                continue
+
+            dt = fields.Date.to_date(rec.invitation_date)
+
+            try:
+                locale = rec.lang or 'tr_TR'
+                rec.duration_days = format_date(dt, format='EEEE', locale=locale)
+            except Exception:
+                # Yedek: basit dizi eşlemesi
+                idx = dt.weekday()  # 0=Monday .. 6=Sunday
+                rec.duration_days = (tr_days if rec.lang == 'tr_TR' else en_days)[idx]
 
     @api.onchange('afterparty_ultra')
     def _onchange_afterparty_ultra_open(self):
         if self.afterparty_ultra:
             self.afterparty_fog_laser = True
-            self.afterparty_service = False
             self.afterparty_street_food = False
             self.afterparty_bbq_wraps = True
             self.afterparty_shot_service = True
         else:
             self.afterparty_fog_laser = False
             self.afterparty_bbq_wraps = False
+            self.afterparty_street_food = False
             self.afterparty_shot_service = False
 
     @api.onchange('afterparty_service')
@@ -1261,13 +1228,13 @@ class ProjectDemoForm(models.Model):
                 else:
                     line.time = f'22:30 - {party_end_str}'
 
-            for t in rec.transport_line_ids.filtered(lambda l: l.label in ['After Party Dönüş','After Parti Dönüş','After Parti Dönüşü']):
+            for t in rec.transport_line_ids.filtered(lambda l: l.label in ['After Party Dönüş','After Parti Dönüş','After Parti Dönüşü','After Party Return']):
                 if rec.afterparty_ultra or rec.afterparty_service:
                     t.time = end_str
                 else:
                     t.time = ''
 
-            for t in rec.transport_line_ids.filtered(lambda l: l.label == 'Çift Dönüş'):
+            for t in rec.transport_line_ids.filtered(lambda l: l.label in ['Çift Dönüş','Çift Dönüşü',"Couple's Return",'Guests Return']):
                 if rec.afterparty_ultra or rec.afterparty_service:
                     later_dt = base_end_dt + timedelta(minutes=15)
                     t.time = later_dt.strftime('%H:%M')
@@ -1473,9 +1440,9 @@ class ProjectDemoForm(models.Model):
             new_val = vals[f]
             old_val = getattr(self, f)
 
-            if not bool(new_val):  # OFF’a geçişte sorma
+            if not bool(new_val):
                 continue
-            if bool(old_val):  # zaten ON idiyse sorma
+            if bool(old_val):
                 continue
 
             labels = self._required_labels_for_field(f)
@@ -1492,10 +1459,8 @@ class ProjectDemoForm(models.Model):
         order = self.project_id.sudo().reinvoiced_sale_order_id if self.project_id else False
         if not order:
             return ""
-        # Farklı kurulumlar için sağlam toplama
         names = []
         try:
-            # Çoğu kurulumda department/role üstünden employee_ids.user_id olur
             emps = order.coordinator_ids.mapped('employee_ids')
             if emps:
                 names = [e.name for e in emps if e.name]
@@ -1505,46 +1470,152 @@ class ProjectDemoForm(models.Model):
             pass
         return "-".join(dict.fromkeys(names))  # uniq + sırayı koru
 
+    def _collect_demo_flag_packages(self):
+        """
+        Demo formundaki bayrak/seçimlerden paket etiketlerini üretir.
+        Artık Barney, Fred, Saç&Makyaj, Konaklama, Dans Dersi, Müzik vb. hepsi dahil.
+        """
+        flag_labels = [
+            # After Party ailesi
+            ('afterparty_service', 'After Party'),
+            ('afterparty_ultra', 'After Party Ultra'),
+            ('afterparty_shot_service', 'Shot Servisi (After Party)'),
+            ('afterparty_sushi', 'Sushi Bar'),
+            ('afterparty_street_food', 'Street Food Atıştırmalık'),
+            ('afterparty_fog_laser', 'Sis & Lazer'),
+            ('afterparty_bbq_wraps', 'BBQ Dürümler'),
+
+            # Foto/Video
+            ('photo_video_plus', 'Photo & Video Plus'),
+            ('photo_drone', 'Drone Kamera'),
+            ('photo_yacht_shoot', 'Yacht Photo Shoot'),
+
+            # Menü/Bar
+            ('menu_hot_appetizer_ultra', 'Roket Karides'),
+            ('bar_alcohol_service', 'Yabancı İçecek Servisi'),
+
+            # Pre-hosting
+            ('prehost_barney', 'Barney'),
+            ('prehost_fred', 'Fred'),
+
+            # Diğer hizmetler
+            ('accommodation_service', 'Konaklama'),
+            ('dance_lesson', 'Dans Dersi'),
+
+            # Müzik (paketlerde de görmek istiyoruz)
+            ('music_live', 'Canlı Müzik'),
+            ('music_percussion', 'Perküsyon'),
+            ('music_trio', 'TRIO'),
+
+            # Demo içi “daha fazla içki” seçeneği
+            ('afterparty_more_drinks', 'Daha Fazla Çeşit İçki (After party zamanı)'),
+        ]
+
+        out = []
+        for f, label in flag_labels:
+            if getattr(self, f):
+                out.append(label)
+
+        # Saç & Makyaj (hangi stüdyo olduğundan bağımsız)
+        if getattr(self, 'hair_studio_3435', False) or getattr(self, 'hair_garage_caddebostan', False):
+            out.append('Saç & Makyaj')
+
+        # Kahvaltı (adetli olabilir)
+        if getattr(self, 'prehost_breakfast', False):
+            cnt = int(getattr(self, 'prehost_breakfast_count', 0) or 0)
+            out.append("Kahvaltı" + (f" (x{cnt})" if cnt else ""))
+
+        # Pasta opsiyonları (demodan da görünmesini istiyoruz)
+        if getattr(self, 'cake_real', False):
+            out.append("Pasta Show'da Gerçek Pasta")
+        if getattr(self, 'cake_champagne_tower', False):
+            out.append("Pasta Show'da Şampanya Kulesi")
+
+        return list(dict.fromkeys(out))  # uniq + sırayı koru
+
     def _collect_packages(self):
         """
-        Sadece satışlardan satın alınmış opsiyonları listeler.
+        SADECE satışlardan satın alınmış opsiyonları listeler.
         Demo formundaki alanlara bakmaz.
+        - İlgili (sale/done) siparişlerin satırlarını toplar
+        - Eşanlamlı ürün adlarını tek etikete indirger
+        - Gerekli olanlarda adet (xN) gösterir
         """
-        purchased = self._get_purchased_products_counter()
 
+        # --- yardımcılar ---
+        def norm(s):
+            return " ".join((s or "").split()).strip().casefold()
+
+        # Satın alınanların normalize edilmiş sayaçları
+        raw = self._get_purchased_products_counter()  # {"Drone Kamera": 1, ...}
+        purchased = {}
+        for name, qty in (raw or {}).items():
+            if not name:
+                continue
+            purchased[norm(name)] = purchased.get(norm(name), 0) + int(qty or 0)
+
+        def total(names):
+            """eşanlamlı listesi için toplam adet"""
+            return sum(purchased.get(norm(n), 0) for n in names)
+
+        # --- eşleştirme tablosu (satış isimleri -> tek etiket) ---
         MAPPING = [
+            # After Party ailesi
             (['After Party Ultra'], 'After Party Ultra', False),
             (['After Party'], 'After Party', False),
             (['After Party Shot Servisi'], 'Shot Servisi (After Party)', False),
-            (['Fog + Laser Show'], 'Sis & Lazer', False),
+            (['Fog + Laser Show', 'Sis & Lazer'], 'Sis & Lazer', False),
             (['Sushi Bar'], 'Sushi Bar', False),
-            (['Yabancı İçki Servisi'], 'Yabancı İçki Servisi', False),
+            (['Street Food Atıştırmalık'], 'Street Food Atıştırmalık', False),
+            (['BBQ Dürümler', 'BBQ Wraps'], 'BBQ Dürümler', False),
+            (['Daha Fazla Çeşit İçki (After party zamanı)'], 'Daha Fazla Çeşit İçki (After party zamanı)', False),
+
+            # Foto/Video
             (['Photo & Video Plus'], 'Photo & Video Plus', False),
             (['Drone Kamera'], 'Drone Kamera', False),
             (['Yacht Photo Shoot', 'Yat Çekimi', 'Yat Fotoğraf Çekimi'], 'Yacht Photo Shoot', False),
-            (['Rocket Shrimp'], 'Roket Karides', False),
+
+            # Menü/Bar
+            (['Rocket Shrimp', 'Roket Karides'], 'Roket Karides', False),
+            (['Yabancı İçecek Servisi', 'Yabancı İçki Servisi'], 'Yabancı İçecek Servisi', False),
+
+            # Pre-hosting
+            (['BARNEY', 'Barney'], 'Barney', False),
+            (['FRED', 'Fred'], 'Fred', False),
+            (['Breakfast Service', 'Kahvaltı'], 'Kahvaltı', True),  # adetli göster
+
+            # Diğer hizmetler
+            (['Konaklama'], 'Konaklama', False),
+            (['Dans Dersi'], 'Dans Dersi', False),
+            (['Saç & Makyaj', 'Saç & Makyaj Hizmeti'], 'Saç & Makyaj', False),
+            (['Ev Çıkış Fotoğraf Çekimi	', 'Ev Çıkış Fotoğraf Çekimi	'], 'Ev Çıkış Fotoğraf Çekimi', False),
+
+            # Müzik
+            (['Canlı Müzik'], 'Canlı Müzik', False),
+            (['Perküsyon'], 'Perküsyon', False),
+            (['TRIO', 'Trio'], 'TRIO', False),
+
+            # Pasta opsiyonları
             (["Pasta Show'da Gerçek Pasta"], "Pasta Show'da Gerçek Pasta", False),
             (["Pasta Show'da Şampanya Kulesi"], "Pasta Show'da Şampanya Kulesi", False),
-            (["FRED"], "FRED", False),
-            (["BARNEY"], "BARNEY", False),
-            (["TRIO"], "TRIO", False),
-            (["Eğlence Uzatma(1 Saat)"], "Eğlence Uzatma(1 Saat)", False),
-            (["Canlı Müzik + Perküsyon"], "Canlı Müzik + Perküsyon", False),
-            (["Canlı Müzik Özel"], "Canlı Müzik Özel", False),
-            (["Canlı Müzik + Perküsyon + TRIO"], "Canlı Müzik + Perküsyon + TRIO", False),
-            (['Saç & Makyaj'], 'Saç & Makyaj', True),
-            (['Davetiye Baskı ve Zarflama'], 'Davetiye Baskı ve Zarflama', True),
-            (['Breakfast Service'], 'Kahvaltı', True),
+
+            # Opsiyonel ilaveler (kullanıyorsan)
+            (['Eğlence Uzatma(1 Saat)'], 'Eğlence Uzatma(1 Saat)', False),
+            (['Canlı Müzik + Perküsyon'], 'Canlı Müzik + Perküsyon', False),
+            (['Canlı Müzik Özel'], 'Canlı Müzik Özel', False),
+            (['Canlı Müzik + Perküsyon + TRIO'], 'Canlı Müzik + Perküsyon + TRIO', False),
         ]
 
-        out, seen = [], set()
+        out = []
+        seen = set()
         for names, label, show_qty in MAPPING:
-            total = sum(purchased.get(n, 0) for n in names)
-            if total:
-                text = f"{label} (x{int(total)})" if show_qty else label
-                if text not in seen:
-                    out.append(text)
-                    seen.add(text)
+            qty = total(names)
+            if qty <= 0:
+                continue
+            text = f"{label} (x{int(qty)})" if show_qty else label
+            if text not in seen:
+                out.append(text)
+                seen.add(text)
 
         return out
 
@@ -1578,22 +1649,17 @@ class ProjectDemoForm(models.Model):
         out = []
         i = 1
 
-        found_next_day = any(
-            'ertesi gün çift dönüşü' in (t.label or '').lower()
-            for t in self.transport_line_ids
-        )
-
         for t in self.transport_line_ids.sorted('sequence'):
             label = (t.label or '').strip()
             tm = (t.time or '').strip()
 
             ports = [p.name.strip() for p in t.port_ids] if t.port_ids else []
-            other_port = (t.other_port or '').strip()
-            if other_port:
-                extra = [p.strip() for p in re.split(r'[,\-/;–—·•]+', other_port) if p.strip()]
-                for p in extra:
-                    if p not in ports:
-                        ports.append(p)
+            # other_port = (t.other_port or '').strip()
+            # if other_port:
+            #     extra = [p.strip() for p in re.split(r'[,\-/;–—·•]+', other_port) if p.strip()]
+            #     for p in extra:
+            #         if p not in ports:
+            #             ports.append(p)
 
             # HAM HTML not
             is_return = 'dönüş' in label.lower() or 'dönüşü' in label.lower()
@@ -1609,8 +1675,8 @@ class ProjectDemoForm(models.Model):
                 out.append(line)
                 i += 1
 
-        if not found_next_day:
-            out.append(f"{i}/ Ertesi gün çift dönüşü: haber vereceğim.")
+
+        out.append(f"{i}/ Ertesi gün çift dönüşü: haber vereceğim.")
 
         return out
 
@@ -1623,7 +1689,7 @@ class ProjectDemoForm(models.Model):
         runner = names(self.table_runner_design_ids)
         colors = names(self.table_color_ids)
         charger = names(self.table_charger_ids)
-        tag = getattr(self.table_tag_ids, 'name', '') or ''  # Many2one
+        tag = getattr(self.table_tag_ids, 'name', '') or ''
 
         cake = names(self.cake_choice_ids)
         cake_bits = []
@@ -1652,9 +1718,12 @@ class ProjectDemoForm(models.Model):
     def _collect_music_notes(self):
         """Eğlence başlıkları."""
         bits = []
-        if self.music_live:        bits.append("Canlı müzik")
-        if self.music_percussion:  bits.append("Perküsyon")
-        if self.music_trio:        bits.append("Trio")
+        if self.music_live:        bits.append("Canlı müzik Var")
+        else:        bits.append("Canlı müzik Yok")
+        if self.music_percussion:  bits.append("Perküsyon Var")
+        else:  bits.append("Perküsyon Yok")
+        if self.music_trio:        bits.append("Trio Var")
+        else: bits.append("Trio Yok")
         if self.afterparty_service and self.afterparty_ultra:
             bits.append("After Party Ultra var")
         elif self.afterparty_service:
@@ -1663,6 +1732,7 @@ class ProjectDemoForm(models.Model):
         if self.afterparty_shot_service: bits.append("Shot Servisi")
         if self.afterparty_fog_laser: bits.append("Sis & Laser")
         if self.afterparty_sushi:     bits.append("Sushi")
+        if self.afterparty_street_food:     bits.append("Street Food Atıştırmalık")
         #if self.music_other and self.music_other_details:
         #     bits.append(f"Özel: {self.music_other_details}")
         # if self.cocktail_request:
@@ -1808,7 +1878,7 @@ class ProjectDemoForm(models.Model):
         if self.alcohol_service:
             lines.append("➖Alkol Servisi : Var")
         else:
-            lines.append("➖ALkol Servisi : Yok")
+            lines.append("➖Alkol Servisi : Yok")
 
         if self.bar_raki_brand:
             lines.append(f"➖Rakı Markası : {raki_map.get(self.bar_raki_brand, self.bar_raki_brand)}")

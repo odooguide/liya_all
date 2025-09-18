@@ -2,8 +2,6 @@ from odoo import fields, models
 
 
 class AllowedIPs(models.Model):
-    """Class for the model allowed_ips. Contains fields for record users and
-    their Allowed IPs."""
     _name = 'allowed.ips'
     _description = "Allowed IPs"
 

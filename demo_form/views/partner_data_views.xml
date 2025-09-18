@@ -283,24 +283,21 @@
   </field>
 </record>
 
-
-
-
-
     <menuitem id="menu_partner_info_root"
             name="Partner Info"
             parent="project.menu_main_pm"
-            sequence="80"/>
+            sequence="80"
+            groups="base.group_system,__export__.res_groups_102_8eb2392b"/>
     <menuitem id="menu_demo_info_root"
             name="Demo Info"
             parent="project.menu_main_pm"
-            sequence="90"/>
+            sequence="90"
+              groups="base.group_system,__export__.res_groups_102_8eb2392b"/>
     <menuitem id="menu_confirmed_demos_root"
             name="Demo Infos"
             parent="demo_form.menu_demo_info_root"
             action="action_confirmed_demo"
             sequence="10"/>
-
     <menuitem id="menu_wedding_trio_root"
             name="Wedding Trios"
             parent="demo_form.menu_partner_info_root"

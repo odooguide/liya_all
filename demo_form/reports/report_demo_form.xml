@@ -77,10 +77,14 @@
                 .liya-theme .thin-line { border-bottom:1px solid #2D7F97; }
 
                 /* Linkler ve kalın vurgular */
-                .liya-theme a { color:#2D7F97; }
+                .liya-theme a { color:#2D7F97; font-size:12pt !important }
                 .liya-theme strong { color:#2D7F97; font-size:12pt !important }
-                .liya-theme table {line-height:10pt; font-size:11pt;}
-
+                .liya-theme table {line-height:1.3; font-size:11pt;}
+                .liya-theme table tr > td:first-child,
+                .liya-theme table tr > th:first-child,
+                .liya-theme table tr > td {
+                font-size: 12pt !important;
+                }
                 .seat-plan-page {
                 height: 237mm;
                 width: 100%;
@@ -130,7 +134,7 @@
                                 <!-- Event Summary -->
                                 <td style="width:50%; vertical-align:top; border:1px solid #4a8599;                padding:12px; box-sizing:border-box; line-height:1.3;">
                                     <table style="width:100%; border-collapse:collapse; font-family:Helvetica, Arial, sans-serif;font-size:13pt">
-                                        <tr style='line-height:1.3'>
+                                        <tr style="line-height:1.3">
                                             <td style="padding:4px 6px; font-weight:600; width:140px;">
                                                 Couple's Name:
                                             </td>
@@ -225,7 +229,7 @@
                                 <thead style="border:none !important">
                                     <tr>
                                         <th style="text-align:left; padding:4px 8px; width:30px;"/>
-                                        <th style="text-align:left; padding:4px 8px; width:150px;"/>
+                                        <th style="text-align:left; padding:4px 8px; width:225px;"/>
                                         <th style="text-align:left; padding:4px 8px; width:80px;"/>
                                         <th style="text-align:center; padding:4px 8px; width:200px;"/>
                                         <th style="text-align:left; padding:4px 8px;"/>
@@ -282,10 +286,27 @@
                                     </t>
                                 </tbody>
                             </table>
-                            <div style="padding-left:4px;vertical-align:top">
-                                <t t-if="o.merasim">
+                            <div style="padding-left:4px;vertical-align:top;white-space:nowrap;">
+
+                                <!-- 1) Presents Accepting Area -->
+                                <span>
+                                    <span style="color:#C86A00;font-size:12pt">Presents Accepting Area:</span>
                                     <span t-field="o.merasim"/>
-                                </t>
+                                </span>
+
+                                <span style="display:inline-block; padding-left:16px;">
+                                    <span style="color:#C86A00;font-size:12pt">Ceremony Order:</span>
+                                    <t t-if="o.is_ceremony">Yes</t>
+                                    <t t-else="">No</t>
+                                </span>
+
+                                <span style="display:inline-block; padding-left:16px;">
+                                    <span style="color:#C86A00;font-size:12pt">Ceremony Call:</span>
+                                    <t t-if="o.ceremony_call">Yes</t>
+                                    <t t-else="">No</t>
+                                </span>
+
+
                             </div>
                             <div style="padding-left:4px; width:100%">
                                 <span t-field="o.schedule_description" t-options="{&quot;widget&quot;:&quot;html&quot;}"
@@ -301,7 +322,7 @@
                                 <thead style="border:none !important">
                                     <tr>
                                         <th style="text-align:left; padding:6px 8px; width:10px;"/>
-                                        <th style="text-align:left; padding:6px 8px; width:160px;"/>
+                                        <th style="text-align:left; padding:6px 8px; width:225px;"/>
                                         <th style="text-align:left; padding:6px 8px; width:50px;"/>
                                         <th style="text-align:left; padding:6px 8px; width:300px;"/>
                                         <th style="text-align:left; padding:6px 8px;"/>
@@ -326,7 +347,7 @@
                                             </td>
                                             <td style="padding:6px 8px; vertical-align:top;">
                                                 <t t-if="line.port_ids">
-                                                    <span style="color:#2D7F97;">Docks:</span>
+                                                    <span style="color:#2D7F97;">Ports:</span>
                                                     <t t-foreach="line.port_ids" t-as="p">
                                                         <span t-esc="p.name"/>
                                                         <t t-if="not p_last">,</t>
@@ -357,7 +378,8 @@
                         <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
                             <h6 style="margin-bottom:6px;">C) MENU</h6>
 
-                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
+                            <table class="table table-borderless"
+                                   style="width:100%; border-collapse:collapse;line-height:1.3">
                                 <tbody>
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600; width:180px;">Hot
@@ -547,7 +569,8 @@
                         <!-- E) AFTER PARTY -->
                         <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
                             <h6 style="margin-bottom:6px;">E) AFTER PARTY</h6>
-                            <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
+                            <table class="table table-borderless"
+                                   style="width:100%; border-collapse:collapse; line-height:1.3">
                                 <tbody>
                                     <tr style="width">
                                         <td style="padding:4px 8px; font-weight:600; width:170px;">After Party:</td>
@@ -589,64 +612,64 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                            <td style="padding:4px 8px; font-weight:600;width:250px">Street Food:</td>
-                                            <td style="padding:4px 8px;">
-                                                <span style="margin-right:6px;">Yes (
-                                                    <t t-if="o.afterparty_street_food">
-                                                        <strong>x</strong>
-                                                    </t>
-                                                    <t t-if="not o.afterparty_street_food"/>
-                                                    )
-                                                </span>
-                                                -
-                                                <span style="margin-left:6px;">No (
-                                                    <t t-if="not o.afterparty_street_food">
-                                                        <strong>x</strong>
-                                                    </t>
-                                                    <t t-if="o.afterparty_street_food"/>
-                                                    )
-                                                </span>
-                                            </td>
+                                        <td style="padding:4px 8px; font-weight:600;width:250px">Street Food:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Yes (
+                                                <t t-if="o.afterparty_street_food">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_street_food"/>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">No (
+                                                <t t-if="not o.afterparty_street_food">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_street_food"/>
+                                                )
+                                            </span>
+                                        </td>
 
-                                            <td style="padding:4px 8px; font-weight:600;">Fog + Laser:</td>
-                                            <td style="padding:4px 8px;">
-                                                <span style="margin-right:6px;">Yes (
-                                                    <t t-if="o.afterparty_fog_laser">
-                                                        <strong>x</strong>
-                                                    </t>
-                                                    <t t-if="not o.afterparty_fog_laser"/>
-                                                    )
-                                                </span>
-                                                -
-                                                <span style="margin-left:6px;">No (
-                                                    <t t-if="not o.afterparty_fog_laser">
-                                                        <strong>x</strong>
-                                                    </t>
-                                                    <t t-if="o.afterparty_fog_laser"/>
-                                                    )
-                                                </span>
-                                            </td>
+                                        <td style="padding:4px 8px; font-weight:600;">Fog + Laser:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Yes (
+                                                <t t-if="o.afterparty_fog_laser">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_fog_laser"/>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">No (
+                                                <t t-if="not o.afterparty_fog_laser">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_fog_laser"/>
+                                                )
+                                            </span>
+                                        </td>
 
                                     </tr>
                                     <tr>
-                                            <td style="padding:4px 8px; font-weight:600;">BBQ Wraps:</td>
-                                            <td style="padding:4px 8px;">
-                                                <span style="margin-right:6px;">Yes (
-                                                    <t t-if="o.afterparty_bbq_wraps">
-                                                        <strong>x</strong>
-                                                    </t>
-                                                    <t t-if="not o.afterparty_bbq_wraps"/>
-                                                    )
-                                                </span>
-                                                -
-                                                <span style="margin-left:6px;">No (
-                                                    <t t-if="not o.afterparty_bbq_wraps">
-                                                        <strong>x</strong>
-                                                    </t>
-                                                    <t t-if="o.afterparty_bbq_wraps"/>
-                                                    )
-                                                </span>
-                                            </td>
+                                        <td style="padding:4px 8px; font-weight:600;">BBQ Wraps:</td>
+                                        <td style="padding:4px 8px;">
+                                            <span style="margin-right:6px;">Yes (
+                                                <t t-if="o.afterparty_bbq_wraps">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="not o.afterparty_bbq_wraps"/>
+                                                )
+                                            </span>
+                                            -
+                                            <span style="margin-left:6px;">No (
+                                                <t t-if="not o.afterparty_bbq_wraps">
+                                                    <strong>x</strong>
+                                                </t>
+                                                <t t-if="o.afterparty_bbq_wraps"/>
+                                                )
+                                            </span>
+                                        </td>
 
                                         <t t-if="o.afterparty_sushi">
                                             <td style="padding:4px 8px; font-weight:600;">Sushi:</td>
@@ -783,8 +806,8 @@
                                         </h6>
                                         <div style="margin-bottom:4px; font-weight:600;">
                                             <strong>Hotel:</strong>
-                                            <span style="border-bottom:1px solid #000; padding-left:4px; display:inline-block;width:150px">
-                                                <span t-esc="o.accommodation_hotel or ''"/>
+                                            <span style="border-bottom:1px solid #000; padding-left:4px; display:inline-block;width:150px;">
+                                                <span style='font-weight:600' t-esc="o.accommodation_hotel or ''"/>
                                             </span>
                                         </div>
                                         <div style="margin-bottom:4px;font-weight:600;">
@@ -924,12 +947,12 @@
                         <div style="margin-top:20px; font-family:Helvetica, Arial, sans-serif;">
                             <h6>I) PHOTOGRAPHY</h6>
                             <table class="table table-borderless"
-                                   style="width:100%; border-collapse:collapse; font-size:11pt;">
+                                   style="width:100%; border-collapse:collapse; font-size:11pt;line-height:1.3">
                                 <tr>
-                                    <td style="padding:4px 8px; font-weight:600; width:250px;">Standard Photography
+                                    <td style="padding:4px 8px; font-weight:600; width:225px;">Standard Photography
                                         Service:
                                     </td>
-                                    <td style="padding:4px 8px;">Yes (
+                                    <td style="padding:4px 1px;">Yes (
                                         <t t-if="o.photo_standard">
                                             <strong>x</strong>
                                         </t>
@@ -941,7 +964,7 @@
                                     </td>
                                     <td style="padding:4px 8px; font-weight:600; width:200px;">Photo And Video Plus:
                                     </td>
-                                    <td style="padding:4px 8px;">Yes (
+                                    <td style="padding:4px 1px;">Yes (
                                         <t t-if="o.photo_video_plus">
                                             <strong>x</strong>
                                         </t>
@@ -955,7 +978,7 @@
                                 <t t-if="o.home_exit">
                                     <tr>
                                         <td style="padding:4px 8px; font-weight:600;">Home Session:</td>
-                                        <td style="padding:4px 8px;">Yes (
+                                        <td style="padding:4px 1px;">Yes (
                                             <t t-if="o.home_exit">
                                                 <strong>x</strong>
                                             </t>
@@ -967,7 +990,7 @@
                                         </td>
                                         <t t-if="o.home_exit">
                                             <td style="padding:4px 8px; font-weight:600;">Address:</td>
-                                            <td style="padding:4px 8px;">
+                                            <td style="padding:4px 1px;">
                                                 <span style="display:inline-block; max-width:200px;word-break:always">
                                                     <span t-esc="o.photo_homesession_address or ''"/>
                                                 </span>
@@ -977,7 +1000,7 @@
                                 </t>
                                 <tr>
                                     <td style="padding:4px 8px; font-weight:600;">Photo Print Service:</td>
-                                    <td style="padding:4px 8px;">Yes (
+                                    <td style="padding:4px 1px;">Yes (
                                         <t t-if="o.photo_print_service">
                                             <strong>x</strong>
                                         </t>
@@ -988,7 +1011,7 @@
                                         <t t-if="o.photo_print_service"/>)
                                     </td>
                                     <td style="padding:4px 8px; font-weight:600;">Drone Camera:</td>
-                                    <td style="padding:4px 8px;">Yes (
+                                    <td style="padding:4px 1px;">Yes (
                                         <t t-if="o.photo_drone">
                                             <strong>x</strong>
                                         </t>
@@ -1001,11 +1024,13 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:4px 8px; font-weight:600;">Hard disk 1 TB:</td>
-                                    <td style="padding:4px 8px;">Delivered (
+                                    <td style="padding:4px 1px;">Delivered (
                                         <t t-if="o.photo_harddisk_delivered == 'delivered'">
                                             <strong>x</strong>
                                         </t>
-                                        <t t-if="o.photo_harddisk_delivered != 'delivered'"/>) / Will Deliver Later (
+                                        <t t-if="o.photo_harddisk_delivered != 'delivered'"/>)
+                                        <br/>
+                                        / Will Deliver Later (
                                         <t t-if="o.photo_harddisk_delivered == 'later'">
                                             <strong>x</strong>
                                         </t>
@@ -1013,7 +1038,7 @@
                                     </td>
                                     <t t-if="o.photo_yacht_shoot">
                                         <td style="padding:4px 8px; font-weight:600;">Yacht Shoot:</td>
-                                        <td style="padding:4px 8px;">Yes (
+                                        <td style="padding:4px 1px;">Yes (
                                             <t t-if="o.photo_yacht_shoot">
                                                 <strong>x</strong>
                                             </t>
@@ -1032,7 +1057,7 @@
                         </div>
 
                         <!-- J) MÜZİK -->
-                        <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;">
+                        <div style="margin-top:16px; font-family:Helvetica, Arial, sans-serif;page-break-inside: avoid !important;  break-inside: avoid !important;">
                             <h6>J) MUSIC</h6>
 
                             <table class="table table-borderless"
@@ -1139,7 +1164,7 @@
 
                                 <!-- Charger -->
                                 <tr>
-                                    <td style="padding:4px 8px; font-weight:600;">Charger:</td>
+                                    <td style="padding:4px 8px; font-weight:600;">Under plate:</td>
                                     <td style="padding:4px 8px;">
                                         <t t-set="chargers" t-value="o.env['project.demo.table.charger'].search([])"/>
                                         <t t-if="chargers">
@@ -1184,9 +1209,9 @@
 
                                 <!-- Tablecloth Color Selection -->
                                 <tr>
-                                    <td style="padding:4px 8px; font-weight:600;">Tablecloth Color Selection:
+                                    <td style="padding:4px 8px; font-weight:600;">Tableclothing:
                                     </td>
-                                    <td style="padding:4px 8px;">
+                                    <td style="padding:4px 8px;padding-right:25px;">
                                         <t t-set="colors" t-value="o.env['project.demo.table.color'].search([])"/>
                                         <t t-if="colors">
                                             <t t-foreach="colors" t-as="it">
@@ -1206,7 +1231,7 @@
 
                                 <!-- Ceremony Tag -->
                                 <tr>
-                                    <td style="padding:4px 8px; font-weight:600;">Ceremony Tag:</td>
+                                    <td style="padding:4px 8px; font-weight:600;">Ceremony Stage:</td>
                                     <td style="padding:4px 8px;">
                                         <t t-if="o.table_tag_ids">
                                             <span t-esc="o.table_tag_ids.name"/>
@@ -1217,7 +1242,7 @@
 
                                 <!-- Cake Selection + Real Cake + Champagne Tower -->
                                 <tr>
-                                    <td style="padding:4px 8px; font-weight:600;">Cake Selection:</td>
+                                    <td style="padding:4px 8px; font-weight:600;">Wedding Pie:</td>
                                     <td style="padding:4px 8px;">
                                         <t t-set="cakes" t-value="o.env['project.demo.cake.choice'].search([])"/>
                                         <t t-if="cakes">
@@ -1254,7 +1279,7 @@
                                 <tr>
                                     <td style="padding:4px 8px; font-weight:600;">Flowers:</td>
                                     <td style="padding:4px 8px;">
-                                        Fresh Flowers: Yes (
+                                        Live Flowering: Yes (
                                         <t t-if="o.table_fresh_flowers">
                                             <strong>x</strong>
                                         </t>
@@ -1266,7 +1291,7 @@
                                         <t t-else=""/>
                                         )
                                         <span style="margin-left:16px;">/</span>
-                                        <span style="margin-left:16px;">Dried Flowers: Yes (
+                                        <span style="margin-left:16px;">Dried Flowering: Yes (
                                             <t t-if="o.table_dried_flowers">
                                                 <strong>x</strong>
                                             </t>
@@ -1300,37 +1325,46 @@
 
                         <div style="margin-top:14px; font-family:Helvetica, Arial, sans-serif;">
                             <h6>L) OTHER NOTES</h6>
-                            <table class="table table-borderless"
-                                   style="width:100%; border-collapse:collapse; font-size:11pt;">
+
+                            <table id="other-notes-table"
+                                   class="table table-borderless"
+                                   style="width:100%; border-collapse:collapse; font-size:11pt; table-layout:fixed;">
+                                <!-- Sütun genişlikleri -->
+                                <colgroup>
+                                    <col style="width:220px"/>   <!-- etiket sütunu -->
+                                    <col/>                       <!-- değer sütunu (kalan alan) -->
+                                </colgroup>
+
                                 <tr>
-                                    <td style="padding:4px 8px; font-weight:600;">RSVP:</td>
-                                    <td style="padding:4px 8px;padding-left:0">
+                                    <td style="padding:4px 8px; font-weight:600; white-space:nowrap;">RSVP:</td>
+                                    <td style="padding:4px 8px; padding-left:0; text-align:left;">
                                         Yes (
                                         <t t-if="o.other_lcv">
                                             <strong>x</strong>
                                         </t>
-                                        <t t-else=""/>
-                                        ) - No (
+                                        ) -
+                                        No (
                                         <t t-if="not o.other_lcv">
                                             <strong>x</strong>
                                         </t>
-                                        <t t-else=""/>
                                         )
                                     </td>
                                 </tr>
+
                                 <tr>
-                                    <td style="padding:4px 8px; font-weight:600;">Social Media Tag Me:</td>
-                                    <td style="padding:4px 8px;padding-left:0">
+                                    <td style="padding:4px 8px; font-weight:600; white-space:nowrap;">Social Media Tag
+                                        Me:
+                                    </td>
+                                    <td style="padding:4px 8px; padding-left:0; text-align:left;">
                                         Yes (
                                         <t t-if="o.other_social_media_tag">
                                             <strong>x</strong>
                                         </t>
-                                        <t t-else=""/>
-                                        ) - No (
+                                        ) -
+                                        No (
                                         <t t-if="not o.other_social_media_tag">
                                             <strong>x</strong>
                                         </t>
-                                        <t t-else=""/>
                                         )
                                         <span style="margin-left:10px;">
                                             <t t-if="o.other_social_media_tag">
@@ -1339,16 +1373,18 @@
                                         </span>
                                     </td>
                                 </tr>
+
                                 <tr t-if="o.other_description">
-                                    <td style="padding:4px 8px; font-weight:600; vertical-align:top;">Additional
-                                        Notes:
+                                    <td style="padding:4px 8px; font-weight:600; vertical-align:top; white-space:nowrap;">
+                                        Additional Notes:
                                     </td>
-                                    <td style="padding:4px 8px; padding-left:0;vertical-align:top;font-style:italic;">
+                                    <td style="padding:4px 8px; padding-left:0; vertical-align:top; font-style:italic; text-align:left;">
                                         <span t-field="o.other_description"/>
                                     </td>
                                 </tr>
                             </table>
                         </div>
+
                     </div>
 
                 </div>
@@ -2185,10 +2221,10 @@
                     <table class="table table-borderless" style="width:100%; border-collapse:collapse;">
                         <tr>
                             <td style="width:50%; vertical-align:bottom;">
-                                Çiftimiz İsim &amp; İmza
+                                Couple's Name &amp; Signature
                             </td>
                             <td style="width:50%; vertical-align:bottom; text-align:right;">
-                                Koordinatör İsim &amp; İmza
+                                Coordinator's Name &amp; Signature
                             </td>
                         </tr>
                     </table>
